@@ -1,0 +1,56 @@
+export DOTFILES=~/.dotfiles
+export ZSH=$DOTFILES/zsh
+
+
+
+
+command_exists() {
+    type "$1" > /dev/null 2>&1
+}
+
+
+[ -d ~/bin ] && export PATH=~/bin:$PATH
+
+
+#STARTTIME=$(date +%s%3N)
+
+
+# use antigen
+#ADOTDIR=$ZSHSCRIPTS/.antigen-files
+#source $ZSHSCRIPTS/.antigen/antigen.zsh
+
+#antigen use oh-my-zsh
+#antigen bundle git
+#antigen apply
+
+#ENDTIME=$(date +%s%3N)
+#echo "It takes $(($ENDTIME - $STARTTIME)) ms to complete this task..."
+
+
+
+# enable completion
+autoload -U compinit && compinit -d ~/.localbin/.zcompdump
+
+
+
+[ -z "$TMUX" ] && export TERM=xterm-256color
+
+# source all .zsh files inside of the zsh/ directory
+for config ($ZSH/**/*.zsh) source $config
+
+
+# autoload colors && colors
+
+
+# load custom settings
+if [[ -f "${HOME}/.zshrc.local" ]]; then
+  source "${HOME}/.zshrc.local"
+fi
+
+
+
+if [[ $1 == eval ]]
+then
+    "$@"
+set --
+fi

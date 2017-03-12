@@ -1,0 +1,48 @@
+let mapleader = " "
+
+noremap <Leader><F1> :source ~/.ideavimrc<CR>
+
+
+source ~/.config/nvim/shared.vim
+
+
+
+noremap <C-i> <C-S-6>
+noremap <C-o> :action VimWindowOnly<cr>
+noremap <C-q> :action VimWindowClose<CR>
+
+noremap <C-h> :action TabShiftActions.MoveFocusLeft<CR>
+noremap <C-j> :action TabShiftActions.MoveFocusDown<CR>
+noremap <C-k> :action TabShiftActions.MoveFocusUp<CR>
+noremap <C-l> :action TabShiftActions.MoveFocusRight<CR>
+
+noremap z= :action com.intellij.spellchecker.actions.SpellingPopupActionGroup<CR>
+
+" noremap <leader>h :action TypeHierarchy<CR>
+" noremap <leader>m :action EditorScrollToCenter<CR>
+" noremap <leader>[ :action EditorCodeBlockStart<CR>
+" noremap <leader>] :action EditorCodeBlockEnd<CR>
+" noremap <leader>a :action $SelectAll<CR>
+" noremap <leader>b :action GotoDeclaration<CR>
+" noremap <leader>c :action $Copy<CR>
+" noremap <leader>d :action EditorDuplicate<CR>
+" noremap <leader>e :action RecentFiles<CR>
+" noremap <leader>f :action Find<CR>
+" noremap <leader>g :action GotoLine<CR>
+" noremap <leader>l :action NextSplitter<CR>
+" noremap <leader>h :action PrevSplitter<CR>
+" noremap <leader>- :action SplitHorizontally<CR>
+" noremap <leader>| :action SplitVertically<CR>
+" noremap <leader>i :action ImplementMethods<CR>
+" noremap <leader>l :action NextSplitter<CR>
+" noremap <leader>o :action MethodHierarchy.OverrideMethodAction<CR>
+" noremap <leader>p :action ParameterInfo<CR>
+" noremap <leader>q :action GuiDesigner.QuickJavadoc<CR>
+" noremap <leader>r :action Replace<CR>
+" noremap <leader>s :action SaveAll<CR>
+" noremap <leader>t :action Vcs.UpdateProject<CR>
+" noremap <leader>u :action GotoSuperMethod<CR>
+" noremap <leader>v :action $Paste<CR>
+" noremap <leader>w :action EditorSelectWord<CR>
+" noremap <leader>x :action $Cut<CR>
+" noremap <leader>y :action EditorDeleteLine<CR>

@@ -1,0 +1,5 @@
+"\e[1;5C": forward-word   # ctrl + right
+"\e[1;5D": backward-word  # ctrl + left
+
+"\C-h": backward-kill-word		#ctrl + backspace
+

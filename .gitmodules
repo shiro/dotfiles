@@ -1,0 +1,12 @@
+[submodule "vim.symlink/plug"]
+	path = vim.symlink/plug
+	url = git@github.com:junegunn/vim-plug
+[submodule "vim.ln/plug"]
+	path = vim.ln/plug
+	url = git@github.com:junegunn/vim-plug
+[submodule "config.ln/nvim/plug"]
+	path = config.ln/nvim/plug
+	url = git@github.com:junegunn/vim-plug
+[submodule "config/nvim/plug"]
+	path = config/nvim/plug
+	url = git@github.com:junegunn/vim-plug

@@ -1,0 +1,9 @@
+[config]
+[user]
+	name = shiro
+	email = shiro@usagi.io
+[core]
+	editor = vim
+	autocrlf = false
+[rebase]
+	autosquash = true
