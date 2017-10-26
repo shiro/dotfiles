@@ -41,12 +41,15 @@ nnoremap <leader>= <C-w>=
 " resize splits
 " todo
 
+" clear search highlighting
+nnoremap <silent> <esc> :noh<cr><esc>
+
 " buffer managment
 nnoremap <C-w> :wq<cr>
 " nnoremap <C-W> :wqa<cr>
 nnoremap <leader>q :qa!<cr>
 
-" swap acitve buffers
+" swap active buffers
 nnoremap <C-i> <C-^>
 
 " toggle raw formatting view
@@ -75,7 +78,7 @@ set clipboard=unnamed       " use Windows clipboard
 set go+=a
 
 set ignorecase              " case insensitive searching
-set smartcase               " case-sensitive if expresson contains a capital letter
+set smartcase               " case-sensitive if expression contains a capital letter
 
 set magic                   " Set magic on, for regex
 
@@ -94,7 +97,7 @@ set foldlevel=0             " all folds closed
 set wildmode=list:longest   " complete files like a shell
 
 set ignorecase              " case insensitive searching
-set smartcase               " case-sensitive if expresson contains a capital letter
+set smartcase               " case-sensitive if expression contains a capital letter
 set hlsearch                " highlight search results
 set incsearch               " set incremental search, like modern browsers
 
