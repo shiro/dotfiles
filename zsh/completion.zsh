@@ -10,7 +10,9 @@ setopt always_to_end
 
 
 # case, hypthen insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list '' \
+	'r:|?=** m:{a-z\-}={A-Z\_}'
 
 
 # disable named-directories autocompletion
@@ -40,6 +42,7 @@ zmodload zsh/complist
 
 # Ignore certail extensions
 # zstyle ':completion:*:-command-:*' ignored-patterns '(#i)*.exe' '(#i)*.dll'
+zstyle ':completion:*:-command-:*' ignored-patterns '(#i)*.dll'
 
 # navigate dirs without cd
 setopt auto_cd
