@@ -63,6 +63,8 @@ nnoremap <leader>gpl :Dispatch! git pull<CR>
 
 " 72 is the number
 autocmd Filetype gitcommit setlocal spell textwidth=72
+" auto cleanup buffers
+autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " }}}
 
