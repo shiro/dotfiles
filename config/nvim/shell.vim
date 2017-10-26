@@ -58,6 +58,7 @@ set shell=$SHELL
 " " Searching
 set nolazyredraw " don't redraw while executing macros
 
+set noshowmode " don't show mode at the bottom
 
 " error bells
 " set visualbell
@@ -195,6 +196,11 @@ augroup configgroup
 "     autocmd! BufWritePost * Neomake
 augroup END
 
+augroup AutoSaveFolds
+    autocmd!
+    autocmd BufWinLeave * mkview
+    autocmd BufWinEnter *.* silent! loadview
+augroup END
 
 " }}}
 

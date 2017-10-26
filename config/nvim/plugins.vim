@@ -121,9 +121,13 @@ let g:fzf_layout = { 'down': '~25%' }
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
+let g:pandoc#folding#mode = 'syntax'
+let g:pandoc#folding#fold_yaml = 1
+" let g:pandoc#folding#fold_fenced_codeblocks = 1
+
 " }}}
 
-" vim rooter
+" vim rooter {{{
 
 Plug 'airblade/vim-rooter' " start in the right place
 
@@ -133,9 +137,24 @@ let g:rooter_resolve_links = 1
 
 " }}}
 
+" lightline.vim (todo) {{{
+
+" Plug 'itchyny/lightline.vim' " a light, fancy status bar
+
+" let g:lightline = {
+"       \ 'colorscheme': 'jellybeans',
+"       \ 'active': {
+"       \   'left': [ [ 'paste' ],
+"       \             [ 'readonly', 'filename', 'modified', 'helloworld' ] ]
+"       \ },
+"       \ 'component': {
+"       \   'helloworld': 'Hello, world!'
+"       \ },
+"       \ }
+
+" }}}
+
 call plug#end()
-
-
 
 
 " if isdirectory(".git")
