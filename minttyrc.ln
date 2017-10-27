@@ -17,24 +17,31 @@ Rows=40
 Scrollbar=none
 Term=xterm-256color
 Transparency=off
+BellTaskbar=no
 
 
 # Hyrule color theme
 
-ForegroundColour=192,213,193
-BackgroundColour=45,44,43
-# Black=255,255,255
-# BoldBlack=255,255,255
-Red=204,68,66
-# BoldRed=131,11,11
-Green=144,201,63
-# BoldGreen=239,73,73
-Yellow=245,197,4
-# BoldYellow=131,11,11
-Blue=53,156,230
-# BoldBlue=150,13,13
-Magenta=206,132,13
-Cyan=187,221,255
-# BoldCyan=239,73,73
-BellTaskbar=no
-Printer=Hewlett-Packard HP LaserJet P2015 Series
+ForegroundColour=#c0d5c1
+BackgroundColour=#2d2c2b
+
+Black=#716d6a
+BoldBlack=#716d6a
+
+Red=#cc4442
+BoldRed=#cc4442
+
+Green=#90c93f
+BoldGreen=#90c93f
+
+Yellow=#f5c504
+BoldYellow=#f5c504
+
+Blue=#359ce6
+BoldBlue=#359ce6
+
+Magenta=#ce840d
+BoldMagenta=#ce840d
+
+Cyan=#bbddff
+BoldCyan=#bbddff
