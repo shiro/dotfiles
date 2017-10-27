@@ -1,5 +1,7 @@
 # options
-export FZF_DEFAULT_OPTS='--height 40% --reverse --bind alt-j:down,alt-k:up'
+export FZF_DEFAULT_OPTS="--height 40% --reverse
+  --color=prompt:#c0d5c1,pointer:#ce840d
+  --color=fg:#c0d5c1,hl:#90c93f,hl+:#90c93f"
 
 
 # auto-completion
