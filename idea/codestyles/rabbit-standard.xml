@@ -29,6 +29,9 @@
     <option name="SPACE_AFTER_PROPERTY_COLON" value="false" />
     <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
   </JSCodeStyleSettings>
+  <MarkdownNavigatorCodeStyleSettings>
+    <option name="RIGHT_MARGIN" value="72" />
+  </MarkdownNavigatorCodeStyleSettings>
   <Objective-C>
     <option name="INDENT_BLOCK_COMMENT" value="false" />
     <option name="INDENT_DIRECTIVE_AS_CODE" value="true" />
