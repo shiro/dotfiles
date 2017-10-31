@@ -10,5 +10,5 @@ export FZF_DEFAULT_OPTS="--height 40% --reverse
 
 # key bindings
 # ------------
-source "/home/shiro/.fzf/shell/key-bindings.zsh"
+source ~"/.local/share/fzf/shell/key-bindings.zsh"
 

@@ -13,6 +13,7 @@ git submodule update --init --recursive
  
 mkdir -p local # local files directory
 mkdir -p ~/.localbin # local files directory
+mkdir -p ~/.local/share # local files directory
 
 
 mkdir -p local/zsh_comp_cache
@@ -23,13 +24,10 @@ source install/link.sh
 
 
 # install fzf if not installed
-if ! [[ -f ~/.fzf.zsh ]]; then
+if [ ! -d ~/.local/share/fzf ]; then
 	echo "installing fzf"
-	if ! [[ -f ~/.fzf/install ]]; then
-		rm -rf ~/.fzf
-		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-	fi
-	~/.fzf/install --all
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
+	~/.local/share/fzf/install --all
 fi
 
 # install wslpath
