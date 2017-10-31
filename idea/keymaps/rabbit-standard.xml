@@ -52,6 +52,7 @@
   <action id="GotoBookmark6" />
   <action id="GotoBookmark7" />
   <action id="InsertLiveTemplate" />
+  <action id="MaintenanceAction" />
   <action id="ReSharperGotoImplementation">
     <keyboard-shortcut first-keystroke="numpad2" />
   </action>
@@ -71,9 +72,11 @@
     <keyboard-shortcut first-keystroke="shift f7" />
     <keyboard-shortcut first-keystroke="ctrl 6" />
   </action>
+  <action id="StepInto">
+    <keyboard-shortcut first-keystroke="shift ctrl alt period" />
+  </action>
   <action id="StepOut">
-    <keyboard-shortcut first-keystroke="shift f8" />
-    <keyboard-shortcut first-keystroke="ctrl 1" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt slash" />
   </action>
   <action id="StepOver">
     <keyboard-shortcut first-keystroke="shift ctrl alt comma" />
