@@ -4,5 +4,5 @@ fi
 
 
 if [[ ! -f /tmp/msysgit2unix-socket.pid ]]; then
-		~/bin/msysgit2unix-socket.py "$(realpath ~/.ssh/keeagent.sock):$SSH_AUTH_SOCK"
+		python2 ~/bin/msysgit2unix-socket.py "$(realpath ~/.ssh/keeagent.sock):$SSH_AUTH_SOCK"
 fi
