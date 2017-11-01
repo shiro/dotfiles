@@ -30,7 +30,7 @@ if &term =~ '256color'
 endif
 
 
-set viminfo+=n~/.localbin/.viminfo          " change .viminfo location
+set viminfo+=n~/.local/misc/.viminfo " change .viminfo location
 
 
 set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors"

@@ -10,3 +10,6 @@
 [submodule "config/nvim/plug"]
 	path = config/nvim/plug
 	url = git@github.com:junegunn/vim-plug
+[submodule "zsh/_completions"]
+	path = zsh/_completions
+	url = git@github.com:zsh-users/zsh-completions
