@@ -1,9 +1,6 @@
 ## Command history configuration
 
-
-
-
-HISTFILE=~/.localbin/.zsh_history
+HISTFILE=~/.local/share/misc/.zsh_history
 
 
 HISTSIZE=10000
