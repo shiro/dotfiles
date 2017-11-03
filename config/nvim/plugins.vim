@@ -120,7 +120,7 @@ let g:fzf_layout = { 'down': '~25%' }
 
 " pandoc {{{
 
-Plug 'vim-pandoc/vim-pandoc'
+" Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
 let g:pandoc#folding#mode = 'syntax'
