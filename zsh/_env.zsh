@@ -1,5 +1,5 @@
-export EDITOR=/usr/bin/vim
-export VISUAL=/usr/bin/vim
+export EDITOR=vim
+export VISUAL=vim
 export DISPLAY=localhost:0
 
 # win path
