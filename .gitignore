@@ -1,3 +1,4 @@
 localbin.ln
 
 config/nvim/plugged
+config/nvim/spell
