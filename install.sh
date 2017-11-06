@@ -21,7 +21,7 @@ mkdir -p local/zsh_comp_cache
 touch local/.zsh_history
 
 
-source install/link.sh
+source scripts/link.sh
 
 
 # install fzf if not installed

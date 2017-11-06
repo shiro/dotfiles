@@ -10,16 +10,10 @@ command_exists() {
 [ -d ~/bin ] && export PATH=~/bin:$PATH
 
 
+# WSL nice workaround
+unsetopt BG_NICE
+
 #STARTTIME=$(date +%s%3N)
-
-
-# use antigen
-#ADOTDIR=$ZSHSCRIPTS/.antigen-files
-#source $ZSHSCRIPTS/.antigen/antigen.zsh
-
-#antigen use oh-my-zsh
-#antigen bundle git
-#antigen apply
 
 #ENDTIME=$(date +%s%3N)
 #echo "It takes $(($ENDTIME - $STARTTIME)) ms to complete this task..."
@@ -30,7 +24,6 @@ autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
 
 
 [ -z "$TMUX" ] && export TERM=xterm-256color
-
 
 configs=(
 	$ZSH/*.zsh
@@ -43,6 +36,15 @@ for config in "${configs[@]}"; do
 	source $config;
 done
  
+# load zit, the plugin manager
+export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
+
+zit-in "https://github.com/knu/zsh-manydots-magic" "zsh-manydots-magic"
+zit-in "https://github.com/m45t3r/zit" "zit"
+
+zit-lo "zsh-manydots-magic" "manydots-magic"
+
+
 # use addtional completions
 fpath=( $ZSH/_completions/src $fpath)
 
@@ -54,6 +56,9 @@ if [[ -f "${HOME}/.zshrc.local" ]]; then
   source "${HOME}/.zshrc.local"
 fi
 
+
+# compile everything so it loads faster
+zit-lo "zit" "extras/compile-zsh-files.zsh"
 
 
 if [[ $1 == eval ]]
