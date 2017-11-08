@@ -22,7 +22,7 @@ set -g renumber-windows on
 
 # use vi keys in copy mode
 setw -g mode-keys vi
-bind -T copy-mode-vi y send -X copy-pipe 'xsel -ip'
+bind -T copy-mode-vi y send -X copy-pipe 'xclip -selection clipboard'
 bind -T copy-mode-vi Escape send-keys -X clear-selection
 bind -T copy-mode-vi v send-keys -X begin-selection
 bind -T copy-mode-vi r send-keys -X rectangle-toggle
