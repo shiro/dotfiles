@@ -1,9 +1,9 @@
 # behave as expected with vim commands ( y/p/d/c/s )
-[[ -n $DISPLAY ]] && (( $+commands[xclip] )) && {
+[[ -n $DISPLAY ]] && (( $+commands[xsel] )) && {
 
   function cutbuffer() {
     zle .$WIDGET
-    echo $CUTBUFFER | xclip -selection clipboard
+    echo $CUTBUFFER | xsel
   }
 
   zle_cut_widgets=(
@@ -24,7 +24,7 @@
   done
 
   function putbuffer() {
-    zle copy-region-as-kill "$(xclip -o)"
+    zle copy-region-as-kill "$(xsel -o)"
     zle .$WIDGET
   }
 
