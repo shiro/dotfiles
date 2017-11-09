@@ -16,7 +16,24 @@ set directory=/tmp
 set undodir=/tmp
  
 set termguicolors " enable 24bit truecolor support
- 
+
+let g:terminal_color_0  = '#ffffff'
+let g:terminal_color_1  = '#000000'
+let g:terminal_color_2  = '#000000'
+let g:terminal_color_3  = '#000000'
+let g:terminal_color_4  = '#000000'
+let g:terminal_color_5  = '#000000'
+let g:terminal_color_6  = '#000000'
+let g:terminal_color_7  = '#000000'
+let g:terminal_color_8  = '#000000'
+let g:terminal_color_9  = '#000000'
+let g:terminal_color_10 = '#000000'
+let g:terminal_color_11 = '#000000'
+let g:terminal_color_12 = '#000000'
+let g:terminal_color_13 = '#000000'
+let g:terminal_color_14 = '#000000'
+let g:terminal_color_15 = '#000000'
+
 " }}}
 
 " User Interface {{{

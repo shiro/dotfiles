@@ -4,36 +4,43 @@ call plug#begin('~/.config/nvim/plugged')
 
 
 " NERDTree {{{
-Plug 'scrooloose/nerdtree', "{ 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'scrooloose/nerdtree', "{ 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 
-nmap <silent> <leader>u :NERDTreeToggle<cr>
+" nmap <silent> <leader>u :NERDTreeToggle<cr>
 
-" " expand to the path of the file in the current buffer
-" nmap <silent> <leader>y :NERDTreeFind<cr>
+" " " expand to the path of the file in the current buffer
+" " nmap <silent> <leader>y :NERDTreeFind<cr>
 
-" close vim if only window remaining
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" " close vim if only window remaining
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-let NERDTreeMinimalUI=1 " hide help
-let NERDTreeShowHidden=1 " show hidden files
-let NERDTreeDirArrowExpandable = '▷'
-let NERDTreeDirArrowCollapsible = '▼'
+" let NERDTreeMinimalUI=1 " hide help
+" let NERDTreeShowHidden=1 " show hidden files
+" let NERDTreeDirArrowExpandable = '▷'
+" let NERDTreeDirArrowCollapsible = '▼'
 
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
+" let g:NERDTreeIndicatorMapCustom = {
+"     \ "Modified"  : "✹",
+"     \ "Staged"    : "✚",
+"     \ "Untracked" : "✭",
+"     \ "Renamed"   : "➜",
+"     \ "Unmerged"  : "═",
+"     \ "Deleted"   : "✖",
+"     \ "Dirty"     : "✗",
+"     \ "Clean"     : "✔︎",
+"     \ 'Ignored'   : '☒',
+"     \ "Unknown"   : "?"
+"     \ }
 
 " }}}
+
+
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+
+let g:ranger_replace_netrw = 1
+
 
 " Plug 'benmills/vimux' " tmux integration for vim
 Plug 'tpope/vim-commentary' " comment stuff out
@@ -115,6 +122,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --all' } " 
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'down': '~25%' }
+inoremap z= <plug>(fzf-complete-word)
 
 " }}}
 
