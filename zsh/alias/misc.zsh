@@ -25,7 +25,10 @@ alias sedr="sed -r"
 
 # vim
 rcvim(){ vim "$DOTFILES/config/nvim/$1" }
-fv(){ vim $(fzf) }
+fv(){ 
+	file="$(fzf)"
+	[ ! -z $file ] && vim "$file"
+}
 
 # sh function to murder all running processes matching a pattern
 function killall () {
