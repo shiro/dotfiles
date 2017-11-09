@@ -2,3 +2,4 @@ localbin.ln
 
 config/nvim/plugged
 config/nvim/spell
+config/nvim/.netrwhist
