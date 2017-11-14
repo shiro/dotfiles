@@ -12,13 +12,8 @@ git submodule update --init --recursive
 
  
 mkdir -p local # local files directory
-mkdir -p ~/.localbin # local files directory
 mkdir -p ~/.local/share # local files directory
 mkdir -p ~/.local/share/misc
-
-
-mkdir -p local/zsh_comp_cache
-touch local/.zsh_history
 
 
 source scripts/link.sh
