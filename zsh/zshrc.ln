@@ -19,9 +19,6 @@ unsetopt BG_NICE
 #echo "It takes $(($ENDTIME - $STARTTIME)) ms to complete this task..."
 
 
-# enable completion
-autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
-
 
 [ -z "$TMUX" ] && export TERM=xterm-256color
 
@@ -40,13 +37,15 @@ done
 export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
 zit-in "https://github.com/knu/zsh-manydots-magic" "zsh-manydots-magic"
+zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 zit-in "https://github.com/m45t3r/zit" "zit"
 
+zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
 zit-lo "zsh-manydots-magic" "manydots-magic"
 
 
-# use addtional completions
-fpath=( $ZSH/_completions/src $fpath)
+# enable completion
+autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
 
 # autoload colors && colors
 
