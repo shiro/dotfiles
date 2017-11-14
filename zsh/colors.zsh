@@ -40,3 +40,28 @@ On_Blue='\033[44m'        # Blue
 On_Purple='\033[45m'      # Purple
 On_Cyan='\033[46m'        # Cyan
 On_White='\033[47m'       # White
+
+declare -A colors
+colors[FG]='#c0d5c1'
+colors[BG]='#2d2c2b'
+
+colors[Black]='#716d6a'
+colors[BoldBlack]='#716d6a'
+
+colors[Red]='#cc4442'
+colors[BoldRed]='#cc4442'
+
+colors[Green]='#90c93f'
+colors[BoldGreen]='#90c93f'
+
+colors[Yellow]='#f5c504'
+colors[BoldYellow]='#f5c504'
+
+colors[Blue]='#359ce6'
+colors[BoldBlue]='#359ce6'
+
+colors[Magenta]='#ce840d'
+colors[BoldMagenta]='#ce840d'
+
+colors[Cyan]='#bbddff'
+colors[BoldCyan]='#bbddff'
