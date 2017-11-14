@@ -13,11 +13,19 @@ command_exists() {
 # WSL nice workaround
 unsetopt BG_NICE
 
-#STARTTIME=$(date +%s%3N)
 
-#ENDTIME=$(date +%s%3N)
-#echo "It takes $(($ENDTIME - $STARTTIME)) ms to complete this task..."
+# load zit, the plugin manager
+source $ZSH/plugin/zit.zsh
+export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
+
+# additional completions
+zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
+zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
+
+
+# enable completion
+autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
 
 
 [ -z "$TMUX" ] && export TERM=xterm-256color
@@ -33,19 +41,13 @@ for config in "${configs[@]}"; do
 	source $config;
 done
  
-# load zit, the plugin manager
-export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
+# additional plugins
 zit-in "https://github.com/knu/zsh-manydots-magic" "zsh-manydots-magic"
-zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
-zit-in "https://github.com/m45t3r/zit" "zit"
-
-zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
 zit-lo "zsh-manydots-magic" "manydots-magic"
 
+zit-in "https://github.com/m45t3r/zit" "zit"
 
-# enable completion
-autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
 
 # autoload colors && colors
 
