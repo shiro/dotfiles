@@ -1,5 +1,6 @@
 alias md='mkdir -p'
-alias mdc='mkdir -p && cd $_' # md and go there
+mcd(){ mkdir -p $1 && cd $_ }
+
 alias rd=rmdir
 
 # List directory contents
