@@ -7,3 +7,5 @@
 	autocrlf = false
 [rebase]
 	autosquash = true
+[pull]
+	rebase = true
