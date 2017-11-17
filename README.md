@@ -15,3 +15,5 @@ Some of the stuff I use:
  - surfingkeys
  - tmux
  - zsh
+
+To bootstrap all the symlinks simply run the `install.sh` script and get some coffee.
