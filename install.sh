@@ -11,6 +11,7 @@ echo "Initializing submodule(s)"
 git submodule update --init --recursive
 
  
+mkdir -p ~/bin
 mkdir -p local # local files directory
 mkdir -p ~/.local/share # local files directory
 mkdir -p ~/.local/share/misc
@@ -23,7 +24,7 @@ source scripts/link.sh
 if [ ! -d ~/.local/share/fzf ]; then
 	echo "installing fzf"
 	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
-	~/.local/share/fzf/install --all
+	ln -s ~/.local/share/fzf ~/bin/fzf
 fi
 
 # install wslpath
