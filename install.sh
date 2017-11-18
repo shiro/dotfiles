@@ -12,7 +12,7 @@ git submodule update --init --recursive
 
  
 mkdir -p ~/bin
-mkdir -p local # local files directory
+mkdir -p ~/.local # local files directory
 mkdir -p ~/.local/share # local files directory
 mkdir -p ~/.local/share/misc
 

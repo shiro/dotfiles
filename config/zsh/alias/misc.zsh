@@ -1,10 +1,10 @@
 # explorer commands
 ex(){ explorer /e,"$(wslpath -w "$(realpath "$1")")" }
-exrc(){ ex $ZSH/alias }
+exrc(){ ex ${ZDOTDIR}/alias }
 
 # mischelanious commands
-rc(){ $EDITOR "$ZSH/$1" }
-alias rcre='. ~/.zshrc'
+rc(){ $EDITOR "${ZDOTDIR}/$1" }
+alias rcre=". ${ZDOTDIR}/.zshrc"
 alias r='/usr/bin/reset'
 alias wget_website='wget -mkEpnp'
 alias hosts='vim /etc/hosts'
@@ -24,7 +24,7 @@ alias art="php artisan"
 alias sedr="sed -r"
 
 # vim
-rcvim(){ vim "$DOTFILES/config/nvim/$1" }
+rcvim(){ vim "$XDG_CONFIG_HOME/nvim/$1" }
 fv(){ 
 	file="$(fzf)"
 	[ ! -z $file ] && vim "$file"

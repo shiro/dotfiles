@@ -1,0 +1,15 @@
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+export XDG_CONFIG_DIR="/etc/xdg"
+
+export EDITOR=vim
+export VISUAL=vim
+
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export DOTFILES="$HOME/.dotfiles"
+
+[ -n $DISPLAY ] && export DISPLAY=localhost:0
+
+export PATH="$PATH:/mnt/c/Windows/System32"

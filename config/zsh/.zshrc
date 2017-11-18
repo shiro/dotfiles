@@ -1,7 +1,3 @@
-export DOTFILES=~/.dotfiles
-export ZSH=$DOTFILES/zsh
-
-
 command_exists() {
     type "$1" > /dev/null 2>&1
 }
@@ -15,7 +11,7 @@ unsetopt BG_NICE
 
 
 # load zit, the plugin manager
-source $ZSH/plugin/zit.zsh
+source ${ZDOTDIR}/plugin/zit.zsh
 export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
 
@@ -31,9 +27,9 @@ autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
 [ -z "$TMUX" ] && export TERM=xterm-256color
 
 configs=(
-	$ZSH/*.zsh
-	$ZSH/alias/*
-	$ZSH/plugin/*
+	${ZDOTDIR}/*.zsh
+	${ZDOTDIR}/alias/*
+	${ZDOTDIR}/plugin/*
 )
 
 # source all .zsh files inside of the zsh/ directory
@@ -53,8 +49,8 @@ zit-in "https://github.com/m45t3r/zit" "zit"
 
 
 # load custom settings
-if [[ -f "${HOME}/.zshrc.local" ]]; then
-  source "${HOME}/.zshrc.local"
+if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
+  source ${ZDOTDIR}/.zshrc.local
 fi
 
 

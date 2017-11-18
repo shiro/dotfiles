@@ -1,5 +1,5 @@
-localbin.ln
-
+config/nvim/.netrwhist
 config/nvim/plugged
 config/nvim/spell
-config/nvim/.netrwhist
+
+config/zsh/*.zwc
