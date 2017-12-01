@@ -24,13 +24,16 @@ source scripts/link.sh
 if [ ! -d ~/.local/share/fzf ]; then
 	echo "installing fzf"
 	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
-	ln -s ~/.local/share/fzf ~/bin/fzf
+	~/.local/share/fzf/install --bin
+	ln -s ~/.local/share/fzf/bin/fzf ~/bin/fzf
+	chmod +x ~/bin/fzf
 fi
 
 # install wslpath
 if ! [[ -f ~/bin/wslpath ]]; then
 	echo "installing wslpath"
 	wget https://github.com/darealshinji/scripts/raw/master/wslpath -O ~/bin/wslpath
+	chmod +x ~/bin/wslpath
 fi
 
 echo "Done. Reload your terminal."

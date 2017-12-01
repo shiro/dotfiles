@@ -16,4 +16,4 @@ Some of the stuff I use:
  - tmux
  - zsh
 
-To bootstrap all the symlinks simply run the `install.sh` script and get some coffee.
+To bootstrap all the symlinks simply run the `install` script and get some coffee.
