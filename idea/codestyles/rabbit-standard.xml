@@ -35,7 +35,9 @@
   <Objective-C>
     <option name="INDENT_BLOCK_COMMENT" value="false" />
     <option name="INDENT_DIRECTIVE_AS_CODE" value="true" />
-    <option name="CLASS_CONSTRUCTOR_INIT_LIST_COMMA_ON_NEXT_LINE" value="true" />
+    <option name="CLASS_CONSTRUCTOR_INIT_LIST_WRAP" value="5" />
+    <option name="CLASS_CONSTRUCTOR_INIT_LIST_NEW_LINE_BEFORE_COLON" value="0" />
+    <option name="CLASS_CONSTRUCTOR_INIT_LIST_NEW_LINE_AFTER_COLON" value="1" />
     <option name="SPACE_BEFORE_TEMPLATE_DECLARATION_LT" value="true" />
     <option name="DISCHARGED_SHORT_TERNARY_OPERATOR" value="true" />
     <option name="TAG_PREFIX_OF_LINE_COMMENT" value="AT" />

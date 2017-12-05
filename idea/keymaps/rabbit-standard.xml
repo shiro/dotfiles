@@ -51,10 +51,23 @@
   <action id="GotoBookmark3" />
   <action id="GotoBookmark6" />
   <action id="GotoBookmark7" />
+  <action id="GotoDeclaration">
+    <keyboard-shortcut first-keystroke="ctrl b" />
+    <mouse-shortcut keystroke="control button1" />
+    <mouse-shortcut keystroke="button2" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt o" />
+  </action>
   <action id="InsertLiveTemplate" />
   <action id="MaintenanceAction" />
   <action id="ReSharperGotoImplementation">
     <keyboard-shortcut first-keystroke="numpad2" />
+  </action>
+  <action id="Refactorings.QuickListPopupAction">
+    <keyboard-shortcut first-keystroke="shift ctrl alt r" />
+  </action>
+  <action id="ReformatCode">
+    <keyboard-shortcut first-keystroke="ctrl alt l" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt t" />
   </action>
   <action id="Replace" />
   <action id="Rerun">
