@@ -14,7 +14,9 @@ mapkey('p', "Open the clipboard's URL in the current tab", function() {
 });
 
 map('B', 'b');
-mapkey('b', 'Open a Bookmark in current tab', 'Front.openOmnibar({type: "Bookmarks", tabbed: false})');
+mapkey('b', 'Open a Bookmark in current tab', function() {
+	Front.openOmnibar({type: "Bookmarks", tabbed: false});
+});
 
 map('<Alt-t>', '<Alt-s>');
 
