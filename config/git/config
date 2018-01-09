@@ -9,3 +9,5 @@
 	autosquash = true
 [pull]
 	rebase = true
+[hub]
+	protocol = https

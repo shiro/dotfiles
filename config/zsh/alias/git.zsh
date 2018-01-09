@@ -1,3 +1,6 @@
+# use hub instead of git, as it can do everything git can do, and more!
+alias git='hub'
+
 # fzf checkout git branch (including remote branches)
 fbr() {
   local branches branch
