@@ -37,6 +37,8 @@ map('L', 'D');
 map('gt', 'R');
 map('gT', 'E');
 map('yf', 'ya');
+map('`', '\'');
+
 
 unmap(".");
 unmap("sg");
