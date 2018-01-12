@@ -88,6 +88,8 @@ nnoremap <leader>gg :GitGutterToggle<CR>
 Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . command
 Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
 
+Plug 'kchmck/vim-coffee-script' " coffee-scirpt syntax
+
 " tmux navigator {{{
 
 Plug 'christoomey/vim-tmux-navigator' " navigate vim/tmux splits

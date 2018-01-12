@@ -69,8 +69,6 @@ set nonumber                " disable line numbers by default
 set wrap                    " turn on line wrapping
 set wrapmargin=8            " wrap lines when coming within n characters from side
 
-syntax on
-
 set autoindent              " automatically set indent of new line
 set smartindent
 
@@ -103,6 +101,9 @@ set incsearch               " set incremental search, like modern browsers
 
 set wildmenu                " enhanced command line completion
 set hidden                  " current buffer can be put into background
+
+syntax on                   " enable syntax highlighting
+
 
 " }}}
 
