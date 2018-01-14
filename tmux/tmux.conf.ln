@@ -57,6 +57,9 @@ set-option -g mouse on
 bind R source-file ~/.tmux.conf \; display "reloaded"
 bind -n M-R source-file ~/.tmux.conf \; display "reloaded"
 
+# synchronize panes (send input to all)
+bind e setw synchronize-panes
+
 # use vim movements to switch between panes
 bind -n ä display-panes
 
