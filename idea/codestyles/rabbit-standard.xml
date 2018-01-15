@@ -139,6 +139,7 @@
     <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
     <option name="BLOCK_COMMENT_AT_FIRST_COLUMN" value="false" />
     <option name="BLANK_LINES_AROUND_CLASS" value="0" />
+    <option name="BLANK_LINES_AROUND_METHOD" value="0" />
     <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
     <indentOptions>
       <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
