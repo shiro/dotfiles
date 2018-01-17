@@ -51,11 +51,14 @@ set-option -g mouse on
 
 # }}}
 
-# mappings {{{
+# mappings {{
 
 # easy reloading of config file
 bind R source-file ~/.tmux.conf \; display "reloaded"
 bind -n M-R source-file ~/.tmux.conf \; display "reloaded"
+
+# toggle all keys (for nested sessions)
+bind t if -F '#{s/empty//:key-table}' 'set key-table empty' 'set -u key-table'
 
 # synchronize panes (send input to all)
 bind e setw synchronize-panes
@@ -106,8 +109,10 @@ bind -n ß set -g status
 
 # windows {{{
 
-bind -n Right next-window
 bind -n Left previous-window
+bind h previous-window
+bind -n Right next-window
+bind l next-window
 # bind -n M-f find-window
 
 bind -n M-w kill-window
