@@ -124,7 +124,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --all' } " 
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'down': '~25%' }
-inoremap z= <plug>(fzf-complete-word)
+imap z= <plug>(fzf-complete-word)
+nnoremap <leader>b :Buffers<CR> 
+nnoremap <leader>m :Files<CR> 
 
 " }}}
 
