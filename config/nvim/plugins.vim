@@ -90,6 +90,8 @@ Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surro
 
 Plug 'kchmck/vim-coffee-script' " coffee-scirpt syntax
 
+Plug 'cakebaker/scss-syntax.vim' " sass syntax
+
 " tmux navigator {{{
 
 Plug 'christoomey/vim-tmux-navigator' " navigate vim/tmux splits
