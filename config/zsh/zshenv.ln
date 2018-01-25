@@ -12,4 +12,4 @@ export DOTFILES="$HOME/.dotfiles"
 
 [ -n $DISPLAY ] && export DISPLAY=localhost:0
 
-export PATH="$PATH:/mnt/c/Windows/System32"
+[ -f ~/.zshenv.local ] && source ~/.zshenv.local
