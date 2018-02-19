@@ -93,6 +93,7 @@ Plug 'vim-scripts/YankRing.vim' " yank ring
 Plug 'kchmck/vim-coffee-script' " coffee-scirpt syntax
 
 Plug 'cakebaker/scss-syntax.vim' " sass syntax
+Plug 'kana/vim-arpeggio'
 
 " tmux navigator {{{
 
