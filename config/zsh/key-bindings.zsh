@@ -62,3 +62,8 @@ bindkey -M vicmd '^[[B' history-substring-search-down
 # file rename magic
 bindkey "^[m" copy-prev-shell-word
 
+# reset terminal with ease
+reset_widget() { tput reset; builtin zle .redisplay; }
+zle -N reset_widget
+bindkey "^y" reset_widget
+bindkey -M vicmd "^y" reset_widget
