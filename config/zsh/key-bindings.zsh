@@ -59,6 +59,6 @@ bindkey -M vicmd '^[[A' history-substring-search-up
 bindkey -M vicmd '^[[B' history-substring-search-down
 
 
-# file rename magick
+# file rename magic
 bindkey "^[m" copy-prev-shell-word
 
