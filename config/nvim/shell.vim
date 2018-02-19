@@ -108,7 +108,7 @@ xnoremap dp :diffput<cr>:diffu<cr>
 xnoremap do :diffget<cr>:diffu<cr>
 
 
-" moving up and down work as you would expect
+" moving up and down as you would expect
 nnoremap <silent> j gj
 nnoremap <silent> k gk
 nnoremap <silent> ^ g^
