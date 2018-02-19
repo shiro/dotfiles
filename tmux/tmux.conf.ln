@@ -9,7 +9,7 @@ unbind C-b
 set -g prefix C-a
 
 # Reduce command delay
-set -s escape-time 1
+set -sg escape-time 0
 
 # Window numbering should start at 1
 set -g base-index 1

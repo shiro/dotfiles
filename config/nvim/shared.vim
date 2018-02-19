@@ -45,9 +45,8 @@ nnoremap <leader>= <C-w>=
 nnoremap <silent> <esc> :noh<cr><esc>
 
 " buffer managment
-nnoremap <C-w> :wq<cr>
-" nnoremap <C-W> :wqa<cr>
-nnoremap <leader>q :qa!<cr>
+nnoremap <leader>Q :qa!<cr>
+nnoremap <leader>q :q!<cr>
 
 " swap active buffers
 nnoremap <C-i> <C-^>

@@ -93,7 +93,12 @@ Plug 'vim-scripts/YankRing.vim' " yank ring
 Plug 'kchmck/vim-coffee-script' " coffee-scirpt syntax
 
 Plug 'cakebaker/scss-syntax.vim' " sass syntax
-Plug 'kana/vim-arpeggio'
+
+Plug 'kana/vim-arpeggio' " chord keybinds
+
+Plug 'Valloric/YouCompleteMe' " completion
+
+Plug 'easymotion/vim-easymotion' " improved motions
 
 " tmux navigator {{{
 
@@ -174,6 +179,17 @@ let g:rooter_resolve_links = 1
 " }}}
 
 call plug#end()
+
+" chords {{{
+
+" general
+call arpeggio#map('n', '', 0, 'wq', ':wq<cr>') " write-quit
+call arpeggio#map('i', '', 0, 'wq', '<esc>:wq<cr>') " write-quit
+
+" insert mode
+call arpeggio#map('i', '', 0, 'fun', 'function')
+
+" }}}
 
 
 " if isdirectory(".git")
