@@ -34,7 +34,7 @@ nnoremap <leader>W :wa<cr>
 " window navigation
 nnoremap <C-]> <C-w>s
 nnoremap <C-\> <C-w>v
-nnoremap <C-q> :q!<CR>
+nnoremap <C-q> :qa!<CR>
 nnoremap <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
 
@@ -45,7 +45,6 @@ nnoremap <leader>= <C-w>=
 nnoremap <silent> <esc> :noh<cr><esc>
 
 " buffer managment
-nnoremap <leader>Q :qa!<cr>
 nnoremap <leader>q :q!<cr>
 
 " swap active buffers
