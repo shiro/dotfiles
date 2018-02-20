@@ -40,6 +40,7 @@ Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
 
 let g:ranger_replace_netrw = 1
+let g:ranger_map_keys = 0 " use own keymaps
 
 
 " Plug 'benmills/vimux' " tmux integration for vim
@@ -98,7 +99,14 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 
 " Plug 'Valloric/YouCompleteMe' " completion
 
+" vim-easymotion {{{
+
 Plug 'easymotion/vim-easymotion' " improved motions
+
+map <Leader>f <Plug>(easymotion-bd-f)
+map <Leader>e <Plug>(easymotion-bd-w)
+
+" }}}
 
 " tmux navigator {{{
 
