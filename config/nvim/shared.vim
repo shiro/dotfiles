@@ -100,6 +100,7 @@ set incsearch               " set incremental search, like modern browsers
 set wildmenu                " enhanced command line completion
 set hidden                  " current buffer can be put into background
 
+filetype plugin indent on   " enable ftplugin with indenting
 syntax on                   " enable syntax highlighting
 
 

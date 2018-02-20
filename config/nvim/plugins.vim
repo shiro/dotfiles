@@ -96,7 +96,7 @@ Plug 'cakebaker/scss-syntax.vim' " sass syntax
 
 Plug 'kana/vim-arpeggio' " chord keybinds
 
-Plug 'Valloric/YouCompleteMe' " completion
+" Plug 'Valloric/YouCompleteMe' " completion
 
 Plug 'easymotion/vim-easymotion' " improved motions
 
