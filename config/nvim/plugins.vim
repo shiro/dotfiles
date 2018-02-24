@@ -103,8 +103,38 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 
 Plug 'easymotion/vim-easymotion' " improved motions
 
+let g:EasyMotion_smartcase = 1 " case insensitive
+
 map <Leader>f <Plug>(easymotion-bd-f)
+vmap <Leader>f <Plug>(easymotion-bd-f)
 map <Leader>e <Plug>(easymotion-bd-w)
+vmap <Leader>e <Plug>(easymotion-bd-w)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+" }}}
+
+" incsearch {{{
+
+Plug 'haya14busa/incsearch.vim' " incremental search
+Plug 'haya14busa/incsearch-fuzzy.vim' " fuzzy
+Plug 'haya14busa/incsearch-easymotion.vim' " easymotion integration
+
+map / <Plug>(incsearch-fuzzy-/)
+map ? <Plug>(incsearch-fuzzy-?)
+map g/ <Plug>(incsearch-fuzzy-staym
+
+map <silent> z/ <Plug>(incsearch-easymotion-/)
+map <silent> z? <Plug>(incsearch-easymotion-?)
+map <silent> zg/ <Plug>(incsearch-easymotion-stay)
+
+let g:incsearch#auto_nohlsearch = 1 " auto-hide search highlighting
+map <silent> n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 " }}}
 

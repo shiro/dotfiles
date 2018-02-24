@@ -85,7 +85,7 @@ set showmatch               " show matching braces
 
 set noerrorbells
 
-set foldmethod=marker       " fold based on indent
+set foldmethod=manual       " manual folding as default
 set foldnestmax=10          " deepest fold is 10 levels
 set nofoldenable            " don't fold by default
 set foldlevel=0             " all folds closed
