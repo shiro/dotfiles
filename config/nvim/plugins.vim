@@ -92,7 +92,13 @@ nnoremap <leader>gg :GitGutterToggle<CR>
 Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . command
 Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
 
+" yank ring {{{
+
 " Plug 'vim-scripts/YankRing.vim' " yank ring
+
+let g:yankring_history_file = '.local/share/misc/yankring_history.txt' " history file location
+
+" }}}
 
 " syntax {{{
 
