@@ -22,10 +22,6 @@ nnoremap <C-y> 3<C-y>
 " create line bellow
 " nnoremap <C-J> a<CR><Esc>k$
 
-" new line without insert
-nmap <S-Enter> O<Esc>
-nmap <A-o> o<Esc>
-
 " save active buffer
 nnoremap <leader>w :w<cr>
 nnoremap <leader>W :wa<cr>
