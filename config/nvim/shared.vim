@@ -5,7 +5,6 @@ imap jj <Esc>
 " todo double leader map
 " noremap <Leader><Leader> V
 
-noremap <Leader>n :noh<CR>
 noremap <Leader>' :set relativenumber!<CR>
 noremap <Leader>" :set number!<CR>
 
