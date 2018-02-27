@@ -11,3 +11,7 @@
 	rebase = true
 [hub]
 	protocol = https
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+[merge]
+	tool = fugitive
