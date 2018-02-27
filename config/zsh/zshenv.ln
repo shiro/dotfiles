@@ -10,6 +10,6 @@ export VISUAL=vim
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 export DOTFILES="$HOME/.dotfiles"
 
-[ -n $DISPLAY ] && export DISPLAY=localhost:0
+# [ -n $DISPLAY ] && export DISPLAY=localhost:0
 
 [ -f ~/.zshenv.local ] && source ~/.zshenv.local
