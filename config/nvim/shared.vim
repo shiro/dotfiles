@@ -1,7 +1,5 @@
 " mappings {{{
 
-imap jj <Esc>
-
 " todo double leader map
 " noremap <Leader><Leader> V
 
