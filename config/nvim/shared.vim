@@ -98,6 +98,5 @@ set hidden                  " current buffer can be put into background
 filetype plugin indent on   " enable ftplugin with indenting
 syntax on                   " enable syntax highlighting
 
-
 " }}}
 
