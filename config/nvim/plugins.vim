@@ -229,7 +229,11 @@ call arpeggio#map('i', '', 0, 'wq', '<esc>:wq<cr>') " write-quit
 
 " insert mode
 call arpeggio#map('i', '', 0, 'fun', 'function')
-call arpeggio#map('i', '', 0, 'jk', '<esc>:w<cr>')
+
+call arpeggio#map('i', '', 0, 'jk', '<esc>:w<cr>') " save
+
+call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
+
 
 " }}}
 
