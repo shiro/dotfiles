@@ -13,7 +13,7 @@ git submodule update --init --recursive
  
 mkdir -p ~/bin
 mkdir -p ~/.local # local files directory
-mkdir -p ~/.local/share # local files directory
+mkdir -p ~/.local/share
 mkdir -p ~/.local/share/misc
 
 
@@ -30,7 +30,7 @@ if [ ! -d ~/.local/share/fzf ]; then
 fi
 
 # install wslpath
-if ! [[ -f ~/bin/wslpath ]]; then
+if [ ! -f ~/bin/wslpath ]; then
 	echo "installing wslpath"
 	wget https://github.com/darealshinji/scripts/raw/master/wslpath -O ~/bin/wslpath
 	chmod +x ~/bin/wslpath
@@ -42,10 +42,10 @@ if  [ ! -f ~/bin/hub ]; then
 	HUB_VERSION="hub-linux-amd64-2.3.0-pre10"
 	HUB_URL="https://github.com/github/hub/releases/download/v2.3.0-pre10/${HUB_VERSION}.tgz"
 
-	wget $HUB_URL
-	tar xf ${HUB_VERSION}.tgz
+	wget "$HUB_URL"
+	tar xf "${HUB_VERSION}.tgz"
 
-	mv ${HUB_VERSION}/bin/hub ~/bin
+	mv "${HUB_VERSION}/bin/hub" ~/bin
 	rm -r ${HUB_VERSION}{,.tgz}
 fi
 
