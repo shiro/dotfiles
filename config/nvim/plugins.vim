@@ -94,9 +94,15 @@ Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surro
 
 " Plug 'vim-scripts/YankRing.vim' " yank ring
 
-Plug 'kchmck/vim-coffee-script' " coffee-scirpt syntax
+" syntax {{{
 
-Plug 'cakebaker/scss-syntax.vim' " sass syntax
+Plug 'kchmck/vim-coffee-script' " coffee-scirpt
+
+Plug 'cakebaker/scss-syntax.vim' " sass
+
+Plug 'chr4/nginx.vim' " nginx.conf
+
+" }}}
 
 Plug 'kana/vim-arpeggio' " chord keybinds
 
