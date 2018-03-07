@@ -21,6 +21,7 @@ zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-dir
 # Use caching so that commands like apt and dpkg complete are useable
 zstyle ':completion::complete:*' use-cache 1
 zstyle ':completion::complete:*' cache-path ~/.localbin/zsh_comp_cache
+zstyle ':completion::complete:*' cache-path ~/.local/share/misc/.zsh_comp_cache
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
