@@ -18,6 +18,8 @@ export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 # additional completions
 zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
+zit-in "https://github.com/felixr/docker-zsh-completion" "docker-zsh-completions"
+zit-lo "docker-zsh-completions" "docker-zsh-completion.plugin.zsh"
 
 
 # enable completion
