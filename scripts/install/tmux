@@ -1,0 +1,14 @@
+#!/bin/bash
+source _functions
+
+NAME='tmux'
+
+
+command_exists $NAME
+[ $? -eq 0 ] && return 0
+
+case "$OS_RELEASE" in
+  'Debian GNU/Linux')
+    echo 'install not yet configured'
+    ;;
+esac

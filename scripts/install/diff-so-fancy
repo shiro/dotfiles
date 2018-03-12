@@ -1,4 +1,12 @@
 #!/bin/sh
+source _functions
+
+NAME='diff-so-fancy'
+
+
+command_exists $NAME
+[ $? -eq 0 ] && return 0
+
 
 wget 'https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy' \
   -nv -O ~/bin/diff-so-fancy

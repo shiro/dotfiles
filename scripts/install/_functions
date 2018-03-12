@@ -1,0 +1,11 @@
+#!/bin/bash
+
+command_exists(){
+  if [ $(command -v $1) ]; then
+    echo "[SKIP]    $1"
+    return 0
+  else
+    echo "[INSTALL] $1"
+    return 1
+  fi
+}
