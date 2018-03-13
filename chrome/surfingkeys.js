@@ -18,6 +18,11 @@ mapkey('b', 'Open a Bookmark in current tab', function() {
 	Front.openOmnibar({type: "Bookmarks", tabbed: false});
 });
 
+// [HACKS] that might not be necessary sometime
+mapkey('cf', '#1Open multiple links in a new tab', function() {
+  Hints.create("", Hints.dispatchMouseClick, {tabbed: true, active: false, multipleHits: true});
+});
+
 map('<Alt-t>', '<Alt-s>');
 
 map('<ArrowRight>', 'R');
