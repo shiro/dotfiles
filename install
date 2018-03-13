@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-command_exists() {
-    type "$1" > /dev/null 2>&1
-}
+export DOTFILES=$(pwd)
 
 echo "Installing dotfiles."
-
 
 echo "Initializing submodule(s)"
 git submodule update --init --recursive
@@ -16,6 +13,8 @@ mkdir -p ~/.local # local files directory
 mkdir -p ~/.local/share
 mkdir -p ~/.local/share/misc
 
+# cd scripts
+source scripts/install.sh
 
 source scripts/link.sh
 

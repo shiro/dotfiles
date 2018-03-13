@@ -1,5 +1,5 @@
 #!/bin/bash
-source _functions
+source ${DOTFILES}/scripts/install/_functions
 
 NAME='tmux'
 

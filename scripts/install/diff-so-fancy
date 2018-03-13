@@ -1,5 +1,5 @@
 #!/bin/sh
-source _functions
+source ${DOTFILES}/scripts/install/_functions
 
 NAME='diff-so-fancy'
 

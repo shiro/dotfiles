@@ -7,9 +7,7 @@ export KERNEL_TYPE=$(uname -r)
 echo "installing applications..."
 echo "system release: $OS_RELEASE"
 
-cd install
-
-for file in *; do
-  [ "$file" == _* ] && continue # ingore _*
-  source "./$file"
+for file in ${DOTFILES}/scripts/install/*; do
+  [[ "$file" == */_* ]] && continue # ingore _*
+  source "$file"
 done
