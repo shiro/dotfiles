@@ -4,13 +4,13 @@ source _functions
 NAME='wslpath'
 
 
-[ -f ~/bin/wslpath ] || [ "$KERNEL_TYPE" != *Microsoft ]
+[ -f ~/bin/wslpath ] || [[ "$KERNEL_TYPE" != *Microsoft ]]
 condition_exists $NAME $?
 [ $? -eq 0 ] && return 0
 
 
 wget 'https://github.com/darealshinji/scripts/raw/master/wslpath' \
-  -nv -O ~/bin/wslpath
+  -q --show-progress -O ~/bin/wslpath
 chmod +x ~/bin/wslpath
 
 
