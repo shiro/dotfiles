@@ -4,6 +4,9 @@ export FZF_DEFAULT_OPTS="--height 40% --reverse
   --color=fg:#c0d5c1,hl:#90c93f,hl+:#90c93f"
 
 
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_CTRL_T_COMMAND='ag --hidden --ignore .git -g ""'
+
 # auto-completion
 # ---------------
 [[ $- == *i* ]] && source "/home/shiro/.fzf/shell/completion.zsh" 2> /dev/null
