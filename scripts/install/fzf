@@ -1,0 +1,15 @@
+#!/bin/bash
+source _functions
+
+NAME='fzf'
+
+
+[ -d ~/.local/share/fzf ]
+condition_exists $NAME $?
+[ $? -eq 0 ] && return 0
+
+
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
+~/.local/share/fzf/install --bin
+ln -s ~/.local/share/fzf/bin/fzf ~/bin/fzf
+chmod +x ~/bin/fzf

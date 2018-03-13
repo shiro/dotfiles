@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export OS_RELEASE=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed 's/"//g')
+export KERNEL_TYPE=$(uname -r)
 
 
 echo "installing applications..."

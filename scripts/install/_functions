@@ -9,3 +9,13 @@ command_exists(){
     return 1
   fi
 }
+
+condition_exists(){
+  if [ $2 -eq 0 ]; then
+    echo "[SKIP]    $1"
+    return 0
+  else
+    echo "[INSTALL] $1"
+    return 1
+  fi
+}
