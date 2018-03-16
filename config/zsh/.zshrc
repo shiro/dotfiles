@@ -57,7 +57,8 @@ fi
 
 
 # compile everything so it loads faster
-zit-lo "zit" "extras/compile-zsh-files.zsh"
+[ -z $ZSH_NO_COMPILE ] && zit-lo "zit" "extras/compile-zsh-files.zsh"
+
 
 
 if [[ $1 == eval ]]
