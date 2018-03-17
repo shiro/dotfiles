@@ -14,7 +14,7 @@ unsetopt BG_NICE
 source ${ZDOTDIR}/plugin/zit.zsh
 export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
-
+# enable 256 color terminal
 [ -z "$TMUX" ] && export TERM=xterm-256color
 
 configs=(
