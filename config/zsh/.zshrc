@@ -15,19 +15,6 @@ source ${ZDOTDIR}/plugin/zit.zsh
 export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
 
-# additional completions
-zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
-zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
-zit-in "https://github.com/felixr/docker-zsh-completion" "docker-zsh-completions"
-zit-lo "docker-zsh-completions" "docker-zsh-completion.plugin.zsh"
-zit-in "https://github.com/glidenote/hub-zsh-completion" "hub-zsh-completion"
-fpath+="${ZIT_MODULES_PATH}/hub-zsh-completion"
-
-
-# enable completion
-autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
-
-
 [ -z "$TMUX" ] && export TERM=xterm-256color
 
 configs=(

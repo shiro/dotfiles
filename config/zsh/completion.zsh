@@ -1,6 +1,18 @@
 zmodload -i zsh/complist
 
 
+# load additional completions
+zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
+zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
+zit-in "https://github.com/felixr/docker-zsh-completion" "docker-zsh-completions"
+zit-lo "docker-zsh-completions" "docker-zsh-completion.plugin.zsh"
+zit-in "https://github.com/glidenote/hub-zsh-completion" "hub-zsh-completion"
+fpath+="${ZIT_MODULES_PATH}/hub-zsh-completion"
+
+
+# enable completion
+autoload -U compinit && compinit -u -d ~/.local/share/misc/.zcompdump
+
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
 setopt auto_menu         # show completion menu on successive tab press
