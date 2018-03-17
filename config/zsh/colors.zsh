@@ -1,3 +1,9 @@
+local DIRCOLORS_DEFAULT="$DOTFILES/color_themes/hyrule_woods/dircolors.hyrule_woods"
+eval `dircolors ${DIRCOLORS_FILE:-$DIRCOLORS_DEFAULT}`
+
+
+# TODO: rework colors
+
 # Reset
 Color_Off='\033[0m'       # Text Reset
 
