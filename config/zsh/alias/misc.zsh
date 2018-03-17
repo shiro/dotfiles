@@ -1,7 +1,6 @@
 # mischelanious commands
 rc(){ $EDITOR "${ZDOTDIR}/$1" }
 alias rcre=". ${ZDOTDIR}/.zshrc"
-alias r='/usr/bin/reset'
 alias wget_website='wget -mkEpnp'
 alias hosts='vim /etc/hosts'
 
