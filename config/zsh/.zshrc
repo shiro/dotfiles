@@ -20,6 +20,8 @@ zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 zit-lo "zsh-completions" "zsh-completions.plugin.zsh"
 zit-in "https://github.com/felixr/docker-zsh-completion" "docker-zsh-completions"
 zit-lo "docker-zsh-completions" "docker-zsh-completion.plugin.zsh"
+zit-in "https://github.com/glidenote/hub-zsh-completion" "hub-zsh-completion"
+fpath+="${ZIT_MODULES_PATH}/hub-zsh-completion"
 
 
 # enable completion
