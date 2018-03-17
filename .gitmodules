@@ -1,3 +1,6 @@
 [submodule "config/nvim/plug"]
 	path = config/nvim/plug
 	url = https://github.com/junegunn/vim-plug
+[submodule "color_themes/hyrule_woods"]
+	path = color_themes/hyrule_woods
+	url = https://github.com/shiro/hyrule_woods
