@@ -4,10 +4,10 @@ mcd(){ mkdir -p $1 && cd $_ }
 alias rd=rmdir
 
 # List directory contents
-alias lsa='ls -lah'
-alias l='ls -lah'
-alias ll='ls -lh'
-alias la='ls -lAh'
+alias lsa='ls -lah --color'
+alias l='ls -lah --color'
+alias ll='ls -lh --color'
+alias la='ls -lAh --color'
 
 # fzf through directory stack
 d(){ eval cd $(dirs -v | sed -r 's/^[0-9]+	//' | fzf) }
