@@ -19,29 +19,5 @@ Term=xterm-256color
 Transparency=off
 BellTaskbar=no
 
-
-# Hyrule color theme
-
-ForegroundColour=#c0d5c1
-BackgroundColour=#2d2c2b
-
-Black=#716d6a
-BoldBlack=#716d6a
-
-Red=#cc4442
-BoldRed=#cc4442
-
-Green=#90c93f
-BoldGreen=#90c93f
-
-Yellow=#f5c504
-BoldYellow=#f5c504
-
-Blue=#359ce6
-BoldBlue=#359ce6
-
-Magenta=#ce840d
-BoldMagenta=#ce840d
-
-Cyan=#bbddff
-BoldCyan=#bbddff
+# color theme
+ThemeFile=hyrule_woods.minttyrc
