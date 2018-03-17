@@ -1,7 +1,3 @@
-# explorer commands
-ex(){ explorer /e,"$(wslpath -w "$(realpath "$1")")" }
-exrc(){ ex ${ZDOTDIR}/alias }
-
 # mischelanious commands
 rc(){ $EDITOR "${ZDOTDIR}/$1" }
 alias rcre=". ${ZDOTDIR}/.zshrc"
