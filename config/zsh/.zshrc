@@ -11,7 +11,7 @@ unsetopt BG_NICE
 
 
 # load zit, the plugin manager
-source ${ZDOTDIR}/plugin/zit.zsh
+source ${ZDOTDIR}/plugins/zit.zsh
 export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
 # enable 256 color terminal
@@ -19,8 +19,11 @@ export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
 configs=(
 	${ZDOTDIR}/*.zsh
+	${ZDOTDIR}/functions/*.zsh
+	${ZDOTDIR}/completions/*.zsh
+	${ZDOTDIR}/key-bindings/*.zsh
 	${ZDOTDIR}/alias/*
-	${ZDOTDIR}/plugin/*
+	${ZDOTDIR}/plugins/*
 )
 
 # source all .zsh files inside of the zsh/ directory
