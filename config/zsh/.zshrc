@@ -46,8 +46,8 @@ zit-in "https://github.com/m45t3r/zit" "zit"
 
 
 # load custom settings
-if [[ -f ~/.local/share/dotfiles/.zshrc/zshrc ]]; then
-  source ~/.local/share/dotfiles/.zshrc
+if [ -f ~/.local/share/dotfiles/zshrc ]; then
+  source ~/.local/share/dotfiles/zshrc
 fi
 
 
