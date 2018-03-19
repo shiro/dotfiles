@@ -78,6 +78,3 @@ g() {
     git status -s
   fi
 }
-
-# unset -f is_in_git_repo
-# unalias glNoGraph
