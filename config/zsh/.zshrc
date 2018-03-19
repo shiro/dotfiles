@@ -20,9 +20,9 @@ export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 configs=(
 	${ZDOTDIR}/*.zsh
 	${ZDOTDIR}/functions/*.zsh
+	${ZDOTDIR}/alias/*
 	${ZDOTDIR}/completions/*.zsh
 	${ZDOTDIR}/key-bindings/*.zsh
-	${ZDOTDIR}/alias/*
 	${ZDOTDIR}/plugins/*
 )
 

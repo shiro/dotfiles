@@ -15,5 +15,9 @@ HUB_URL="https://github.com/github/hub/releases/download/v2.3.0-pre10/${HUB_VERS
 wget "$HUB_URL" -q --show-progress -P /tmp
 tar xf "/tmp/${HUB_VERSION}.tgz" -C /tmp
 
+mkdir -p ~/bin
+mkdir -p ~/.local/share/completion
 mv "/tmp/${HUB_VERSION}/bin/hub" ~/bin
+mv "/tmp/${HUB_VERSION}/etc/hub.zsh_completion" ~/.local/share/completion/_hub
+
 rm -r /tmp/${HUB_VERSION}{,.tgz}
