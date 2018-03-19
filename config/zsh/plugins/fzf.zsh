@@ -1,5 +1,6 @@
 # options
-export FZF_DEFAULT_OPTS="--height 40% --reverse
+export FZF_DEFAULT_OPTS="--height 95% --reverse --no-border
+  --bind ctrl-alt-j:preview-down,ctrl-alt-k:preview-up
   --color=prompt:#c0d5c1,pointer:#ce840d
   --color=fg:#c0d5c1,hl:#90c93f,hl+:#90c93f
   --preview-window right:70%"
@@ -127,13 +128,13 @@ _fzf_feed_fifo() (
 _fzf_complete() {
   local fifo fzf_opts lbuf fzf matches post
   fifo="${TMPDIR:-/tmp}/fzf-complete-fifo-$$"
-  fzf_opts=$1
+  fzf_opts=$(echo "$1" | tr '\n' ' ')
   lbuf=$2
   post="${funcstack[2]}_post"
   type $post > /dev/null 2>&1 || post=cat
   fzf="$(__fzfcmd_complete)"
   _fzf_feed_fifo "$fifo"
-  matches=$(cat "$fifo" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" ${=fzf} ${=fzf_opts} -q "${(Q)prefix}" | $post | tr '\n' ' ')
+  matches=$(cat "$fifo" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" eval "${=fzf} ${fzf_opts} -q \"${(Q)prefix}\""  | $post | tr '\n' ' ')
   if [ -n "$matches" ]; then
     LBUFFER="$lbuf$matches"
   fi
@@ -215,21 +216,5 @@ zle     -N   fzf-completion
 bindkey '^I' fzf-completion
 
 bindkey -M vicmd '[' fzf-completion
-
-# }}}
-
-# curtom completion {{{
-
-# Custom fuzzy completion for "doge" command
-#   e.g. doge **<TAB>
-_fzf_complete_ga() {
-  _fzf_complete "--multi --reverse" "$@" < <(
-    git diff --name-status | cut -f2
-  )
-}
-
-_fzf_complete_gac() {
-  _fzf_complete_ga
-}
 
 # }}}
