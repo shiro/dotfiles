@@ -112,7 +112,12 @@ Plug 'chr4/nginx.vim' " nginx.conf
 
 Plug 'kana/vim-arpeggio' " chord keybinds
 
-" Plug 'Valloric/YouCompleteMe' " completion
+" deoplete.nvim {{{
+
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" let g:deoplete#enable_at_startup = 1
+
+" }}}
 
 " vim-easymotion {{{
 
