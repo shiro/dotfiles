@@ -14,4 +14,4 @@ export OS_RELEASE=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed 's/"//g')
 export KERNEL_TYPE=$(uname -r)
 
 
-[ -f ~/.zshenv.local ] && source ~/.zshenv.local
+[ -f ~/.local/share/dotfiles/zshenv ] && source ~/.local/share/dotfiles/zshenv

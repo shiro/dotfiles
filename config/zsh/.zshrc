@@ -26,6 +26,9 @@ configs=(
 	${ZDOTDIR}/plugins/*
 )
 
+# source local alias conf if it exists
+[ -f ~/.local/share/dotfiles/alias ] && source ~/.local/share/dotfiles/alias
+
 # source all .zsh files inside of the zsh/ directory
 for config in "${configs[@]}"; do
 	source $config;
@@ -43,8 +46,8 @@ zit-in "https://github.com/m45t3r/zit" "zit"
 
 
 # load custom settings
-if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
-  source ${ZDOTDIR}/.zshrc.local
+if [[ -f ~/.local/share/dotfiles/.zshrc/zshrc ]]; then
+  source ~/.local/share/dotfiles/.zshrc
 fi
 
 
