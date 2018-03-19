@@ -1,0 +1,1 @@
+alias bye='rm -rf'
