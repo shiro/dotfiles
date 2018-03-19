@@ -12,3 +12,10 @@ resign () {
   done
 }
 
+# sudo repeat last command
+alias please='sudo $(fc -ln -1)'
+
+# less shutting down remote servers
+alias stahp='poweroff'
+
+alias whatismyip='curl ifconfig.me'

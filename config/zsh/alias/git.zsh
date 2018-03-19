@@ -28,3 +28,8 @@ alias gsi='git submodule init'
 alias gsa='git submodule add'
 alias gsd='git submodule deinit'
 alias gsu='git submodule update'
+
+# doge git
+alias such=git
+alias very=git
+alias wow='git log --oneline --decorate --graph --all' 
