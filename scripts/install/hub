@@ -19,5 +19,6 @@ mkdir -p ~/bin
 mkdir -p ~/.local/share/completion
 mv "/tmp/${HUB_VERSION}/bin/hub" ~/bin
 mv "/tmp/${HUB_VERSION}/etc/hub.zsh_completion" ~/.local/share/completion/_hub
+chmod +x ~/.local/share/completion/_hub
 
 rm -r /tmp/${HUB_VERSION}{,.tgz}
