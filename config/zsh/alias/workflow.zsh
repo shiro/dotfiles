@@ -1,0 +1,1 @@
+proj(){cd "${HOME}/project/"$@}
