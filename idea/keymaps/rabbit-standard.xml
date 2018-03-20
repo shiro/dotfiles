@@ -33,6 +33,7 @@
   <action id="DuplicatesForm.SendToRight" />
   <action id="EditorDown">
     <keyboard-shortcut first-keystroke="alt j" />
+    <keyboard-shortcut first-keystroke="down" />
   </action>
   <action id="EditorUp">
     <keyboard-shortcut first-keystroke="up" />
@@ -68,6 +69,7 @@
   <action id="ReformatCode">
     <keyboard-shortcut first-keystroke="ctrl alt l" />
     <keyboard-shortcut first-keystroke="shift ctrl alt t" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt semicolon" />
   </action>
   <action id="Replace" />
   <action id="Rerun">
@@ -94,6 +96,7 @@
   <action id="StepOver">
     <keyboard-shortcut first-keystroke="shift ctrl alt comma" />
   </action>
+  <action id="TabShiftActions.MoveFocusDown" />
   <action id="ToggleBookmark" />
   <action id="ToggleFullScreen">
     <keyboard-shortcut first-keystroke="f11" />
