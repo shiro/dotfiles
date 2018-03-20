@@ -1,12 +1,11 @@
 #!/bin/bash
 source ${DOTFILES}/scripts/install/_functions
 
-NAME='fzf'
+this_is_called 'fzf'
 
 
-[ -d ~/.local/share/fzf ]
-condition_exists $NAME $?
-[ $? -eq 0 ] && return 0
+[ ! -d ~/.local/share/fzf ]
+install_or_skip $?
 
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf

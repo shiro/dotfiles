@@ -9,5 +9,5 @@ echo "system release: $OS_RELEASE"
 
 for file in ${DOTFILES}/scripts/install/*; do
   [[ "$file" == */_* ]] && continue # ingore _*
-  source "$file"
+  (source "$file")
 done

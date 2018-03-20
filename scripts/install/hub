@@ -1,12 +1,11 @@
 #!/bin/bash
 source ${DOTFILES}/scripts/install/_functions
 
-NAME='hub'
+this_is_called 'hub'
 
 
-[ -f ~/bin/hub ]
-condition_exists $NAME $?
-[ $? -eq 0 ] && return 0
+[ ! -f ~/bin/hub ]
+install_or_skip $?
 
 
 HUB_VERSION="hub-linux-amd64-2.3.0-pre10"

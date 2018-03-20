@@ -1,12 +1,13 @@
 #!/bin/bash
 source ${DOTFILES}/scripts/install/_functions
 
-NAME='wslpath'
+this_is_called 'wslpath'
 
+[[ "$KERNEL_TYPE" != *Microsoft ]]
+unsupported_platform $?
 
-[ -f ~/bin/wslpath ] || [[ "$KERNEL_TYPE" != *Microsoft ]]
-condition_exists $NAME $?
-[ $? -eq 0 ] && return 0
+[ ! -f ~/bin/wslpath ]
+install_or_skip $?
 
 
 wget 'https://github.com/darealshinji/scripts/raw/master/wslpath' \
