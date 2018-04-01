@@ -18,7 +18,7 @@ for /d %%F in %fileList% do (
 
   for %%x in (keymaps colors codestyles) do (
     rd /s /q "%%F\config\%%x" > nul 2>&1
-    mklink /J "%%F\config\%%x" ".\\idea\\%%x" > nil
+    mklink /J "%%F\config\%%x" ".\\idea\\%%x" > NUL
   )
 )
 
