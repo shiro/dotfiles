@@ -83,6 +83,10 @@
     <keyboard-shortcut first-keystroke="ctrl 2" />
   </action>
   <action id="SelectNextOccurrence" />
+  <action id="ShowPopupMenu">
+    <keyboard-shortcut first-keystroke="context_menu" />
+    <keyboard-shortcut first-keystroke="shift ctrl enter" />
+  </action>
   <action id="SmartStepInto">
     <keyboard-shortcut first-keystroke="shift f7" />
     <keyboard-shortcut first-keystroke="ctrl 6" />

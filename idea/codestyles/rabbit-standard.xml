@@ -1,14 +1,8 @@
-<code_scheme name="shiro">
+<code_scheme name="shiro" version="173">
   <option name="OTHER_INDENT_OPTIONS">
     <value>
       <option name="INDENT_SIZE" value="2" />
-      <option name="CONTINUATION_INDENT_SIZE" value="8" />
       <option name="TAB_SIZE" value="2" />
-      <option name="USE_TAB_CHARACTER" value="false" />
-      <option name="SMART_TABS" value="false" />
-      <option name="LABEL_INDENT_SIZE" value="0" />
-      <option name="LABEL_INDENT_ABSOLUTE" value="false" />
-      <option name="USE_RELATIVE_INDENTS" value="false" />
     </value>
   </option>
   <option name="LINE_SEPARATOR" value="&#10;" />
@@ -25,6 +19,10 @@
     <option name="SPACE_AFTER_COLON" value="false" />
     <option name="SPACE_BEFORE_OPENING_BRACE" value="false" />
   </CssCodeStyleSettings>
+  <HTMLCodeStyleSettings>
+    <option name="HTML_ATTRIBUTE_WRAP" value="0" />
+    <option name="HTML_ELEMENTS_TO_INSERT_NEW_LINE_BEFORE" value="body" />
+  </HTMLCodeStyleSettings>
   <JSCodeStyleSettings>
     <option name="SPACE_AFTER_PROPERTY_COLON" value="false" />
     <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
@@ -64,8 +62,8 @@
       <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="DeallocMethod" />
     </class>
     <extensions>
-      <pair source="cpp" header="h" />
-      <pair source="c" header="h" />
+      <pair source="cpp" header="h" fileNamingConvention="NONE" />
+      <pair source="c" header="h" fileNamingConvention="NONE" />
     </extensions>
   </Objective-C-extensions>
   <PHPCodeStyleSettings>
@@ -139,8 +137,8 @@
     <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
     <option name="BLOCK_COMMENT_AT_FIRST_COLUMN" value="false" />
     <option name="BLANK_LINES_AROUND_CLASS" value="0" />
-    <option name="BLANK_LINES_AROUND_METHOD" value="0" />
     <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
+    <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
     <indentOptions>
       <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
     </indentOptions>
