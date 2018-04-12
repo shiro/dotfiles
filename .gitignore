@@ -3,3 +3,5 @@ config/nvim/plugged
 config/nvim/spell
 
 config/zsh/*.zwc
+
+idea/colors/_@user_Darcula.icls
