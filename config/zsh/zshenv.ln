@@ -10,5 +10,6 @@ export VISUAL=vim
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 export DOTFILES="$HOME/.dotfiles"
 
-export OS_RELEASE=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed 's/"//g')
-export KERNEL_TYPE=$(uname -r)
+[ -n $DISPLAY ] && export DISPLAY=localhost:0
+
+[ -f ~/.zshenv.local ] && source ~/.zshenv.local
