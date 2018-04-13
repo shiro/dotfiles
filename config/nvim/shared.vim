@@ -36,9 +36,6 @@ nnoremap <leader>= <C-w>=
 " resize splits
 " todo
 
-" clear search highlighting
-nnoremap <silent> <esc> :noh<cr><esc>
-
 " buffer managment
 nnoremap <leader>q :q!<cr>
 
