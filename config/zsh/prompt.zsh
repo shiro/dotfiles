@@ -48,6 +48,14 @@ prompt_user() {
   echo -n "%{$Color_Off%}"
 }
 
+prompt_host() {
+	echo -n "%{$Yellow%}"
+	echo -n "["
+	echo -n "`hostname`"
+	echo -n "] "
+	echo -n "%{$Color_Off%}"
+}
+
 prompt_pwd() {
   echo -n " at "
   echo -n "%{$Purple%}"
@@ -62,6 +70,7 @@ prompt_token() {
 }
 
 build_prompt() {
+  [ -n "$SSH_CLIENT" ] && prompt_host
   prompt_user
   prompt_pwd
   prompt_git_info
