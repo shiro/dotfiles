@@ -20,6 +20,8 @@ nnoremap <C-y> 3<C-y>
 " create line bellow
 " nnoremap <C-J> a<CR><Esc>k$
 
+nnoremap gs <C-o>
+
 " save active buffer
 nnoremap <leader>w :w<cr>
 nnoremap <leader>W :wa<cr>
