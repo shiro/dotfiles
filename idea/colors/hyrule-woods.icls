@@ -4,7 +4,6 @@
   <option name="EDITOR_FONT_SIZE" value="12" />
   <option name="EDITOR_FONT_NAME" value="Hack" />
   <option name="CONSOLE_FONT_NAME" value="Monospaced" />
-  <option name="CONSOLE_LINE_SPACING" value="1.4" />
   <colors>
     <option name="ADDED_LINES_COLOR" value="434a5c" />
     <option name="ANNOTATIONS_COLOR" value="707b80" />
@@ -637,11 +636,6 @@
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
-    <option name="IGNORE.HEADER" baseAttributes="DEFAULT_DOC_COMMENT_TAG" />
-    <option name="IGNORE.NEGATION" baseAttributes="DEFAULT_KEYWORD" />
-    <option name="IGNORE.SECTION" baseAttributes="DEFAULT_DOC_COMMENT" />
-    <option name="IGNORE.SYNTAX" baseAttributes="DEFAULT_INSTANCE_FIELD" />
-    <option name="IGNORE.VALUE" baseAttributes="DEFAULT_STRING" />
     <option name="IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES">
       <value>
         <option name="FOREGROUND" value="b389c5" />
@@ -816,11 +810,15 @@
         <option name="FONT_TYPE" value="1" />
       </value>
     </option>
+    <option name="JS.GLOBAL_VARIABLE" baseAttributes="DEFAULT_GLOBAL_VARIABLE" />
+    <option name="JS.INSTANCE_MEMBER_FUNCTION" baseAttributes="DEFAULT_INSTANCE_METHOD" />
+    <option name="JS.LOCAL_VARIABLE" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
     <option name="JS.PARAMETER">
       <value>
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
+    <option name="JS.REGEXP" baseAttributes="DEFAULT_STRING" />
     <option name="JSP_DIRECTIVE_NAME">
       <value>
         <option name="FOREGROUND" value="90c93f" />
