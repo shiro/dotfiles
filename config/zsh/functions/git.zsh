@@ -10,26 +10,13 @@ is_in_git_repo() {
 }
 
 # diff modfied files against HEAD
-gd() {
+gdd() {
   is_in_git_repo || return
-  # git -c color.status=always status --short |
-  # fzf -m --ansi --nth 2..,.. --height 100% \
-  #   --bind "enter:execute:$_viewGitLogLine | less -R" \
-  #   --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
-  # cut -c4- | sed 's/.* -> //'
-
 
   git -c color.status=always status --short |
   fzf --no-sort --reverse --tiebreak=index --no-multi --ansi \
     --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' \
     --bind "enter:execute:$_viewGitDiffLine | less -R"
-  # cut -c4- | sed 's/.* -> //'
-
-
-  # glNoGraph |
-  # fzf --no-sort --reverse --tiebreak=index --no-multi \
-  #   --ansi --preview $_viewGitLogLine \
-  #   --bind "enter:execute:$_viewGitLogLine | less -R" \
 }
 
 fgb() {
