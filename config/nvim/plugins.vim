@@ -140,13 +140,13 @@ Plug 'haya14busa/incsearch.vim' " incremental search
 Plug 'haya14busa/incsearch-fuzzy.vim' " fuzzy
 Plug 'haya14busa/incsearch-easymotion.vim' " easymotion integration
 
-map / <Plug>(incsearch-fuzzy-/)
-map ? <Plug>(incsearch-fuzzy-?)
-map g/ <Plug>(incsearch-fuzzy-staym
+map <leader>/ <Plug>(incsearch-fuzzy-/)
+map <leader>? <Plug>(incsearch-fuzzy-?)
+" map g/ <Plug>(incsearch-fuzzy-staym
 
-map <silent> z/ <Plug>(incsearch-easymotion-/)
-map <silent> z? <Plug>(incsearch-easymotion-?)
-map <silent> zg/ <Plug>(incsearch-easymotion-stay)
+" map <silent> z/ <Plug>(incsearch-easymotion-/)
+" map <silent> z? <Plug>(incsearch-easymotion-?)
+" map <silent> zg/ <Plug>(incsearch-easymotion-stay)
 
 let g:incsearch#auto_nohlsearch = 1 " auto-hide search highlighting
 map <silent> n  <Plug>(incsearch-nohl-n)
