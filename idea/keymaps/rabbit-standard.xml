@@ -26,6 +26,7 @@
   <action id="ChooseRunConfiguration">
     <keyboard-shortcut first-keystroke="shift alt r" />
   </action>
+  <action id="Console.TableResult.MaximizeEditingCell" />
   <action id="Debug">
     <keyboard-shortcut first-keystroke="alt w" />
   </action>
@@ -39,6 +40,7 @@
     <keyboard-shortcut first-keystroke="up" />
     <keyboard-shortcut first-keystroke="alt k" />
   </action>
+  <action id="ExtractFunctionToScope" />
   <action id="FileChooser.GotoHome" />
   <action id="FileChooser.GotoModule" />
   <action id="FileChooser.GotoProject" />
@@ -58,6 +60,7 @@
     <mouse-shortcut keystroke="button2" />
     <keyboard-shortcut first-keystroke="shift ctrl alt o" />
   </action>
+  <action id="GotoSymbol" />
   <action id="InsertLiveTemplate" />
   <action id="MaintenanceAction" />
   <action id="ReSharperGotoImplementation">
@@ -76,6 +79,11 @@
     <keyboard-shortcut first-keystroke="ctrl r" />
   </action>
   <action id="RerunTests" />
+  <action id="Resume">
+    <keyboard-shortcut first-keystroke="f9" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt n" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt m" />
+  </action>
   <action id="Run">
     <keyboard-shortcut first-keystroke="alt r" />
   </action>
