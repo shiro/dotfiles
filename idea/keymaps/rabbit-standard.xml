@@ -36,6 +36,7 @@
     <keyboard-shortcut first-keystroke="alt j" />
     <keyboard-shortcut first-keystroke="down" />
   </action>
+  <action id="EditorPasteSimple" />
   <action id="EditorUp">
     <keyboard-shortcut first-keystroke="up" />
     <keyboard-shortcut first-keystroke="alt k" />
@@ -107,6 +108,10 @@
   </action>
   <action id="StepOver">
     <keyboard-shortcut first-keystroke="shift ctrl alt comma" />
+  </action>
+  <action id="Stop">
+    <keyboard-shortcut first-keystroke="ctrl f2" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt v" />
   </action>
   <action id="TabShiftActions.MoveFocusDown" />
   <action id="ToggleBookmark" />
