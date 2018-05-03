@@ -13,3 +13,8 @@ export DOTFILES="$HOME/.dotfiles"
 [ -n $DISPLAY ] && export DISPLAY=localhost:0
 
 [ -f ~/.zshenv.local ] && source ~/.zshenv.local
+
+
+# export ZSH_NO_COMPILE=0
+
+# export DOCKER_HOST=tcp://0.0.0.0:2375
