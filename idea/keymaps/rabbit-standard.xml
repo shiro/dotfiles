@@ -3,8 +3,10 @@
     <keyboard-shortcut first-keystroke="alt 3" />
   </action>
   <action id="ActivateDebugToolWindow">
-    <keyboard-shortcut first-keystroke="alt 5" />
     <keyboard-shortcut first-keystroke="alt 3" />
+  </action>
+  <action id="ActivateEventLogToolWindow">
+    <keyboard-shortcut first-keystroke="alt 0" />
   </action>
   <action id="ActivateFavoritesToolWindow" />
   <action id="ActivateFindToolWindow" />
@@ -20,6 +22,10 @@
     <mouse-shortcut keystroke="button4" />
     <keyboard-shortcut first-keystroke="numpad1" />
   </action>
+  <action id="CheckinProject">
+    <keyboard-shortcut first-keystroke="ctrl k" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt q" />
+  </action>
   <action id="ChooseDebugConfiguration">
     <keyboard-shortcut first-keystroke="shift alt w" />
   </action>
@@ -27,6 +33,7 @@
     <keyboard-shortcut first-keystroke="shift alt r" />
   </action>
   <action id="Console.TableResult.MaximizeEditingCell" />
+  <action id="CopyReference" />
   <action id="Debug">
     <keyboard-shortcut first-keystroke="alt w" />
   </action>
@@ -121,6 +128,10 @@
   <action id="ToggleLineBreakpoint">
     <keyboard-shortcut first-keystroke="ctrl 3" />
     <keyboard-shortcut first-keystroke="shift ctrl alt b" />
+  </action>
+  <action id="ViewBreakpoints">
+    <keyboard-shortcut first-keystroke="shift ctrl f8" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt c" />
   </action>
   <action id="tasks.close" />
 </keymap>
