@@ -75,10 +75,16 @@
     </extensions>
   </Objective-C-extensions>
   <PHPCodeStyleSettings>
-    <option name="CONCAT_SPACES" value="false" />
-    <option name="SPACE_BEFORE_UNARY_NOT" value="true" />
-    <option name="SPACE_AFTER_UNARY_NOT" value="true" />
-    <option name="SPACES_WITHIN_SHORT_ECHO_TAGS" value="false" />
+    <option name="ALIGN_PHPDOC_COMMENTS" value="true" />
+    <option name="COMMA_AFTER_LAST_ARRAY_ELEMENT" value="true" />
+    <option name="PHPDOC_BLANK_LINES_AROUND_PARAMETERS" value="true" />
+    <option name="LOWER_CASE_BOOLEAN_CONST" value="true" />
+    <option name="LOWER_CASE_NULL_CONST" value="true" />
+    <option name="ELSE_IF_STYLE" value="SEPARATE" />
+    <option name="SPACE_BEFORE_CLOSURE_LEFT_PARENTHESIS" value="false" />
+    <option name="FORCE_SHORT_DECLARATION_ARRAY_STYLE" value="true" />
+    <option name="SPACE_AROUND_ASSIGNMENT_IN_DECLARE" value="true" />
+    <option name="SPACE_BEFORE_COLON_IN_RETURN_TYPE" value="true" />
   </PHPCodeStyleSettings>
   <XML>
     <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
@@ -161,7 +167,9 @@
     <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
     <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
     <option name="BLANK_LINES_AFTER_PACKAGE" value="1" />
-    <option name="SPACE_AFTER_COMMA" value="false" />
+    <option name="BLANK_LINES_AROUND_METHOD" value="0" />
+    <option name="CLASS_BRACE_STYLE" value="1" />
+    <option name="METHOD_BRACE_STYLE" value="1" />
     <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
     <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />
     <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
@@ -182,13 +190,8 @@
     <option name="SPACE_BEFORE_WHILE_KEYWORD" value="false" />
     <option name="SPACE_BEFORE_CATCH_KEYWORD" value="false" />
     <option name="SPACE_BEFORE_FINALLY_KEYWORD" value="false" />
-    <option name="SPACE_BEFORE_QUEST" value="false" />
-    <option name="SPACE_AFTER_QUEST" value="false" />
-    <option name="SPACE_BEFORE_COLON" value="false" />
-    <option name="SPACE_AFTER_COLON" value="false" />
     <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
     <indentOptions>
-      <option name="USE_TAB_CHARACTER" value="true" />
       <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
     </indentOptions>
   </codeStyleSettings>

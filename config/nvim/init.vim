@@ -12,7 +12,7 @@ nnoremap <Space> <Nop>
 let mapleader = " "
 
 " reload .vimrc
-noremap <Leader><F1> :source $MYVIMRC<CR>
+noremap <Leader><F1> :so $MYVIMRC<CR>
 
 
 source ~/.config/nvim/plugins.vim

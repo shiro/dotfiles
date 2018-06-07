@@ -91,6 +91,9 @@ nnoremap <leader>gg :GitGutterToggle<CR>
 
 Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . command
 Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
+Plug 'tpope/vim-unimpaired' " convinient pair mappings
+
+Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 
 " yank ring {{{
 
