@@ -83,9 +83,7 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 
 Plug 'airblade/vim-gitgutter' " git gutter to the left
 
-let g:gitgutter_enabled = 0
-
-nnoremap <leader>gg :GitGutterToggle<CR>
+nnoremap <leader>gg :GitGutterLineHighlightsToggle<CR>
 
 " }}}
 
@@ -118,7 +116,7 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 " deoplete.nvim {{{
 
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
 
 " }}}
 
@@ -258,6 +256,7 @@ call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
 " }}}
 
 
+" todo add this
 "" if isdirectory(".git")
 ""     " if in a git project, use :GFiles
 ""     nmap <silent> <leader>t :GFiles<cr>
@@ -265,6 +264,9 @@ call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
 ""     " otherwise, use :FZF
 ""     nmap <silent> <leader>t :FZF<cr>
 "" endif
+
+
+
 
 "" nmap <silent> <leader>r :Buffers<cr>
 "" nmap <silent> <leader>e :FZF<cr>

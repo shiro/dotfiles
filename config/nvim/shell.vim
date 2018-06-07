@@ -7,18 +7,20 @@ hi ExtraWhitespace guibg=#ce840d ctermbg=red
 
 set encoding=utf-8 " The encoding displayed.
 set fileencoding=utf-8 " The encoding written to file.
- 
+
 set nocompatible " not compatible with vi
 set autoread " detect when a file is changed
- 
+
 set history=1000 " change history to 1000
 set textwidth=120
 
 set backupdir=/tmp
 set directory=/tmp
 set undodir=/tmp
- 
+
 set termguicolors " enable 24bit truecolor support
+
+set updatetime=100 " update every 100ms
 
 let g:terminal_color_0  = '#ffffff'
 let g:terminal_color_1  = '#000000'
@@ -92,7 +94,7 @@ endif
 
 
 " }}}
-" 
+"
 " mappings {{{
 
 " vimdiff
@@ -227,7 +229,7 @@ augroup END
 " " make the highlighting of tabs and other non-text less annoying
 " highlight SpecialKey ctermbg=none ctermfg=8
 " highlight NonText ctermbg=none ctermfg=8
-" 
+"
 " " make comments and HTML attributes italic
 " highlight Comment cterm=italic
 " highlight htmlArg cterm=italic
@@ -239,10 +241,10 @@ augroup END
 " set list
 " set listchars=tab:→\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
 " set showbreak=↪
-" 
+"
 " " highlight conflicts
 " match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-" 
+"
 " " make backspace behave in a sane manner
 " set backspace=indent,eol,start
 
@@ -250,7 +252,7 @@ augroup END
 
 " let g:python_host_prog = '/usr/local/bin/python'
 " let g:python3_host_prog = '/usr/local/bin/python3'
- 
+
 " if (has('nvim'))
 " 	" show results of substition as they're happening
 " 	" but don't open a split
