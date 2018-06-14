@@ -30,7 +30,7 @@ configs=(
 for config in "${configs[@]}"; do
 	source $config;
 done
- 
+
 
 # additional plugins
 zit-in "https://github.com/knu/zsh-manydots-magic" "zsh-manydots-magic"
