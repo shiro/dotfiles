@@ -33,4 +33,4 @@ alias gsu='git submodule update'
 # doge git
 alias such=git
 alias very=git
-alias wow='git log --oneline --decorate --graph --all' 
+alias wow='git log --oneline --decorate --graph --all'
