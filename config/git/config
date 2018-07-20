@@ -3,9 +3,10 @@
 	name = shiro
 	email = shiro@usagi.io
 [core]
+	autocrlf = input
 	editor = vim
-	autocrlf = false
 	pager = diff-so-fancy | less --tabs=4 -RFX
+	safecrlf = false
 [rebase]
 	autosquash = true
 [pull]
