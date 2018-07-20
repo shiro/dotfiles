@@ -1,11 +1,7 @@
-[[ -z "$TMUX" && -n "$USE_TMUX" ]] && {
-    [[ -n "$ATTACH_ONLY" ]] && {
-        tmux a 2>/dev/null || {
-            cd && exec tmux
-        }
-        exit
-    }
+[[ -z "$TMUX" && -n "$TMUX_ID" ]] && {
+	local SESSION="sesstion_$TMUX_ID"
 
-    tmux new-window -c "$PWD" 2>/dev/null && exec tmux a
-    exec tmux
+	tmux a -t "$SESSION" 2>/dev/null || {
+		cd && exec tmux new -s "$SESSION"
+	}
 }
