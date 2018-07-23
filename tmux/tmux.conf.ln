@@ -103,7 +103,7 @@ bind -n ž resize-pane -Z
 bind -n M-q kill-pane
 bind -n ö kill-pane -a
 
-# swap panes 
+# swap panes
 bind -n M-[ swap-pane -U
 bind -n M-"'" swap-pane -D
 
@@ -114,17 +114,23 @@ bind -n ß set -g status
 
 # windows {{{
 
+# swap windows
+bind-key -n M-, swap-window -t -1
+bind-key -n M-. swap-window -t +1
+bind-key , swap-window -t -1
+bind-key . swap-window -t +1
+
 bind -n Left previous-window
 bind h previous-window
 bind -n Right next-window
-bind l next-window
+# bind l next-window
 # bind -n M-f find-window
 
 bind -n M-w kill-window
 bind -n Ö kill-window -a # kill all but current
 bind -n M-r new-window -c "#{pane_current_path}"
 
-bind -n M-, command-prompt -I "#W" "rename-window '%%'" # rename window
+# bind -n M-, command-prompt -I "#W" "rename-window '%%'" # rename window
 
 bind -n M-v copy-mode
 
