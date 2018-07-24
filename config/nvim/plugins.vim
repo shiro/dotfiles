@@ -243,6 +243,7 @@ call plug#end()
 
 " general
 call arpeggio#map('n', '', 0, 'wq', ':wq<cr>') " write-quit
+call arpeggio#map('n', '', 0, 'we', ':wqa<cr>') " write-quit-all
 call arpeggio#map('i', '', 0, 'wq', '<esc>:wq<cr>') " write-quit
 
 " insert mode
