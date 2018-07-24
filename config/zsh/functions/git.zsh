@@ -56,6 +56,11 @@ fgs() {
     --bind "ctrl-y:execute:$_gitLogLineToHash | xsel"
 }
 
+# yank current commit
+gyy() {
+  git show -s --format=%h | xsel
+}
+
 # No arguments: `git status`
 # With arguments: acts like `git`
 g() {
