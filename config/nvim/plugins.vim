@@ -1,4 +1,4 @@
-runtime plug/plug.vim 
+runtime plug/plug.vim
 
 call plug#begin('~/.config/nvim/plugged')
 
