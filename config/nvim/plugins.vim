@@ -101,6 +101,17 @@ let g:yankring_history_file = '.local/share/misc/yankring_history.txt' " history
 
 " }}}
 
+" ConflictMotions {{{
+
+Plug 'vim-scripts/ConflictMotions' " motions on diff hunks
+
+" dependencies
+Plug 'vim-scripts/CountJump'
+Plug 'vim-scripts/visualrepeat'
+Plug 'vim-scripts/ingo-library'
+
+" }}}
+
 " syntax {{{
 
 Plug 'kchmck/vim-coffee-script' " coffee-scirpt
