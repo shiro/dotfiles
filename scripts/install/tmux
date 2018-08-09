@@ -1,14 +1,16 @@
 #!/bin/bash
 source ${DOTFILES}/scripts/install/_functions
 
-NAME='tmux'
+
+this_is_called 'tmux'
 
 
 command_exists $NAME
 [ $? -eq 0 ] && return 0
 
-case "$OS_RELEASE" in
-  'Debian GNU/Linux')
-    echo 'install not yet configured'
-    ;;
-esac
+
+if we_are_on 'Debian' \
+|| we_are_on 'Arch'
+then
+  unsupported_platform
+fi

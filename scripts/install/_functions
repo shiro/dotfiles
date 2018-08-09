@@ -10,8 +10,33 @@ this_is_called(){
   [ -n $1 ] && INSTALL_NAME="$1"
 }
 
+we_are_on(){
+  (return 1)
+
+  case "$OS_RELEASE" in
+    'Arch Linux')       [[ "$1" == 'Arch'   ]] ;;
+    'Debian GNU/Linux') [[ "$1" == 'Debian' ]] ;;
+  esac
+
+  return $?
+}
+
+kernel_is(){
+  (return 1)
+
+  case "$KERNEL_TYPE" in
+    *Microsoft) [[ "$1" == 'Microsoft'   ]] ;;
+  esac
+
+  return $?
+}
+
 command_exists(){
-  command -v $INSTALL_NAME > /dev/null; return $? 
+  if [ $# -eq 1 ]; then
+    command -v "$1" > /dev/null; return $?
+  else
+    command -v "$INSTALL_NAME" > /dev/null; return $?
+  fi
 }
 
 install_or_skip(){
@@ -25,29 +50,10 @@ install_or_skip(){
 }
 
 unsupported_platform(){
-  if [ $1 -ne 0 ]; then
+  if [ $# -eq 1 ] && [ $1 -ne 0 ]; then
     return 0
   else
     echo "[UNSUP]   $INSTALL_NAME"
     exit
   fi
 }
-
-# # deprecated
-# condition_exists(){
-#   if [ $2 -eq 0 ]; then
-#     echo "[SKIP]    $1"
-#     return 0
-#   else
-#     echo "[INSTALL] $1"
-#     return 1
-#   fi
-# }
-
-# _print_install(){
-#   echo "[INSTALL] $1"
-# }
-
-# _print_skip(){
-#   echo "[INSTALL] $1"
-# }

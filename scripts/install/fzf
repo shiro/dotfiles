@@ -1,4 +1,5 @@
 #!/bin/bash
+
 source ${DOTFILES}/scripts/install/_functions
 
 this_is_called 'fzf'

@@ -1,19 +1,21 @@
 #!/bin/bash
 source ${DOTFILES}/scripts/install/_functions
 
+
 this_is_called 'toast'
 
-! command_exists
+
+! command_exists 'toast'
 install_or_skip $?
 
-case "$KERNEL_TYPE" in
-  *Microsoft)
-	sudo cat <<- EOF > /usr/local/bin/toast
-	#!/bin/sh
-	powershell.exe -command "New-BurntToastNotification -Text '\$@'"
-	EOF
-	sudo chmod +x /usr/local/bin/toast
-    ;;
-  *)
-    unsupported_platform
-esac
+
+if kernel_is 'Microsoft'
+then
+  sudo cat <<- EOF > /usr/local/bin/toast
+  #!/bin/sh
+  powershell.exe -command "New-BurntToastNotification -Text '\$@'"
+  EOF
+  sudo chmod +x /usr/local/bin/toast
+else
+  unsupported_platform
+fi

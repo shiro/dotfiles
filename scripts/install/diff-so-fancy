@@ -1,10 +1,11 @@
 #!/bin/sh
 source ${DOTFILES}/scripts/install/_functions
 
+
 this_is_called 'diff-so-fancy'
 
 
-! command_exists
+! command_exists 'diff-so-fancy'
 install_or_skip $?
 
 
