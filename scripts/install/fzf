@@ -5,7 +5,7 @@ source ${DOTFILES}/scripts/install/_functions
 this_is_called 'fzf'
 
 
-[ ! -d ~/.local/share/fzf ]
+[ ! -e ~/bin/fzf ]
 install_or_skip $?
 
 
