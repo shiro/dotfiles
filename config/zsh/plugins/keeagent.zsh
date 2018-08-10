@@ -6,7 +6,7 @@ keepass(){
 	if [ -f /tmp/msysgit2unix-socket.pid ]; then
 		rm /tmp/msysgit2unix-socket.pid $SSH_AUTH_SOCK 2>/dev/null
 	fi
-	python2 ~/bin/msysgit2unix-socket.py "$(realpath ~/.ssh/keeagent.sock):$SSH_AUTH_SOCK"
+	python2 ~/bin/msysgit2unix-socket "$(realpath ~/.ssh/keeagent.sock):$SSH_AUTH_SOCK"
 }
 
 # load keepass socket on startup (if it's not there)
