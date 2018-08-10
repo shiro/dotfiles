@@ -43,8 +43,8 @@ zit-in "https://github.com/m45t3r/zit" "zit"
 
 
 # load local settings
-[ -f ~/.local/share/dotfiles/zshrc ] && source ~/.local/share/dotfiles/zshrc
-[ -f ~/.local/share/dotfiles/alias ] && source ~/.local/share/dotfiles/alias
+[ -f "$LOCAL_CONFIG_DIR/zsh/zshrc" ] && source "$LOCAL_CONFIG_DIR/zsh/zshrc"
+[ -f "$LOCAL_CONFIG_DIR/zsh/alias" ] && source "$LOCAL_CONFIG_DIR/zsh/alias"
 
 
 # compile everything so it loads faster

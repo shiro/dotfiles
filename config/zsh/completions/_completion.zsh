@@ -1,7 +1,11 @@
 zmodload -i zsh/complist
 
 
+# local module completions
 fpath+="${HOME}/.local/share/completion"
+
+# user defined completions
+fpath+="$LOCAL_CONFIG_DIR/completions"
 
 # load additional completions
 zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
@@ -65,5 +69,8 @@ setopt auto_cd
 # match files without explicitly specifying the dot
 setopt GLOBDOTS
 
-# extended globbing 
+# extended globbing
 setopt extendedglob
+
+# local config
+[ -f "$LOCAL_CONFIG_DIR/zsh/completion" ] && . "$LOCAL_CONFIG_DIR/zsh/completion"

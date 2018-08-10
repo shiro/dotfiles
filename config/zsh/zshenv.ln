@@ -10,11 +10,23 @@ export VISUAL=vim
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 export DOTFILES="$HOME/.dotfiles"
 
+export LOCAL_DIR="$HOME/.local"
+export LOCAL_CONFIG_DIR="$LOCAL_DIR/config"
+export CONFIG_DIR="$XDG_CONFIG_HOME"
 
-[ -f ~/.zshenv.local ] && source ~/.zshenv.local
 
+[ -f "$LOCAL_CONFIG_DIR/zsh/zshenv" ] && source "$LOCAL_CONFIG_DIR/zsh/zshenv"
+
+
+# OPTIONAL settings
+# enable these in the local zshenv file
+
+
+# general variables
 # [ -n $DISPLAY ] && export DISPLAY=localhost:0
 
+# startup behaviour
 # export ZSH_NO_COMPILE=0
 
+# docker
 # export DOCKER_HOST=tcp://0.0.0.0:2375
