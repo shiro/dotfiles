@@ -22,6 +22,8 @@ set termguicolors " enable 24bit truecolor support
 
 set updatetime=100 " update every 100ms
 
+set shortmess+=A " ignore swapfile warning
+
 let g:terminal_color_0  = '#ffffff'
 let g:terminal_color_1  = '#000000'
 let g:terminal_color_2  = '#000000'
