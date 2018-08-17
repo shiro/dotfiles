@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\audio\shell\Enqueue]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\audio\shell\Play]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Audio\shell\Enqueue]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Audio\shell\Play]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Image\shell\Enqueue]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Image\shell\Play]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Video\shell\Enqueue]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Video\shell\Play]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\video\shell\Enqueue]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\video\shell\Play]
+
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\audio\shellex\ContextMenuHandlers]
+[-HKEY_CLASSES_ROOT\SystemFileAssociations\Directory.Audio\shellex\ContextMenuHandlers]
