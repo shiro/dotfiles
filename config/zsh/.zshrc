@@ -26,7 +26,7 @@ configs=(
 	${ZDOTDIR}/alias/*
 	${ZDOTDIR}/functions/*.zsh
 	${ZDOTDIR}/completions/_*.zsh
-	${ZDOTDIR}/completions/^_*.zsh
+	${ZDOTDIR}/completions/(^_)*.zsh
 	${ZDOTDIR}/key-bindings/*.zsh
 	${ZDOTDIR}/plugins/*
 )
