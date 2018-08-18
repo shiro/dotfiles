@@ -4,9 +4,9 @@
 DEST="${HOME}/bin"
 
 SOURCES=(
-  "${HOME}/.local/bin"
   "$DOTFILES/scripts/bin"
   "$DOTFILES/scripts/windows/bin"
+  "${HOME}/.local/bin"
 )
 
 linkFiles(){
