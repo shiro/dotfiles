@@ -9,7 +9,12 @@ this_is_called 'fzf'
 install_or_skip $?
 
 
+# remove previous if exists
+rm -r ~/.local/share/fzf 2>/dev/null
+
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
 ~/.local/share/fzf/install --bin
+
 ln -s ~/.local/share/fzf/bin/fzf ~/bin/fzf
+
 chmod +x ~/bin/fzf
