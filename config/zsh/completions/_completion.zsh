@@ -1,11 +1,11 @@
 zmodload -i zsh/complist
 
 
-# local module completions
+# user defined completions
 fpath+="${HOME}/.local/completion"
 
-# user defined completions
-fpath+="$LOCAL_CONFIG_DIR/completions"
+# dotfiles completions
+fpath+="${ZDOTDIR}/completions"
 
 # load additional completions
 zit-in "https://github.com/zsh-users/zsh-completions" "zsh-completions"
