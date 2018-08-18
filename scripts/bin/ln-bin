@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+
+DEST="${HOME}/bin"
+
+SOURCES=(
+  "${HOME}/.local/bin"
+  "$DOTFILES/scripts/bin"
+  "$DOTFILES/scripts/windows/bin"
+)
+
+linkFiles(){
+  if [ -d "$1" ]; then
+	  echo "# from: $1"
+  else
+	  echo "# skip $1: not found"
+	  return
+  fi
+
+  local files=(`find "$1" -type f`)
+
+  for file in ${files[@]}; do
+    echo "[LINK] ${file:t}"
+    ln -sf "$file" "$DEST/${file:r:t}"
+  done
+}
+
+
+for src in "${SOURCES[@]}"; do
+  linkFiles "$src"
+done
+

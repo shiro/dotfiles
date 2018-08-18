@@ -1,0 +1,5 @@
+#!/bin/bash
+
+name=$(echo $1 | cut -f 1 -d '.')
+
+ffmpeg -i "$1" -ab 320k -acodec libmp3lame "${name}.mp3"
