@@ -19,6 +19,4 @@ mkdir -p ~/.local/share/completion
 
 mv "/tmp/${HUB_VERSION}/bin/hub" ~/bin
 
-chmod +x ~/.local/share/completion/_hub
-
 rm -r /tmp/${HUB_VERSION}{,.tgz}
