@@ -212,12 +212,15 @@ nnoremap <leader>m :Files<CR>
 
 " pandoc {{{
 
-" Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
 let g:pandoc#folding#mode = 'syntax'
 let g:pandoc#folding#fold_yaml = 1
-" let g:pandoc#folding#fold_fenced_codeblocks = 1
+let g:pandoc#folding#fold_fenced_codeblocks = 1
+
+let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
+let g:pandoc#filetypes#pandoc_markdown = 0
 
 " }}}
 
