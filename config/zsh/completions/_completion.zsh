@@ -2,7 +2,7 @@ zmodload -i zsh/complist
 
 
 # local module completions
-fpath+="${HOME}/.local/share/completion"
+fpath+="${HOME}/.local/completion"
 
 # user defined completions
 fpath+="$LOCAL_CONFIG_DIR/completions"
