@@ -2,7 +2,7 @@ zmodload -i zsh/complist
 
 
 # user defined completions
-fpath+="${HOME}/.local/completion"
+fpath+="${HOME}/.local/zsh/completions"
 
 # dotfiles completions
 fpath+="${ZDOTDIR}/completions"
@@ -73,4 +73,4 @@ setopt GLOBDOTS
 setopt extendedglob
 
 # local config
-[ -f "$LOCAL_CONFIG_DIR/zsh/completion" ] && . "$LOCAL_CONFIG_DIR/zsh/completion"
+[ -f "$LOCAL_CONFIG_DIR/zsh/completion.zsh" ] && . "$LOCAL_CONFIG_DIR/zsh/completion.zsh"

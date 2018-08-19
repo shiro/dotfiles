@@ -20,17 +20,14 @@ export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 [ -z "$TMUX" ] && export TERM=xterm-256color
 
 # we need advanced globbing for this
-setopt extendedglob
 configs=(
 	${ZDOTDIR}/*.zsh
+	${ZDOTDIR}/completion/*.zsh
 	${ZDOTDIR}/alias/*
 	${ZDOTDIR}/functions/*.zsh
-	${ZDOTDIR}/completions/_*.zsh
-	${ZDOTDIR}/completions/(^_)*.zsh
 	${ZDOTDIR}/key-bindings/*.zsh
 	${ZDOTDIR}/plugins/*
 )
-unsetopt extendedglob
 
 # source all .zsh files inside of the zsh/ directory
 for config in "${configs[@]}"; do
