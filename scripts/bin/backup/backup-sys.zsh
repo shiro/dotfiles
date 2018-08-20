@@ -11,7 +11,7 @@ usage(){
 USAGE
 }
 
-CONFIG_FILE=~/.config/local/backup/`hostname`/system.json
+CONFIG_FILE=~/.local/config/backup/`hostname`/system.json
 
 
 while getopts :c:o:-: opt; do
