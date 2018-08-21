@@ -63,11 +63,11 @@ set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors"
 
 
 " Tab control
-set noexpandtab " insert tabs rather than spaces for <Tab>
+set expandtab " we do not like tabs being displayed
 set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
-set tabstop=4 " the visible width of tabs
+set tabstop=2 " the visible width of tabs
 " set softtabstop=4 " edit as if the tabs are 4 characters wide
-set shiftwidth=4 " number of spaces to use for indent and unindent
+set shiftwidth=2 " number of spaces to use for indent and unindent
 " set shiftround " round indent to a multiple of 'shiftwidth'
 " set completeopt+=longest
 
@@ -80,7 +80,7 @@ set scrolloff=3 " lines of text around cursor
 set shell=$SHELL
 " set cmdheight=1             " command bar height
 " set title                   " set terminal title
-" 
+"
 " " Searching
 set nolazyredraw " don't redraw while executing macros
 
