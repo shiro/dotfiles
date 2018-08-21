@@ -10,7 +10,7 @@ install_or_skip $?
 
 
 # remove previous if exists
-rm -r ~/.local/share/fzf 2>/dev/null
+rm -rf ~/.local/share/fzf 2>/dev/null
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
 ~/.local/share/fzf/install --bin
