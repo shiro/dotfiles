@@ -18,6 +18,8 @@ set backupdir=/tmp
 set directory=/tmp
 set undodir=/tmp
 
+set title " change terminal title
+
 set termguicolors " enable 24bit truecolor support
 
 set updatetime=100 " update every 100ms
