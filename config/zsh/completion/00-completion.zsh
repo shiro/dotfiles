@@ -2,7 +2,7 @@ zmodload -i zsh/complist
 
 
 # user defined completions
-fpath+="${HOME}/.local/zsh/completions"
+fpath+="${HOME}/.local/config/zsh/completions"
 
 # dotfiles completions
 fpath+="${ZDOTDIR}/completions"
