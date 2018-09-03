@@ -13,11 +13,8 @@
   <option name="FORMATTER_OFF_TAG" value="@off" />
   <CssCodeStyleSettings>
     <option name="HEX_COLOR_LOWER_CASE" value="true" />
-    <option name="HEX_COLOR_LONG_FORMAT" value="true" />
-    <option name="BLANK_LINES_BETWEEN_BLOCKS" value="0" />
+    <option name="HEX_COLOR_SHORT_FORMAT" value="true" />
     <option name="KEEP_SINGLE_LINE_BLOCKS" value="true" />
-    <option name="SPACE_AFTER_COLON" value="false" />
-    <option name="SPACE_BEFORE_OPENING_BRACE" value="false" />
   </CssCodeStyleSettings>
   <HTMLCodeStyleSettings>
     <option name="HTML_ATTRIBUTE_WRAP" value="0" />
@@ -91,7 +88,9 @@
   </XML>
   <codeStyleSettings language="CSS">
     <indentOptions>
-      <option name="USE_TAB_CHARACTER" value="true" />
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
     </indentOptions>
   </codeStyleSettings>
   <codeStyleSettings language="CoffeeScript">
@@ -191,6 +190,12 @@
     <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
     <indentOptions>
       <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="SCSS">
+    <indentOptions>
+      <option name="CONTINUATION_INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
     </indentOptions>
   </codeStyleSettings>
 </code_scheme>
