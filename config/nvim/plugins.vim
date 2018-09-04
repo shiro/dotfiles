@@ -200,7 +200,7 @@ vnoremap <silent> <c-l> :<C-U>TmuxNavigateRight()<cr>
 
 " FZF {{{
 
-Plug 'junegunn/fzf', { 'dir': '~/.local/share/fzf', 'do': './install --all' } " fzf fuzzy-find wrapper
+Plug 'junegunn/fzf' " fzf fuzzy-find wrapper
 Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'down': '~25%' }
