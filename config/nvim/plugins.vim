@@ -212,10 +212,10 @@ nnoremap <leader>m :Files<CR>
 
 " vimwiki [DISABLED](no pandoc compatibility yet) {{{
 
-" Plug 'vimwiki/vimwiki'
+Plug 'vimwiki/vimwiki'
 
-" let g:vimwiki_list = [{'path': '~/Desktop/', 'syntax': 'markdown', 'ext': '.md'}]
-" let g:vimwiki_global_ext=0
+let g:vimwiki_list = [{'path': '~/.local/wiki', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_global_ext=0
 
 " }}}
 
@@ -231,7 +231,7 @@ let g:pandoc#folding#fold_fenced_codeblocks = 1
 let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
 
 " enter opens current link
-autocmd FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
+au FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
 
 " }}}
 
@@ -290,6 +290,3 @@ call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
 ""     " otherwise, use :FZF
 ""     nmap <silent> <leader>t :FZF<cr>
 "" endif
-
-au FileType vimwiki set syntax=pandoc
-au FileType vimwiki echo "wow"
