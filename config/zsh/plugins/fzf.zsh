@@ -13,62 +13,17 @@ export FZF_CTRL_T_COMMAND='ag --hidden --ignore .git -g ""'
 # ---------------
 [[ $- == *i* ]] && source "/home/shiro/.fzf/shell/completion.zsh" 2> /dev/null
 
-# key bindings
-# ------------
-
-# paste the selected file path(s) into the command line
-__fsel() {# {{{
-  local cmd="${FZF_CTRL_T_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune \
-    -o -type f -print \
-    -o -type d -print \
-    -o -type l -print 2> /dev/null | cut -b3-"}"
-  setopt localoptions pipefail 2> /dev/null
-  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
-    echo -n "${(q)item} "
-  done
-  local ret=$?
-  echo
-  return $ret
-}
-
-__fzf_use_tmux__() {
-  [ -n "$TMUX_PANE" ] && [ "${FZF_TMUX:-0}" != 0 ] && [ ${LINES:-40} -gt 15 ]
-}
-
-__fzfcmd() {
-  __fzf_use_tmux__ &&
-    echo "fzf-tmux -d${FZF_TMUX_HEIGHT:-40%}" || echo "fzf"
-}
-
-fzf-file-widget() {
-  LBUFFER="${LBUFFER}$(__fsel)"
-  local ret=$?
-  zle redisplay
-  typeset -f zle-line-init >/dev/null && zle zle-line-init
-  return $ret
-}# }}}
-zle     -N   fzf-file-widget
-bindkey '^T' fzf-file-widget
 
 # completion {{{
 
-# To use custom commands instead of find, override _fzf_compgen_{path,dir}
-if ! declare -f _fzf_compgen_path > /dev/null; then
-  _fzf_compgen_path() {
-    echo "$1"
-    command find -L "$1" \
-      -name .git -prune -o -name .svn -prune -o \( -type d -o -type f -o -type l \) \
-      -a -not -path "$1" -print 2> /dev/null | sed 's@^\./@@'
-  }
-fi
+_fzf_compgen_path() {
+  echo "$1"
+  ag --hidden --ignore .git -g "$1" 2>/dev/null
+}
 
-if ! declare -f _fzf_compgen_dir > /dev/null; then
-  _fzf_compgen_dir() {
-    command find -L "$1" \
-      -name .git -prune -o -name .svn -prune -o -type d \
-      -a -not -path "$1" -print 2> /dev/null | sed 's@^\./@@'
-  }
-fi
+_fzf_compgen_dir() {
+  ag --hidden --ignore .git -g "$1" 2>/dev/null | sed -e 's:/[^/]*$::' | uniq
+}
 
 ###########################################################
 
@@ -217,4 +172,3 @@ bindkey '^I' fzf-completion
 
 bindkey -M vicmd '[' fzf-completion
 
-# }}}
