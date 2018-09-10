@@ -93,7 +93,7 @@ Plug 'tpope/vim-unimpaired' " convinient pair mappings
 
 Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 
-" yank ring {{{
+" yank ring [DISABLED](slows down nvim a LOT) {{{
 
 " Plug 'vim-scripts/YankRing.vim' " yank ring
 
@@ -210,6 +210,15 @@ nnoremap <leader>m :Files<CR>
 
 " }}}
 
+" vimwiki [DISABLED](no pandoc compatibility yet) {{{
+
+" Plug 'vimwiki/vimwiki'
+
+" let g:vimwiki_list = [{'path': '~/Desktop/', 'syntax': 'markdown', 'ext': '.md'}]
+" let g:vimwiki_global_ext=0
+
+" }}}
+
 " pandoc {{{
 
 Plug 'vim-pandoc/vim-pandoc'
@@ -220,7 +229,9 @@ let g:pandoc#folding#fold_yaml = 1
 let g:pandoc#folding#fold_fenced_codeblocks = 1
 
 let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
-let g:pandoc#filetypes#pandoc_markdown = 0
+
+" enter opens current link
+autocmd FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
 
 " }}}
 
@@ -279,3 +290,6 @@ call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
 ""     " otherwise, use :FZF
 ""     nmap <silent> <leader>t :FZF<cr>
 "" endif
+
+au FileType vimwiki set syntax=pandoc
+au FileType vimwiki echo "wow"
