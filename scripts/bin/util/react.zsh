@@ -40,22 +40,21 @@ shift $((OPTIND-1))
 
 read -r -d '' SFC_TEMPLATE <<'TEMPLATE'
 import * as React from "react";
+import cn from 'classnames';
 
-import * as css from "./$[NAME].scss";
+import "./$[NAME].sass";
 
 
-interface IProps {
-    className?: {
-        element: string;
-    };
+interface Props {
+    className?: string;
 }
 
-const $[NAME]: React.SFC<IProps> = (props) => {
-    const className = props.className || {};
+const $[NAME]: React.SFC<Props> = (props) => {
+    const {className, children} = props;
 
     return (
-        <div className={className.element}>
-            {props.children}
+        <div className={cn("$[NAME]", className)}>
+            {children}
         </div>
     );
 }
@@ -66,20 +65,20 @@ TEMPLATE
 
 read -r -d '' COMPONENT_TEMPLATE <<'TEMPLATE'
 import * as React from "react";
-import classNames from 'classnames';
+import cn from 'classnames';
 
-import * as css from "./$[NAME].scss";
+import "./$[NAME].sass";
 
 
-interface IProps {
+interface Props {
     className?: string;
 }
 
-interface IState {
+interface State {
 }
 
-export class $[NAME] extends React.Component<IProps, IState> {
-    state : IState = {
+export class $[NAME] extends React.Component<Props, State> {
+    state : State = {
     }
 
     constructor(props){
@@ -99,9 +98,13 @@ export class $[NAME] extends React.Component<IProps, IState> {
     }
 
     render() {
-        return <div className={this.props.className}>
-            {this.props.children}
-        </div>
+        const {className, children} = props;
+
+        return (
+            <div className={cn("$[NAME]", className)}>
+                {children}
+            </div>
+        );
     }
 }
 
@@ -121,7 +124,7 @@ case "${1:l}" in
     echo $COMPONENT_TEMPLATE | sed \
       -e 's/\$\[NAME\]/'"$component_name/g" \
       > "$dest/$component_name.tsx"
-    touch  "$dest/$component_name.scss"
+    touch  "$dest/$component_name.sass"
 
     shift 2
     ;;
@@ -135,7 +138,7 @@ case "${1:l}" in
     echo $SFC_TEMPLATE | sed \
       -e 's/\$\[NAME\]/'"$component_name/g" \
       > "$dest/$component_name.tsx"
-    touch  "$dest/$component_name.scss"
+    touch  "$dest/$component_name.sass"
     shift 2
     ;;
   *)

@@ -50,7 +50,7 @@ shift $((OPTIND-1))
 [ $# -ne 0 ] && usage && exit 1
 
 
-BORG_REPO=`jq -r '.destination' "$CONFIG_FILE"`
+BORG_REPO=${BORG_REPO:-`jq -r '.destination' "$CONFIG_FILE"`}
 LOCATION_LIST=( `jq -r '.location[]' "$CONFIG_FILE" | tr '\n' ' '` )
 
 
@@ -102,7 +102,9 @@ borg prune                          \
     --list                          \
     --prefix 'main-{hostname}-'     \
     --show-rc                       \
-    --keep-last 1                   \
+    --keep-daily=7                  \
+    --keep-weekly=4                 \
+    --keep-monthly=1
 
 prune_exit=$?
 
