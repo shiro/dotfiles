@@ -1,0 +1,8 @@
+# really install the package?
+# NOCONFIRM=1
+
+# really want to build?
+BUILD_NOCONFIRM=1
+
+# edit PKGBUILD?
+EDITFILES=0
