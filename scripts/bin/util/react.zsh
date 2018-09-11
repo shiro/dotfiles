@@ -98,7 +98,7 @@ export class $[NAME] extends React.Component<Props, State> {
     }
 
     render() {
-        const {className, children} = props;
+        const {className, children} = this.props;
 
         return (
             <div className={cn("$[NAME]", className)}>

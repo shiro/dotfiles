@@ -26,8 +26,14 @@ ln(){
 
   [ "$force" = true ] && [ -e "$dest" ] && rm -r "$dest"
 
+  # directory symlink or junction
   if [ -d "$src" ]; then
-    mode="/D"
+    [ "$lnType" = "/H" ] && \
+      mode="/J" || \
+      mode="/D"
+
+    # no hardlink option since it's a directory
+    lnType=""
   fi
 
   local srcPath="`wslpath -w "$src"`"
