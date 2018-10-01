@@ -14,7 +14,7 @@ then
   sudo cat <<- EOF > /usr/local/bin/toast
   #!/bin/sh
   powershell.exe -command "New-BurntToastNotification -Text '\$@'"
-  EOF
+EOF
   sudo chmod +x /usr/local/bin/toast
 else
   unsupported_platform
