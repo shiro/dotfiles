@@ -24,7 +24,7 @@ ln(){
 
   [ ! -e "$src" ] && printf '%s: not found' "$src" && exit 1
 
-  [ "$force" = true ] && [ -e "$dest" ] && rm -r "$dest"
+  [ "$force" = true ] && ([ -e "$dest" ] || [ -L "$dest" ]) && rm -r "$dest"
 
   # directory symlink or junction
   if [ -d "$src" ]; then
