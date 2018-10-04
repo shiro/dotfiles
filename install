@@ -14,6 +14,11 @@ mkdir -p ~/.local/share
 mkdir -p ~/.local/share/dotfiles
 mkdir -p ~/.local/share/misc
 
+echo "Setting up config templates"
+echo "~/.local/config"
+cp -rn $DOTFILES/template/config ~/.local/config
+echo "Done"
+
 # cd scripts
 source scripts/link.sh
 
