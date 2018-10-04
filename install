@@ -7,7 +7,7 @@ echo "Installing dotfiles."
 echo "Initializing submodule(s)"
 git submodule update --init --recursive
 
- 
+
 mkdir -p ~/bin
 mkdir -p ~/.local # local files directory
 mkdir -p ~/.local/share
@@ -15,8 +15,6 @@ mkdir -p ~/.local/share/dotfiles
 mkdir -p ~/.local/share/misc
 
 # cd scripts
-source scripts/install.sh
-
 source scripts/link.sh
 
 echo "Done. Reload your terminal."
