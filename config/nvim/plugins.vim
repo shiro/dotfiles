@@ -210,11 +210,15 @@ nnoremap <leader>m :Files<CR>
 
 " }}}
 
-" vimwiki [DISABLED](no pandoc compatibility yet) {{{
+" vimwiki (no pandoc compatibility yet) {{{
 
 Plug 'vimwiki/vimwiki'
 
-let g:vimwiki_list = [{'path': '~/.local/wiki', 'syntax': 'markdown', 'ext': '.md'}]
+" load wiki list from ENV
+if expand("$VIMWIKI_LIST") != "$VIMWIKI_LIST"
+	execute 'let g:vimwiki_list = ' . expand("$VIMWIKI_LIST")
+endif
+
 let g:vimwiki_global_ext=0
 
 " }}}

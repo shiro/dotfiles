@@ -10,3 +10,10 @@
 # yarn
 # export PATH="$PATH:${HOME}/.yarn/bin"
 
+# vimwiki
+# read -r -d '' VIMWIKI_LIST <<EOF
+# [ \
+# 	\{'path': '~/.local/wiki', 'syntax': 'markdown', 'ext': '.md'\}, \
+# ]
+# EOF
+# export VIMWIKI_LIST
