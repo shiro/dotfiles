@@ -1,0 +1,10 @@
+<templateSet group="Javacript - custom">
+  <template name="confun" value="const $NAME$ = ($PARAMS$) =&gt; $END$" description="function as a const member" toReformat="false" toShortenFQNames="true">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="PARAMS" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="ECMAScript6" value="true" />
+      <option name="TypeScript" value="true" />
+    </context>
+  </template>
+</templateSet>
