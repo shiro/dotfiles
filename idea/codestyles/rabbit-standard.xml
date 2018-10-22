@@ -16,6 +16,9 @@
     <option name="HEX_COLOR_SHORT_FORMAT" value="true" />
     <option name="KEEP_SINGLE_LINE_BLOCKS" value="true" />
   </CssCodeStyleSettings>
+  <GoCodeStyleSettings>
+    <option name="ADD_LEADING_SPACE_TO_COMMENTS" value="true" />
+  </GoCodeStyleSettings>
   <HTMLCodeStyleSettings>
     <option name="HTML_ATTRIBUTE_WRAP" value="0" />
     <option name="HTML_ELEMENTS_TO_INSERT_NEW_LINE_BEFORE" value="body" />
@@ -196,6 +199,11 @@
     <indentOptions>
       <option name="CONTINUATION_INDENT_SIZE" value="2" />
       <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="go">
+    <indentOptions>
+      <option name="USE_TAB_CHARACTER" value="false" />
     </indentOptions>
   </codeStyleSettings>
 </code_scheme>
