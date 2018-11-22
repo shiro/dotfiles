@@ -1,10 +1,10 @@
 <application>
   <component name="MaterialThemeConfig">
-    <option name="version" value="2.10.6" />
-    <option name="selectedTheme" value="DARKER" />
-    <option name="highlightColor" value="80cbc4" />
-    <option name="accentColor" value="ce840d" />
-    <option name="userId" value="-4b94b71b:1661460127c:-8000" />
     <option name="isWizardShown" value="true" />
+    <option name="accentColor" value="ce840d" />
+    <option name="highlightColor" value="80cbc4" />
+    <option name="selectedTheme" value="DARKER" />
+    <option name="userId" value="-4b94b71b:1661460127c:-8000" />
+    <option name="version" value="3.0.0-pre1" />
   </component>
 </application>
