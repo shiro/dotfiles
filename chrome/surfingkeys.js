@@ -23,6 +23,21 @@ mapkey('cf', '#1Open multiple links in a new tab', function() {
   Hints.create("", Hints.dispatchMouseClick, {tabbed: true, active: false, multipleHits: true});
 });
 
+
+// open stuff in new tab
+function getImageElements() {
+    return Array.from(document.querySelectorAll("img"));
+}
+
+mapkey('zf', 'Open an Image in a new tab', function() {
+  Hints.create(getImageElements(), function(imageElement) {
+    console.log(imageElement);
+    var url = imageElement.getAttribute('src');
+    window.open(url, '_blank');
+  });
+});
+
+
 map('<Alt-t>', '<Alt-s>');
 
 map('<ArrowRight>', 'R');
