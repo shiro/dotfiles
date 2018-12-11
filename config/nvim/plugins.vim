@@ -219,7 +219,8 @@ if expand("$VIMWIKI_LIST") != "$VIMWIKI_LIST"
 	execute 'let g:vimwiki_list = ' . expand("$VIMWIKI_LIST")
 endif
 
-let g:vimwiki_global_ext=0
+" disable mappings
+let g:vimwiki_map_prefix = '<Leader>e'
 
 " }}}
 
@@ -246,6 +247,12 @@ Plug 'airblade/vim-rooter' " start in the right place
 let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_silent_chdir = 1
 let g:rooter_resolve_links = 1
+
+" only if requested
+let g:rooter_manual_only = 1
+
+" go to root
+nmap <leader>;r :Rooter<cr>
 
 " }}}
 
