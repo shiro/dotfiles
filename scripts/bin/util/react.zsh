@@ -39,8 +39,8 @@ shift $((OPTIND-1))
 # templates {{{
 
 read -r -d '' SFC_TEMPLATE <<'TEMPLATE'
-import * as React from "react";
 import cn from 'classnames';
+import * as React from "react";
 
 import "./$[NAME].sass";
 
@@ -57,7 +57,7 @@ const $[NAME]: React.SFC<Props> = (props) => {
             {children}
         </div>
     );
-}
+};
 
 export default $[NAME];
 
