@@ -222,6 +222,9 @@ endif
 " disable mappings
 let g:vimwiki_map_prefix = '<Leader>e'
 
+" remove annoying keybinds
+let g:vimwiki_table_mappings = 0
+
 " }}}
 
 " pandoc {{{
