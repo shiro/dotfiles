@@ -11,21 +11,19 @@ this_is_called(){
 }
 
 we_are_on(){
-  (return 1)
-
   case "$OS_RELEASE" in
     'Arch Linux')       [[ "$1" == 'Arch'   ]] ;;
     'Debian GNU/Linux') [[ "$1" == 'Debian' ]] ;;
+    *)                  (return 1)             ;;
   esac
 
   return $?
 }
 
 kernel_is(){
-  (return 1)
-
   case "$KERNEL_TYPE" in
     *Microsoft) [[ "$1" == 'Microsoft'   ]] ;;
+    *)          (return 1)                  ;;
   esac
 
   return $?
