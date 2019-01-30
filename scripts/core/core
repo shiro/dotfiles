@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+export dotimport(){ source "$DOTFILES/scripts/$1" }
+export dotcoreimport(){ dotimport "core/$1" }
+
+
+dotcoreimport 'system-info'

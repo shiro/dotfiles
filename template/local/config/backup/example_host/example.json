@@ -1,0 +1,12 @@
+{
+  "location": [
+    "/home/foo"
+  ],
+  "exclude": {
+    "files": [
+      "/home/foo/bar"
+    ],
+    "patterns": [
+    ]
+  }
+}

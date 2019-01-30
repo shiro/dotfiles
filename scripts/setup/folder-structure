@@ -1,0 +1,44 @@
+#!/bin/zsh
+
+
+echo "setting up folder structure"
+
+
+cat << EOF
+relevant folders:
+|--- ${HOME}/
+| |--- bin/             shared bin
+|   |--- windows/       windows bin
+|   |--- linux/         linux bin
+|
+|--- .local/            local files
+  |---> share/          temporary files
+  |---> config/         local configuration files
+    |---> backup/       local backup config
+    |---> zsh/          local zsh config
+  |---> bin/            local configuration files
+    |---> windows/      local windows bin
+    |---> linux/        local linux bin
+EOF
+
+
+mkdir -p "$HOME/bin"
+mkdir -p "$HOME/bin/linux"
+mkdir -p "$HOME/bin/windows"
+
+mkdir -p "$HOME/.local"
+mkdir -p "$HOME/.local/backup"
+mkdir -p "$HOME/.local/backup/`hostname`"
+mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/.local/bin/linux"
+mkdir -p "$HOME/.local/bin/windows"
+mkdir -p "$HOME/.local/config"
+mkdir -p "$HOME/.local/config/backup"
+mkdir -p "$HOME/.local/config/zsh"
+mkdir -p "$HOME/.local/share"
+
+
+# cp -rn $DOTFILES/template/local $HOME/.local
+
+
+echo "file structure setup complete"

@@ -1,8 +1,6 @@
 #!/bin/zsh
 
-command_exists() {
-    type "$1" > /dev/null 2>&1
-}
+source $DOTFILES/scripts/core/core
 
 
 [ -d ~/bin ] && export PATH=~/bin:$PATH
