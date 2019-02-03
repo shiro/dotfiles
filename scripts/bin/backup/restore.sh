@@ -36,9 +36,10 @@ shift $((OPTIND-1))
 [ $# -ne 1 ] && usage && exit 1
 
 BORG_REPO="$1"
-DESTINATION="${2:-"`pwd`"}"
 shift 1
 
+export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
+export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 
 # validate input
 [ ! -d "$BORG_REPO" ] && echo "borg repo \"$BORG_REPO\" could not be found" && exit 1
@@ -158,7 +159,6 @@ extract_files(){
 
   echo "restored successfully"
 }
-
 
 
 
