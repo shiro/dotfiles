@@ -1,4 +1,3 @@
-
 timer() {
     ## Set a timer to display duration ##
     # Usage:  timer [start|stop]
