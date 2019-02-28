@@ -67,7 +67,6 @@ unmap("sb");
 unmap("ga");
 unmap("sw");
 unmap("ss");
-// unmap("s");
 unmap("S");
 unmap(";dh");
 unmap("t");
@@ -81,6 +80,12 @@ unmap("spsset");
 unmap("spcset");
 unmap("spishow");
 unmap("sfrshow");
+
+// website specific bindings
+unmap('j', /youtube.com/);
+unmap('k', /youtube.com/);
+unmap('l', /youtube.com/);
+
 
 settings.theme = `
 .sk_theme {
