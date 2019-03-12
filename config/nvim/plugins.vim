@@ -137,10 +137,10 @@ Plug 'easymotion/vim-easymotion' " improved motions
 
 let g:EasyMotion_smartcase = 1 " case insensitive
 
-map <Leader>f <Plug>(easymotion-bd-f)
-vmap <Leader>f <Plug>(easymotion-bd-f)
-map <Leader>e <Plug>(easymotion-bd-w)
-vmap <Leader>e <Plug>(easymotion-bd-w)
+" map <Leader>f <Plug>(easymotion-bd-f)
+" vmap <Leader>f <Plug>(easymotion-bd-f)
+" map <Leader>e <Plug>(easymotion-bd-w)
+" vmap <Leader>e <Plug>(easymotion-bd-w)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
@@ -223,7 +223,7 @@ endif
 let g:vimwiki_map_prefix = '<Leader>e'
 
 " remove annoying keybinds
-let g:vimwiki_table_mappings = 0
+" let g:vimwiki_table_mappings = 0
 
 " }}}
 
