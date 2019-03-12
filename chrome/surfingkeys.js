@@ -88,7 +88,7 @@ unmap('l', /youtube.com/);
 
 
 settings.theme = `
-.sk_theme {
+/*.sk_theme {
     background: rgba(0, 50, 70, 0.95);
 }
 
@@ -102,6 +102,7 @@ settings.theme = `
 
 .sk_theme #sk_omnibarSearchResult > ul {
 }
+*/
 
 .sk_theme #sk_omnibarSearchResult > ul > li {
     margin: 5px 10px;
@@ -110,9 +111,13 @@ settings.theme = `
     transition: 0.3s all;
     border-radius: 5px;
 }
+/*
 
 .sk_theme #sk_omnibarSearchResult > ul > li:hover, .sk_theme #sk_omnibarSearchResult > ul > .focused {
     cursor: pointer;
     font-size: 20px;
     background-color: rgba(205, 222, 249, 0.9) !important;
-}`
+}
+
+*/
+`
