@@ -28,20 +28,20 @@ set shortmess+=A " ignore swapfile warning
 
 let g:terminal_color_0  = '#ffffff'
 let g:terminal_color_1  = '#000000'
-let g:terminal_color_2  = '#000000'
-let g:terminal_color_3  = '#000000'
-let g:terminal_color_4  = '#000000'
-let g:terminal_color_5  = '#000000'
-let g:terminal_color_6  = '#000000'
+let g:terminal_color_2  = '#90C93F'
+let g:terminal_color_3  = '#ffffff'
+let g:terminal_color_4  = '#ffffff'
+let g:terminal_color_5  = '#ffffff'
+let g:terminal_color_6  = '#ffffff'
 let g:terminal_color_7  = '#000000'
-let g:terminal_color_8  = '#000000'
-let g:terminal_color_9  = '#000000'
-let g:terminal_color_10 = '#000000'
-let g:terminal_color_11 = '#000000'
-let g:terminal_color_12 = '#000000'
-let g:terminal_color_13 = '#000000'
-let g:terminal_color_14 = '#000000'
-let g:terminal_color_15 = '#000000'
+let g:terminal_color_8  = '#ffffff'
+let g:terminal_color_9  = '#ffffff'
+let g:terminal_color_10 = '#90C93F'
+let g:terminal_color_11 = '#ffffff'
+let g:terminal_color_12 = '#359CE6'
+let g:terminal_color_13 = '#ffffff'
+let g:terminal_color_14 = '#BBDDFF'
+let g:terminal_color_15 = '#ffffff'
 
 " }}}
 
@@ -127,6 +127,9 @@ nnoremap <silent> $ g$
 " quickly paste from default buffer
 inoremap <C-r><C-r> <C-r>*
 cnoremap <C-r><C-r> <C-r>*
+
+" make some bindings work in term mode
+tmap <C-q> <C-\><C-n><C-q>
 
 " wipout buffer
 " nmap <silent> <leader>b :bw<cr>

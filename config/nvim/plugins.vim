@@ -3,7 +3,7 @@ runtime plug/plug.vim
 call plug#begin('~/.config/nvim/plugged')
 
 
-" NERDTree {{{
+" NERDTree [disabled] {{{
 " Plug 'scrooloose/nerdtree', "{ 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 " Plug 'Xuyuanp/nerdtree-git-plugin'
 
@@ -14,6 +14,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 " " close vim if only window remaining
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" autocmd bufenter * if (winnr("$") == 1) | q | endif
 
 " let NERDTreeMinimalUI=1 " hide help
 " let NERDTreeShowHidden=1 " show hidden files
@@ -37,11 +38,14 @@ call plug#begin('~/.config/nvim/plugged')
 
 " ranger {{{
 
-Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
+Plug 'francoiscabrol/ranger.vim'
 
 let g:ranger_replace_netrw = 1
 let g:ranger_map_keys = 0 " use own keymaps
+
+map <C-M-r> :Ranger<CR>.
+map <C-M-t> :RangerWorkingDirectory<CR>.
 
 " }}}
 
@@ -127,7 +131,7 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 " deoplete.nvim {{{
 
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 
 " }}}
 
@@ -195,6 +199,12 @@ vnoremap <silent> <c-h> :<C-U>TmuxNavigateLeft()<cr>
 vnoremap <silent> <c-j> :<C-U>TmuxNavigateDown()<cr>
 vnoremap <silent> <c-k> :<C-U>TmuxNavigateUp()<cr>
 vnoremap <silent> <c-l> :<C-U>TmuxNavigateRight()<cr>
+
+" handle term mode
+tmap <C-h> <C-\><C-n><C-h>i
+tmap <C-j> <C-\><C-n><C-j>i
+tmap <C-k> <C-\><C-n><C-k>i
+tmap <C-l> <C-\><C-n><C-l>i
 
 " }}}
 
