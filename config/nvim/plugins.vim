@@ -220,7 +220,25 @@ nnoremap <leader>m :Files<CR>
 
 " }}}
 
-" vimwiki (no pandoc compatibility yet) {{{
+" pandoc {{{
+
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+
+" enter opens current link
+" au FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
+
+let g:pandoc#folding#fold_yaml = 1
+let g:pandoc#folding#fold_fenced_codeblocks = 1
+let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
+let g:pandoc#filetypes#pandoc_markdown = 0
+let g:pandoc#folding#mode = ["syntax"]
+let g:pandoc#modules#enabled = ["formatting", "folding"]
+let g:pandoc#formatting#mode = "h"
+
+" }}}
+
+" vimwiki {{{
 
 Plug 'vimwiki/vimwiki'
 
@@ -232,24 +250,10 @@ endif
 " disable mappings
 let g:vimwiki_map_prefix = '<Leader>e'
 
+let g:vimwiki_folding='expr'
+au FileType vimwiki set filetype=vimwiki.markdown
 " remove annoying keybinds
 " let g:vimwiki_table_mappings = 0
-
-" }}}
-
-" pandoc {{{
-
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-
-let g:pandoc#folding#mode = 'syntax'
-let g:pandoc#folding#fold_yaml = 1
-let g:pandoc#folding#fold_fenced_codeblocks = 1
-
-let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
-
-" enter opens current link
-au FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
 
 " }}}
 
