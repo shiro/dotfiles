@@ -233,6 +233,25 @@ augroup END
 
 " }}}
 
+" utility functions {{{
+
+" get syntax element names and colors {{{
+function! GetSyntaxID()
+    return synID(line('.'), col('.'), 1)
+endfunction
+
+function! GetSyntaxParentID()
+    return synIDtrans(GetSyntaxID())
+endfunction
+
+function! GetSyntax()
+    echo synIDattr(GetSyntaxID(), 'name')
+    exec "hi ".synIDattr(GetSyntaxParentID(), 'name')
+endfunction
+" }}}
+
+" }}}
+
 " " make the highlighting of tabs and other non-text less annoying
 " highlight SpecialKey ctermbg=none ctermfg=8
 " highlight NonText ctermbg=none ctermfg=8
