@@ -88,6 +88,7 @@
     <keyboard-shortcut first-keystroke="shift ctrl alt t" />
     <keyboard-shortcut first-keystroke="shift ctrl alt semicolon" />
     <keyboard-shortcut first-keystroke="shift ctrl l" />
+    <keyboard-shortcut first-keystroke="ctrl alt semicolon" />
   </action>
   <action id="Replace" />
   <action id="Rerun">
