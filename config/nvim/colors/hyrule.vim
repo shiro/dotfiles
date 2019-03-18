@@ -99,3 +99,15 @@ hi DiffAdd guifg=#c0d5c1 guibg=#2c445c guisp=#2c445c gui=NONE ctermfg=151 ctermb
 hi TabLine guifg=NONE guibg=#2d2c2b guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg=236 cterm=NONE
 hi titled guifg=#c0d5c1 guibg=#2d2c2b guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=236 cterm=NONE
 hi htmlh2 guifg=#c0d5c1 guibg=#2d2c2b guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=236 cterm=NONE
+
+hi link TagbarAccessPublic Error
+hi link TagbarAccessProtected Error
+hi link TagbarAccessPrivate Error
+
+" Vimwiki:
+hi link VimwikiHeader1 Boolean
+hi link VimwikiHeader2 String
+hi link VimwikiHeader3 String
+hi link VimwikiHeader4 String
+hi link VimwikiHeader5 String
+hi link VimwikiHeader6 String
