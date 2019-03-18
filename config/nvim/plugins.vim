@@ -233,7 +233,7 @@ let g:pandoc#folding#fold_fenced_codeblocks = 1
 let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
 let g:pandoc#filetypes#pandoc_markdown = 0
 let g:pandoc#folding#mode = ["syntax"]
-let g:pandoc#modules#enabled = ["formatting", "folding"]
+let g:pandoc#modules#enabled = ["formatting", "folding", "toc"]
 let g:pandoc#formatting#mode = "h"
 
 " }}}
@@ -247,11 +247,16 @@ if expand("$VIMWIKI_LIST") != "$VIMWIKI_LIST"
 	execute 'let g:vimwiki_list = ' . expand("$VIMWIKI_LIST")
 endif
 
-" disable mappings
+" change leader mappings
 let g:vimwiki_map_prefix = '<Leader>e'
 
+" enable global highlighting
+let g:vimwiki_ext2syntax = {'.md': 'markdown'}
 let g:vimwiki_folding='expr'
+
 au FileType vimwiki set filetype=vimwiki.markdown
+
+
 " remove annoying keybinds
 " let g:vimwiki_table_mappings = 0
 
