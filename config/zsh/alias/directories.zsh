@@ -10,7 +10,7 @@ alias ll='ls -lh --color'
 alias la='ls -lAh --color'
 
 # ranger
-alias r='/usr/bin/ranger'
+alias r='zranger > /dev/null'
 
 # fzf through directory stack
 d(){ eval cd $(dirs -v | sed -r 's/^[0-9]+	//' | fzf) }
