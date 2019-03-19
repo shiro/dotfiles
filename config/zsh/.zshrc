@@ -41,15 +41,7 @@ zit-in "https://github.com/m45t3r/zit" "zit"
 
 zit-in "https://github.com/Vifon/zranger" "zranger"
 export fpath=($fpath "$ZIT_MODULES_PATH/zranger")
-
-# autoload colors && colors
-
 autoload -U zranger
-bindkey -s '\e;' "zranger\n"
-
-_zranger-widget() zranger
-zle -N _zranger-widget
-bindkey -M vicmd -s 'r' 'i\nzranger > /dev/null\n'
 
 
 # load local settings
