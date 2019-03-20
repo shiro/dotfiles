@@ -1,0 +1,113 @@
+#!/bin/zsh
+
+[ $# -ne 1 ] && echo "missing destination parameter" && exit 1
+
+export DESTINATION="$1"
+
+
+
+# make sure dependencies are installed
+for app in jq gomplate fzf; do
+  command -v $app > /dev/null || { echo "$app must be installed" && exit 1 }
+done
+
+
+TEMPLATE_ROOT="$XDG_CONFIG_HOME/snip"
+
+
+# initialize directories
+if [ ! -d "$TEMPLATE_ROOT" ]; then
+  for dir in recipes snippets; do
+    mkdir -p $TEMPLATE_ROOT/$dir > /dev/null
+  done
+fi
+
+
+
+
+export SNIPPET="`find "$TEMPLATE_ROOT"/* -type f -not -name "*.json" -exec realpath --relative-to "$TEMPLATE_ROOT" {} \; | fzf`"
+export DATASOURCE="${SNIPPET:r}.json"
+
+# require valid snippet
+[ -z "$SNIPPET" ] && exit 0
+
+
+
+assign(){
+  [ $# -ne 2 ] && echo "assign: expected 2 arguments, but got $#" && exit 1
+  local varName="$1"
+  local value="$2"
+
+  eval "export $1=\"$value\""
+}
+
+load-data(){
+  [ $# -lt 1 ] && echo "load-data: expected at least 1 argument, but got $#" && exit 1
+  local dataSource="$TEMPLATE_ROOT/$1"
+  local outputVar="$2"
+
+  if [ -f "$dataSource" ]; then
+    if [ -n "$outputVar" ]; then
+      assign "$outputVar" "`cat "$dataSource"`"
+    else
+      cat "$dataSource"
+    fi
+  fi
+}
+
+edit(){
+  [ $# != 1 ] && echo "edit: expected 1 argument, but got $#" && exit 1
+  local data="$1"
+
+  echo "$data" | vipe
+}
+
+merge(){
+  [ $# -lt 1 ] && echo "render: expected at least 1 argument, but got $#" && exit 1
+  local data1="$1"
+  local data2="$2"
+  local outputVar="$3"
+
+  result="`echo "$data1" | jq ". + $data2"`"
+
+  if [ -n "$outputVar" ]; then
+    assign "$outputVar" "$result"
+  else
+    echo "$result"
+  fi
+}
+
+render(){
+  [ $# -lt 1 ] && echo "render: expected 1-2 arguments, but got $#" && exit 1
+  local snippet="$TEMPLATE_ROOT/$1"
+  local data="$2"
+
+  if [ -n "$data" ]; then
+    j2 --undefined --format=json "$snippet" <(echo "$data")
+  else
+    j2 --undefined "$snippet"
+  fi
+}
+
+
+case "${SNIPPET:e}" in
+  recipe)
+    export DATA="`load-data "$DATASOURCE"`"
+
+    ( source "$TEMPLATE_ROOT/$SNIPPET")
+    ;;
+  *)
+    [ -d "$DESTINATION" ] && echo "destination \"$DESTINATION\" cannot be a directory" && exit 1
+
+    local data="`load-data "$DATASOURCE"`"
+
+    if [ -n "$data" ]; then
+      data="`edit "$data"`"
+    fi
+
+    result="`render "$SNIPPET" "$data"`"
+
+    echo "$result" > "$DESTINATION"
+    ;;
+esac
+
