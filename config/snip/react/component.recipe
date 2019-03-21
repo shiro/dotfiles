@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+# parse name, camel-case
+componentName="${DESTINATION:r:t}"
+componentName="${(C)componentName[1]}${componentName[2,-1]}"
+
+DESTINATION="${DESTINATION:h}/$componentName"
+
+# create destination dir
+mkdir -p "${DESTINATION:h}"
+
+
+tsx=$(load-data 'react/component.tsx')
+css=$(load-data 'react/component.scss')
+
+data=$(merge "$tsx" "$css")
+data=$(set-value "$data" "name" "$componentName")
+
+render 'react/component.tsx' "$data" > "$DESTINATION.tsx"
+render 'react/component.scss' "$data" > "$DESTINATION.scss"

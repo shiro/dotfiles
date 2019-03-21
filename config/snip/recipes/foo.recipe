@@ -1,8 +1,0 @@
-load-data "recipes/hello.json" "d2"
-merge "$DATA" "$d2" "d3"
-echo $d3
-exit
-
-echo $DESTINATION
-
-render "recipes/mello"

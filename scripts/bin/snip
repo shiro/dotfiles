@@ -15,18 +15,16 @@ done
 TEMPLATE_ROOT="$XDG_CONFIG_HOME/snip"
 
 
-# initialize directories
+# init directories
 if [ ! -d "$TEMPLATE_ROOT" ]; then
-  for dir in recipes snippets; do
-    mkdir -p $TEMPLATE_ROOT/$dir > /dev/null
-  done
+  mkdir -p $TEMPLATE_ROOT
 fi
 
 
 
 
 export SNIPPET="`find "$TEMPLATE_ROOT"/* -type f -not -name "*.json" -exec realpath --relative-to "$TEMPLATE_ROOT" {} \; | fzf`"
-export DATASOURCE="${SNIPPET:r}.json"
+export DATASOURCE="$SNIPPET"
 
 # require valid snippet
 [ -z "$SNIPPET" ] && exit 0
@@ -37,44 +35,48 @@ assign(){
   [ $# -ne 2 ] && echo "assign: expected 2 arguments, but got $#" && exit 1
   local varName="$1"
   local value="$2"
+  eval "unset $varName"
 
-  eval "export $1=\"$value\""
+  # dark HEREDOC magic to assign multi-line value to variable
+  eval 'read -d "" '"$varName"' <<EOF
+'"$value"'
+EOF'
+  eval "export $varName"
+  # eval "echo $varName \$$varName"
 }
 
 load-data(){
-  [ $# -lt 1 ] && echo "load-data: expected at least 1 argument, but got $#" && exit 1
-  local dataSource="$TEMPLATE_ROOT/$1"
-  local outputVar="$2"
+  [ $# -ne 1 ] && echo "load-data: expected 1 argument, but got $#" && exit 1
+  local dataSource="$TEMPLATE_ROOT/$1.json"
 
   if [ -f "$dataSource" ]; then
-    if [ -n "$outputVar" ]; then
-      assign "$outputVar" "`cat "$dataSource"`"
-    else
-      cat "$dataSource"
-    fi
+    cat "$dataSource"
   fi
 }
 
 edit(){
-  [ $# != 1 ] && echo "edit: expected 1 argument, but got $#" && exit 1
+  [ $# -ne 1 ] && echo "edit: expected 1 argument, but got $#" && exit 1
   local data="$1"
+  local outputVar="$2"
 
   echo "$data" | vipe
 }
 
 merge(){
-  [ $# -lt 1 ] && echo "render: expected at least 1 argument, but got $#" && exit 1
+  [ $# -ne 2 ] && echo "merge: expected 2 arguments, but got $#" && exit 1
   local data1="$1"
   local data2="$2"
-  local outputVar="$3"
 
-  result="`echo "$data1" | jq ". + $data2"`"
+  echo "$data1" | jq ". + $data2"
+}
 
-  if [ -n "$outputVar" ]; then
-    assign "$outputVar" "$result"
-  else
-    echo "$result"
-  fi
+set-value(){
+  [ $# -ne 3 ] && echo "set-value: expected 3 arguments, but got $#" && exit 1
+  local data="$1"
+  local key="$2"
+  local value="$3"
+
+  merge "$data" "{\"$key\":\"$value\"}"
 }
 
 render(){
@@ -94,7 +96,7 @@ case "${SNIPPET:e}" in
   recipe)
     export DATA="`load-data "$DATASOURCE"`"
 
-    ( source "$TEMPLATE_ROOT/$SNIPPET")
+    (source "$TEMPLATE_ROOT/$SNIPPET")
     ;;
   *)
     [ -d "$DESTINATION" ] && echo "destination \"$DESTINATION\" cannot be a directory" && exit 1
