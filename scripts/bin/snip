@@ -7,7 +7,7 @@ export DESTINATION="$1"
 
 
 # make sure dependencies are installed
-for app in jq gomplate fzf; do
+for app in jq vipe fzf; do
   command -v $app > /dev/null || { echo "$app must be installed" && exit 1 }
 done
 
