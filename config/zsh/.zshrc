@@ -19,17 +19,17 @@ export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 
 # we need advanced globbing for this
 configs=(
-	${ZDOTDIR}/*.zsh
-	${ZDOTDIR}/completion/*.zsh
-	${ZDOTDIR}/alias/*
-	${ZDOTDIR}/functions/*.zsh
-	${ZDOTDIR}/key-bindings/*.zsh
-	${ZDOTDIR}/plugins/*
+  ${ZDOTDIR}/*.zsh
+  ${ZDOTDIR}/completion/*.zsh
+  ${ZDOTDIR}/alias/*
+  ${ZDOTDIR}/functions/*.zsh
+  ${ZDOTDIR}/key-bindings/*.zsh
+  ${ZDOTDIR}/plugins/*
 )
 
 # source all .zsh files inside of the zsh/ directory
 for config in "${configs[@]}"; do
-	source $config;
+  source $config;
 done
 
 
