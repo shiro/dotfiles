@@ -6,9 +6,6 @@ source $DOTFILES/scripts/core/core
 [ -d ~/bin ] && export PATH=~/bin:$PATH
 
 
-# WSL nice workaround
-unsetopt BG_NICE
-
 
 # load zit, the plugin manager
 source ${ZDOTDIR}/plugins/zit.zsh
