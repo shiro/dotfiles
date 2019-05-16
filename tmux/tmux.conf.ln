@@ -1,3 +1,13 @@
+bind-key b copy-mode\;\
+           send-keys -X start-of-line\;\
+           send-keys -X search-backward "兎" 
+
+is_sh="ps -o state= -o comm= -t '#{pane_tty}' | tail -n1 \
+	| grep -iqE '^[^ ]+ +(sh|bash|zsh|fish)$'"
+
+bind-key u if-shell "$is_sh" "display \"wow\"" "display \"nyan\""
+#bind-key u run-shell "ps -o state= -o comm= -t #{pane_tty} | tail -n1"
+
 # options {{{
 
 # Enviormental variables
