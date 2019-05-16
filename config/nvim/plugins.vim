@@ -118,8 +118,6 @@ Plug 'vim-scripts/ingo-library'
 
 " syntax {{{
 
-Plug 'kchmck/vim-coffee-script' " coffee-scirpt
-
 Plug 'cakebaker/scss-syntax.vim' " sass
 
 Plug 'chr4/nginx.vim' " nginx.conf
