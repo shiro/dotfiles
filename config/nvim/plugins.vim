@@ -257,6 +257,7 @@ au FileType vimwiki set filetype=vimwiki.markdown
 
 " remove annoying keybinds
 " let g:vimwiki_table_mappings = 0
+:nmap <C-M-F12> <Plug>VimwikiNextLink
 
 " }}}
 
