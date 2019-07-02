@@ -133,6 +133,8 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 
 " }}}
 
+Plug 'rhysd/vim-grammarous' " grammar
+
 " vim-easymotion {{{
 
 Plug 'easymotion/vim-easymotion' " improved motions
