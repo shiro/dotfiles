@@ -1,11 +1,11 @@
+#!/bin/zsh
+
 # export DOCKER_HOST=tcp://0.0.0.0:2375
 
 # export ZSH_NO_COMPILE=1
 
 # [ -n $DISPLAY ] && export DISPLAY=localhost:0
 
-
-# export PATH="$PATH:/mnt/c/Windows/System32"
 
 # yarn
 # export PATH="$PATH:${HOME}/.yarn/bin"
