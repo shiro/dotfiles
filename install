@@ -20,9 +20,9 @@ mkdir -p ~/.local/share/dotfiles
 mkdir -p ~/.local/share/misc
 
 # take care of all local files
-source scripts/setup/setup-local-files.zsh
+source scripts/setup/folder-structure
 
 # cd scripts
-source scripts/setup/link.sh
+source scripts/setup/link
 
 echo "Done. Reload your terminal."
