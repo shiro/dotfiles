@@ -18,6 +18,7 @@ make
 neovim-git
 openssh
 p7zip
+pandoc-bin
 python
 python-llfuse
 python2
