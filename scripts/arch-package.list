@@ -17,6 +17,7 @@ lolcat
 make
 neovim-git
 openssh
+p7zip
 python
 python-llfuse
 python2
