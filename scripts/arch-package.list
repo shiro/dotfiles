@@ -1,5 +1,6 @@
 autoconf
 automake
+jq
 borg-git
 cowsay
 diff-so-fancy-git
