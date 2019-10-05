@@ -2,6 +2,7 @@ autoconf
 automake
 borg-git
 cowsay
+diff-so-fancy-git
 entr
 fakeroot
 fortune-mod
@@ -10,14 +11,15 @@ git
 grep
 gzip
 htop
+hub-git
 less
 lolcat
 make
 neovim-git
 openssh
 python
-python2
 python-llfuse
+python2
 sed
 silver-searcher-git
 tar
