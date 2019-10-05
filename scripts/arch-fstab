@@ -1,0 +1,9 @@
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+C:\ /mnt/c drvfs rw,metadata
+D:\ /mnt/d drvfs rw,metadata
+
+/mnt/d/Users/shiro/.ssh /home/shiro/.ssh auto bind
+/mnt/d/Users/shiro/project /home/shiro/project auto bind

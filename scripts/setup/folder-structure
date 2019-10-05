@@ -10,10 +10,12 @@ relevant folders:
 | |--- bin/             local script files
 |
 |--- .local/            local files
-  |---> share/          temporary files
-  |---> config/         local configuration files
-    |---> backup/        backup config
-    |---> zsh/           zsh config
+| |---> share/          temporary files
+| |---> config/         local configuration files
+|   |---> backup/       backup config
+|   |---> zsh/          zsh config
+|
+|--- project/           development projects
 EOF
 
 
@@ -26,6 +28,7 @@ mkdir -p "$HOME/.local/config/backup"
 mkdir -p "$HOME/.local/config/backup/`hostname`"
 mkdir -p "$HOME/.local/config/zsh"
 mkdir -p "$HOME/.local/share"
+mkdir -p "$HOME/project"
 
 
 cp -rn $DOTFILES/template/local/* $HOME/.local
