@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+export dotimport(){ source "$DOTFILES/scripts/$1" }
+
+dotimport 'core/system-info'
+
+
+
+# global dotfiles initialization
+# can be used in verious scripts to access dotfiles functionality
+export DOTINIT="$DOTFILES/scripts/dotinit"

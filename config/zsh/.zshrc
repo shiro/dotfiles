@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-source $DOTFILES/scripts/core/core
+source $DOTFILES/scripts/dotinit
 
 
 [ -d ~/bin ] && export PATH=~/bin:$PATH
