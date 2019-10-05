@@ -1,21 +1,22 @@
 #!/bin/zsh
-source ${DOTFILES}/scripts/install/_functions
+source $DOTINIT
+dotimport 'admin/package-installation'
 
 
 this_is_called 'toast'
 
 
-! command_exists 'toast'
-install_or_skip $?
+command_exists 'toast'
+skip_if_true $?
 
 
-if kernel_is 'Microsoft'
+if kernel_is 'windows'
 then
-  sudo cat <<- EOF > /usr/local/bin/toast
+  sudo cat <<- EOF > ~/bin/toast
   #!/bin/sh
   powershell.exe -command "New-BurntToastNotification -Text '\$@'"
 EOF
-  sudo chmod +x /usr/local/bin/toast
+  sudo chmod +x ~/bin/toast
 else
   unsupported_platform
 fi

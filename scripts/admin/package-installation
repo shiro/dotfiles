@@ -20,8 +20,8 @@ we_are_on(){
 
 kernel_is(){
   case "$KERNEL_TYPE" in
-    *Microsoft) [[ "$1" == 'Microsoft'   ]] ;;
-    *)          (return 1)                  ;;
+    *microsoft*) [[ "$1" == 'windows'     ]] ;;
+    *)           (return 1)                  ;;
   esac
 
   return $?
@@ -35,12 +35,16 @@ command_exists(){
   fi
 }
 
-install_or_skip(){
+install_if_true(){
   if [ $1 -eq 0 ]; then
-    echo "[INSTALL] $INSTALL_NAME"
-    return 0
-  else
-    echo "[SKIP]    $INSTALL_NAME"
+    echo "[INSTALL]        $INSTALL_NAME"
+    exit
+  fi
+}
+
+skip_if_true(){
+  if [ $1 -eq 0 ]; then
+    echo "[SKIP]           $INSTALL_NAME"
     exit
   fi
 }
@@ -49,7 +53,7 @@ unsupported_platform(){
   if [ $# -eq 1 ] && [ $1 -ne 0 ]; then
     return 0
   else
-    echo "[UNSUP]   $INSTALL_NAME"
+    echo "[UNSUP-PLATFORM] $INSTALL_NAME"
     exit
   fi
 }
