@@ -1,0 +1,4 @@
+#!/bin/zsh
+ipconfig.exe \
+| grep WSL -A 20 \
+| awk 'match($0,/IPv4.*: ([0-9\.]+)/,a){print a[1]; exit}'
