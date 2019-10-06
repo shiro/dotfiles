@@ -25,4 +25,6 @@ source scripts/setup/folder-structure
 # cd scripts
 source scripts/setup/link
 
+scripts/bin/ln-bin
+
 echo "Done. Reload your terminal."
