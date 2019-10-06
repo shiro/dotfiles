@@ -1,7 +1,7 @@
 @echo off
 
 set home=%userprofile%
-set dotIdeaDir=%~dp0..\..\idea
+set dotIdeaDir=%~dp0..\idea
 
 set fileList=("%home%\.PhpStorm*" ^
               "%home%\.IntelliJIdea*" ^
