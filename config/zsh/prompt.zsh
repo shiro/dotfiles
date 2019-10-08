@@ -25,8 +25,6 @@ function prompt_git_info() {
   else
       echo -n "%F{green}✔%f"
   fi
-
-
 }
 
 
