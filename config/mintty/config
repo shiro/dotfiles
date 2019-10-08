@@ -9,7 +9,7 @@ Font=Hack
 FontHeight=10
 FontIsBold=no
 FontWeight=700
-Locale=en_US
+Locale=Hack
 OpaqueWhenFocused=no
 Padding=3
 RowSpacing=2
@@ -19,5 +19,30 @@ Term=xterm-256color
 Transparency=off
 BellTaskbar=no
 
-# color theme
-ThemeFile=hyrule_woods.minttyrc
+
+# Hyrule color theme
+
+ForegroundColour=192,213,193
+BackgroundColour=45,44,43
+
+Black=113,109,106
+BoldBlack=113,109,106
+
+Red=204,68,66
+BoldRed=204,68,66
+
+Green=144,201,63
+BoldGreen=144,201,63
+
+Yellow=245,197,4
+BoldYellow=245,197,4
+
+Blue=53,156,230
+BoldBlue=53,156,230
+
+Magenta=206,132,13
+BoldMagenta=206,132,13
+
+Cyan=187,221,255
+BoldCyan=187,221,255
+EmojiPlacement=full
