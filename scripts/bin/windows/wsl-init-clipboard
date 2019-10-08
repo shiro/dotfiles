@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+echo 'export DISPLAY=`windows-host-ip`:0'
