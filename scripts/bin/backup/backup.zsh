@@ -8,14 +8,16 @@ usage(){
     repository      destination borg repository
     -l=<LIST FILE>  specify the location file
         --help      print this message
+    -n, --dry-run   do not persist backups
 USAGE
 }
 
 LOCATION_FILE=~/.local/config/backup/`hostname`/system.lst
+local dry_run=false
 
 set +x
 
-while getopts :l:-: opt; do
+while getopts :l:n-: opt; do
   case "$opt" in
     l)
       if [ ! -f "$OPTARG" ]; then
@@ -24,9 +26,15 @@ while getopts :l:-: opt; do
       fi
       LOCATION_FILE="$OPTARG"
       ;;
+    n)
+      dry_run=true
+      ;;
     -) case "$OPTARG" in
         help)
           usage; exit 0
+          ;;
+        dry-run)
+          dry_run=true
           ;;
         *)
           usage; exit 1
@@ -72,15 +80,19 @@ trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
 info "Starting backup"
 
+args=
+$dry_run && args="-n"
 
 borg create                          \
-    --stats                          \
     --patterns-from "$LOCATION_FILE" \
     --show-rc                        \
-                                     \
+    --list \
+    $args \
     ::'main-{hostname}-{now}'
 
 backup_exit=$?
+
+[ $dry_run ] && exit 0
 
 info "Pruning repository"
 
