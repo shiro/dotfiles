@@ -20,11 +20,13 @@ usage(){
                     backup name
 
     --keep-daily DAILY
-                    the daily update to keep
+                    the daily updates to keep
     --keep-weekly WEEKLY
-                    the weekly update to keep
+                    the weekly updates to keep
     --keep-monthly MONTHLY
-                    the montly update to keep
+                    the montly updates to keep
+    --keep-last BACKUP_COUNT
+                    the amount of backups to keep
 
     --no-backup     skip the backup step
     --no-prune      skip the prune step
@@ -35,71 +37,92 @@ DEFAULT_LOCATION_DIR="$HOME/.local/config/backup/`hostname`"
 
 local location_file=
 local backup_name=
-local dry_run=
-local keep_daily=7
-local keep_weekly=4
-local keep_monthly=1
+local dry_run
+local keep_daily
+local keep_weekly
+local keep_monthly
+local keep_last
 
 set +x
 
-while getopts :l:n-: opt; do
-  case "$opt" in
-    l)
-      if [ -f "$OPTARG" ]; then
-        location_file="$OPTARG"
-      elif [ -f "$DEFAULT_LOCATION_DIR/$OPTARG" ]; then
-        location_file="$DEFAULT_LOCATION_DIR/$OPTARG"
+SHORT=l:n
+LONG=help,keep-last:,dry-run,no-prune,no-backup,keep-last:,keep-daily:,keep-weekly:,keep-monthly:,name:
+
+OPTS=$(getopt --options $SHORT --long $LONG --name "$0" -- "$@")
+
+[ $? != 0 ] && exit 1;
+
+eval set -- "$OPTS"
+
+while true ; do
+  case "$1" in
+    -l )
+      if [ -f "$2" ]; then
+        location_file="$2"
+      elif [ -f "$DEFAULT_LOCATION_DIR/$2" ]; then
+        location_file="$DEFAULT_LOCATION_DIR/$2"
       else
-        echo "$OPTARG: not found"
+        echo "$2: not found"
         exit 1
       fi
+
       if [ -z $backup_name ]; then
         backup_name="`basename "$location_file"`"
       fi
+
+      shift 2
       ;;
-    n)
+    -n | --dry-run )
       dry_run=1
+      no_prune=1
+      shift
       ;;
-    -) case "$OPTARG" in
-        help)
-          usage; exit 0
-          ;;
-        name)
-          backup_name="$1"
-          shift
-          ;;
-        dry-run)
-          dry_run=1
-          no_prune=1
-          ;;
-        keep-daily)
-          keep_daily=$1
-          shift
-          ;;
-        keep-weekly)
-          keep_weekly=$1
-          shift
-          ;;
-        keep-montly)
-          keep_monthly=$1
-          shift
-          ;;
-        no-backup)
-          no_backup=1
-          ;;
-        no-prune)
-          no_prune=1
-          ;;
-        *)
-          usage; exit 1
-          ;;
-      esac;;
-    :|\?)
-      usage; exit 1
+    --name )
+      backup_name="$2"
+      shift 2
+      ;;
+    --keep-last )
+      keep_last=$2
+      shift 2
+      ;;
+    --keep-daily )
+      keep_daily=$2
+      shift 2
+      ;;
+    --keep-weekly )
+      keep_weekly=$2
+      shift 2
+      ;;
+    --keep-monthly )
+      keep_monthly=$2
+      shift 2
+      ;;
+    --keep-last )
+      keep_last=$2
+      shift 2
+      ;;
+    --no-backup )
+      no_backup=1
+      shift
+      ;;
+    --no-prune )
+      no_prune=1
+      shift
+      ;;
+    --help )
+      usage; exit 0
+      ;;
+    -- )
+      shift
+      break
+      ;;
+    *)
+      echo "Internal error!"
+      exit 1
       ;;
   esac
 done
-shift $((OPTIND-1))
+
 
 # check parameter validity
 [ $# -ne 1 ] && usage && exit 1
@@ -122,6 +145,13 @@ shift 1
 # initialize variables
 [ -z $backup_name ] && \
   backup_name="`basename "$location_file"`"
+
+
+if [ ! $keep_daily ] && [ ! $keep_weekly ] && [ ! $keep_monthly ] && [ ! $keep_last ]; then
+  keep_daily=7
+  keep_weekly=4
+  keep_monthly=1
+fi
 
 # borg will use this
 export BORG_REPO
@@ -159,15 +189,15 @@ prune(){
   info "Pruning repository"
 
   args=()
-  [ -n $keep_daily ] && args+="-d $keep_daily"
-  [ -n $keep_weekly ] && args+="-w $keep_weekly"
-  [ -n $keep_monthly ] && args+="-m $keep_monthly"
+  [ $keep_daily ] && args+="-d $keep_daily"
+  [ $keep_weekly ] && args+="-w $keep_weekly"
+  [ $keep_monthly ] && args+="--keep-monthly $keep_monthly"
 
   borg prune                                  \
       --list                                  \
       --prefix "main-{hostname}-$backup_name" \
       --show-rc                               \
-      ${args[@]}
+      ${args[@]}        "$BORG_REPO"
 }
 
 if [ -z $no_backup ]; then
