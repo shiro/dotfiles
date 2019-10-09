@@ -189,15 +189,16 @@ prune(){
   info "Pruning repository"
 
   args=()
-  [ $keep_daily ] && args+="-d $keep_daily"
-  [ $keep_weekly ] && args+="-w $keep_weekly"
+  [ $keep_daily ] && args+="--keep-daily $keep_daily"
+  [ $keep_weekly ] && args+="--keep-weekly $keep_weekly"
   [ $keep_monthly ] && args+="--keep-monthly $keep_monthly"
+  [ $keep_last ] && args+="--keep-last $keep_last"
 
   borg prune                                  \
       --list                                  \
       --prefix "main-{hostname}-$backup_name" \
       --show-rc                               \
-      ${args[@]}        "$BORG_REPO"
+      ${=args[@]}
 }
 
 if [ -z $no_backup ]; then
