@@ -9,22 +9,38 @@ usage(){
     -l=<LIST FILE>  specify the location file
         --help      print this message
     -n, --dry-run   do not persist backups
+    --keep-daily DAILY
+                    the daily update to keep
+    --keep-weekly WEEKLY
+                    the weekly update to keep
+    --keep-monthly MONTHLY
+                    the montly update to keep
+    --no-backup     skip the backup step
+    --no-prune      skip the prune step
 USAGE
 }
 
-LOCATION_FILE=~/.local/config/backup/`hostname`/system.lst
+DEFAULT_LOCATION_DIR="$HOME/.local/config/backup/`hostname`"
+
+LOCATION_FILE="$DEFAULT_LOCATION_DIR/system"
 local dry_run=false
+local keep_daily=7
+local keep_weekly=4
+local keep_monthly=1
 
 set +x
 
 while getopts :l:n-: opt; do
   case "$opt" in
     l)
-      if [ ! -f "$OPTARG" ]; then
+      if [ -f "$OPTARG" ]; then
+        LOCATION_FILE="$OPTARG"
+      elif [ -f "$DEFAULT_LOCATION_DIR/$OPTARG" ]; then
+        LOCATION_FILE="$DEFAULT_LOCATION_DIR/$OPTARG"
+      else
         echo "$OPTARG: not found"
         exit 1
       fi
-      LOCATION_FILE="$OPTARG"
       ;;
     n)
       dry_run=true
@@ -35,6 +51,25 @@ while getopts :l:n-: opt; do
           ;;
         dry-run)
           dry_run=true
+          no_prune=true
+          ;;
+        keep-daily)
+          keep_daily=$1
+          shift
+          ;;
+        keep-weekly)
+          keep_weekly=$1
+          shift
+          ;;
+        keep-montly)
+          keep_monthly=$1
+          shift
+          ;;
+        no-backup)
+          no_backup=true
+          ;;
+        no-prune)
+          no_prune=true
           ;;
         *)
           usage; exit 1
@@ -78,33 +113,43 @@ fi
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
 trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
-info "Starting backup"
+backup(){
+  info "Starting backup"
 
-args=
-$dry_run && args="-n"
+  args=
+  $dry_run && args="-n"
 
-borg create                          \
-    --patterns-from "$LOCATION_FILE" \
-    --show-rc                        \
-    --list \
-    $args \
-    ::'main-{hostname}-{now}'
+  borg create                          \
+      --patterns-from "$LOCATION_FILE" \
+      --show-rc                        \
+      --list \
+      $args \
+      ::"main-{hostname}-{now}-${name}"
 
-backup_exit=$?
+  [ $dry_run ] && exit 0
+}
 
-[ $dry_run ] && exit 0
+prune(){
+  info "Pruning repository"
 
-info "Pruning repository"
+  borg prune                           \
+      --list                           \
+      --prefix 'main-{hostname}-'      \
+      --show-rc                        \
+      --keep-daily=7                   \
+      --keep-weekly=4                  \
+      --keep-monthly=1
+}
 
-borg prune                           \
-    --list                           \
-    --prefix 'main-{hostname}-'      \
-    --show-rc                        \
-    --keep-daily=7                   \
-    --keep-weekly=4                  \
-    --keep-monthly=1
+if [ -z $no_backup ]; then
+  backup
+  backup_exit=$?
+fi
 
-prune_exit=$?
+if [ -z $no_prune ]; then
+  prune
+  prune_exit=$?
+fi
 
 # use highest exit code as global exit code
 global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
