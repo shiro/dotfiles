@@ -61,6 +61,7 @@ map('`', '\'');
 
 
 unmap(".");
+unmap("gr");
 unmap("sg");
 unmap("sd");
 unmap("sb");
