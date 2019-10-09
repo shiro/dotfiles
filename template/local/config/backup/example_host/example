@@ -1,0 +1,7 @@
+R /home/example
+
+! /home/example/ignore
+
+- /home/example/exclude
+
++ /home/example/add
