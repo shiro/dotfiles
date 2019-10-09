@@ -35,7 +35,7 @@ DEFAULT_LOCATION_DIR="$HOME/.local/config/backup/`hostname`"
 
 local location_file=
 local backup_name=
-local dry_run=false
+local dry_run=
 local keep_daily=7
 local keep_weekly=4
 local keep_monthly=1
@@ -58,7 +58,7 @@ while getopts :l:n-: opt; do
       fi
       ;;
     n)
-      dry_run=true
+      dry_run=1
       ;;
     -) case "$OPTARG" in
         help)
@@ -69,8 +69,8 @@ while getopts :l:n-: opt; do
           shift
           ;;
         dry-run)
-          dry_run=true
-          no_prune=true
+          dry_run=1
+          no_prune=1
           ;;
         keep-daily)
           keep_daily=$1
@@ -85,10 +85,10 @@ while getopts :l:n-: opt; do
           shift
           ;;
         no-backup)
-          no_backup=true
+          no_backup=1
           ;;
         no-prune)
-          no_prune=true
+          no_prune=1
           ;;
         *)
           usage; exit 1
@@ -144,29 +144,30 @@ trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 backup(){
   info "Starting backup"
 
-  args=
-  $dry_run && args="-n"
+  args=()
+  [ -n $dry_run ] && args+="-n"
 
   borg create                          \
       --patterns-from "$location_file" \
       --show-rc                        \
-      --list \
-      $args \
-      ::"main-{hostname}-{now}-${name}"
-
-  [ $dry_run ] && exit 0
+      --list                           \
+      ${args[@]}                       \
+      ::"main-{hostname}-$backup_name-{now}"
 }
 
 prune(){
   info "Pruning repository"
 
-  borg prune                           \
-      --list                           \
-      --prefix 'main-{hostname}-'      \
-      --show-rc                        \
-      --keep-daily=7                   \
-      --keep-weekly=4                  \
-      --keep-monthly=1
+  args=()
+  [ -n $keep_daily ] && args+="-d $keep_daily"
+  [ -n $keep_weekly ] && args+="-w $keep_weekly"
+  [ -n $keep_monthly ] && args+="-m $keep_monthly"
+
+  borg prune                                  \
+      --list                                  \
+      --prefix "main-{hostname}-$backup_name" \
+      --show-rc                               \
+      ${args[@]}
 }
 
 if [ -z $no_backup ]; then
@@ -174,7 +175,7 @@ if [ -z $no_backup ]; then
   backup_exit=$?
 fi
 
-if [ -z $no_prune ]; then
+if [ -z $no_prune ] && [ -z $dry_run ]; then
   prune
   prune_exit=$?
 fi
