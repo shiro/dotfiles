@@ -7,7 +7,7 @@ usage(){
   Usage: $SCRIPT_NAME [OPTION]... -l LOCATION_FILE REPOSITORY
     REPOSITORY      destination borg repository
 
-    options:
+  Options:
     --help          print this message
 
 
