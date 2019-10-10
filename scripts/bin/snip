@@ -1,13 +1,13 @@
 #!/bin/zsh
 
-[ $# -ne 1 ] && echo "missing destination parameter" && exit 1
+[ $# -lt 1 ] && echo "missing destination parameter" && exit 1
 
 export DESTINATION="$1"
 
 
 
 # make sure dependencies are installed
-for app in jq vipe fzf; do
+for app in jq vipe fzf j2; do
   command -v $app > /dev/null || { echo "$app must be installed" && exit 1 }
 done
 
@@ -21,13 +21,25 @@ if [ ! -d "$TEMPLATE_ROOT" ]; then
 fi
 
 
+# handle snippet input
+if [ -n "$2" ]; then
+  if [ -f "$2" ] || [ -f "$TEMPLATE_ROOT/$2" ]; then
+    export SNIPPET="$2"
+  else
+    echo "'$2': file not found"
+    exit
+  fi
+fi
 
 
-export SNIPPET="`find "$TEMPLATE_ROOT"/* -type f -not -name "*.json" -exec realpath --relative-to "$TEMPLATE_ROOT" {} \; | fzf`"
+if [ -z "$SNIPPET" ]; then
+  export SNIPPET="`find "$TEMPLATE_ROOT"/* -type f -not -name "*.json" -exec realpath --relative-to "$TEMPLATE_ROOT" {} \; | fzf`"
+fi
+
 export DATASOURCE="$SNIPPET"
 
 # require valid snippet
-[ -z "$SNIPPET" ] && exit 0
+[ -z "$SNIPPET" ] && echo "snippet was not defined but is required" && exit 0
 
 
 
@@ -47,11 +59,32 @@ EOF'
 
 load-data(){
   [ $# -ne 1 ] && echo "load-data: expected 1 argument, but got $#" && exit 1
-  local dataSource="$TEMPLATE_ROOT/$1.json"
+  [ ! -f "$TEMPLATE_ROOT/$1" ] && echo "'$1': file not found" && exit 1
 
-  if [ -f "$dataSource" ]; then
-    cat "$dataSource"
+  local data_file
+
+  if [[ "${1:e}" == "json" ]] && [ -f "$TEMPLATE_ROOT/$1" ]; then
+    data_file="$TEMPLATE_ROOT/$1"
+  elif [ -f "$TEMPLATE_ROOT/$1.json" ]; then
+    data_file="$TEMPLATE_ROOT/$1.json"
   fi
+
+
+  local result='{}'
+
+  local file_variables=(`grep -oP '(?<={{ )[^ ]+(?= }})' "$TEMPLATE_ROOT/$1" | sort -u`)
+
+  for var in "${file_variables[@]}"; do
+    result="`set-value "$result" "$var" ''`"
+  done
+
+  if [ -n "$data_file" ]; then
+    local data_file_data="`cat "$data_file"`"
+
+    result="`merge "$result" "$data_file_data"`"
+  fi
+
+  echo "$result"
 }
 
 edit(){
@@ -85,16 +118,16 @@ render(){
   local data="$2"
 
   if [ -n "$data" ]; then
-    j2 --undefined --format=json "$snippet" <(echo "$data")
+    j2 --format=json "$snippet" <(echo "$data")
   else
-    j2 --undefined "$snippet"
+    j2 "$snippet"
   fi
 }
 
 
 case "${SNIPPET:e}" in
   recipe)
-    export DATA="`load-data "$DATASOURCE"`"
+    #export DATA="`load-data "$DATASOURCE"`"
 
     (source "$TEMPLATE_ROOT/$SNIPPET")
     ;;
