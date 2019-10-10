@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+data=$(load-data 'sge/UpdatableKeyPlum/UpdatableKeyPlum.cpp')
+
+data=$(edit "$data")
+
+render 'sge/UpdatableKeyPlum/UpdatableKeyPlum.cpp' "$data"
