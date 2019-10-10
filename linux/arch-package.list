@@ -1,7 +1,7 @@
 autoconf
 automake
-jq
 borg-git
+cmatrix-git
 cowsay
 diff-so-fancy-git
 entr
@@ -13,9 +13,11 @@ grep
 gzip
 htop
 hub-git
+jq
 less
 lolcat
 make
+moreutils
 neovim-git
 openssh
 p7zip
@@ -23,11 +25,16 @@ pandoc-bin
 python
 python-llfuse
 python2
+python2-j2cli
+python2-jinja
+ranger-git
 sed
 silver-searcher-git
 tar
 tmux-git
+unzip
 wget
 which
 xsel
+zip
 zsh-git
