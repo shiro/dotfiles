@@ -30,6 +30,9 @@ usage(){
 
     --no-backup     skip the backup step
     --no-prune      skip the prune step
+
+    --compression COMPRESSION
+                    the compression to use
 USAGE
 }
 
@@ -38,15 +41,19 @@ DEFAULT_LOCATION_DIR="$HOME/.local/config/backup/`hostname`"
 local location_file
 local backup_name
 local dry_run
+
 local keep_daily
 local keep_weekly
 local keep_monthly
 local keep_last
 
+local compression
+
+
 set +x
 
 SHORT=l:n
-LONG=help,keep-last:,dry-run,no-prune,no-backup,keep-last:,keep-daily:,keep-weekly:,keep-monthly:,name:
+LONG=help,keep-last:,dry-run,no-prune,no-backup,keep-last:,keep-daily:,keep-weekly:,keep-monthly:,name:,compression:
 
 OPTS=$(getopt --options $SHORT --long $LONG --name "$0" -- "$@")
 
@@ -73,8 +80,8 @@ while true ; do
       shift 2
       ;;
     -n | --dry-run )
-      dry_run=true
-      no_prune=true
+      dry_run=1
+      no_prune=1
       shift
       ;;
     --name )
@@ -102,12 +109,16 @@ while true ; do
       shift 2
       ;;
     --no-backup )
-      no_backup=true
+      no_backup=1
       shift
       ;;
     --no-prune )
-      no_prune=true
+      no_prune=1
       shift
+      ;;
+    --compression )
+      compression=$2
+      shift 2
       ;;
     --help )
       usage; exit 0
@@ -148,7 +159,7 @@ shift 1
 
 
 if [ ! $keep_daily ] && [ ! $keep_weekly ] && [ ! $keep_monthly ] && [ ! $keep_last ]; then
-  no_prune=true
+  no_prune=1
 fi
 
 # borg will use this
@@ -174,6 +185,7 @@ backup(){
 
   args=()
   [ $dry_run ] && args+="--dry-run"
+  [ "$compression" ] && args+=("-C" "$compression")
 
   borg create                          \
       --patterns-from "$location_file" \
