@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/bin/zsh
 
 SCRIPT_NAME="`basename $0`"
 
@@ -35,8 +35,8 @@ USAGE
 
 DEFAULT_LOCATION_DIR="$HOME/.local/config/backup/`hostname`"
 
-local location_file=
-local backup_name=
+local location_file
+local backup_name
 local dry_run
 local keep_daily
 local keep_weekly
@@ -73,8 +73,8 @@ while true ; do
       shift 2
       ;;
     -n | --dry-run )
-      dry_run=1
-      no_prune=1
+      dry_run=true
+      no_prune=true
       shift
       ;;
     --name )
@@ -102,11 +102,11 @@ while true ; do
       shift 2
       ;;
     --no-backup )
-      no_backup=1
+      no_backup=true
       shift
       ;;
     --no-prune )
-      no_prune=1
+      no_prune=true
       shift
       ;;
     --help )
@@ -148,9 +148,7 @@ shift 1
 
 
 if [ ! $keep_daily ] && [ ! $keep_weekly ] && [ ! $keep_monthly ] && [ ! $keep_last ]; then
-  keep_daily=7
-  keep_weekly=4
-  keep_monthly=1
+  no_prune=true
 fi
 
 # borg will use this
@@ -175,7 +173,7 @@ backup(){
   info "Starting backup"
 
   args=()
-  [ -n $dry_run ] && args+="-n"
+  [ $dry_run ] && args+="--dry-run"
 
   borg create                          \
       --patterns-from "$location_file" \
@@ -193,6 +191,7 @@ prune(){
   [ $keep_weekly ] && args+="--keep-weekly $keep_weekly"
   [ $keep_monthly ] && args+="--keep-monthly $keep_monthly"
   [ $keep_last ] && args+="--keep-last $keep_last"
+  [ $dry_run ] && args+="--dry-run"
 
   borg prune                                  \
       --list                                  \
@@ -206,7 +205,7 @@ if [ -z $no_backup ]; then
   backup_exit=$?
 fi
 
-if [ -z $no_prune ] && [ -z $dry_run ]; then
+if [ -z $no_prune ]; then
   prune
   prune_exit=$?
 fi
