@@ -3,6 +3,7 @@
 export dotimport(){ source "$DOTFILES/scripts/$1" }
 
 dotimport 'core/system-info'
+dotimport 'core/core-commands'
 
 
 

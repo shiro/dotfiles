@@ -27,14 +27,6 @@ kernel_is(){
   return $?
 }
 
-command_exists(){
-  if [ $# -eq 1 ]; then
-    command -v "$1" > /dev/null; return $?
-  else
-    command -v "$INSTALL_NAME" > /dev/null; return $?
-  fi
-}
-
 install_if_true(){
   if [ $1 -eq 0 ]; then
     echo "[INSTALL]        $INSTALL_NAME"
