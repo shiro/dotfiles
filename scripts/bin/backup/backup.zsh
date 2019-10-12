@@ -180,7 +180,7 @@ backup(){
       --show-rc                        \
       --list                           \
       ${args[@]}                       \
-      ::"main-{hostname}-$backup_name-{now}"
+      ::"{hostname}-[$backup_name]-{now}"
 }
 
 prune(){
@@ -195,7 +195,7 @@ prune(){
 
   borg prune                                  \
       --list                                  \
-      --prefix "main-{hostname}-$backup_name" \
+      --prefix "{hostname}-[$backup_name]" \
       --show-rc                               \
       ${=args[@]}
 }
