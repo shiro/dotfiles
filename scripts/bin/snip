@@ -2,17 +2,17 @@
 
 [ $# -lt 1 ] && echo "missing destination parameter" && exit 1
 
-export DESTINATION="$1"
+# initialize enviorment
+TEMPLATE_ROOT="$XDG_CONFIG_HOME/snip"
 
+# initialize recipe enviorment
+export DESTINATION="$1"
 
 
 # make sure dependencies are installed
 for app in jq vipe fzf j2; do
   command -v $app > /dev/null || { echo "$app must be installed" && exit 1 }
 done
-
-
-TEMPLATE_ROOT="$XDG_CONFIG_HOME/snip"
 
 
 # init directories
@@ -57,32 +57,35 @@ EOF'
   # eval "echo $varName \$$varName"
 }
 
-load-data(){
-  [ $# -ne 1 ] && echo "load-data: expected 1 argument, but got $#" && exit 1
-  [ ! -f "$TEMPLATE_ROOT/$1" ] && echo "'$1': file not found" && exit 1
+resolve(){
+  [ $# -ne 1 ] && echo "resolve: expected 1 argument, but got $#" && exit 1
 
-  local data_file
-
-  if [[ "${1:e}" == "json" ]] && [ -f "$TEMPLATE_ROOT/$1" ]; then
-    data_file="$TEMPLATE_ROOT/$1"
-  elif [ -f "$TEMPLATE_ROOT/$1.json" ]; then
-    data_file="$TEMPLATE_ROOT/$1.json"
+  if [ -f "$PWD/$1" ]; then
+    echo "$PWD/$1"
+  elif [ -f "$TEMPLATE_ROOT/$1" ] ;then
+    echo "$TEMPLATE_ROOT/$1"
+  else
+    >&2 echo "'$1': file not found"
+    exit 1
   fi
+}
 
+variables(){
+  set -e
+  [ $# -ne 1 ] && echo "load-data: expected 1 argument, but got $#" && exit 1
 
+  # the file could be in several locations
+  local file_location
+  file_location="$(resolve "$1")"
+
+  # calculate the json result from the source file
   local result='{}'
 
-  local file_variables=(`grep -oP '(?<={{ )[^ ]+(?= }})' "$TEMPLATE_ROOT/$1" | sort -u`)
+  local file_variables=(`grep -oP '(?<={{ )[^ ]+(?= }})' "$file_location" | sort -u`)
 
   for var in "${file_variables[@]}"; do
     result="`set-value "$result" "$var" ''`"
   done
-
-  if [ -n "$data_file" ]; then
-    local data_file_data="`cat "$data_file"`"
-
-    result="`merge "$result" "$data_file_data"`"
-  fi
 
   echo "$result"
 }
@@ -114,8 +117,16 @@ set-value(){
 
 render(){
   [ $# -lt 1 ] && echo "render: expected 1-2 arguments, but got $#" && exit 1
-  local snippet="$TEMPLATE_ROOT/$1"
+
   local data="$2"
+
+  # initialize data
+  if [ -z "$data" ];then
+    data=$(variables "$1")
+    data=$(edit "$data")
+  fi
+
+  local snippet="$(resolve "$1")"
 
   if [ -n "$data" ]; then
     j2 --format=json "$snippet" <(echo "$data")
@@ -127,22 +138,21 @@ render(){
 
 case "${SNIPPET:e}" in
   recipe)
-    #export DATA="`load-data "$DATASOURCE"`"
+    export PWD="$(realpath "$(dirname "$TEMPLATE_ROOT/$SNIPPET")")"
 
     (source "$TEMPLATE_ROOT/$SNIPPET")
     ;;
   *)
-    [ -d "$DESTINATION" ] && echo "destination \"$DESTINATION\" cannot be a directory" && exit 1
-
-    local data="`load-data "$DATASOURCE"`"
-
-    if [ -n "$data" ]; then
-      data="`edit "$data"`"
+    set -e
+    if [ -d "$DESTINATION" ]; then
+     DESTINATION="$DESTINATION/${SNIPPET:t}"
     fi
 
-    result="`render "$SNIPPET" "$data"`"
+    local data
+    data=$(variables "$DATASOURCE")
+    data=$(edit $data)
 
-    echo "$result" > "$DESTINATION"
+    render "$SNIPPET" "$data" > "$DESTINATION"
     ;;
 esac
 
