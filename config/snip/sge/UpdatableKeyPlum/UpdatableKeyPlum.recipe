@@ -1,7 +1,10 @@
 #!/bin/zsh
+data=$(variables 'UpdatableKeyPlum/UpdatableKeyPlum.cpp')
+data2=$(variables 'UpdatableKeyPlum.h')
 
-data=$(load-data 'sge/UpdatableKeyPlum/UpdatableKeyPlum.cpp')
+data=$(merge $data $data2)
 
-data=$(edit "$data")
+data=$(edit $data)
 
-render 'sge/UpdatableKeyPlum/UpdatableKeyPlum.cpp' "$data"
+render 'UpdatableKeyPlum.cpp' $data > "UpdatableKeyPlum.cpp"
+render 'UpdatableKeyPlum.h' $data > "UpdatableKeyPlum.h"
