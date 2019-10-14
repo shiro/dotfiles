@@ -99,6 +99,7 @@ edit(){
 }
 
 merge(){
+  set -e
   [ $# -ne 2 ] && echo "merge: expected 2 arguments, but got $#" && exit 1
   local data1="$1"
   local data2="$2"
@@ -113,6 +114,14 @@ set-value(){
   local value="$3"
 
   merge "$data" "{\"$key\":\"$value\"}"
+}
+
+get-value(){
+  [ $# -ne 2 ] && echo "get-value: expected 2 arguments, but got $#" && exit 1
+  local data="$1"
+  local key="$2"
+
+  echo "$data" | jq -r ".$key"
 }
 
 render(){
