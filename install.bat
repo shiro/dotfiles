@@ -15,4 +15,6 @@ mkdir %home%\.config 2>&1
 
 mklink /D %home%\.config\mintty %dotfiles%\config\mintty
 
+mklink %home%\.ideavimrc %dotfiles%\idea\ideavimrc.ln
+
 echo "Done. Reload your terminal."
