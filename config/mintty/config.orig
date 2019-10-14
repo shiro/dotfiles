@@ -5,8 +5,13 @@ Charset=UTF-8
 Columns=150
 ConfirmExit=no
 CursorType=line
+<<<<<<< HEAD
+Font=Hack NF
+FontHeight=10
+=======
 Font=Hack NF Mono
 FontHeight=11
+>>>>>>> Update mintty settings
 FontIsBold=no
 FontWeight=400
 Locale=Hack
