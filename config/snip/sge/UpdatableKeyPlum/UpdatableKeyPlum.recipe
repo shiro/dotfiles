@@ -1,10 +1,12 @@
 #!/bin/zsh
-data=$(variables 'UpdatableKeyPlum/UpdatableKeyPlum.cpp')
+data=$(variables 'UpdatableKeyPlum.cpp')
 data2=$(variables 'UpdatableKeyPlum.h')
 
 data=$(merge $data $data2)
 
 data=$(edit $data)
 
-render 'UpdatableKeyPlum.cpp' $data > "UpdatableKeyPlum.cpp"
-render 'UpdatableKeyPlum.h' $data > "UpdatableKeyPlum.h"
+itemname=$(get-value $data itemname)
+
+render 'UpdatableKeyPlum.cpp' $data > $itemname.cpp
+render 'UpdatableKeyPlum.h' $data > $itemname.h
