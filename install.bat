@@ -14,6 +14,7 @@ echo "Installing dotfiles."
 mkdir %home%\.config 2>&1
 
 mklink /D %home%\.config\mintty %dotfiles%\config\mintty
+mklink /D %home%\.config\nvim %dotfiles%\config\nvim
 
 mklink %home%\.ideavimrc %dotfiles%\idea\ideavimrc.ln
 
