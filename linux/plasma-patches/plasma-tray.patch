@@ -1,0 +1,13 @@
+--- /usr/share/plasma/plasmoids/org.kde.plasma.private.systemtray/contents/ui/main.qml	2019-10-20 00:54:01.991015698 +0200
++++ -	2019-10-20 00:58:37.034013646 +0200
+@@ -307,8 +307,8 @@
+     //Main Layout
+     Flow {
+         id: tasksRow
+-        spacing: 0
+-        height: parent.height - (vertical && expander.visible ? expander.height : 0)
++        spacing: 7
++        height: parent.height - (vertical && expander.visible ? expander.height : 0) - 10
+         width: parent.width - (vertical || !expander.visible ? 0 : expander.width)
+         property string skipItems
+         flow: vertical ? Flow.LeftToRight : Flow.TopToBottom
