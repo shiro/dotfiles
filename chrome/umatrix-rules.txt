@@ -1,0 +1,64 @@
+https-strict: behind-the-scene false
+matrix-off: about-scheme true
+matrix-off: aliexpress.com true
+matrix-off: behind-the-scene true
+matrix-off: chrome-extension-scheme true
+matrix-off: chrome-scheme true
+matrix-off: gensokyoradio.net true
+matrix-off: mega.nz true
+matrix-off: moz-extension-scheme true
+matrix-off: oebb.at true
+matrix-off: opera-scheme true
+matrix-off: paypal.com true
+matrix-off: skillshare.com true
+matrix-off: vivaldi-scheme true
+matrix-off: wyciwyg-scheme true
+noscript-spoof: * true
+referrer-spoof: * true
+referrer-spoof: behind-the-scene false
+referrer-spoof: lingq.com false
+* * * block
+* * css allow
+* * frame block
+* * image allow
+* * media allow
+* * script allow
+* * xhr allow
+* 1st-party cookie allow
+* 1st-party frame allow
+* 1st-party other allow
+* accounts.google.com frame allow
+* api.wirecard.com cookie allow
+* api.wirecard.com frame allow
+* apis.google.com frame allow
+* cdn.embedly.com frame allow
+* clips.twitch.tv frame allow
+* codepen.io frame allow
+* disqus.com frame allow
+* embed.nicovideo.jp frame allow
+* future-publishing.msgfocus.com frame allow
+* gfycat.com frame allow
+* google.com cookie allow
+* js.stripe.com frame allow
+* mangarock.com frame allow
+* mangarock.com other allow
+* platform.twitter.com frame allow
+* player.bilibili.com frame allow
+* player.twitch.tv frame allow
+* s.update.fbsbx.com frame allow
+* staticxx.facebook.com frame allow
+* twitter.com frame allow
+* vi.vipr.ebaydesc.com * allow
+* vi.vipr.ebaydesc.com frame allow
+* w.soundcloud.com frame allow
+* www.facebook.com other allow
+* www.google.com frame allow
+* www.instagram.com frame allow
+* www.pcgamer.com other allow
+* www.redditmedia.com frame allow
+* www.redditstatic.com other allow
+* www.youtube.com frame allow
+* www.youtube.com other allow
+chinauncensored.tv content.jwplatform.com frame allow
+facebook.com facebook.com cookie allow
+youtube.com google.com cookie inherit
