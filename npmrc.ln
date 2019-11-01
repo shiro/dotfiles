@@ -1,3 +1,4 @@
-loglevel = warn
-link = true
-save-exact = true
+loglevel=warn
+link=true
+save-exact=true
+unsafe-perm=true
