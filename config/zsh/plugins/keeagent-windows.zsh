@@ -1,3 +1,6 @@
+#!/bin/zsh
+dotimport 'admin/package-installation'
+
 WEASELPAGENTDIR=/mnt/c/etc/weasel-pageant
 
 local keepass-init(){
@@ -12,4 +15,6 @@ keepass(){
   keepass-init
 }
 
-keepass-init
+
+kernel_is 'windows' && \
+  keepass-init
