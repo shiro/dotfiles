@@ -176,7 +176,8 @@ map g# <Plug>(incsearch-nohl-g#)
 
 " tmux navigator {{{
 
-Plug 'christoomey/vim-tmux-navigator' " navigate vim/tmux splits
+Plug 'fogine/vim-i3wm-tmux-navigator' " navigate vim/tmux/i3 splits
+" Plug 'christoomey/vim-tmux-navigator' " navigate vim/tmux splits
 
 " Disable tmux navigator when zooming the Vim pane
 let g:tmux_navigator_disable_when_zoomed = 1
