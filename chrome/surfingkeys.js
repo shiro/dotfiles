@@ -43,6 +43,8 @@ map('<Alt-t>', '<Alt-s>');
 map('<ArrowRight>', 'R');
 map('<ArrowLeft>', 'E');
 
+map('D', '<Ctrl-h>');
+
 map('F', 'C');
 map('o', 'go');
 map('O', 't');
