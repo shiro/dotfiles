@@ -13,8 +13,7 @@ config_dirs=( \
   "$HOME/.CLion"* \
 )
 
-#set -e
-set -x
+set -e
 
 for config_dir in ${config_dirs[@]}; do
   [ -d "$config_dir" ] || continue;
