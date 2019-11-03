@@ -32,9 +32,7 @@
   <action id="ChooseDebugConfiguration">
     <keyboard-shortcut first-keystroke="shift alt w" />
   </action>
-  <action id="ChooseRunConfiguration">
-    <keyboard-shortcut first-keystroke="shift alt r" />
-  </action>
+  <action id="ChooseRunConfiguration" />
   <action id="Console.TableResult.MaximizeEditingCell" />
   <action id="CopyReference" />
   <action id="Debug">
@@ -75,13 +73,15 @@
     <keyboard-shortcut first-keystroke="shift ctrl alt o" />
   </action>
   <action id="GotoSymbol" />
+  <action id="HippieBackwardCompletion" />
   <action id="InsertLiveTemplate" />
   <action id="MaintenanceAction" />
   <action id="ReSharperGotoImplementation">
     <keyboard-shortcut first-keystroke="numpad2" />
   </action>
+  <action id="RecentChanges" />
   <action id="Refactorings.QuickListPopupAction">
-    <keyboard-shortcut first-keystroke="shift ctrl alt r" />
+    <keyboard-shortcut first-keystroke="shift alt r" />
   </action>
   <action id="ReformatCode">
     <keyboard-shortcut first-keystroke="ctrl alt l" />
@@ -96,9 +96,7 @@
   </action>
   <action id="RerunTests" />
   <action id="Resume">
-    <keyboard-shortcut first-keystroke="f9" />
-    <keyboard-shortcut first-keystroke="shift ctrl alt n" />
-    <keyboard-shortcut first-keystroke="shift ctrl alt m" />
+    <keyboard-shortcut first-keystroke="shift alt back_slash" />
   </action>
   <action id="Run">
     <keyboard-shortcut first-keystroke="alt r" />
@@ -116,13 +114,13 @@
     <keyboard-shortcut first-keystroke="ctrl 6" />
   </action>
   <action id="StepInto">
-    <keyboard-shortcut first-keystroke="shift ctrl alt period" />
+    <keyboard-shortcut first-keystroke="shift alt period" />
   </action>
   <action id="StepOut">
-    <keyboard-shortcut first-keystroke="shift ctrl alt slash" />
+    <keyboard-shortcut first-keystroke="shift alt slash" />
   </action>
   <action id="StepOver">
-    <keyboard-shortcut first-keystroke="shift ctrl alt comma" />
+    <keyboard-shortcut first-keystroke="shift alt comma" />
   </action>
   <action id="Stop">
     <keyboard-shortcut first-keystroke="ctrl f2" />
@@ -135,11 +133,12 @@
   </action>
   <action id="ToggleLineBreakpoint">
     <keyboard-shortcut first-keystroke="ctrl 3" />
-    <keyboard-shortcut first-keystroke="shift ctrl alt b" />
+    <keyboard-shortcut first-keystroke="shift alt c" />
   </action>
   <action id="ViewBreakpoints">
     <keyboard-shortcut first-keystroke="shift ctrl f8" />
     <keyboard-shortcut first-keystroke="shift ctrl alt c" />
   </action>
+  <action id="ViewInplaceComments" />
   <action id="tasks.close" />
 </keymap>

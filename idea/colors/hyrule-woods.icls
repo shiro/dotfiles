@@ -581,6 +581,7 @@
     <option name="GO_EXPORTED_FUNCTION_CALL" baseAttributes="DEFAULT_FUNCTION_CALL" />
     <option name="GO_LOCAL_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
     <option name="GO_LOCAL_FUNCTION" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
+    <option name="GO_LOCAL_FUNCTION_CALL" baseAttributes="DEFAULT_FUNCTION_CALL" />
     <option name="GO_METHOD_RECEIVER" baseAttributes="DEFAULT_LOCAL_VARIABLE" />
     <option name="GO_PACKAGE" baseAttributes="DEFAULT_IDENTIFIER" />
     <option name="GO_PACKAGE_EXPORTED_CONSTANT" baseAttributes="DEFAULT_CONSTANT" />
