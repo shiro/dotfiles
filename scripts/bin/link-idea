@@ -13,12 +13,12 @@ config_dirs=( \
   "$HOME/.CLion"* \
 )
 
-set -e
+# set -e
 
 for config_dir in ${config_dirs[@]}; do
   [ -d "$config_dir" ] || continue;
 
-  echo "[LINK] $config_dir"
+  echo -n "[LINK] $config_dir"
 
   for option_dir in keymaps colors codestyles; do
     rm -r "$config_dir/config/$option_dir" 2>/dev/null
@@ -31,5 +31,7 @@ for config_dir in ${config_dirs[@]}; do
     rm "$config_dir/config/options/$option_name" 2>/dev/null
     ln -s "$option_file" "$config_dir/config/options/$option_name"
   done
+
+  echo " DONE"
 done
 
