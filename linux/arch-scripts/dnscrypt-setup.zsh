@@ -5,11 +5,13 @@ yay -S dnscrypt-proxy-git
 
 echo "edit: /etc/dnscrypt-proxy/dnscrypt-proxy.toml"
 
-echo "to set cloudflare as NS use:"
+echo "setup bind to local port 53. to set cloudflare as NS use:"
 
 cat << EOF
 
 server_names = ['cloudflare', 'cloudflare-ipv6']
+
+listen_addresses = ['127.0.0.1:53', '[::1]:53']
 
 EOF
 
@@ -36,6 +38,10 @@ sudo -E vim /etc/NetworkManager/NetworkManager.conf
 echo "sudo killall dnsmasq"
 sudo killall dnsmasq
 
+echo "stop and disable systemd-resolved.service"
+sudo systemctl stop systemd-resolved.service
+sudo systemctl disable systemd-resolved.service
+
 
 echo "add:"
 cat << EOF
@@ -51,6 +57,9 @@ echo "comment out other lines"
 
 read
 sudo -E vim /etc/resolv.conf
+
+echo 'making /etc/resolv.conf immutable so NW managers cannot change it'
+sudo chattr +i /etc/resolv.conf
 
 
 echo "starting dnscrypt-proxy.service"
