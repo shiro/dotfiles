@@ -4,4 +4,4 @@ config/nvim/spell
 
 config/zsh/*.zwc
 
-idea/colors/_@user_Darcula.icls
+idea/colors/_@user_*
