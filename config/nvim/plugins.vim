@@ -280,6 +280,22 @@ nmap <leader>;r :Rooter<cr>
 
 " }}}
 
+" goyo {{{
+
+Plug 'junegunn/goyo.vim' " distraction-free writing in vim
+
+" let g:goyo_height = 100
+" let g:goyo_width = 100
+
+" }}}
+
+" wal {{{
+
+" Plug 'dylanaraps/wal.vim' " color scheme
+
+" }}}
+
+
 " lightline.vim (todo) {{{
 
 " Plug 'itchyny/lightline.vim' " a light, fancy status bar
