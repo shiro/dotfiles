@@ -72,7 +72,7 @@ unmap("sw");
 unmap("ss");
 unmap("S");
 unmap(";dh");
-unmap("t");
+//unmap("t");
 unmap("cpToggle");
 unmap(";cpCopy");
 unmap(";apApply");
