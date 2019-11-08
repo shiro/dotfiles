@@ -3,7 +3,7 @@
 
   function cutbuffer() {
     zle .$WIDGET
-    echo $CUTBUFFER | xsel
+    echo $CUTBUFFER | xsel -b
   }
 
   zle_cut_widgets=(
@@ -24,7 +24,7 @@
   done
 
   function putbuffer() {
-    zle copy-region-as-kill "$(xsel -o)"
+    zle copy-region-as-kill "$(xsel -b -o)"
     zle .$WIDGET
   }
 
