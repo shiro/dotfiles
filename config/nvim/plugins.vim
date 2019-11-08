@@ -291,7 +291,7 @@ Plug 'junegunn/goyo.vim' " distraction-free writing in vim
 
 " wal {{{
 
-" Plug 'dylanaraps/wal.vim' " color scheme
+Plug 'dylanaraps/wal.vim' " color scheme
 
 " }}}
 
