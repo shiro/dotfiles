@@ -313,6 +313,8 @@ Plug 'dylanaraps/wal.vim' " color scheme
 
 " }}}
 
+Plug 'deviantfero/wpgtk.vim'
+
 call plug#end()
 
 " chords {{{
