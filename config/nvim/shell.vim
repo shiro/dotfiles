@@ -1,7 +1,7 @@
 " Section General {{{
 
-colorscheme hyrule
-" colorscheme wpgtk
+" colorscheme hyrule
+colorscheme wpgtk
 
 " custom trailing whitespace color
 hi ExtraWhitespace guibg=#ce840d ctermbg=red
@@ -21,28 +21,11 @@ set undodir=/tmp
 
 set title " change terminal title
 
-set termguicolors " enable 24bit truecolor support
+" set termguicolors " enable 24bit truecolor support
 
 set updatetime=100 " update every 100ms
 
 set shortmess+=A " ignore swapfile warning
-
-let g:terminal_color_0  = '#000000'
-let g:terminal_color_1  = '#CC4442'
-let g:terminal_color_2  = '#90C93F'
-let g:terminal_color_3  = '#F5C504'
-let g:terminal_color_4  = '#D0A703'
-let g:terminal_color_5  = '#CE840D'
-let g:terminal_color_6  = '#BBDDFF'
-let g:terminal_color_7  = '#000000'
-let g:terminal_color_8  = '#000000'
-let g:terminal_color_9  = '#B43230'
-let g:terminal_color_10 = '#90C93F'
-let g:terminal_color_11 = '#D0A703'
-let g:terminal_color_12 = '#359CE6'
-let g:terminal_color_13 = '#CE840D'
-let g:terminal_color_14 = '#BBDDFF'
-let g:terminal_color_15 = '#C0D5C1'
 
 " }}}
 
