@@ -14,5 +14,6 @@ for device in "Touch Finger touch" "Pen stylus" "Pen eraser"; do
   xsetwacom set "Wacom Cintiq Pro 16 $device" MapToOutput "DisplayPort-0"
 
   xsetwacom set "Wacom Cintiq Pro 16 $device" Touch on
+  xsetwacom set "Wacom Cintiq Pro 16 $device" Gesture off
 done
 
