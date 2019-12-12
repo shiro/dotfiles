@@ -35,6 +35,17 @@ read
 sudo -E vim /etc/NetworkManager/NetworkManager.conf
 
 
+
+echo "prevent NetworkManager to overwrite resolv.conf"
+echo "add:"
+cat << EOF
+[main]
+dns=none
+EOF
+
+echo "to: /etc/NetworkManager/conf.d/dns.conf"
+read
+
 echo "sudo killall dnsmasq"
 sudo killall dnsmasq
 
