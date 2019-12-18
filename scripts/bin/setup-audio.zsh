@@ -6,12 +6,12 @@ cadence-session-start -s
 
 (
   # mixer
-  non-mixer ~/delme/mixer &
+  non-mixer ~/audio/mixer &
 
   sleep 5;
 
   # plugin host
-  carla ~/delme/example1.carxp &
+  carla ~/audio/example1.carxp &
 ) &
 
 # communication

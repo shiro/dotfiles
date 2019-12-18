@@ -33,6 +33,10 @@
     <keyboard-shortcut first-keystroke="shift alt w" />
   </action>
   <action id="ChooseRunConfiguration" />
+  <action id="CollapseBlock">
+    <keyboard-shortcut first-keystroke="shift ctrl period" />
+    <keyboard-shortcut first-keystroke="ctrl 9" />
+  </action>
   <action id="Console.TableResult.MaximizeEditingCell" />
   <action id="CopyReference" />
   <action id="Debug">
@@ -66,6 +70,7 @@
   <action id="GotoBookmark3" />
   <action id="GotoBookmark6" />
   <action id="GotoBookmark7" />
+  <action id="GotoBookmark9" />
   <action id="GotoDeclaration">
     <keyboard-shortcut first-keystroke="ctrl b" />
     <mouse-shortcut keystroke="control button1" />
