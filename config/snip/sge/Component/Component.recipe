@@ -1,0 +1,12 @@
+#!/bin/zsh
+data=$(variables 'Component.cpp')
+data2=$(variables 'Component.h')
+
+data=$(merge $data $data2)
+
+data=$(edit $data)
+
+itemname=$(get-value $data itemname)
+
+render 'Component.cpp' $data > $DESTINATION/$itemname.cpp
+render 'Component.h' $data > $DESTINATION/$itemname.h

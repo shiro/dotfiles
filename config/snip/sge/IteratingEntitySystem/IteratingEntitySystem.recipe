@@ -1,0 +1,12 @@
+#!/bin/zsh
+data=$(variables 'IteratingEntitySystem.cpp')
+data2=$(variables 'IteratingEntitySystem.h')
+
+data=$(merge $data $data2)
+
+data=$(edit $data)
+
+itemname=$(get-value $data itemname)
+
+render 'IteratingEntitySystem.cpp' $data > $DESTINATION/$itemname.cpp
+render 'IteratingEntitySystem.h' $data > $DESTINATION/$itemname.h
