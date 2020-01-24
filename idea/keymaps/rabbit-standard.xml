@@ -32,7 +32,10 @@
   <action id="ChooseDebugConfiguration">
     <keyboard-shortcut first-keystroke="shift alt w" />
   </action>
-  <action id="ChooseRunConfiguration" />
+  <action id="ChooseRunConfiguration">
+    <keyboard-shortcut first-keystroke="ctrl r" />
+    <keyboard-shortcut first-keystroke="ctrl alt r" />
+  </action>
   <action id="CollapseBlock">
     <keyboard-shortcut first-keystroke="shift ctrl period" />
     <keyboard-shortcut first-keystroke="ctrl 9" />
@@ -53,6 +56,7 @@
     <keyboard-shortcut first-keystroke="up" />
     <keyboard-shortcut first-keystroke="alt k" />
   </action>
+  <action id="ExecuteInPyConsoleAction" />
   <action id="ExtractFunctionToScope" />
   <action id="FileChooser.GotoHome" />
   <action id="FileChooser.GotoModule" />
@@ -95,10 +99,12 @@
     <keyboard-shortcut first-keystroke="shift ctrl l" />
     <keyboard-shortcut first-keystroke="ctrl alt semicolon" />
   </action>
-  <action id="Replace" />
-  <action id="Rerun">
-    <keyboard-shortcut first-keystroke="ctrl r" />
+  <action id="RenameElement">
+    <keyboard-shortcut first-keystroke="shift f6" />
+    <keyboard-shortcut first-keystroke="shift alt e" />
   </action>
+  <action id="Replace" />
+  <action id="Rerun" />
   <action id="RerunTests" />
   <action id="Resume">
     <keyboard-shortcut first-keystroke="shift alt back_slash" />
