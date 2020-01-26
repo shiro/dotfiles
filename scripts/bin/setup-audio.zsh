@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-killall cadence carla non-mixer
+killall cadence carla non-mixer pulseaudio
 
 cadence-session-start -s
 
