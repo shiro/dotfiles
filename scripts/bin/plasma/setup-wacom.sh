@@ -1,21 +1,24 @@
 #!/bin/zsh
 
-xrandr --fb 4480x2880 --output eDP --scale 1 --pos 0x1440 --primary
+#xrandr --fb 4480x2880 --output eDP --scale 1 --pos 0x1440 --primary
 
 # set monitor 2 resolution
-xrandr --fb 4480x2880 --output DisplayPort-0 --mode 1920x1080 --scale 1 --pos 1920x1440
+#xrandr --fb 4480x2880 --output DisplayPort-0 --mode 1920x1080 --scale 1 --pos 1920x1440
 
 xrandr --output DisplayPort-1 --pos 0x0
 
-# downscale hdpi display
+
+# downscale hdpi display (not working right now)
 # xrandr --fb 4480x2880 --output DisplayPort-0 --scale .65 --pos 1920x1440
 
 # ask wacom to use the new display position
-for device in "Touch Finger touch" "Pen stylus" "Pen eraser"; do
-  xsetwacom set "Wacom Cintiq Pro 16 $device" ResetArea
-  xsetwacom set "Wacom Cintiq Pro 16 $device" MapToOutput "DisplayPort-0"
 
-  xsetwacom set "Wacom Cintiq Pro 16 $device" Touch on
-  xsetwacom set "Wacom Cintiq Pro 16 $device" Gesture off
-done
+devices="$(xsetwacom --list devices | sed 's/id:.*//')"
 
+while read device; do
+  xsetwacom set "$device" ResetArea
+  xsetwacom set "$device" MapToOutput "DisplayPort-0"
+
+  xsetwacom set "$device" Touch on
+  xsetwacom set "$device" Gesture off
+done < <(echo "$devices")
