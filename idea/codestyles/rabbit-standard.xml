@@ -6,6 +6,7 @@
     </value>
   </option>
   <option name="LINE_SEPARATOR" value="&#10;" />
+  <option name="RIGHT_MARGIN" value="170" />
   <option name="HTML_ATTRIBUTE_WRAP" value="0" />
   <option name="HTML_ELEMENTS_TO_INSERT_NEW_LINE_BEFORE" value="body" />
   <option name="FORMATTER_TAGS_ENABLED" value="true" />
