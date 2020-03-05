@@ -19,3 +19,5 @@ alias please='sudo $(fc -ln -1)'
 alias stahp='poweroff'
 
 alias whatismyip='curl ifconfig.me'
+
+alias note=xournalpp
