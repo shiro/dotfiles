@@ -1,6 +1,6 @@
 bind-key b copy-mode\;\
            send-keys -X start-of-line\;\
-           send-keys -X search-backward "兎" 
+           send-keys -X search-backward "兎"
 
 is_sh="ps -o state= -o comm= -t '#{pane_tty}' | tail -n1 \
 	| grep -iqE '^[^ ]+ +(sh|bash|zsh|fish)$'"
@@ -119,6 +119,9 @@ bind -n M-"'" swap-pane -D
 
 # toggle status bar
 bind -n ß set -g status
+
+# rename current session to time
+bind m run-shell "~/bin/rename-tmux-time"
 
 # }}}
 
