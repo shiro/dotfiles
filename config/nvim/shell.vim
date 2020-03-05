@@ -19,6 +19,9 @@ set backupdir=/tmp
 set directory=/tmp
 set undodir=/tmp
 
+set noshowmode " hide bottom status bar
+set laststatus=0
+
 set title " change terminal title
 
 " set termguicolors " enable 24bit truecolor support
