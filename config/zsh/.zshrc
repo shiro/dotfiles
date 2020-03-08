@@ -24,6 +24,10 @@ configs=(
   ${ZDOTDIR}/plugins/*
 )
 
+# TODO move me
+[ -f /etc/profile.d/autojump.zsh ] && \
+  source /etc/profile.d/autojump.zsh
+
 # source all .zsh files inside of the zsh/ directory
 for config in "${configs[@]}"; do
   source $config;

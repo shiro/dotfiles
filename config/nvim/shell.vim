@@ -1,6 +1,5 @@
 " Section General {{{
 
-" colorscheme hyrule
 colorscheme wpgtk
 
 " custom trailing whitespace color

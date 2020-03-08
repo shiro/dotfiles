@@ -7,7 +7,7 @@ SCRIPT_NAME="`basename $0`"
 
 usage(){
   cat <<USAGE
-Usage: $SCRIPT_NAME BORG_REPO_PATH [DESTINATION]
+Usage: $SCRIPT_NAME BORG_REPO_PATH
 USAGE
 }
 

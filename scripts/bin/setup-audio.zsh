@@ -11,7 +11,7 @@ cadence-session-start -s
   sleep 5;
 
   # plugin host
-  carla ~/audio/example1.carxp &
+  carla ~/audio/carla-system.carxp &
 ) &
 
 # communication
