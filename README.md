@@ -1,25 +1,24 @@
 # dotfiles
-Dotfiles for WSL, made by rabbits!
+My dotfiles, made by rabbits!
 
 This is my personal ever-changing dotfiles repo, feel free to pick
 up anything you think might be useful to you.
 
 Some of the stuff I use:
-- fzf
+- fzf (fuzzy finder)
 - git
 - jetbrains IDE
-- mintty
-- neovim
-- nodejs
+- st (terminal emulator)
+- neovim (file editor)
 - pandoc
-- surfingkeys
-- tmux
-- zsh
+- surfingkeys (chromium browser extension)
+- tmux (terminal multiplexer)
+- zsh (shell)
 
 ## Install
 
-To bootstrap all components simply run
+To list all options simply run the main script:
 ```
-./install
+./dot
 ````
-and get some coffee.
+and use the interactive menu.
