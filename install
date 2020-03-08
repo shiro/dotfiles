@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 export DOTFILES=$(pwd)
 
 # initialize core module
