@@ -291,10 +291,13 @@ Plug 'junegunn/goyo.vim' " distraction-free writing in vim
 
 " vim  pandoc markdown preview {{{
 
+"let g:md_args = "--template eisvogel --listings --latex-engine=xelatex"
+
 Plug 'skywind3000/asyncrun.vim'
 Plug 'conornewton/vim-pandoc-markdown-preview'
 
 let g:md_pdf_viewer="zathura"
+let g:md_args = "--template eisvogel --listings --pdf-engine=xelatex"
 
 " }}}
 
