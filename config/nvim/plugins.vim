@@ -289,14 +289,14 @@ Plug 'junegunn/goyo.vim' " distraction-free writing in vim
 
 " }}}
 
-" wal {{{
+" vim  pandoc markdown preview {{{
 
-"Plug 'dylanaraps/wal.vim' " color scheme
+Plug 'skywind3000/asyncrun.vim'
+Plug 'conornewton/vim-pandoc-markdown-preview'
 
-Plug 'deviantfero/wpgtk.vim'
+let g:md_pdf_viewer="zathura"
 
 " }}}
-
 
 " lightline.vim (todo) {{{
 
@@ -315,7 +315,6 @@ Plug 'deviantfero/wpgtk.vim'
 
 " }}}
 
-Plug 'deviantfero/wpgtk.vim'
 
 call plug#end()
 
