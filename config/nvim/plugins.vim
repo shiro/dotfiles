@@ -44,7 +44,7 @@ Plug 'francoiscabrol/ranger.vim'
 let g:ranger_replace_netrw = 1
 let g:ranger_map_keys = 0 " use own keymaps
 
-map <C-M-r> :Ranger<CR>.
+nnoremap <leader>m :RangerWorkingDirectory<CR>
 map <C-M-t> :RangerWorkingDirectory<CR>.
 
 " }}}
@@ -216,8 +216,9 @@ Plug 'junegunn/fzf.vim'
 
 let g:fzf_layout = { 'down': '~25%' }
 imap z= <plug>(fzf-complete-word)
-nnoremap <leader>b :Buffers<CR> 
-nnoremap <leader>m :Files<CR> 
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>n :Files<CR>
+nnoremap <leader>v :History<CR>
 
 " }}}
 
@@ -297,7 +298,14 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'conornewton/vim-pandoc-markdown-preview'
 
 let g:md_pdf_viewer="zathura"
-let g:md_args = "--template eisvogel --listings --pdf-engine=xelatex"
+
+" }}}
+
+" vim-localvimrc {{{
+Plug 'embear/vim-localvimrc' 
+
+let g:localvimrc_whitelist='/home/shiro/.local/.*'
+let g:localvimrc_sandbox=0
 
 " }}}
 

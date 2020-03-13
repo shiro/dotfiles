@@ -192,7 +192,7 @@ augroup configgroup
 "     autocmd BufWritePost .vimrc.local source %
 "
     " save all files on focus lost, ignoring warnings about untitled buffers
-    autocmd FocusLost * silent! wa
+    " autocmd FocusLost * silent! wa
 
     " newline on a comment won't create a comment line
     autocmd Filetype * setlocal fo-=ro
@@ -213,8 +213,8 @@ augroup END
 
 augroup AutoSaveFolds
     autocmd!
-    autocmd BufWinLeave * silent! mkview
-    autocmd BufWinEnter *.* silent! loadview
+    " autocmd BufWinLeave * silent! mkview
+    " autocmd BufWinEnter *.* silent! loadview
 augroup END
 
 " }}}
