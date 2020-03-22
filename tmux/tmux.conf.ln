@@ -145,7 +145,7 @@ bind -n M-r new-window -c "#{pane_current_path}"
 
 # bind -n M-, command-prompt -I "#W" "rename-window '%%'" # rename window
 
-bind -n M-v copy-mode
+bind -n M-b copy-mode
 
 bind-key C-q confirm-before kill-server
 
