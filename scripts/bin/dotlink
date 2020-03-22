@@ -5,27 +5,32 @@ set -e
 usage(){
   cat << EOF
 usage:
-  dotlink [FILE]
+  dotlink FILE [FILES...]
 EOF
 }
 
-[ $# != 1 ] && usage && exit 1
+[ $# -eq 0 ] && usage && exit 1
 
-TARGET="$1"
+for file in "$@"; do
+  [ ! -f "$file" ] && usage && exit 1
+done
 
-[ ! -f "$TARGET" ] && usage && exit 1
+for file in "$@"; do
+  TARGET="$file"
 
-# get full path
-TARGET="$(readlink -f "$TARGET")"
+  [ ! -f "$TARGET" ] && usage && exit 1
 
-LINK_ROOT=$DOTFILES/linux/system
+  # get full path
+  TARGET="$(readlink -f "$TARGET")"
+
+  LINK_ROOT=$DOTFILES/linux/system
 
 
-if [ ! -f "$LINK_ROOT$TARGET" ]; then
-  mkdir -p "$LINK_ROOT${TARGET:h}"
-  sudo cp "$TARGET" "$LINK_ROOT$TARGET"
-  sudo chown "`whoami`" "$LINK_ROOT$TARGET"
-else
-  vim -d "$TARGET" "$LINK_ROOT$TARGET" 
-fi
-
+  if [ ! -f "$LINK_ROOT$TARGET" ]; then
+    mkdir -p "$LINK_ROOT${TARGET:h}"
+    sudo cp "$TARGET" "$LINK_ROOT$TARGET"
+    sudo chown "`whoami`" "$LINK_ROOT$TARGET"
+  else
+    vim -d "$TARGET" "$LINK_ROOT$TARGET" 
+  fi
+done

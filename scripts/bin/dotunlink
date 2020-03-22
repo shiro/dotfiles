@@ -5,23 +5,27 @@ set -e
 usage(){
   cat << EOF
 usage:
-  dotlink [FILE]
+  dotunlink FILE [FILES...]
 EOF
 }
 
-[ $# != 1 ] && usage && exit 1
+[ $# -eq 0 ] && usage && exit 1
 
-TARGET="$1"
+for file in "$@"; do
+  [ ! -f "$file" ] && usage && exit 1
+done
 
-[ ! -f "$TARGET" ] && usage && exit 1
+for file in "$@"; do
+  TARGET="$file"
 
-# get full path
-TARGET="$(readlink -f "$TARGET")"
+  # get full path
+  TARGET="$(readlink -f "$TARGET")"
 
-LINK_ROOT=$DOTFILES/linux/system
+  LINK_ROOT=$DOTFILES/linux/system
 
 
-[ ! -f "$LINK_ROOT$TARGET" ] && exit 0
+  [ ! -f "$LINK_ROOT$TARGET" ] && continue
 
-rm "$LINK_ROOT$TARGET"
-find "$LINK_ROOT" -type d -empty -delete
+  rm "$LINK_ROOT$TARGET"
+  find "$LINK_ROOT" -type d -empty -delete
+done
