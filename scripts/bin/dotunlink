@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+set -e
+
+usage(){
+  cat << EOF
+usage:
+  dotlink [FILE]
+EOF
+}
+
+[ $# != 1 ] && usage && exit 1
+
+TARGET="$1"
+
+[ ! -f "$TARGET" ] && usage && exit 1
+
+# get full path
+TARGET="$(readlink -f "$TARGET")"
+
+LINK_ROOT=$DOTFILES/linux/system
+
+
+[ ! -f "$LINK_ROOT$TARGET" ] && exit 0
+
+rm "$LINK_ROOT$TARGET"
+find "$LINK_ROOT" -type d -empty -delete
