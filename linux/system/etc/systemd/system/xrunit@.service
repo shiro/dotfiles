@@ -1,0 +1,9 @@
+[Unit]
+Description=Execute the application in X
+
+[Service]
+Type=simple
+ExecStart=/home/shiro/bin/runinx %I
+
+[Install]
+WantedBy=multi-user.target

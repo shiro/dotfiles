@@ -1,0 +1,5 @@
+ACTION=="add", KERNEL=="js[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="Sysgration Ltd. Elecom Wired Gamepad", GROUP="gamepad", MODE="0444", \
+RUN+="/usr/bin/systemctl --no-block start xrunit@'-home-shiro-bin-antimicrox\x2dgamepad'.service"
+
+ACTION=="remove", KERNEL=="js[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="Sysgration Ltd. Elecom Wired Gamepad", \
+RUN+="/usr/bin/systemctl stop xrunit@'-home-shiro-bin-antimicrox\x2dgamepad'.service"
