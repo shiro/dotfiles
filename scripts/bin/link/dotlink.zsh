@@ -30,7 +30,7 @@ for file in "$@"; do
     mkdir -p "$LINK_ROOT${TARGET:h}"
     sudo cp "$TARGET" "$LINK_ROOT$TARGET"
     sudo chown "`whoami`" "$LINK_ROOT$TARGET"
-  else
-    vim -d "$TARGET" "$LINK_ROOT$TARGET" 
+  elif ! diff "$TARGET" "$LINK_ROOT$TARGET" > /dev/null; then
+    vim -d "$TARGET" "$LINK_ROOT$TARGET"
   fi
 done
