@@ -124,6 +124,19 @@ Plug 'chr4/nginx.vim' " nginx.conf
 
 " }}}
 
+" quick score {{{
+Plug 'unblevable/quick-scope' " quickly highlight first word characters
+
+" trigger a highlight in the appropriate direction when pressing these keys
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+" trigger a highlight only when pressing f and F
+let g:qs_highlight_on_keys = ['f', 'F']
+
+" }}}
+
+Plug '~/project/autojump.vim'
+
 Plug 'kana/vim-arpeggio' " chord keybinds
 
 " deoplete.nvim {{{

@@ -213,8 +213,8 @@ augroup END
 
 augroup AutoSaveFolds
     autocmd!
-    " autocmd BufWinLeave * silent! mkview
-    " autocmd BufWinEnter *.* silent! loadview
+    autocmd BufWinLeave * silent! mkview
+    autocmd BufWinEnter *.* silent! loadview
 augroup END
 
 " }}}
