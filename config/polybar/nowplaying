@@ -1,6 +1,13 @@
 #!/bin/zsh
 
-deadbeef --nowplaying "%t" 2>/dev/null
+output="$(deadbeef --nowplaying-tf "%ispaused% %title%" 2>/dev/null)"
+
+# if playing
+if [ "${output:0:1}" -ne 1 ]; then
+  echo "${output:1}"
+else
+  echo
+fi
 
 # if [ -f /tmp/foobar-now-playing.txt ]; then
 #   state="$(cat /tmp/foobar-now-playing.txt | head -n1)"
