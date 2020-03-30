@@ -55,5 +55,10 @@ class autojump_fzf_cd(Command):
         process = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if process.returncode == 0:
-            target_dir = os.path.abspath(stdout.rstrip('\n'))
-            self.fm.cd(target_dir)
+            path = stdout.rstrip('\n')
+            path = os.path.abspath(stdout.rstrip('\n'))
+
+            if os.path.isdir(path):
+                self.fm.cd(path)
+            elif os.path.isfile(path):
+                self.fm.execute_console("edit " + path)

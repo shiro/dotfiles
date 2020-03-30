@@ -1,6 +1,7 @@
 config/nvim/.netrwhist
 config/nvim/plugged
 config/nvim/spell
+config/ranger/plugins/__pycache__/
 
 config/zsh/*.zwc
 

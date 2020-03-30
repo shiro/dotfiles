@@ -21,8 +21,8 @@ pactl load-module module-jack-source client_name=comm-in  connect=no
 # browser
 pactl load-module module-jack-sink   client_name=browser_out connect=no
 
-# foobar
-pactl load-module module-jack-sink   client_name=foobar_out connect=no
+# music
+pactl load-module module-jack-sink   client_name=music_out connect=no
 
 # general use busses
 pactl load-module module-jack-sink   client_name=gen1_out connect=no

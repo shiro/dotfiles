@@ -29,7 +29,10 @@ class j(Command):
     """
 
     def execute(self):
-        directory = subprocess.check_output(["autojump", self.arg(1)])
-        directory = directory.decode("utf-8", "ignore")
-        directory = directory.rstrip('\n')
-        self.fm.execute_console("cd " + directory)
+        path = subprocess.check_output(["autojump", self.arg(1)])
+        path = path.decode("utf-8", "ignore")
+        path = path.rstrip('\n')
+        if os.path.isdir(path):
+            self.fm.execute_console("cd " + path)
+        elif os.path.isfile(path):
+            self.fm.execute_console("edit " + path)
