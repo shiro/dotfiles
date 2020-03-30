@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+local WIKI_PATH="${HOME}/.local/wiki"
+local WIKI_INDEX="${WIKI_PATH}/index.md"
+
+if [ ! -f "$WIKI_INDEX" ]; then
+  exit 1
+fi
+
+urgent=$(grep '\[-\].*\(!\)' "$WIKI_INDEX" | wc -l)
+todos=$(( $(grep '\[-\]' "$WIKI_INDEX" | wc -l) - $urgent ))
+
+echo " $urgent  $todos"

@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+local WIKI_PATH="${HOME}/.local/wiki"
+local ACTIVITY_FILE="${WIKI_PATH}/daily-tasks.md"
+
+if [ ! -f "$ACTIVITY_FILE" ]; then
+  exit 1
+fi
+
+grep -P '^- \[ \].*\(.+\)$' "$ACTIVITY_FILE" | sed -r 's/.*\((.+)\)$/\1/' | tr -d '\n'

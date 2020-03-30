@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+deadbeef --nowplaying "%t" 2>/dev/null
+
+# if [ -f /tmp/foobar-now-playing.txt ]; then
+#   state="$(cat /tmp/foobar-now-playing.txt | head -n1)"
+
+#   if [[ "$state" =~ "playing: " ]]; then
+#     echo "${state##*"playing: "}"
+#   else
+#     echo ""
+#   fi
+# fi
