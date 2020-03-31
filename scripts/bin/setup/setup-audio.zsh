@@ -8,6 +8,9 @@ cadence-session-start -s
   # mixer
   non-mixer ~/audio/mixer &
 
+
+  ( /usr/bin/jack-autoconnect ) &
+
   sleep 5;
 
   # plugin host
