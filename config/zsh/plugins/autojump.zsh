@@ -15,7 +15,9 @@ if [ -f /etc/profile.d/autojump.zsh ]; then
     	return
     fi
     setopt localoptions noautonamedirs
-    local output="$(autojump ${@})" 
+
+    [[ -n "$@" ]] && query="-q $@"
+    local output="$(cat ~/.local/share/autojump/autojump.txt | sort -nr | awk -F "\\t" "{print \$NF}" | fzf +s $query)"
     if [[ -d "${output}" ]]; then
     	if [ -t 1 ]; then
     		echo -e "\\033[31m${output}\\033[0m"
@@ -24,12 +26,17 @@ if [ -f /etc/profile.d/autojump.zsh ]; then
     	fi
     	cd "${output}"
     elif [ -f "$output" ]; then
-      XDG_CURRENT_DESKTOP=X-Generic xdg-open "$output"
+      # hacky way of determining whether a file should be openend in the terminal or GUI
+      desktop_location="$(find-desktop-for-mime "$output")"
+
+      if grep '^Terminal=true' "$desktop_location" > /dev/null 2>&1; then
+         XDG_CURRENT_DESKTOP=X-Generic xdg-open "$output"
+         return 0
+      fi
+
+      (xdg-open "$output" > /dev/null 2>&1 & 2>/dev/null disown)
     else
-    	echo "autojump: directory '${@}' not found"
-    	echo "\n${output}\n"
-    	echo "Try \`autojump --help\` for more information."
-    	false
+      return 1
     fi
   }
 fi
