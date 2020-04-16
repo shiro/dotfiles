@@ -36,7 +36,7 @@ endif
 let g:colors_name = "wpgtk"
 
 
-hi Normal                 ctermfg=15  ctermbg=0
+hi Normal                 ctermfg=15  ctermbg=NONE
 hi User1                  cterm=none  ctermbg=6    ctermfg=15
 hi User2				  cterm=none  ctermbg=8    ctermfg=15
 hi Title                  cterm=none  ctermbg=none ctermfg=DarkGrey
@@ -47,17 +47,17 @@ hi StatusLine             cterm=none  ctermbg=14   ctermfg=0
 hi StatusLineNC           cterm=none  ctermbg=8    ctermfg=15
 hi StatusLineTerm         cterm=none  ctermfg=12   ctermfg=0
 hi StatusLineTermNC       cterm=none  ctermbg=8    ctermfg=15
-hi CursorLine             ctermbg=0   cterm=none
+hi CursorLine             ctermbg=NONE   cterm=none
 hi Visual                 ctermbg=14  ctermfg=0    cterm=none
 hi CursorLineNr           ctermfg=15 ctermbg=6
 hi LineNr                 ctermfg=7  ctermbg=8
 hi VertSplit              ctermfg=0   ctermbg=8    cterm=none
-hi Specialkey             ctermfg=13  ctermbg=0
+hi Specialkey             ctermfg=13  ctermbg=NONE
 hi ErrorMsg               ctermfg=0   ctermbg=9
 hi Pmenu                  ctermbg=8   ctermfg=15
 hi PmenuSel               ctermbg=14  ctermfg=0
 hi SpellBad               ctermfg=8   ctermbg=9    term=none
-hi Comment                ctermfg=4   ctermbg=0    cterm=italic
+hi Comment                ctermfg=4   ctermbg=NONE    cterm=italic
 hi MatchParen             ctermfg=12  ctermbg=8   cterm=none
 hi DiffAdd				  ctermfg=0
 hi DiffDelete			  ctermfg=0
@@ -91,7 +91,7 @@ highlight Search                    ctermfg=0      ctermbg=12  guifg=Black    gu
 " Change the highlight of visual highlight.
 
 highlight Float          ctermfg=14  guifg=#88AAEE
-highlight Exception      ctermfg=10 ctermbg=0 guifg=Red   guibg=White
+highlight Exception      ctermfg=10 ctermbg=NONE guifg=Red   guibg=White
 highlight Function       ctermfg=14
 highlight Typedef        ctermfg=10  ctermbg=8   gui=italic  guifg=White guibg=Blue
 highlight SpecialChar    ctermfg=12 ctermbg=8   guifg=Black guibg=White
