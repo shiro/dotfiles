@@ -1,5 +1,7 @@
 import * as React from "react";
-import "./{{ name }}.scss";
+import cn from "classnames";
+
+import css from "./{{ name }}.module.scss";
 
 
 export interface I{{ name }} {
@@ -8,7 +10,7 @@ export interface I{{ name }} {
 
 const {{ name }}: React.FC<I{{ name }}> = (props) => {
     return (
-        <div className="{{ name }}">
+        <div className={cn()}>
         </div>
     );
 };

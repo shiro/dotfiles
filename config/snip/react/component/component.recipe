@@ -10,11 +10,11 @@ DESTINATION="${DESTINATION:h}/$componentName"
 mkdir -p "${DESTINATION:h}"
 
 
-tsx=$(load-data 'react/component.tsx')
-css=$(load-data 'react/component.scss')
+tsx=$(variables 'react/component/component.tsx')
+css=$(variables 'react/component/component.scss')
 
 data=$(merge "$tsx" "$css")
 data=$(set-value "$data" "name" "$componentName")
 
-render 'react/component.tsx' "$data" > "$DESTINATION.tsx"
-render 'react/component.scss' "$data" > "$DESTINATION.scss"
+render 'react/component/component.tsx' "$data" > "$DESTINATION.tsx"
+render 'react/component/component.scss' "$data" > "$DESTINATION.scss"
