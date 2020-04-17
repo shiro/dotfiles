@@ -47,19 +47,30 @@ process_xmp() {
 }
 
 
+batch_size=50
+counter=0
 # process xmp files
 for file in "$@"; do
   [ ! -f "$file" ] || \
   [[ ! ${file:t:e:l} == "xmp" ]] && continue
 
-  process_xmp "$file"
+  process_xmp "$file" &
 
-  echo
+  counter=$(($counter+1))
+  if [ $counter -eq $batch_size ]; then
+    counter=0
+    wait
+  fi
 done
 
+wait
 
+
+batch_size=50
+counter=0
 # process raw files
 for file in "$@"; do
+  (
   [ ! -f "$file" ] && continue
 
   [[ ${file:t:e:l} == "xmp" ]] && continue
@@ -80,6 +91,13 @@ for file in "$@"; do
 
   local new_filename="$(get_new_filename "$raw_file")"
   rename_file "$file" "$base_path/$new_filename.$raw_ext"
+  ) &
 
-  echo
+  counter=$(($counter+1))
+  if [ $counter -eq $batch_size ]; then
+    counter=0
+    wait
+  fi
 done
+
+wait
