@@ -136,10 +136,13 @@ bind-key , swap-window -t -1
 bind-key . swap-window -t +1
 
 bind -n Left previous-window
-bind h previous-window
 bind -n Right next-window
-# bind l next-window
 # bind -n M-f find-window
+
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
 
 bind -n M-w kill-window
 bind -n Ö kill-window -a # kill all but current
