@@ -4,11 +4,11 @@ import cn from "classnames";
 import css from "./{{ name }}.module.scss";
 
 
-export interface I{{ name }} {
+export interface I{{ name }}Props {
 }
 
 
-const {{ name }}: React.FC<I{{ name }}> = (props) => {
+const {{ name }}: React.FC<I{{ name }}Props> = (props) => {
     return (
         <div className={cn()}>
         </div>
