@@ -40,6 +40,7 @@
     <keyboard-shortcut first-keystroke="shift ctrl period" />
     <keyboard-shortcut first-keystroke="ctrl 9" />
   </action>
+  <action id="CollapseSelection" />
   <action id="Console.TableResult.MaximizeEditingCell" />
   <action id="CopyReference" />
   <action id="Debug">
@@ -47,6 +48,7 @@
   </action>
   <action id="DuplicatesForm.SendToLeft" />
   <action id="DuplicatesForm.SendToRight" />
+  <action id="EditorChooseLookupItemDot" />
   <action id="EditorDown">
     <keyboard-shortcut first-keystroke="alt j" />
     <keyboard-shortcut first-keystroke="down" />
@@ -72,6 +74,7 @@
   <action id="GotoBookmark1" />
   <action id="GotoBookmark2" />
   <action id="GotoBookmark3" />
+  <action id="GotoBookmark4" />
   <action id="GotoBookmark6" />
   <action id="GotoBookmark7" />
   <action id="GotoBookmark9" />
@@ -144,6 +147,8 @@
     <keyboard-shortcut first-keystroke="ctrl f2" />
     <keyboard-shortcut first-keystroke="shift ctrl alt v" />
     <keyboard-shortcut first-keystroke="shift alt z" />
+    <keyboard-shortcut first-keystroke="ctrl period" />
+    <keyboard-shortcut first-keystroke="shift alt quote" />
   </action>
   <action id="Switcher">
     <keyboard-shortcut first-keystroke="ctrl tab" />
@@ -158,6 +163,7 @@
   <action id="ToggleLineBreakpoint">
     <keyboard-shortcut first-keystroke="ctrl 3" />
     <keyboard-shortcut first-keystroke="shift alt c" />
+    <keyboard-shortcut first-keystroke="ctrl 4" />
   </action>
   <action id="Vcs.Log.OpenRepositoryVersion">
     <keyboard-shortcut first-keystroke="ctrl o" />
