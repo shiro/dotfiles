@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-killall cadence carla non-mixer pulseaudio
+killall -9 cadence carla non-mixer pulseaudio /usr/bin/jack-autoconnect
 
 cadence-session-start -s
 
@@ -16,6 +16,8 @@ cadence-session-start -s
   # plugin host
   carla ~/audio/carla-system.carxp &
 ) &
+
+sleep 2
 
 # communication
 pactl load-module module-jack-sink   client_name=comm-out connect=no
