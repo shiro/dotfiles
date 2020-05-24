@@ -1175,6 +1175,14 @@
         <option name="FOREGROUND" value="f5c504" />
       </value>
     </option>
+    <option name="SQL_OUTER_QUERY_COLUMN">
+      <value>
+        <option name="FOREGROUND" value="d0d0ff" />
+        <option name="FONT_TYPE" value="1" />
+        <option name="EFFECT_COLOR" value="d0d0ff" />
+        <option name="EFFECT_TYPE" value="5" />
+      </value>
+    </option>
     <option name="SQL_STRING">
       <value>
         <option name="FOREGROUND" value="ce830d" />
