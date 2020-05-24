@@ -33,3 +33,11 @@ pactl load-module module-jack-sink   client_name=music_out connect=no
 pactl load-module module-jack-sink   client_name=gen1_out connect=no
 pactl load-module module-jack-sink   client_name=gen2_out connect=no
 pactl load-module module-jack-sink   client_name=gen3_out connect=no
+
+# workaround for cadence not exposing pulse sink settings (https://github.com/falkTX/Cadence/issues/234)
+jack_disconnect "PulseAudio JACK Sink:front-left" "system:playback_1"
+jack_disconnect "PulseAudio JACK Sink:front-right" "system:playback_2"
+
+(alsa_out -j "hdmi-1" -d hw:0,3) &
+
+# discord=$(pgrep -l discord | cut -d' ' -f2)
