@@ -90,6 +90,12 @@ for file in "$@"; do
   fi
 
   local new_filename="$(get_new_filename "$raw_file")"
+
+  if [[ -z "$new_filename" ]]; then
+    echo "error: failed to generate name for file '$raw_file'"
+    return
+  fi
+
   rename_file "$file" "$base_path/$new_filename.$raw_ext"
   ) &
 
