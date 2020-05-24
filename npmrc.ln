@@ -2,3 +2,4 @@ loglevel=warn
 link=true
 save-exact=true
 unsafe-perm=true
+registry=http://r.cnpmjs.org/
