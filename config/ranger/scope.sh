@@ -255,8 +255,14 @@ handle_mime() {
             exiftool "${FILE_PATH}" && exit 5
             exit 1;;
 
+        audio/* | */flac)
+            mediainfo "${FILE_PATH}"
+            exiftool "${FILE_PATH}"
+            ffmpeg -i "${FILE_PATH}" -vf scale=320:-1 "${IMAGE_CACHE_PATH}"
+            exit 6;;
+
         ## Video and audio
-        video/* | audio/*)
+        video/*)
             mediainfo "${FILE_PATH}" && exit 5
             exiftool "${FILE_PATH}" && exit 5
             exit 1;;
