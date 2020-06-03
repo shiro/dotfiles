@@ -303,6 +303,8 @@ Plug 'junegunn/goyo.vim' " distraction-free writing in vim
 
 " }}}
 
+Plug 'ChristianChiarulli/codi.vim'
+
 " vim  pandoc markdown preview {{{
 
 "let g:md_args = "--template eisvogel --listings --latex-engine=xelatex"
