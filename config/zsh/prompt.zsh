@@ -41,13 +41,13 @@ suspended_jobs() {
 }
 
 prompt_user() {
-  echo -n "%{$Green%}"
+  echo -n "%{$BBlue%}"
   echo -n "%n"
   echo -n "%{$Color_Off%}"
 }
 
 prompt_host() {
-	echo -n "%{$Yellow%}"
+	echo -n "%{$BYellow%}"
 	echo -n "["
 	echo -n "`hostname`"
 	echo -n "] "
@@ -56,7 +56,7 @@ prompt_host() {
 
 prompt_pwd() {
   echo -n " at "
-  echo -n "%{$Purple%}"
+  echo -n "%{$IGreen%}"
   echo -n "${PWD/#$HOME/~}"
   echo -n "%{$Color_Off%}"
 }
