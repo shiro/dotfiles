@@ -95,6 +95,18 @@ Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . c
 Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
 Plug 'tpope/vim-unimpaired' " convinient pair mappings
 
+" vim-easy-align {{{
+
+Plug 'junegunn/vim-easy-align' " align everything
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" }}}
+
 Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 
 " yank ring [DISABLED](slows down nvim a LOT) {{{
