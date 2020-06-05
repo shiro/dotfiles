@@ -31,7 +31,7 @@ xkb_symbols "basic" {
     key <AD12> { [ bracketright, braceright                ] }; // b b
 
     key <AC01> { [ a,          A, adiaeresis, Adiaeresis ] }; // a A ä Ä
-    key <AC02> { [ s,          S, ssharp,     section    ] }; // s S
+    key <AC02> { [ s,          S, U0161,      U0160      ] }; // s S š Š
     key <AC03> { [ d,          D                         ] }; // d D
     key <AC04> { [ f,          F                         ] }; // f F
     key <AC05> { [ g,          G                         ] }; // g G
