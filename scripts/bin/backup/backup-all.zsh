@@ -2,6 +2,11 @@
 
 BACKUP_LOCATION="/mnt/hdd1/backup/`hostname`"
 
+# TODO add some failure handling
+if [ ! -d "$BACKUP_LOCATION" ]; then
+  BACKUP_LOCATION="ssh://shiro@homebox$BACKUP_LOCATION"
+fi
+
 
 # attempt to read passphrase from the keyring
 env_passphrase="$(secret-tool lookup Title "system-backup-reference")"
