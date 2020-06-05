@@ -1,12 +1,12 @@
-bind-key b copy-mode\;\
-           send-keys -X start-of-line\;\
-           send-keys -X search-backward "兎"
+# bind-key b copy-mode\;\
+#            send-keys -X start-of-line\;\
+#            send-keys -X search-backward "兎"
 
 is_sh="ps -o state= -o comm= -t '#{pane_tty}' | tail -n1 \
 	| grep -iqE '^[^ ]+ +(sh|bash|zsh|fish)$'"
 
-bind-key u if-shell "$is_sh" "display \"wow\"" "display \"nyan\""
-#bind-key u run-shell "ps -o state= -o comm= -t #{pane_tty} | tail -n1"
+# bind-key u if-shell "$is_sh" "display \"wow\"" "display \"nyan\""
+# bind-key u run-shell "ps -o state= -o comm= -t #{pane_tty} | tail -n1"
 
 # options {{{
 
@@ -120,7 +120,7 @@ bind -n M-[ swap-pane -U
 bind -n M-"'" swap-pane -D
 
 # toggle status bar
-bind -n ß set -g status
+bind b set -g status
 
 # rename current session to time
 bind m run-shell "~/bin/rename-tmux-time"
