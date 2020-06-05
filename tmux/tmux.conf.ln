@@ -61,7 +61,7 @@ set-option -g mouse on
 
 # }}}
 
-# mappings {{
+# mappings {{{
 
 # easy reloading of config file
 bind R source-file ~/.tmux.conf \; display "reloaded"
