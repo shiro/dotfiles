@@ -5,6 +5,9 @@ colorscheme wpgtk
 " custom trailing whitespace color
 hi ExtraWhitespace guibg=#ce840d ctermbg=red
 
+hi VimwikiLink                 ctermfg=13
+hi VimwikiCode                 ctermfg=3
+
 set encoding=utf-8 " The encoding displayed.
 set fileencoding=utf-8 " The encoding written to file.
 
@@ -280,3 +283,6 @@ endfunction
 
 " let g:onedark_termcolors=16
 " let g:onedark_terminal_italics=1
+
+" print hovered syntax element name
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
