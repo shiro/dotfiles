@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-wpg -s japan-temple-lake-lotus-bird-darker.png
+wpg -s thinking-about-hapiness.png
 
 # [ -f $HOME/.config/wpg/wp_init.sh ] && \
 #   source $HOME/.config/wpg/wp_init.sh
