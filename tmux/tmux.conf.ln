@@ -97,8 +97,8 @@ bind-key -T copy-mode-vi M-\\ select-pane -l
 bind-key -T copy-mode-vi Left previous-window
 bind-key -T copy-mode-vi Right next-window
 
-bind-key -n š break-pane
-bind-key -n Š join-pane -t:{previous}
+# bind-key -n š break-pane
+# bind-key -n Š join-pane -t:{previous}
 
 # split panes
 bind -n M-\\ split-window -h -c "#{pane_current_path}"
@@ -120,7 +120,7 @@ bind -n M-[ swap-pane -U
 bind -n M-"'" swap-pane -D
 
 # toggle status bar
-bind b set -g status
+bind b set status
 
 # rename current session to time
 bind m run-shell "~/bin/rename-tmux-time"
