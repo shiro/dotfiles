@@ -6,6 +6,10 @@ noremap <Leader><F1> :source ~/.ideavimrc<CR>
 source ~/.config/nvim/shared.vim
 
 
+noremap <leader>gp mm O<esc> gg /interface IProps<return> /{<return> ya{ `m iconst <esc> p k va{ :s/:.*/,<return> gv J $ F, X A= props;<esc> :noh<return>
+
+noremap <leader>cn i className={cn()}<esc>F(
+
 
 noremap <C-i> <C-S-6>
 noremap <C-o> :action VimWindowOnly<cr>

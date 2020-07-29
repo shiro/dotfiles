@@ -225,7 +225,8 @@
     </option>
     <option name="CONSOLE_RANGE_TO_EXECUTE">
       <value>
-        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="BACKGROUND" value="32312f" />
+        <option name="EFFECT_TYPE" value="2" />
       </value>
     </option>
     <option name="CONSOLE_RED_BRIGHT_OUTPUT" baseAttributes="CONSOLE_RED_OUTPUT" />
