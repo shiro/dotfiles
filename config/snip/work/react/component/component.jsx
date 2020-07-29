@@ -4,11 +4,7 @@ import cn from "classnames";
 import css from "./{{ name }}.module.scss";
 
 
-interface IProps {
-}
-
-
-const {{ name }}: React.FC<IProps> = (props) => {
+const {{ name }} = (props) => {
     return (
         <div className={cn()}>
         </div>
