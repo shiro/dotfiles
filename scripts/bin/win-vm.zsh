@@ -4,6 +4,7 @@ VIRTIMG="/usr/share/virtio/virtio-win.iso"
 
 sudo -E qemu-system-x86_64 \
 --enable-kvm -m 6144 \
+-machine accel=kvm \
 -drive file=/usr/share/edk2-ovmf/x64/OVMF_CODE.fd,if=pflash,format=raw,readonly \
 -drive file=$HOME/.config/qemu-windows/qemu-windows.nvram,if=pflash,format=raw,unit=1 \
 -drive file=/dev/disk/by-id/ata-ST1000LM035-1RK172_WDEWXNX5,index=0,media=disk,driver=raw,if=virtio,cache=none \
@@ -16,6 +17,7 @@ sudo -E qemu-system-x86_64 \
 -net user,hostfwd=tcp::22222-:22,smb=/mnt/vm/win10 \
 -net nic,model=virtio \
 -device virtio-serial-pci -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 -chardev spicevmc,id=spicechannel0,name=vdagent \
+-device virtio-balloon,deflate-on-oom=on \
 -smp cores=4,threads=1,sockets=1
 
 
