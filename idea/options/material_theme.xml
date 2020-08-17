@@ -2,10 +2,12 @@
   <component name="MaterialThemeConfig">
     <option name="isWizardShown" value="true" />
     <option name="pristineConfig" value="false" />
+    <option name="tabsHeight" value="10" />
     <option name="accentColor" value="ff9800" />
     <option name="highlightColor" value="80cbc4" />
     <option name="selectedTheme" value="DARKER" />
     <option name="userId" value="-4b94b71b:1661460127c:-8000" />
     <option name="version" value="5.2.0" />
+    <option name="tabHighlightPosition" value="None" />
   </component>
 </application>

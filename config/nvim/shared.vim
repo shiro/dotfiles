@@ -20,6 +20,7 @@ nnoremap <C-y> 3<C-y>
 " create line bellow
 " nnoremap <C-J> a<CR><Esc>k$
 
+" back/forward naviation
 nnoremap gs <C-o>
 
 " save active buffer
@@ -32,6 +33,18 @@ nnoremap <C-\> <C-w>v
 nnoremap <C-q> :qa!<CR>
 nnoremap <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
+
+nnoremap [e :action GotoNextError<CR>
+nnoremap ]e :action GotoPreviousError<CR>
+nnoremap <leader>e :action ShowErrorDescription<CR>
+
+
+inoremap jj <ESC>
+
+" not working because of ideavim bugs in diff window
+" nnoremap <c-w>i :action Diff.FocusOppositePane<CR>
+" nnoremap [c :action NextDiff<CR>
+" nnoremap ]c :action PrevDiff<CR>
 
 " resize splits
 " todo

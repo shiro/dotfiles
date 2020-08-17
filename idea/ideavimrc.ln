@@ -10,9 +10,27 @@ noremap <leader>gp mm O<esc> gg /interface IProps<return> /{<return> ya{ `m icon
 
 noremap <leader>cn i className={cn()}<esc>F(
 
+" recursive folding
+nnoremap zC :action CollapseRegionRecursively<CR>
+nnoremap zO :action ExpandRegionRecursively<CR>
+
+noremap <leader>g8 :action CollapseSelection<CR>
+noremap <leader>gi :action ExtractInterface<CR><esc>
+
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+" fix default expand all behaviour not working
+nnoremap zR :action ExpandAllRegions<CR>
+nnoremap <leader>p :action EditorPaste<CR>
+nnoremap <leader>yy :action CopyContentRootPath<CR>
+
+nnoremap ]c :action VcsShowNextChangeMarker<CR>
+nnoremap [c :action VcsShowPrevChangeMarker<CR>
+
 
 noremap <C-i> <C-S-6>
-noremap <C-o> :action VimWindowOnly<cr>
+noremap <C-o> :action VimWindowOnly<CR>
 noremap <C-q> :action VimWindowClose<CR>
 
 noremap <C-h> :action TabShiftActions.MoveFocusLeft<CR>
@@ -21,6 +39,11 @@ noremap <C-k> :action TabShiftActions.MoveFocusUp<CR>
 noremap <C-l> :action TabShiftActions.MoveFocusRight<CR>
 
 noremap z= :action com.intellij.spellchecker.actions.SpellingPopupActionGroup<CR>
+
+" enable easymotion idea plugin and other idea settings
+set easymotion
+set idearefactormode=keep
+set surround
 
 " noremap <leader>h :action TypeHierarchy<CR>
 " noremap <leader>m :action EditorScrollToCenter<CR>

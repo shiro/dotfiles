@@ -1,4 +1,7 @@
 <keymap version="1" name="rabbit-standard" parent="$default">
+  <action id="$Undo">
+    <keyboard-shortcut first-keystroke="ctrl z" />
+  </action>
   <action id="ActivateDatabaseConsoleToolWindow">
     <keyboard-shortcut first-keystroke="alt 3" />
   </action>
@@ -12,7 +15,9 @@
     <keyboard-shortcut first-keystroke="alt 0" />
   </action>
   <action id="ActivateFavoritesToolWindow" />
-  <action id="ActivateFindToolWindow" />
+  <action id="ActivateFindToolWindow">
+    <keyboard-shortcut first-keystroke="alt 5" />
+  </action>
   <action id="ActivateRunToolWindow">
     <keyboard-shortcut first-keystroke="alt 2" />
   </action>
@@ -20,6 +25,7 @@
     <keyboard-shortcut first-keystroke="alt 7" />
     <keyboard-shortcut first-keystroke="alt 4" />
   </action>
+  <action id="AddToFavoritesPopup" />
   <action id="Back">
     <keyboard-shortcut first-keystroke="ctrl alt left" />
     <mouse-shortcut keystroke="button4" />
@@ -36,15 +42,27 @@
     <keyboard-shortcut first-keystroke="ctrl r" />
     <keyboard-shortcut first-keystroke="ctrl alt r" />
   </action>
+  <action id="CloseContent">
+    <keyboard-shortcut first-keystroke="ctrl f4" />
+    <keyboard-shortcut first-keystroke="alt back_space" />
+  </action>
   <action id="CollapseBlock">
     <keyboard-shortcut first-keystroke="shift ctrl period" />
     <keyboard-shortcut first-keystroke="ctrl 9" />
   </action>
   <action id="CollapseSelection" />
+  <action id="Console.Oracle.DbmsOutput">
+    <keyboard-shortcut first-keystroke="ctrl 3" />
+    <keyboard-shortcut first-keystroke="ctrl 4" />
+  </action>
   <action id="Console.TableResult.MaximizeEditingCell" />
   <action id="CopyReference" />
   <action id="Debug">
     <keyboard-shortcut first-keystroke="alt w" />
+  </action>
+  <action id="Diff.FocusOppositePane">
+    <keyboard-shortcut first-keystroke="ctrl tab" />
+    <keyboard-shortcut first-keystroke="shift alt t" />
   </action>
   <action id="DuplicatesForm.SendToLeft" />
   <action id="DuplicatesForm.SendToRight" />
@@ -71,6 +89,9 @@
     <mouse-shortcut keystroke="button5" />
     <keyboard-shortcut first-keystroke="numpad3" />
   </action>
+  <action id="Git.CompareWithBranch">
+    <keyboard-shortcut first-keystroke="shift alt 3" />
+  </action>
   <action id="GotoBookmark1" />
   <action id="GotoBookmark2" />
   <action id="GotoBookmark3" />
@@ -85,17 +106,33 @@
     <keyboard-shortcut first-keystroke="shift ctrl alt o" />
   </action>
   <action id="GotoSymbol" />
+  <action id="HideAllWindows">
+    <keyboard-shortcut first-keystroke="shift ctrl f12" />
+    <keyboard-shortcut first-keystroke="shift alt kp_left" />
+  </action>
   <action id="HippieBackwardCompletion" />
   <action id="Images.Editor.ToggleGrid" />
   <action id="ImplementMethods" />
   <action id="InsertLiveTemplate" />
+  <action id="JupyterInsertCellAboveAction" />
   <action id="MaintenanceAction" />
+  <action id="NewFile">
+    <keyboard-shortcut first-keystroke="shift alt v" />
+  </action>
+  <action id="NextDiff">
+    <keyboard-shortcut first-keystroke="f7" />
+    <keyboard-shortcut first-keystroke="shift alt a" />
+  </action>
+  <action id="NextWindow">
+    <keyboard-shortcut first-keystroke="shift alt kp_up" />
+  </action>
   <action id="OverrideMethods" />
   <action id="QuickImplementations" />
   <action id="ReSharperGotoImplementation">
     <keyboard-shortcut first-keystroke="numpad2" />
   </action>
   <action id="RecentChanges" />
+  <action id="RecentFiles" />
   <action id="Refactorings.QuickListPopupAction">
     <keyboard-shortcut first-keystroke="shift alt r" />
   </action>
@@ -126,6 +163,11 @@
   <action id="ShowErrorDescription">
     <keyboard-shortcut first-keystroke="ctrl quote" />
   </action>
+  <action id="ShowNavBar">
+    <keyboard-shortcut first-keystroke="alt home" />
+    <keyboard-shortcut first-keystroke="shift alt f" />
+    <keyboard-shortcut first-keystroke="shift alt c" />
+  </action>
   <action id="ShowPopupMenu">
     <keyboard-shortcut first-keystroke="context_menu" />
     <keyboard-shortcut first-keystroke="shift ctrl enter" />
@@ -149,12 +191,17 @@
     <keyboard-shortcut first-keystroke="shift alt z" />
     <keyboard-shortcut first-keystroke="ctrl period" />
     <keyboard-shortcut first-keystroke="shift alt quote" />
+    <keyboard-shortcut first-keystroke="shift alt home" />
+    <keyboard-shortcut first-keystroke="shift alt x" />
   </action>
   <action id="Switcher">
     <keyboard-shortcut first-keystroke="ctrl tab" />
     <keyboard-shortcut first-keystroke="shift ctrl tab" />
     <keyboard-shortcut first-keystroke="shift ctrl i" />
+    <keyboard-shortcut first-keystroke="ctrl e" />
   </action>
+  <action id="SwitcherIterateItems" />
+  <action id="SwitcherRecentEditedChangedToggleCheckBox" />
   <action id="TabShiftActions.MoveFocusDown" />
   <action id="ToggleBookmark" />
   <action id="ToggleFullScreen">
@@ -162,15 +209,19 @@
   </action>
   <action id="ToggleLineBreakpoint">
     <keyboard-shortcut first-keystroke="ctrl 3" />
-    <keyboard-shortcut first-keystroke="shift alt c" />
     <keyboard-shortcut first-keystroke="ctrl 4" />
   </action>
   <action id="Vcs.Log.OpenRepositoryVersion">
     <keyboard-shortcut first-keystroke="ctrl o" />
   </action>
+  <action id="Vcs.Log.ShowAllAffected" />
   <action id="Vcs.ShowDiffWithLocal">
     <keyboard-shortcut first-keystroke="ctrl i" />
   </action>
+  <action id="Vcs.ShowMessageHistory">
+    <keyboard-shortcut first-keystroke="ctrl m" />
+  </action>
+  <action id="VcsHistory.ShowAllAffected" />
   <action id="ViewBreakpoints">
     <keyboard-shortcut first-keystroke="shift ctrl f8" />
     <keyboard-shortcut first-keystroke="shift ctrl alt c" />
