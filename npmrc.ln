@@ -3,3 +3,4 @@ link=true
 save-exact=true
 unsafe-perm=true
 registry=https://registry.npmjs.org/
+prefix=~/.yarn
