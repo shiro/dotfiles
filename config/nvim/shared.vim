@@ -22,6 +22,8 @@ nnoremap <C-y> 3<C-y>
 
 " back/forward naviation
 nnoremap gs <C-o>
+nnoremap <C-n> <C-o>
+nnoremap <C-m> <C-i>
 
 " save active buffer
 nnoremap <leader>w :w<cr>
