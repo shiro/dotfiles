@@ -35,9 +35,7 @@
     <keyboard-shortcut first-keystroke="ctrl k" />
     <keyboard-shortcut first-keystroke="shift ctrl alt q" />
   </action>
-  <action id="ChooseDebugConfiguration">
-    <keyboard-shortcut first-keystroke="shift alt w" />
-  </action>
+  <action id="ChooseDebugConfiguration" />
   <action id="ChooseRunConfiguration">
     <keyboard-shortcut first-keystroke="ctrl r" />
     <keyboard-shortcut first-keystroke="ctrl alt r" />
@@ -81,6 +79,7 @@
   <action id="FileChooser.GotoHome" />
   <action id="FileChooser.GotoModule" />
   <action id="FileChooser.GotoProject" />
+  <action id="FileChooser.TogglePathShowing" />
   <action id="FindPrevious">
     <keyboard-shortcut first-keystroke="shift f3" />
   </action>
@@ -127,6 +126,7 @@
     <keyboard-shortcut first-keystroke="shift alt kp_up" />
   </action>
   <action id="OverrideMethods" />
+  <action id="ParameterInfo" />
   <action id="QuickImplementations" />
   <action id="ReSharperGotoImplementation">
     <keyboard-shortcut first-keystroke="numpad2" />
@@ -142,6 +142,9 @@
     <keyboard-shortcut first-keystroke="shift ctrl alt semicolon" />
     <keyboard-shortcut first-keystroke="shift ctrl l" />
     <keyboard-shortcut first-keystroke="ctrl alt semicolon" />
+  </action>
+  <action id="RemoteHostView.Rename">
+    <keyboard-shortcut first-keystroke="shift f6" />
   </action>
   <action id="RenameElement">
     <keyboard-shortcut first-keystroke="shift f6" />
@@ -159,6 +162,7 @@
   <action id="RunToCursor">
     <keyboard-shortcut first-keystroke="ctrl 2" />
   </action>
+  <action id="SaveAll" />
   <action id="SelectNextOccurrence" />
   <action id="ShowErrorDescription">
     <keyboard-shortcut first-keystroke="ctrl quote" />
@@ -196,9 +200,9 @@
   </action>
   <action id="Switcher">
     <keyboard-shortcut first-keystroke="ctrl tab" />
-    <keyboard-shortcut first-keystroke="shift ctrl tab" />
-    <keyboard-shortcut first-keystroke="shift ctrl i" />
     <keyboard-shortcut first-keystroke="ctrl e" />
+    <keyboard-shortcut first-keystroke="ctrl p" />
+    <keyboard-shortcut first-keystroke="ctrl s" />
   </action>
   <action id="SwitcherIterateItems" />
   <action id="SwitcherRecentEditedChangedToggleCheckBox" />
