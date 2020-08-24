@@ -36,8 +36,8 @@ nnoremap <C-q> :qa!<CR>
 nnoremap <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
 
-nnoremap [e :action GotoNextError<CR>
-nnoremap ]e :action GotoPreviousError<CR>
+nnoremap [e :action GotoPreviousError<CR>
+nnoremap ]e :action GotoNextError<CR>
 nnoremap <leader>e :action ShowErrorDescription<CR>
 
 
