@@ -284,7 +284,6 @@ lib32-libcanberra
 lib32-libcanberra-pulse
 lib32-libva-intel-driver
 lib32-libva-vdpau-driver
-lib32-mesa-demos
 lib32-mesa-tkg-git
 libcanberra
 libcanberra-gstreamer
