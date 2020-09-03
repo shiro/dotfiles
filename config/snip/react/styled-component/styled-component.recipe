@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# parse name, camel-case
+componentName="${DESTINATION:r:t}"
+componentName="${(C)componentName[1]}${componentName[2,-1]}"
+
+DESTINATION="${DESTINATION:h}/$componentName"
+
+# create destination dir
+mkdir -p "${DESTINATION:h}"
+
+
+data=$(variables 'react/styled-component/styled-component.tsx')
+data=$(set-value "$data" "name" "$componentName")
+
+render 'react/styled-component/styled-component.tsx' "$data" > "$DESTINATION.tsx"
