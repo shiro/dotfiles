@@ -301,8 +301,12 @@ let g:rooter_resolve_links = 1
 " only if requested
 let g:rooter_manual_only = 1
 
-" go to root
+" cwd to root
 nmap <leader>;r :Rooter<cr>
+" cwd to current
+nmap <leader>;t :cd %:p:h<cr>
+" auto change cwd to current file
+set autochdir
 
 " }}}
 
