@@ -37,6 +37,7 @@
   </action>
   <action id="ChooseDebugConfiguration">
     <keyboard-shortcut first-keystroke="shift alt w" />
+    <keyboard-shortcut first-keystroke="ctrl alt w" />
   </action>
   <action id="ChooseRunConfiguration">
     <keyboard-shortcut first-keystroke="ctrl r" />
@@ -134,7 +135,6 @@
     <keyboard-shortcut first-keystroke="shift alt kp_up" />
   </action>
   <action id="OverrideMethods" />
-  <action id="ParameterInfo" />
   <action id="QuickImplementations" />
   <action id="ReSharperGotoImplementation">
     <keyboard-shortcut first-keystroke="numpad2" />
@@ -209,7 +209,6 @@
   </action>
   <action id="Switcher">
     <keyboard-shortcut first-keystroke="ctrl e" />
-    <keyboard-shortcut first-keystroke="ctrl p" />
     <keyboard-shortcut first-keystroke="ctrl s" />
     <keyboard-shortcut first-keystroke="ctrl tab" />
   </action>
