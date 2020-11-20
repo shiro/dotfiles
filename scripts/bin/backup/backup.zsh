@@ -19,13 +19,13 @@ usage(){
     --name BACKUP_NAME
                     backup name
 
-    --keep-daily DAILY
+    --daily DAILY
                     the daily updates to keep
-    --keep-weekly WEEKLY
+    --weekly WEEKLY
                     the weekly updates to keep
-    --keep-monthly MONTHLY
+    --monthly MONTHLY
                     the montly updates to keep
-    --keep-last BACKUP_COUNT
+    --last BACKUP_COUNT
                     the amount of backups to keep
 
     --no-backup     skip the backup step
@@ -53,7 +53,7 @@ local compression
 set +x
 
 SHORT=l:n
-LONG=help,keep-last:,dry-run,no-prune,no-backup,keep-last:,keep-daily:,keep-weekly:,keep-monthly:,name:,compression:
+LONG=help,dry-run,no-prune,no-backup,last:,daily:,weekly:,monthly:,name:,compression:
 
 OPTS=$(getopt --options $SHORT --long $LONG --name "$0" -- "$@")
 
@@ -88,23 +88,23 @@ while true ; do
       backup_name="$2"
       shift 2
       ;;
-    --keep-last )
+    --last )
       keep_last=$2
       shift 2
       ;;
-    --keep-daily )
+    --daily )
       keep_daily=$2
       shift 2
       ;;
-    --keep-weekly )
+    --weekly )
       keep_weekly=$2
       shift 2
       ;;
-    --keep-monthly )
+    --monthly )
       keep_monthly=$2
       shift 2
       ;;
-    --keep-last )
+    --last )
       keep_last=$2
       shift 2
       ;;
@@ -145,9 +145,10 @@ shift 1
   usage && \
   exit 1
 
-[ ! -d "$BORG_REPO" ] && \
-  echo "repository \"$BORG_REPO\": not a directory" && \
+if [ ! -d "$BORG_REPO" ] && [[ "$BORG_REPO" != 'ssh://'* ]]; then
+  echo "repository \"$BORG_REPO\": not a directory"
   exit 1
+fi
 
 [ ! -f "$location_file" ] && \
   echo "no location file provided" && \
@@ -191,8 +192,9 @@ backup(){
       --patterns-from "$location_file" \
       --show-rc                        \
       --list                           \
+      --exclude-if-present .nobackup   \
       ${args[@]}                       \
-      ::"{hostname}-[$backup_name]-{now}"
+      ::"{hostname}-$backup_name-{now}"
 }
 
 prune(){
@@ -207,7 +209,7 @@ prune(){
 
   borg prune                                  \
       --list                                  \
-      --prefix "{hostname}-[$backup_name]" \
+      --prefix "{hostname}-$backup_name" \
       --show-rc                               \
       ${=args[@]}
 }

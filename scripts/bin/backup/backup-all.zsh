@@ -2,9 +2,15 @@
 
 BACKUP_LOCATION="/mnt/hdd1/backup/`hostname`"
 
-# TODO add some failure handling
+
 if [ ! -d "$BACKUP_LOCATION" ]; then
-  BACKUP_LOCATION="ssh://shiro@homebox$BACKUP_LOCATION"
+  ssh shiro@homebox [ -d "$BACKUP_LOCATION" ]
+  if [ $? -eq 0 ]; then
+    BACKUP_LOCATION="ssh://shiro@homebox$BACKUP_LOCATION"
+  else
+    echo "could not access backup location '$BACKUP_LOCATION'"
+    exit 1
+  fi
 fi
 
 
@@ -23,6 +29,19 @@ if [ -z "$BORG_PASSPHRASE" ]; then
   echo
 fi
 
-backup --compression zlib -l system "$BACKUP_LOCATION/system" --keep-monthly 1
-backup --compression zlib -l games "$BACKUP_LOCATION/games" --keep-monthly 1
-backup --compression zlib -l photography "$BACKUP_LOCATION/photography" --keep-monthly 1
+backup --compression zlib -l system "$BACKUP_LOCATION/main" \
+  --daily 3 --weekly 2 --monthly 1
+
+local externalPhotographyPath='/mnt/hdd1/pictures/photography'
+if [ -e "$externalPhotographyPath" ]; then
+  backup --compression zlib -l photography "$BACKUP_LOCATION/main" \
+    --daily 3 --weekly 2 --monthly 1
+else
+  echo "skipping 'photography' since '$externalPhotographyPath' does not exist"
+fi
+
+backup --compression zlib -l games "$BACKUP_LOCATION/main" \
+  --daily 3 --weekly 2 --monthly 1
+
+backup --compression zlib -l music "$BACKUP_LOCATION/main" \
+  --daily 3 --weekly 2 --monthly 1
