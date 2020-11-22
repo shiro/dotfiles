@@ -97,8 +97,8 @@ bind-key -T copy-mode-vi M-\\ select-pane -l
 bind-key -T copy-mode-vi Left previous-window
 bind-key -T copy-mode-vi Right next-window
 
-# bind-key -n š break-pane
-# bind-key -n Š join-pane -t:{previous}
+bind-key -n š break-pane
+bind-key -n Š join-pane -t:!
 
 # split panes
 bind -n M-\\ split-window -h -c "#{pane_current_path}"
