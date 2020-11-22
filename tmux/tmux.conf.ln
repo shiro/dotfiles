@@ -130,10 +130,10 @@ bind m run-shell "~/bin/rename-tmux-time"
 # windows {{{
 
 # swap windows
-bind-key -n M-, swap-window -t -1
-bind-key -n M-. swap-window -t +1
-bind-key , swap-window -t -1
-bind-key . swap-window -t +1
+bind-key -n M-, swap-window -t -1 \; previous-window
+bind-key -n M-. swap-window -t +1 \; next-window
+bind-key , swap-window -t -1 \; previous-window
+bind-key . swap-window -t +1 \; next-window
 
 bind -n Left previous-window
 bind -n Right next-window
@@ -148,7 +148,7 @@ bind -n M-w kill-window
 bind -n Ö kill-window -a # kill all but current
 bind -n M-r new-window -c "#{pane_current_path}"
 
-# bind -n M-, command-prompt -I "#W" "rename-window '%%'" # rename window
+bind -n M-/ command-prompt -I "" "rename-window '%%'" # rename window
 
 bind -n M-b copy-mode
 
