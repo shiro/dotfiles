@@ -19,3 +19,7 @@ alias please='sudo $(fc -ln -1)'
 alias stahp='poweroff'
 
 alias whatismyip='curl ifconfig.me'
+
+# copy/move using rsync
+alias cs='rsync -a --progress'
+alias ms='rsync -a --progress --remove-source-files'
