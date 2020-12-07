@@ -2213,17 +2213,6 @@
         </variant>
         <variant>
           <configItem>
-            <name>tel-kagapa</name>
-            <!-- Keyboard indicator for Telugu layouts -->
-            <shortDescription>te</shortDescription>
-            <description>Telugu (KaGaPa, phonetic)</description>
-            <languageList>
-              <iso639Id>tel</iso639Id>
-            </languageList>
-          </configItem>
-        </variant>
-        <variant>
-          <configItem>
             <name>urd-phonetic</name>
             <!-- Keyboard indicator for Urdu layouts -->
             <shortDescription>ur</shortDescription>
