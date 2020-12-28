@@ -190,8 +190,9 @@ inherit = style/tile
 exec = ~/.config/polybar/nowplaying
 label-active-font = 0
 label = " %output:0:45:...%"
-
-interval = 1
+tail = true
+interval = 0
+;interval = 1
 
 ; }}}
 

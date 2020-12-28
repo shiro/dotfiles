@@ -1,13 +1,28 @@
 #!/bin/zsh
 
-output="$(deadbeef --nowplaying-tf "%ispaused% %title%" 2>/dev/null)"
+export MPD_HOST="$HOME/.config/mpd/socket"
+
+output="$(mpc -f '%title% - %artist%' 2>/dev/null)"
 
 # if playing
-if [ "${output:0:1}" -ne 1 ]; then
-  echo "${output:1}"
+if echo "$output" | grep -q "\[playing\]"; then
+  echo "$output"
 else
   echo
 fi
+
+# Block until an event is emitted
+mpc idle >/dev/null
+
+
+# output="$(deadbeef --nowplaying-tf "%ispaused% %title%" 2>/dev/null)"
+
+# if playing
+# if [ "${output:0:1}" -ne 1 ]; then
+#   echo "${output:1}"
+# else
+#   echo
+# fi
 
 # if [ -f /tmp/foobar-now-playing.txt ]; then
 #   state="$(cat /tmp/foobar-now-playing.txt | head -n1)"
@@ -18,3 +33,4 @@ fi
 #     echo ""
 #   fi
 # fi
+
