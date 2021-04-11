@@ -1,9 +1,10 @@
 #!/bin/zsh
 
-systemctl --user start pulseaudio.socket
-systemctl --user start pulseaudio.service
+systemctl --user restart pulseaudio.socket
+systemctl --user restart pulseaudio.service
 
-killall -9 cadence carla non-mixer pulseaudio /usr/bin/jack-autoconnect
+killall -9 cadence carla non-mixer /usr/bin/jack-autoconnect
+pulseaudio --kill
 
 cadence-session-start -s
 
