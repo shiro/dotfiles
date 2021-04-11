@@ -1,7 +1,7 @@
 [colors]
 ; {{{
 ;background = ${xrdb:color1}
-background = transparent
+background = #00000000
 foreground = ${xrdb:color7}
 color1  = ${xrdb:color1}
 color2  = ${xrdb:color2}
