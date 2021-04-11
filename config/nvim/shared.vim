@@ -77,7 +77,7 @@ set wrapmargin=8            " wrap lines when coming within n characters from si
 set autoindent              " automatically set indent of new line
 set smartindent
 
-set clipboard=unnamedplus       " use Windows clipboard
+set clipboard=unnamedplus    " use Windows clipboard
 set go+=a
 
 set ignorecase              " case insensitive searching
