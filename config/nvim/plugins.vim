@@ -134,6 +134,8 @@ Plug 'cakebaker/scss-syntax.vim' " sass
 
 Plug 'chr4/nginx.vim' " nginx.conf
 
+Plug 'elzr/vim-json' " JSON
+
 " }}}
 
 " quick score {{{
