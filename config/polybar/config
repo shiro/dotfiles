@@ -25,7 +25,7 @@ color17 = ${xrdb:color17}
 
 [bar/main]
 ; {{{
-modules-right = activities todos pkgupdates battery wlan date
+modules-right = nightlight activities todos pkgupdates battery wlan date
 modules-left  = nowPlaying
 
 enable-ipc = true
@@ -138,6 +138,19 @@ label = "%{A:st '/home/shiro/bin/activities':}%output%%{A}"
 interval = 20
 
 ; }}}
+
+[module/nightlight]
+; {{{
+type = custom/script
+inherit = style/tile
+
+exec = ~/.config/polybar/nightlight
+label = "%{A:/home/shiro/bin/nightlight toggle:}%output%%{A}"
+
+interval = 20
+
+; }}}
+
 
 [module/wlan]
 ; {{{
