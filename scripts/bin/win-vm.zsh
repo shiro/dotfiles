@@ -1,11 +1,11 @@
 #!/bin/zsh
 
-VIRTIMG="/usr/share/virtio/virtio-win.iso"
+VIRTIMG="/var/lib/libvirt/images/virtio-win.iso"
 
 sudo -E qemu-system-x86_64 \
 --enable-kvm -m 6144 \
 -machine accel=kvm \
--drive file=/usr/share/edk2-ovmf/x64/OVMF_CODE.fd,if=pflash,format=raw,readonly \
+-drive file=/usr/share/edk2-ovmf/x64/OVMF_CODE.fd,if=pflash,format=raw,readonly=on \
 -drive file=$HOME/.config/qemu-windows/qemu-windows.nvram,if=pflash,format=raw,unit=1 \
 -drive file=/dev/disk/by-id/ata-ST1000LM035-1RK172_WDEWXNX5,index=0,media=disk,driver=raw,if=virtio,cache=none \
 -drive file=/dev/disk/by-id/ata-SanDisk_SD9SN8W256G1002_184243802494,index=1,media=disk,driver=raw,if=virtio,cache=none \
