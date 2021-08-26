@@ -22,4 +22,7 @@ alias whatismyip='curl ifconfig.me'
 
 # copy/move using rsync
 alias cs='rsync -a --progress'
-alias ms='rsync -a --progress --remove-source-files'
+function ms(){
+  rsync -a --progress --remove-source-files "$1" "$2" && \
+  find "$1" -depth -type d -empty -exec rmdir "{}" \;
+}
