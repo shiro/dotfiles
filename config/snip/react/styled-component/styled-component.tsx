@@ -1,12 +1,12 @@
 import * as React from "react";
 import {styled} from "linaria/react";
-import {bodyText, primaryFont} from "style/commonStyle";
+import {text} from "style/commonStyle";
 
 
-interface IProps { }
+interface Props { }
 
 
-const {{ name }}: React.FC<IProps> = (props) => {
+const {{ name }}: React.FC<Props> = (props) => {
     return (
         <Container>
           
@@ -19,6 +19,5 @@ export default {{ name }};
 
 
 const Container = styled.div`
-  ${bodyText}
-  ${primaryFont}
+  ${text("primary", "body", "text")}
 `;
