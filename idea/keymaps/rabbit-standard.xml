@@ -70,6 +70,7 @@
   </action>
   <action id="DuplicatesForm.SendToLeft" />
   <action id="DuplicatesForm.SendToRight" />
+  <action id="EditorAddCaretPerSelectedLine" />
   <action id="EditorChooseLookupItemDot" />
   <action id="EditorDown">
     <keyboard-shortcut first-keystroke="alt j" />
@@ -184,6 +185,10 @@
     <keyboard-shortcut first-keystroke="context_menu" />
     <keyboard-shortcut first-keystroke="shift ctrl enter" />
     <keyboard-shortcut first-keystroke="shift enter" />
+  </action>
+  <action id="ShowSettings">
+    <keyboard-shortcut first-keystroke="ctrl alt s" />
+    <keyboard-shortcut first-keystroke="shift alt g" />
   </action>
   <action id="SmartStepInto">
     <keyboard-shortcut first-keystroke="shift f7" />
