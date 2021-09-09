@@ -192,6 +192,7 @@ backup(){
       --patterns-from "$location_file" \
       --show-rc                        \
       --list                           \
+      --exclude-caches                 \
       --exclude-if-present .nobackup   \
       ${args[@]}                       \
       ::"{hostname}-$backup_name-{now}"
