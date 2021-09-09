@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name={{ name }}
+Exec=env WINEPREFIX="{{ prefix }}" wine '{{ executable }}'
+Type=Application
+StartupNotify=true
+Path={{ prefix }}
