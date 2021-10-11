@@ -39,3 +39,6 @@ set recolor                     true
 set recolor-lightcolor          "#11242f"
 set recolor-darkcolor           "#e7e7f1"
 # set recolor-keephue             true      # keep original color
+
+
+map <C-i> recolor
