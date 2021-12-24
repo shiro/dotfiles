@@ -1,12 +1,22 @@
 <code_scheme name="Default" version="173">
-  <PostgresCodeStyleSettings version="2">
-    <option name="KEYWORD_CASE" value="0" />
+  <PostgresCodeStyleSettings version="6">
+    <option name="USE_GENERAL_STYLE" value="false" />
+    <option name="KEYWORD_CASE" value="2" />
   </PostgresCodeStyleSettings>
+  <Python>
+    <option name="BLANK_LINES_AROUND_TOP_LEVEL_CLASSES_FUNCTIONS" value="0" />
+  </Python>
   <codeStyleSettings language="PostgreSQL">
     <indentOptions>
       <option name="INDENT_SIZE" value="2" />
       <option name="CONTINUATION_INDENT_SIZE" value="2" />
       <option name="TAB_SIZE" value="2" />
     </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="Python">
+    <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="2" />
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="2" />
+    <option name="BLANK_LINES_AROUND_CLASS" value="0" />
+    <option name="BLANK_LINES_AROUND_METHOD" value="0" />
   </codeStyleSettings>
 </code_scheme>

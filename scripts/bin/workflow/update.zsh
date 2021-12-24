@@ -1,3 +1,3 @@
 #!/bin/sh
 
-nice -n 18 yay -Syu --devel
+nice -n 18 snp yay -Syu --devel

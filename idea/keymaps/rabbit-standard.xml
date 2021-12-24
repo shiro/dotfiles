@@ -22,8 +22,11 @@
     <keyboard-shortcut first-keystroke="alt 2" />
   </action>
   <action id="ActivateStructureToolWindow">
-    <keyboard-shortcut first-keystroke="alt 7" />
     <keyboard-shortcut first-keystroke="alt 4" />
+  </action>
+  <action id="ActivateTerminalToolWindow">
+    <keyboard-shortcut first-keystroke="alt f12" />
+    <keyboard-shortcut first-keystroke="alt 7" />
   </action>
   <action id="AddToFavoritesPopup" />
   <action id="Back">

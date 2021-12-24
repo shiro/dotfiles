@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+export PATH="$PATH:$HOME/bin"
+
 BACKUP_LOCATION="/mnt/hdd1/backup/`hostname`"
 
 

@@ -95,6 +95,9 @@
     <option name="USE_GENERAL_STYLE" value="false" />
     <option name="KEYWORD_CASE" value="2" />
   </PostgresCodeStyleSettings>
+  <Python>
+    <option name="BLANK_LINES_AROUND_TOP_LEVEL_CLASSES_FUNCTIONS" value="0" />
+  </Python>
   <ScssCodeStyleSettings>
     <option name="BLANK_LINES_BETWEEN_BLOCKS" value="0" />
     <option name="BLANK_LINES_AROUND_NESTED_SELECTOR" value="0" />
@@ -208,6 +211,12 @@
     <indentOptions>
       <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
     </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="Python">
+    <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="2" />
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="2" />
+    <option name="BLANK_LINES_AROUND_CLASS" value="0" />
+    <option name="BLANK_LINES_AROUND_METHOD" value="0" />
   </codeStyleSettings>
   <codeStyleSettings language="Rust">
     <option name="RIGHT_MARGIN" value="200" />

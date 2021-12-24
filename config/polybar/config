@@ -25,7 +25,7 @@ color17 = ${xrdb:color17}
 
 [bar/main]
 ; {{{
-modules-right = nightlight activities todos pkgupdates battery wlan date
+modules-right = audio-output nightlight activities todos pkgupdates wlan date
 modules-left  = nowPlaying
 
 enable-ipc = true
@@ -152,6 +152,19 @@ interval = 20
 ; }}}
 
 
+[module/audio-output]
+; {{{
+type = custom/script
+inherit = style/tile
+
+exec = ~/.config/polybar/audio-output
+label = "%output%"
+click-left = /home/shiro/bin/audio-output toggle
+
+interval = 3
+
+; }}}
+
 [module/wlan]
 ; {{{
 type = internal/network
@@ -160,7 +173,7 @@ width=20
 
 inherit = style/tile
 
-interface = wlan0
+interface = enp7s0
 interval = 3.0
 
 ;format-connected = <ramp-signal> <label-connected>
@@ -209,36 +222,36 @@ interval = 0
 
 ; }}}
 
-[module/battery]
-; {{{
-type = internal/battery
-inherit = style/tile
-
-full-at = 100
-
-
-format-charging = <ramp-capacity>
-format-discharging = <ramp-capacity>
-format-full = <ramp-capacity>
-
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
-
-battery = BAT0
-adapter = ADP1
-
-format-charging-padding = 1
-format-discharging-padding = 1
-format-full-padding = 1
-
-format-charging-background = ${colors.background}
-format-charging-foreground = ${colors.foreground}
-format-discharging-background = ${colors.background}
-format-foreground-background = ${colors.foreground
-
-;poll-interval = 5
-
-; }}}
+; [module/battery]
+; ; {{{
+; type = internal/battery
+; inherit = style/tile
+; 
+; full-at = 100
+; 
+; 
+; format-charging = <ramp-capacity>
+; format-discharging = <ramp-capacity>
+; format-full = <ramp-capacity>
+; 
+; ramp-capacity-0 = 
+; ramp-capacity-1 = 
+; ramp-capacity-2 = 
+; ramp-capacity-3 = 
+; ramp-capacity-4 = 
+; 
+; battery = BAT0
+; adapter = ADP1
+; 
+; format-charging-padding = 1
+; format-discharging-padding = 1
+; format-full-padding = 1
+; 
+; format-charging-background = ${colors.background}
+; format-charging-foreground = ${colors.foreground}
+; format-discharging-background = ${colors.background}
+; format-foreground-background = ${colors.foreground
+; 
+; ;poll-interval = 5
+; 
+; ; }}}

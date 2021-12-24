@@ -38,8 +38,10 @@ bind -T copy-mode-vi v send-keys -X begin-selection
 bind -T copy-mode-vi r send-keys -X rectangle-toggle
 
 # enable 256 color display
-set -g default-terminal "screen-256color"
-set-option -sa terminal-overrides ",xterm*:Tc" # true color support
+set -g default-terminal "xterm-256color"
+#set-option -sa terminal-overrides ",xterm*:Tc" # true color support
+set -as terminal-features ",xterm-256color*:RGB"
+#set -as terminal-features ",xterm-256color*:Tc"
 
 # disable visual notifications
 set -g visual-activity off
