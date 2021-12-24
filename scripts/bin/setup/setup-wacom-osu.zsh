@@ -46,7 +46,7 @@ devices="$(xsetwacom --list devices | sed 's/id:.*//')"
 while read device; do
   # echo $device
   # echo
-  xsetwacom set "$device" MapToOutput 1920x1080+0+0
+  xsetwacom set "$device" MapToOutput  "DisplayPort-3"
   xsetwacom set "$device" Area 0 15000 7000 19000
   xsetwacom set "$device" Touch off
   # xsetwacom set "$device" ResetArea
