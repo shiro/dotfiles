@@ -1,3 +1,11 @@
 #!/bin/bash
 
-[ "$(/home/shiro/bin/audio-output)" == "headphones" ] && echo 蓼 || echo 
+device="$(/home/shiro/bin/audio-output)"
+
+if [ "$device" == "headphones" ]; then
+ echo 
+elif [ "$device" == "speaker" ]; then
+ echo 蓼
+else
+ echo '?'
+fi
