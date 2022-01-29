@@ -98,6 +98,9 @@
   <Python>
     <option name="BLANK_LINES_AROUND_TOP_LEVEL_CLASSES_FUNCTIONS" value="0" />
   </Python>
+  <RsCodeStyleSettings>
+    <option name="ALIGN_RET_TYPE" value="false" />
+  </RsCodeStyleSettings>
   <ScssCodeStyleSettings>
     <option name="BLANK_LINES_BETWEEN_BLOCKS" value="0" />
     <option name="BLANK_LINES_AROUND_NESTED_SELECTOR" value="0" />
@@ -219,7 +222,9 @@
     <option name="BLANK_LINES_AROUND_METHOD" value="0" />
   </codeStyleSettings>
   <codeStyleSettings language="Rust">
-    <option name="RIGHT_MARGIN" value="200" />
+    <option name="RIGHT_MARGIN" value="150" />
+    <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+    <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="false" />
   </codeStyleSettings>
   <codeStyleSettings language="SCSS">
     <indentOptions>
