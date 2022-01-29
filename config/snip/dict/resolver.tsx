@@ -1,8 +1,7 @@
-import {QueryResolvers} from "@/generated/schema";
+import {QueryResolversSchema} from "@core/generated/gql/graphql";
 
-export const {{ name }}Resolver: QueryResolvers["{{ name }}"] = async (parent, args) => {
+export const workflowSearchResolver: QueryResolversSchema["{{ name }}"] = async (parent, args) => {
     const {id} = args;
 
-    return {
-    };
+    return {} as any;
 }

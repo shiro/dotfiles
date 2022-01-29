@@ -14,6 +14,8 @@ export LOCAL_DIR="$HOME/.local"
 export LOCAL_CONFIG_DIR="$LOCAL_DIR/config"
 export CONFIG_DIR="$XDG_CONFIG_HOME"
 
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
 
 [ -f "$LOCAL_CONFIG_DIR/zsh/zshenv" ] && source "$LOCAL_CONFIG_DIR/zsh/zshenv"
 
