@@ -13,7 +13,6 @@ const {{ name }}: React.FC<Props> = (props) => {
 };
 
 
-export default {{ name }};
-
-
 const Container = styled.div``;
+
+export default {{ name }};

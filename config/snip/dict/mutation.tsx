@@ -1,9 +1,9 @@
 import {MutationResolvers} from "@server/resolvers/resolverTypes";
-import {UnauthenticatedError} from "@core/Errors/generalErrors";
+import {requireAuthentication} from "@server/auth/serverAuth";
 
 
 export const {{ name }}Mutation: MutationResolvers["{{ name }}"] = async (parent, args, ctx) => {
-    if (!ctx.isAuthenticated()) throw new UnauthenticatedError();
+    requireAuthentication(ctx);
 
     return {} as any;
 }
