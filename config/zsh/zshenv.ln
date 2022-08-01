@@ -17,6 +17,8 @@ export CONFIG_DIR="$XDG_CONFIG_HOME"
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
+export QT_QPA_PLATFORMTHEME=qt5ct
+
 [ -f "$LOCAL_CONFIG_DIR/zsh/zshenv" ] && source "$LOCAL_CONFIG_DIR/zsh/zshenv"
 
 
