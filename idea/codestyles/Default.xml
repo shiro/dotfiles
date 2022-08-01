@@ -1,8 +1,4 @@
 <code_scheme name="Default" version="173">
-  <PostgresCodeStyleSettings version="6">
-    <option name="USE_GENERAL_STYLE" value="false" />
-    <option name="KEYWORD_CASE" value="2" />
-  </PostgresCodeStyleSettings>
   <Python>
     <option name="BLANK_LINES_AROUND_TOP_LEVEL_CLASSES_FUNCTIONS" value="0" />
   </Python>
