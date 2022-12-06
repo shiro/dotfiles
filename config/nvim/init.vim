@@ -18,3 +18,7 @@ noremap <Leader><F1> :so $MYVIMRC<CR>
 source ~/.config/nvim/plugins.vim
 source ~/.config/nvim/shared.vim
 source ~/.config/nvim/shell.vim
+
+if exists('g:vscode')
+  source ~/.config/nvim/vscode.vim
+endif

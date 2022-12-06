@@ -14,6 +14,8 @@ nnoremap <C-y> 3<C-y>
 " nnoremap <leader>/ "fyiw :/<c-r>f<cr>
 " nnoremap <leader>? "fyiw :/<c-r>F<cr>
 
+nmap <ESC> :noh<CR>
+
 " replace all under cursor
 " nnoremap <Leader>% :%s/\<<C-r><C-w>\>/
 
