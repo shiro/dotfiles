@@ -1,9 +1,8 @@
 <scheme name="rabbit's favourite - Hyrule" version="142" parent_scheme="Default">
   <option name="FONT_SCALE" value="1.0" />
-  <option name="LINE_SPACING" value="1.4" />
-  <option name="EDITOR_FONT_SIZE" value="12" />
-  <option name="EDITOR_FONT_NAME" value="Hack" />
   <option name="CONSOLE_FONT_NAME" value="Monospaced" />
+  <option name="CONSOLE_FONT_SIZE" value="12" />
+  <option name="CONSOLE_LINE_SPACING" value="1.4" />
   <colors>
     <option name="ADDED_LINES_COLOR" value="304d2e" />
     <option name="ANNOTATIONS_COLOR" value="c0d5c1" />
@@ -1076,15 +1075,6 @@
         <option name="FOREGROUND" value="219598" />
       </value>
     </option>
-    <option name="PY.BUILTIN_NAME" baseAttributes="DEFAULT_PREDEFINED_SYMBOL" />
-    <option name="PY.CLASS_DEFINITION" baseAttributes="DEFAULT_CLASS_NAME" />
-    <option name="PY.DECORATOR" baseAttributes="DEFAULT_IDENTIFIER" />
-    <option name="PY.FUNC_DEFINITION" baseAttributes="DEFAULT_FUNCTION_DECLARATION" />
-    <option name="PY.KEYWORD_ARGUMENT" baseAttributes="DEFAULT_PARAMETER" />
-    <option name="PY.PREDEFINED_DEFINITION" baseAttributes="DEFAULT_PREDEFINED_SYMBOL" />
-    <option name="PY.PREDEFINED_USAGE" baseAttributes="DEFAULT_PREDEFINED_SYMBOL" />
-    <option name="PY.SELF_PARAMETER" baseAttributes="DEFAULT_PARAMETER" />
-    <option name="PY.STRING.U" baseAttributes="DEFAULT_STRING" />
     <option name="REGEXP.CHAR_CLASS">
       <value>
         <option name="FOREGROUND" value="e8bf6a" />

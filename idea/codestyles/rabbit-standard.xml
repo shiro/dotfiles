@@ -79,6 +79,9 @@
   <Objective-C-extensions>
     <option name="TAG_PREFIX_OF_LINE_COMMENT" value="AT" />
   </Objective-C-extensions>
+  <Objective-C-extensions>
+    <option name="TAG_PREFIX_OF_LINE_COMMENT" value="AT" />
+  </Objective-C-extensions>
   <PHPCodeStyleSettings>
     <option name="ALIGN_PHPDOC_COMMENTS" value="true" />
     <option name="COMMA_AFTER_LAST_ARRAY_ELEMENT" value="true" />
@@ -222,7 +225,7 @@
     <option name="BLANK_LINES_AROUND_METHOD" value="0" />
   </codeStyleSettings>
   <codeStyleSettings language="Rust">
-    <option name="RIGHT_MARGIN" value="150" />
+    <option name="RIGHT_MARGIN" value="200" />
     <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
     <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="false" />
   </codeStyleSettings>
