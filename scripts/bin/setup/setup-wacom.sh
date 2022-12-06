@@ -17,7 +17,7 @@ devices="$(xsetwacom --list devices | sed 's/id:.*//')"
 
 while read device; do
   xsetwacom set "$device" ResetArea
-  xsetwacom set "$device" MapToOutput "DisplayPort-1"
+  xsetwacom set "$device" MapToOutput "DisplayPort-0"
 
   xsetwacom set "$device" Touch on
   xsetwacom set "$device" Gesture off
