@@ -6,6 +6,7 @@ export XDG_CONFIG_DIR="/etc/xdg"
 
 export EDITOR=vim
 export VISUAL=vim
+export NVIM_LOG_FILE=${XDG_RUNTIME_DIR:-${TMPDIR:-${TMP:-${TEMP:-/tmp}}}}/nvimlog
 
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 export DOTFILES="$HOME/.dotfiles"
