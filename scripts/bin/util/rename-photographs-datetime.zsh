@@ -19,6 +19,11 @@ get_new_filename() {
 
   original_date="$(exiftool -s3 -d "%Y-%m-%d_%Hh%Mm%S" -DateTimeOriginal "$1")"
 
+  if [ -z $original_date ]; then
+    >&2 echo "no EXIF date included in '$1'"
+    exit 1
+  fi
+
   echo "$original_date-$uid"
 }
 
