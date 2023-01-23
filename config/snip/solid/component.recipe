@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# parse name, camel-case
+componentName="$(basename -s .solid.tsx "$DESTINATION")"
+componentName="${(C)componentName[1]}${componentName[2,-1]}"
+
+DESTINATION="${DESTINATION:h}/$componentName"
+
+# create destination dir
+mkdir -p "${DESTINATION:h}"
+
+
+data=$(variables 'solid/component.tsx')
+data=$(set-value "$data" "name" "$componentName")
+
+render 'solid/component.tsx' "$data" > "$DESTINATION.solid.tsx"
