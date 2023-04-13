@@ -6,6 +6,7 @@ setopt +o nomatch
 
 config_dirs=( \
   "$HOME/.config/JetBrains/"*
+  "$HOME/.config/Google/"*
 )
 
 # set -e
