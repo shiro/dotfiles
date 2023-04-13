@@ -242,6 +242,7 @@
   <action id="Tool_External Tools_stylelint">
     <keyboard-shortcut first-keystroke="shift alt page_up" />
   </action>
+  <action id="UpdateRunningApplication" />
   <action id="Vcs.Log.OpenRepositoryVersion">
     <keyboard-shortcut first-keystroke="ctrl o" />
   </action>
@@ -264,6 +265,12 @@
   <action id="XDebugger.MuteBreakpoints">
     <keyboard-shortcut first-keystroke="shift alt context_menu" />
     <keyboard-shortcut first-keystroke="shift alt d" />
+  </action>
+  <action id="android.deploy.ApplyChanges">
+    <keyboard-shortcut first-keystroke="ctrl f10" />
+  </action>
+  <action id="android.deploy.CodeSwap">
+    <keyboard-shortcut first-keystroke="ctrl alt f10" />
   </action>
   <action id="tasks.close" />
 </keymap>

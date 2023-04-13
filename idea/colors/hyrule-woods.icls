@@ -1,8 +1,11 @@
 <scheme name="rabbit's favourite - Hyrule" version="142" parent_scheme="Default">
   <option name="FONT_SCALE" value="1.0" />
+  <option name="LINE_SPACING" value="1.4" />
+  <option name="EDITOR_FONT_SIZE" value="14" />
+  <option name="EDITOR_FONT_NAME" value="Hack" />
+  <option name="EDITOR_LIGATURES" value="true" />
   <option name="CONSOLE_FONT_NAME" value="Monospaced" />
   <option name="CONSOLE_FONT_SIZE" value="12" />
-  <option name="CONSOLE_LINE_SPACING" value="1.4" />
   <colors>
     <option name="ADDED_LINES_COLOR" value="304d2e" />
     <option name="ANNOTATIONS_COLOR" value="c0d5c1" />
@@ -13,18 +16,23 @@
     <option name="DIFF_SEPARATORS_BACKGROUND" value="3d3b39" />
     <option name="DIFF_SEPARATORS_TOP_BORDER" value="" />
     <option name="DOCUMENTATION_COLOR" value="292929" />
-    <option name="FILESTATUS_ADDED" value="629755" />
-    <option name="FILESTATUS_DELETED" value="6c6c6c" />
+    <option name="FILESTATUS_ADDED" value="c3e887" />
+    <option name="FILESTATUS_DELETED" value="f77669" />
+    <option name="FILESTATUS_HIJACKED" value="ffcb6b" />
     <option name="FILESTATUS_IDEA_FILESTATUS_DELETED_FROM_FILE_SYSTEM" value="6c6c6c" />
     <option name="FILESTATUS_IDEA_FILESTATUS_IGNORED" value="848504" />
     <option name="FILESTATUS_IDEA_FILESTATUS_MERGED_WITH_BOTH_CONFLICTS" value="d5756c" />
     <option name="FILESTATUS_IDEA_FILESTATUS_MERGED_WITH_CONFLICTS" value="d5756c" />
     <option name="FILESTATUS_IDEA_FILESTATUS_MERGED_WITH_PROPERTY_CONFLICTS" value="d5756c" />
+    <option name="FILESTATUS_IGNORE.PROJECT_VIEW.IGNORED" value="ab7967" />
     <option name="FILESTATUS_MERGED" value="569e16" />
-    <option name="FILESTATUS_MODIFIED" value="ce830d" />
-    <option name="FILESTATUS_NOT_CHANGED_IMMEDIATE" value="ce830d" />
-    <option name="FILESTATUS_NOT_CHANGED_RECURSIVE" value="ce830d" />
-    <option name="FILESTATUS_UNKNOWN" value="d1675a" />
+    <option name="FILESTATUS_MODIFIED" value="80cbc4" />
+    <option name="FILESTATUS_NOT_CHANGED_IMMEDIATE" value="80cbc4" />
+    <option name="FILESTATUS_NOT_CHANGED_RECURSIVE" value="80cbc4" />
+    <option name="FILESTATUS_OBSOLETE" value="ffcb6b" />
+    <option name="FILESTATUS_SUPPRESSED" value="546e7a" />
+    <option name="FILESTATUS_SWITCHED" value="f77669" />
+    <option name="FILESTATUS_UNKNOWN" value="f77669" />
     <option name="FILESTATUS_addedOutside" value="629755" />
     <option name="FILESTATUS_changelistConflict" value="d5756c" />
     <option name="FILESTATUS_modifiedOutside" value="ce830d" />
@@ -429,7 +437,7 @@
     </option>
     <option name="DEFAULT_INSTANCE_METHOD">
       <value>
-        <option name="FOREGROUND" value="569e16" />
+        <option name="FOREGROUND" value="7a7a43" />
       </value>
     </option>
     <option name="DEFAULT_INVALID_STRING_ESCAPE">
@@ -471,16 +479,13 @@
     </option>
     <option name="DEFAULT_STATIC_METHOD">
       <value>
-        <option name="FOREGROUND" value="569e16" />
+        <option name="FOREGROUND" value="93784e" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
       <value>
         <option name="FOREGROUND" value="ce830d" />
       </value>
-    </option>
-    <option name="DEFAULT_TAG">
-      <value />
     </option>
     <option name="DEFAULT_TEMPLATE_LANGUAGE_COLOR">
       <value>
@@ -841,7 +846,11 @@
         <option name="FONT_TYPE" value="1" />
       </value>
     </option>
-    <option name="JS.GLOBAL_VARIABLE" baseAttributes="DEFAULT_GLOBAL_VARIABLE" />
+    <option name="JS.GLOBAL_VARIABLE">
+      <value>
+        <option name="FONT_TYPE" value="3" />
+      </value>
+    </option>
     <option name="JS.PARAMETER">
       <value>
         <option name="EFFECT_TYPE" value="1" />
@@ -861,6 +870,25 @@
     <option name="JSP_SCRIPTING_BACKGROUND">
       <value>
         <option name="FOREGROUND" value="90c93f" />
+      </value>
+    </option>
+    <option name="KOTLIN_SMART_CAST_RECEIVER">
+      <value>
+        <option name="EFFECT_COLOR" value="828282" />
+        <option name="EFFECT_TYPE" value="5" />
+      </value>
+    </option>
+    <option name="KOTLIN_SMART_CAST_VALUE">
+      <value>
+        <option name="FONT_TYPE" value="2" />
+        <option name="EFFECT_COLOR" value="212121" />
+        <option name="EFFECT_TYPE" value="5" />
+      </value>
+    </option>
+    <option name="KOTLIN_SMART_CONSTANT">
+      <value>
+        <option name="EFFECT_COLOR" value="737373" />
+        <option name="EFFECT_TYPE" value="5" />
       </value>
     </option>
     <option name="LABEL">
@@ -889,6 +917,78 @@
       <value>
         <option name="FOREGROUND" value="80805a" />
         <option name="FONT_TYPE" value="1" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_LEVEL_ASSERT">
+      <value>
+        <option name="FOREGROUND" value="9ac7e3" />
+        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="EFFECT_COLOR" value="4f4f4f" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_LEVEL_DEBUG">
+      <value>
+        <option name="FOREGROUND" value="a5b999" />
+        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="EFFECT_COLOR" value="4f4f4f" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_LEVEL_ERROR">
+      <value>
+        <option name="FOREGROUND" value="d29aa4" />
+        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="EFFECT_COLOR" value="4f4f4f" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_LEVEL_INFO">
+      <value>
+        <option name="FOREGROUND" value="d9d9d9" />
+        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="EFFECT_COLOR" value="4f4f4f" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_LEVEL_VERBOSE">
+      <value>
+        <option name="FOREGROUND" value="ababab" />
+        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="EFFECT_COLOR" value="4f4f4f" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_LEVEL_WARNING">
+      <value>
+        <option name="FOREGROUND" value="e3df9a" />
+        <option name="BACKGROUND" value="2d2c2b" />
+        <option name="EFFECT_COLOR" value="4f4f4f" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_MESSAGE_ASSERT">
+      <value>
+        <option name="FOREGROUND" value="9ac7e3" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_MESSAGE_DEBUG">
+      <value>
+        <option name="FOREGROUND" value="a5b999" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_MESSAGE_ERROR">
+      <value>
+        <option name="FOREGROUND" value="d29aa4" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_MESSAGE_INFO">
+      <value>
+        <option name="FOREGROUND" value="d9d9d9" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_MESSAGE_VERBOSE">
+      <value>
+        <option name="FOREGROUND" value="ababab" />
+      </value>
+    </option>
+    <option name="LOGCAT_V2_MESSAGE_WARNING">
+      <value>
+        <option name="FOREGROUND" value="e3df9a" />
       </value>
     </option>
     <option name="LOG_ERROR_OUTPUT">
