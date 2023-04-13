@@ -59,6 +59,9 @@ nnoremap <leader>q :q!<cr>
 " swap active buffers
 nnoremap <C-i> <C-^>
 
+" increment number
+nnoremap <C-x> <C-a>
+
 " toggle raw formatting view
 nmap <leader>; :set list!<cr>
 
