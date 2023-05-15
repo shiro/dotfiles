@@ -79,9 +79,6 @@
   <Objective-C-extensions>
     <option name="TAG_PREFIX_OF_LINE_COMMENT" value="AT" />
   </Objective-C-extensions>
-  <Objective-C-extensions>
-    <option name="TAG_PREFIX_OF_LINE_COMMENT" value="AT" />
-  </Objective-C-extensions>
   <PHPCodeStyleSettings>
     <option name="ALIGN_PHPDOC_COMMENTS" value="true" />
     <option name="COMMA_AFTER_LAST_ARRAY_ELEMENT" value="true" />
@@ -94,13 +91,10 @@
     <option name="SPACE_AROUND_ASSIGNMENT_IN_DECLARE" value="true" />
     <option name="SPACE_BEFORE_COLON_IN_RETURN_TYPE" value="true" />
   </PHPCodeStyleSettings>
-  <PostgresCodeStyleSettings version="5">
+  <PostgresCodeStyleSettings version="6">
     <option name="USE_GENERAL_STYLE" value="false" />
     <option name="KEYWORD_CASE" value="2" />
   </PostgresCodeStyleSettings>
-  <Python>
-    <option name="BLANK_LINES_AROUND_TOP_LEVEL_CLASSES_FUNCTIONS" value="0" />
-  </Python>
   <RsCodeStyleSettings>
     <option name="ALIGN_RET_TYPE" value="false" />
   </RsCodeStyleSettings>
