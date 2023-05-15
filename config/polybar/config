@@ -25,7 +25,7 @@ color17 = ${xrdb:color17}
 
 [bar/main]
 ; {{{
-modules-right = audio-output nightlight activities todos pkgupdates wlan date
+modules-right = audio-output nightlight activities todos wlan date
 modules-left  = nowPlaying
 
 enable-ipc = true
