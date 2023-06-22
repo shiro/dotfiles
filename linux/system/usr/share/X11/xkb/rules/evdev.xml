@@ -1421,8 +1421,8 @@
         </variant>
         <variant>
           <configItem>
-            <name>colemak_dh_iso</name>
-            <description>English (Colemak-DH ISO)</description>
+            <name>colemak_dh_wide</name>
+            <description>English (Colemak-DH Wide)</description>
           </configItem>
         </variant>
         <variant>
@@ -1431,7 +1431,18 @@
             <description>English (Colemak-DH Ortholinear)</description>
           </configItem>
         </variant>
-
+        <variant>
+          <configItem>
+            <name>colemak_dh_iso</name>
+            <description>English (Colemak-DH ISO)</description>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>colemak_dh_wide_iso</name>
+            <description>English (Colemak-DH Wide ISO)</description>
+          </configItem>
+        </variant>
         <variant>
           <configItem>
             <name>dvorak</name>
@@ -1808,9 +1819,9 @@
     <layout>
       <configItem>
         <name>au</name>
-        <!-- Keyboard indicator for Australian layouts -->
+        <!-- Keyboard indicator for English layouts -->
         <shortDescription>en</shortDescription>
-        <description>English (Australian)</description>
+        <description>English (Australia)</description>
         <countryList>
           <iso3166Id>AU</iso3166Id>
         </countryList>
@@ -2208,6 +2219,17 @@
           </configItem>
          </variant>
          <variant>
+          <configItem>
+            <name>mal_poorna</name>
+            <!-- Keyboard indicator for Malayalam layouts -->
+            <shortDescription>ml</shortDescription>
+            <description>Malayalam (Poorna, extended InScript)</description>
+            <languageList>
+              <iso639Id>mal</iso639Id>
+            </languageList>
+          </configItem>
+         </variant>
+         <variant>
            <configItem>
             <name>ori</name>
             <!-- Keyboard indicator for Oriya layouts -->
@@ -2546,6 +2568,17 @@
           <configItem>
             <name>nativo</name>
             <description>Portuguese (Brazil, Nativo)</description>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>rus</name>
+            <!-- Keyboard indicator for Russian layouts -->
+            <shortDescription>ru</shortDescription>
+            <description>Russian (Brazil, phonetic)</description>
+            <languageList>
+              <iso639Id>rus</iso639Id>
+            </languageList>
           </configItem>
         </variant>
         <variant>
@@ -3208,7 +3241,7 @@
         <variant>
           <configItem>
             <name>bksl</name>
-            <description>Czech (with &lt;\|&gt; key)</description>
+            <description>Czech (extra backslash)</description>
           </configItem>
         </variant>
         <variant>
@@ -3220,7 +3253,7 @@
         <variant>
           <configItem>
             <name>qwerty_bksl</name>
-            <description>Czech (QWERTY, extended backslash)</description>
+            <description>Czech (QWERTY, extra backslash)</description>
           </configItem>
         </variant>
         <variant>
@@ -3246,10 +3279,22 @@
             <name>rus</name>
             <!-- Keyboard indicator for Russian layouts -->
             <shortDescription>ru</shortDescription>
-            <description>Russian (Czech, phonetic)</description>
+            <description>Russian (Czechia, phonetic)</description>
             <languageList>
               <iso639Id>rus</iso639Id>
             </languageList>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>winkeys</name>
+            <description>Czech (QWERTZ, Windows flavour)</description>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>winkeys-qwerty</name>
+            <description>Czech (QWERTY, Windows flavour)</description>
           </configItem>
         </variant>
       </variantList>
@@ -3400,6 +3445,12 @@
           <configItem>
             <name>pes_keypad</name>
             <description>Persian (with Persian keypad)</description>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>winkeys</name>
+            <description>Persian (Windows)</description>
           </configItem>
         </variant>
         <variant>
@@ -4908,6 +4959,18 @@
             <description>Norwegian (Colemak)</description>
           </configItem>
         </variant>
+        <variant>
+          <configItem>
+            <name>colemak_dh</name>
+            <description>Norwegian (Colemak-DH)</description>
+          </configItem>
+        </variant>
+        <variant>
+          <configItem>
+            <name>colemak_dh_wide</name>
+            <description>Norwegian (Colemak-DH Wide)</description>
+          </configItem>
+        </variant>
       </variantList>
     </layout>
     <layout>
@@ -5399,7 +5462,7 @@
         <variant>
           <configItem>
             <name>bksl</name>
-            <description>Slovak (extended backslash)</description>
+            <description>Slovak (extra backslash)</description>
           </configItem>
         </variant>
         <variant>
@@ -5411,7 +5474,7 @@
         <variant>
           <configItem>
             <name>qwerty_bksl</name>
-            <description>Slovak (QWERTY, extended backslash)</description>
+            <description>Slovak (QWERTY, extra backslash)</description>
           </configItem>
         </variant>
       </variantList>
@@ -5472,12 +5535,6 @@
             <languageList>
               <iso639Id>cat</iso639Id>
             </languageList>
-          </configItem>
-        </variant>
-        <variant>
-          <configItem>
-            <name>mac</name>
-            <description>Spanish (Macintosh)</description>
           </configItem>
         </variant>
       </variantList>
@@ -5995,21 +6052,6 @@
           <configItem>
             <name>legacy</name>
             <description>Ukrainian (legacy)</description>
-          </configItem>
-        </variant>
-        <variant>
-          <configItem>
-            <name>rstu</name>
-            <description>Ukrainian (standard RSTU)</description>
-          </configItem>
-        </variant>
-        <variant>
-          <configItem>
-            <name>rstu_ru</name>
-            <description>Russian (Ukraine, standard RSTU)</description>
-            <languageList>
-              <iso639Id>rus</iso639Id>
-            </languageList>
           </configItem>
         </variant>
         <variant>
@@ -6809,7 +6851,7 @@
           <configItem>
             <name>gag</name>
             <shortDescription>gag</shortDescription>
-            <description>Moldavian (Gagauz)</description>
+            <description>Gagauz (Moldova)</description>
             <languageList>
               <iso639Id>gag</iso639Id>
             </languageList>
@@ -6905,6 +6947,9 @@
 	<name>custom</name>
         <shortDescription>custom</shortDescription>
         <description>A user-defined custom Layout</description>
+        <languageList>
+          <iso639Id>und</iso639Id>
+        </languageList>
       </configItem>
       <variantList/>
     </layout>
@@ -7982,7 +8027,7 @@
     <group allowMultipleSelection="true">
       <configItem>
         <name>lv5</name>
-        <description>Key to choose 5th level</description>
+        <description>Key to choose the 5th level</description>
       </configItem>
       <option>
         <configItem>
@@ -8268,6 +8313,18 @@
           <name>terminate:ctrl_alt_bksp</name>
           <description>Ctrl+Alt+Backspace</description>
         </configItem>
+      </option>
+    </group>
+    <group allowMultipleSelection="true">
+      <configItem>
+        <name>custom</name>
+        <description>Miscellaneous options</description>
+      </configItem>
+      <option>
+        <configItem>
+          <name>custom:types</name>
+          <description>Use user-defined custom XKB types</description>
+       </configItem>
       </option>
     </group>
   </optionList>
