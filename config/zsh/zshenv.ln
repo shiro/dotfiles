@@ -20,6 +20,8 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 
 export QT_QPA_PLATFORMTHEME=qt5ct
 
+export WINEESYNC=1
+
 [ -f "$LOCAL_CONFIG_DIR/zsh/zshenv" ] && source "$LOCAL_CONFIG_DIR/zsh/zshenv"
 
 
