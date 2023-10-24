@@ -15,6 +15,9 @@ resign () {
 # sudo repeat last command
 alias please='sudo $(fc -ln -1)'
 
+# sudo
+alias se='sudo'
+
 # less shutting down remote servers
 alias stahp='poweroff'
 
