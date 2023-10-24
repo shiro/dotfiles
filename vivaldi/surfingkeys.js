@@ -1,7 +1,7 @@
 const {
     aceVimMap,
-    mapkey,
     imap,
+    mapkey,
     imapkey,
     getClickableElements,
     vmapkey,
@@ -65,7 +65,13 @@ map('<Alt-t>', '<Alt-s>');
 map('<ArrowRight>', 'R');
 map('<ArrowLeft>', 'E');
 
-map('D', '<Ctrl-h>');
+// history forward
+map("L", "D");
+// history back
+map('z', 'H');
+
+// open links in new tab
+map('e', 'af');
 
 map('F', 'C');
 map('o', 'go');
