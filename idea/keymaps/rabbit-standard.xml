@@ -67,6 +67,14 @@
   </action>
   <action id="Console.TableResult.MaximizeEditingCell" />
   <action id="CopyReference" />
+  <action id="DatabaseView.DeactivateAction">
+    <keyboard-shortcut first-keystroke="ctrl f2" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt v" />
+    <keyboard-shortcut first-keystroke="shift alt z" />
+    <keyboard-shortcut first-keystroke="ctrl period" />
+    <keyboard-shortcut first-keystroke="shift alt quote" />
+    <keyboard-shortcut first-keystroke="shift alt home" />
+  </action>
   <action id="Debug">
     <keyboard-shortcut first-keystroke="alt w" />
   </action>
@@ -75,6 +83,22 @@
   </action>
   <action id="Diff.FocusOppositePane">
     <keyboard-shortcut first-keystroke="shift alt t" />
+  </action>
+  <action id="Docker.RemoteServers.StopComposeService">
+    <keyboard-shortcut first-keystroke="ctrl f2" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt v" />
+    <keyboard-shortcut first-keystroke="shift alt z" />
+    <keyboard-shortcut first-keystroke="ctrl period" />
+    <keyboard-shortcut first-keystroke="shift alt quote" />
+    <keyboard-shortcut first-keystroke="shift alt home" />
+  </action>
+  <action id="Docker.RemoteServers.StopContainer">
+    <keyboard-shortcut first-keystroke="ctrl f2" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt v" />
+    <keyboard-shortcut first-keystroke="shift alt z" />
+    <keyboard-shortcut first-keystroke="ctrl period" />
+    <keyboard-shortcut first-keystroke="shift alt quote" />
+    <keyboard-shortcut first-keystroke="shift alt home" />
   </action>
   <action id="DuplicatesForm.SendToLeft" />
   <action id="DuplicatesForm.SendToRight" />
@@ -184,8 +208,19 @@
   <action id="Run">
     <keyboard-shortcut first-keystroke="alt r" />
   </action>
+  <action id="RunDashboard.Stop">
+    <keyboard-shortcut first-keystroke="ctrl f2" />
+    <keyboard-shortcut first-keystroke="shift ctrl alt v" />
+    <keyboard-shortcut first-keystroke="shift alt z" />
+    <keyboard-shortcut first-keystroke="ctrl period" />
+    <keyboard-shortcut first-keystroke="shift alt quote" />
+    <keyboard-shortcut first-keystroke="shift alt home" />
+  </action>
   <action id="RunToCursor">
     <keyboard-shortcut first-keystroke="ctrl 2" />
+  </action>
+  <action id="Rust.ShowSingleStepMacroExpansionAction">
+    <keyboard-shortcut first-keystroke="shift alt x" />
   </action>
   <action id="SaveAll" />
   <action id="SelectNextOccurrence" />
@@ -222,7 +257,6 @@
     <keyboard-shortcut first-keystroke="ctrl period" />
     <keyboard-shortcut first-keystroke="shift alt quote" />
     <keyboard-shortcut first-keystroke="shift alt home" />
-    <keyboard-shortcut first-keystroke="shift alt x" />
   </action>
   <action id="Switcher">
     <keyboard-shortcut first-keystroke="ctrl e" />
@@ -272,5 +306,6 @@
   <action id="android.deploy.CodeSwap">
     <keyboard-shortcut first-keystroke="ctrl alt f10" />
   </action>
+  <action id="context.clear" />
   <action id="tasks.close" />
 </keymap>
