@@ -3,9 +3,9 @@
     "layer": "top",
     "position": "top",
     "spacing": 4,
-    "modules-left": [],
+    "modules-left": ["mpd"],
     "modules-center": [],
-    "modules-right": ["tray", "custom/audio-output", "network", "cpu", "memory", "temperature", "backlight", "battery", "clock"],
+    "modules-right": ["tray", "custom/audio-output", "cpu", "memory", "temperature", "backlight", "battery", "clock"],
     "custom/audio-output": {
       "format": " {} ",
       "exec": "$HOME/.config/waybar/audio-output",
@@ -29,9 +29,7 @@
         "tooltip-format": "{app}: {title}"
     },
     "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "format": " {title}",
         "unknown-tag": "N/A",
         "interval": 2,
         "consume-icons": {
