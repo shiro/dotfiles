@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+  alacritty
+else
+  # remove ignore -e flag since it's the default
+  [[ $1 == "-e" ]] && shift
+
+  alacritty -e sh -c "cat "'$HOME'"/.config/wpg/sequences; $*"
+fi
