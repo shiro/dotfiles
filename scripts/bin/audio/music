@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+export MPD_HOST="$HOME/.config/mpd/socket"
+
+case "$1" in
+  play)
+    mpc play
+    ;;
+  pause)
+    mpc pause
+    ;;
+  playpause | toggle)
+    mpc toggle
+    ;;
+  next)
+    mpc next
+    ;;
+  prev)
+    mpc prev
+    ;;
+  forward)
+    mpc seek '+00:00:05'
+    ;;
+  backward)
+    mpc seek '-00:00:05'
+    ;;
+  library)
+    selected=`ls ~/Music | rofi -dmenu -i -select`
+    [ -n "$selected" ] && play ~/"Music/$selected"
+    ;;
+esac
+

@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+set -e
+
+if [ $# -eq 0 ]; then
+  >&2 echo "error, need at least one argument, but got $#"
+  exit 1
+fi
+
+
+#mpc clear
+#mpc repeat off
+
+for relpath in $@; do
+  filepath="$(realpath $relpath)"
+  mpc add "$filepath"
+done
+mpc next
+#mpc play
