@@ -25,7 +25,7 @@ case "$1" in
     mpc seek '-00:00:05'
     ;;
   library)
-    selected=`ls ~/Music | wofi -d -i -select`
+    selected=`ls ~/Music | shuf | wofi -d -i`
     [ -n "$selected" ] && play ~/"Music/$selected"
     ;;
 esac
