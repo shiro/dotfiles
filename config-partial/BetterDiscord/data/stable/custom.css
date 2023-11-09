@@ -1,0 +1,33 @@
+/* remove glow effect */
+* { text-shadow: none !important;}
+.wrapper__7bcde.modeUnread_f74c03 .link__95dc0 .linkTop_eaa673 .icon_eff5d4 {
+    filter: none;
+}
+
+/* hide theme label */
+.theme-dark .container_ca50b9:before { display: none; }
+
+/* hide shop */
+.channel_c21703.container__8759a:nth-child(3),
+.channel_c21703.container__8759a:nth-child(4) {
+    display: none;
+}
+
+/* change muted channel color */
+body { --muted-color: rgba(196, 196, 196, 0.5); }
+
+
+/* adjust channel list color */
+.tree__7a511 {
+    background: rgba(0, 0, 0, calc(var(--background-shading) * 0.3)) !important;
+}
+
+/* adjust tab container */
+#channelTabs-container, .channelTabs-selected {
+    padding: 4px 0;
+    margin: 0;
+    background: rgba(0, 0, 0, calc(var(--background-shading) * 0.3)) !important;
+}
+#channelTabs-container { padding: 0 !important; }
+.channelTabs-tabNav { display: none !important; }
+#channelTabs-settingsMenu:not(:hover) { opacity: 0; }

@@ -1,0 +1,47 @@
+{
+  "puddlestuff.functions_autonumbering": {
+    "arguments": [
+      1,
+      false,
+      1
+    ],
+    "fields": [
+      "__all"
+    ]
+  },
+  "puddlestuff.functions_texttotag": {
+    "arguments": [
+      "",
+      "",
+      ""
+    ],
+    "fields": [
+      "__accessed"
+    ]
+  },
+  "puddlestuff.functions_replace": {
+    "arguments": [
+      ", ",
+      "; ",
+      false,
+      false
+    ],
+    "fields": [
+      "artist"
+    ]
+  },
+  "puddlestuff.functions_remove_fields": {
+    "arguments": [],
+    "fields": [
+      "comment"
+    ]
+  },
+  "puddlestuff.functions_move": {
+    "arguments": [
+      "%title%$if(%artist%, \\ - %artist%,)$if(%album%, \\ - %album%,)"
+    ],
+    "fields": [
+      "just nothing to do with this"
+    ]
+  }
+}

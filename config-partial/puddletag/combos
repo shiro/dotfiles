@@ -1,0 +1,44 @@
+{
+  "filter_text": {
+    "values": [
+      "",
+      ""
+    ]
+  },
+  "&Text": {
+    "values": [
+      "",
+      ""
+    ]
+  },
+  "&Pattern": {
+    "values": [
+      "",
+      "%title% ; %artist% ; %album% ; %discnumber% ; %track% ; %releaseyear% ; %producers% ; %genre%",
+      "%title%$if(%artist%, \\ - %artist%,)$if(%album%, \\ - %album%,)"
+    ]
+  },
+  "&Output": {
+    "values": [
+      "",
+      ""
+    ]
+  },
+  "&Replace": {
+    "values": [
+      ", ",
+      ", "
+    ]
+  },
+  "w&ith:": {
+    "values": [
+      "; ",
+      "; "
+    ]
+  },
+  "For &Mixed Case, after any of:": {
+    "values": [
+      "., !"
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "panel": {
+    "numrows": "7"
+  },
+  "0": {
+    "tags": [
+      "artist"
+    ],
+    "titles": [
+      "&Artist"
+    ]
+  },
+  "1": {
+    "tags": [
+      "albumartist"
+    ],
+    "titles": [
+      "&Album artist"
+    ]
+  },
+  "2": {
+    "tags": [
+      "title"
+    ],
+    "titles": [
+      "&Title"
+    ]
+  },
+  "3": {
+    "tags": [
+      "album"
+    ],
+    "titles": [
+      "Al&bum"
+    ]
+  },
+  "4": {
+    "tags": [
+      "discnumber",
+      "track",
+      "year"
+    ],
+    "titles": [
+      "&Disc",
+      "T&rack",
+      "&Year"
+    ]
+  },
+  "5": {
+    "tags": [
+      "genre"
+    ],
+    "titles": [
+      "&Genre"
+    ]
+  },
+  "6": {
+    "tags": [
+      "comment"
+    ],
+    "titles": [
+      "&Comment"
+    ]
+  }
+}
