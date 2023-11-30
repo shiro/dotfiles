@@ -2,6 +2,9 @@
   <action id="$Undo">
     <keyboard-shortcut first-keystroke="ctrl z" />
   </action>
+  <action id="ActivateBuildToolWindow">
+    <keyboard-shortcut first-keystroke="alt 4" />
+  </action>
   <action id="ActivateDatabaseConsoleToolWindow">
     <keyboard-shortcut first-keystroke="alt 3" />
   </action>
@@ -21,9 +24,7 @@
   <action id="ActivateRunToolWindow">
     <keyboard-shortcut first-keystroke="alt 2" />
   </action>
-  <action id="ActivateStructureToolWindow">
-    <keyboard-shortcut first-keystroke="alt 4" />
-  </action>
+  <action id="ActivateStructureToolWindow" />
   <action id="ActivateTerminalToolWindow">
     <keyboard-shortcut first-keystroke="alt f12" />
     <keyboard-shortcut first-keystroke="alt 7" />

@@ -1569,6 +1569,11 @@
         <option name="FOREGROUND" value="e8d3d3" />
       </value>
     </option>
+    <option name="org.rust.CFG_DISABLED_CODE">
+      <value>
+        <option name="FOREGROUND" value="b2b2b2" />
+      </value>
+    </option>
     <option name="org.rust.UNSAFE_CODE">
       <value>
         <option name="FONT_TYPE" value="1" />
