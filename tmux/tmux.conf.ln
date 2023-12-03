@@ -140,8 +140,9 @@ bind-key -n M-. swap-window -t +1 \; next-window
 bind-key , swap-window -t -1 \; previous-window
 bind-key . swap-window -t +1 \; next-window
 
-bind -n Left previous-window
-bind -n Right next-window
+# go to next/previous window
+bind-key -n C-Tab next-window
+bind-key -n C-S-Tab previous-window
 # bind -n M-f find-window
 
 bind h select-pane -L
