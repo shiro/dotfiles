@@ -34,6 +34,7 @@ vim.g['coc_global_extensions'] = {
   'coc-json',
   'coc-vimlsp',
   'coc-rust-analyzer',
+  'coc-tsserver',
 }
 
 call('plug#begin', PATH)
