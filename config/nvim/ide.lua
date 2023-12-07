@@ -81,6 +81,7 @@ vim.api.nvim_set_keymap('n', '[e', "<Plug>(coc-diagnostic-prev)", { silent = tru
 vim.api.nvim_set_keymap('n', '<A-S-e>', "<Plug>(coc-rename)", { silent = true });
 vim.api.nvim_set_keymap('n', '<A-S-r>', "<Plug>(coc-refactor)", { silent = true });
 vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silent = true });
+vim.api.nvim_set_keymap('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 
 -- show outline (hierarchy)
 vim.api.nvim_set_keymap('n', 'go', ":CocFzfList outline<CR>", { silent = true });
@@ -99,6 +100,13 @@ vim.api.nvim_create_autocmd("CursorHold", {
     group = "CocGroup",
     command = "silent call CocActionAsync('highlight')",
     desc = "Highlight symbol under cursor on CursorHold"
+})
+
+vim.api.nvim_create_autocmd("User", {
+    group = "CocGroup",
+    pattern = "CocJumpPlaceholder",
+    command = "call CocActionAsync('showSignatureHelp')",
+    desc = "Update signature help on jump placeholder"
 })
 
 

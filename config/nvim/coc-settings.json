@@ -15,5 +15,9 @@
   "suggest.pumFloatConfig": {
     "border": true,
     "rounded": true,
+  },
+  "signature.floatConfig": {
+    "border": true,
+    "rounded": true,
   }
 }
