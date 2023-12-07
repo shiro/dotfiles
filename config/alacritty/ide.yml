@@ -1,0 +1,48 @@
+
+import:
+  - ~/.config/alacritty/alacritty.yaml
+
+window:
+  padding:
+    x: 18
+    y: 18
+
+  opacity: 1.0
+
+  title: IDE
+
+  class:
+    instance: IDE
+    general: IDE
+
+font:
+  normal:
+    family: Hack Nerd Font Mono
+    style: Regular
+
+  bold:
+    family: Hack Nerd Font Mono
+    style: Bold
+
+  italic:
+    family: Hack Nerd Font Mono
+    style: Italic
+
+  bold_italic:
+    family: Hack Nerd Font Mono
+    style: Bold Italic
+
+  size: 11.0
+
+  offset:
+    x: -1
+    y: 5
+
+  glyph_offset:
+    x: 0
+    y: 2
+
+colors:
+  primary:
+    background: '#2D2C2B'
+    foreground: '#e7e7f1'
