@@ -145,7 +145,8 @@ exe 'hi CocErrorLine guibg=NONE'
 exe 'hi CocWarningLine guibg=NONE'
 exe 'hi CocInfoLine guibg=NONE'
 exe 'hi CocHintLine guibg=NONE'
-exe 'hi Search guifg='.white.' gui=underline'
+exe 'hi Search guibg='.lightGreen.' guifg='.bg.' gui=NONE'
+exe 'hi IncSearch guibg='.yellow.' guifg='.bg.' gui=NONE'
 
 " Rust
 exe 'hi rustModPath guifg='.white

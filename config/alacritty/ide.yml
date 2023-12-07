@@ -1,4 +1,3 @@
-
 import:
   - ~/.config/alacritty/alacritty.yaml
 
@@ -46,3 +45,34 @@ colors:
   primary:
     background: '#2D2C2B'
     foreground: '#e7e7f1'
+
+  cursor:
+  #  text: '#000000'
+    cursor: '#e7e7f1'
+
+  normal:
+    black:   '#11242f'
+    red:     '#954445'
+    green:   '#3f8f48'
+    yellow:  '#aa8455'
+    blue:    '#4674a2'
+    magenta: '#424f9e'
+    cyan:    '#357a89'
+    white:   '#9ab4c2'
+
+  # Bright colors
+  bright:
+    black:   '#11242f'
+    red:     '#e56567'
+    green:   '#5ea965'
+    yellow:  '#e5be4e'
+    blue:    '#589de2'
+    magenta: '#92b3df'
+    cyan:    '#5db5c8'
+    white:   '#e7e7f1'
+
+key_bindings:
+  # fix Tab and C-S-Tab key sequences not being passed
+  - { key: Tab, mods: Control, chars: "\x1b[27;5;9~" }
+  - { key: Tab, mods: Control|Shift, chars: "\x1b[27;6;9~" }
+  - { key: P, mods: Control|Shift, chars: "\x1b[80;5u" }
