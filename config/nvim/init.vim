@@ -13,11 +13,12 @@ let mapleader = " "
 
 " reload .vimrc
 noremap <Leader><F1> :so $MYVIMRC<CR>
+noremap <Leader><F2> :so ~/.config/nvim/ide.lua<CR>
 
 
-source ~/.config/nvim/plugins.vim
 source ~/.config/nvim/shared.vim
 source ~/.config/nvim/shell.vim
+source ~/.config/nvim/plugins.vim
 
 if exists('g:vscode')
   source ~/.config/nvim/vscode.vim

@@ -36,16 +36,16 @@ call plug#begin('~/.config/nvim/plugged')
 
 " }}}
 
-" ranger {{{
+" nanger {{{
 
 Plug 'rbgrouleff/bclose.vim'
 Plug 'rafaqz/ranger.vim'
-
+"
 let g:ranger_map_keys = 0 " use own keymaps
 
 
 " nnoremap <leader>m :set nosplitright<CR>:RangerVSplit<CR>:set splitright<CR>
-nnoremap <leader>m :RangerEdit<CR>
+nnoremap <leader>l :RangerEdit<CR>
 " nnoremap <leader>m :RangerWorkingDirectory<CR>
 " map <C-M-t> :RangerWorkingDirectory<CR>.
 
@@ -54,6 +54,8 @@ nnoremap <leader>m :RangerEdit<CR>
 " Plug 'benmills/vimux' " tmux integration for vim
 
 Plug 'tpope/vim-commentary' " comment stuff out
+vmap <C-_> gc
+nmap <C-_> gclj
 
 " fugitive {{{
 
@@ -68,11 +70,11 @@ nnoremap <leader>gc :Gcommit -v -q<CR>
 nnoremap <leader>gt :Gcommit -v -q %:p<CR>
 nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>ge :Gedit<CR>
-nnoremap <leader>gr :Gread<CR>
+"nnoremap <leader>gr :Gread<CR>
 nnoremap <leader>gw :Gwrite<CR><CR>
 nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
 nnoremap <leader>gp :Ggrep<Space>
-nnoremap <leader>gm :Gmove<Space>
+"nnoremap <leader>gm :Gmove<Space>
 nnoremap <leader>gb :Git branch<Space>
 nnoremap <leader>go :Git checkout<Space>
 nnoremap <leader>gps :Dispatch! git push<CR>
@@ -89,13 +91,21 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 
 Plug 'airblade/vim-gitgutter' " git gutter to the left
 
+let g:gitgutter_map_keys = 0
+
 nnoremap <leader>gg :GitGutterLineHighlightsToggle<CR>
+nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
+
+
+nnoremap <C-A-Z> <Plug>(GitGutterUndoHunk)
+nnoremap [c <Plug>(GitGutterPrevHunk) \| :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> \| <Plug>(GitGutterPreviewHunk)
+nnoremap ]c <Plug>(GitGutterNextHunk) \| :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> \| <Plug>(GitGutterPreviewHunk)
 
 " }}}
 
-Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . command
+"Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . command
 Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
-Plug 'tpope/vim-unimpaired' " convinient pair mappings
+"Plug 'tpope/vim-unimpaired' " convinient pair mappings
 
 " vim-easy-align {{{
 
@@ -115,43 +125,43 @@ Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 
 " Plug 'vim-scripts/YankRing.vim' " yank ring
 
-let g:yankring_history_file = '.local/share/misc/yankring_history.txt' " history file location
+"let g:yankring_history_file = '.local/share/misc/yankring_history.txt' " history file location
 
 " }}}
 
 " ConflictMotions {{{
 
-Plug 'vim-scripts/ConflictMotions' " motions on diff hunks
-
-" dependencies
-Plug 'vim-scripts/CountJump'
-Plug 'vim-scripts/visualrepeat'
-Plug 'vim-scripts/ingo-library'
+"Plug 'vim-scripts/ConflictMotions' " motions on diff hunks
+"
+"" dependencies
+"Plug 'vim-scripts/CountJump'
+"Plug 'vim-scripts/visualrepeat'
+"Plug 'vim-scripts/ingo-library'
 
 " }}}
 
 " syntax {{{
 
-Plug 'cakebaker/scss-syntax.vim' " sass
-
-Plug 'chr4/nginx.vim' " nginx.conf
-
-Plug 'elzr/vim-json' " JSON
+"Plug 'cakebaker/scss-syntax.vim' " sass
+"
+"Plug 'chr4/nginx.vim' " nginx.conf
+"
+"Plug 'elzr/vim-json' " JSON
 
 " }}}
 
 " quick score {{{
-Plug 'unblevable/quick-scope' " quickly highlight first word characters
-
-" trigger a highlight in the appropriate direction when pressing these keys
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-" trigger a highlight only when pressing f and F
-let g:qs_highlight_on_keys = ['f', 'F']
+"Plug 'unblevable/quick-scope' " quickly highlight first word characters
+"
+"" trigger a highlight in the appropriate direction when pressing these keys
+"let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+"
+"" trigger a highlight only when pressing f and F
+"let g:qs_highlight_on_keys = ['f', 'F']
 
 " }}}
 
-Plug '~/project/autojump.vim'
+"Plug '~/project/autojump.vim'
 
 Plug 'kana/vim-arpeggio' " chord keybinds
 
@@ -164,95 +174,106 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 
 " vim-grammarous {{{
 
-Plug 'rhysd/vim-grammarous' " grammar
-let g:grammarous#show_first_error = 1
+"Plug 'rhysd/vim-grammarous' " grammar
+"let g:grammarous#show_first_error = 1
 
 " }}}
 
 " vim-easymotion {{{
 
-Plug 'easymotion/vim-easymotion' " improved motions
-
-let g:EasyMotion_smartcase = 1 " case insensitive
-
-" map <Leader>f <Plug>(easymotion-bd-f)
-" vmap <Leader>f <Plug>(easymotion-bd-f)
-" map <Leader>e <Plug>(easymotion-bd-w)
-" vmap <Leader>e <Plug>(easymotion-bd-w)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+"Plug 'easymotion/vim-easymotion' " improved motions
+"
+"let g:EasyMotion_smartcase = 1 " case insensitive
+"
+"" map <Leader>f <Plug>(easymotion-bd-f)
+"" vmap <Leader>f <Plug>(easymotion-bd-f)
+"" map <Leader>e <Plug>(easymotion-bd-w)
+"" vmap <Leader>e <Plug>(easymotion-bd-w)
+"map <Leader>j <Plug>(easymotion-j)
+"map <Leader>k <Plug>(easymotion-k)
 
 " }}}
 
 " incsearch {{{
 
-Plug 'haya14busa/incsearch.vim' " incremental search
-Plug 'haya14busa/incsearch-fuzzy.vim' " fuzzy
-Plug 'haya14busa/incsearch-easymotion.vim' " easymotion integration
-
-map <leader>/ <Plug>(incsearch-fuzzy-/)
-map <leader>? <Plug>(incsearch-fuzzy-?)
-" map g/ <Plug>(incsearch-fuzzy-staym
-
-" map <silent> z/ <Plug>(incsearch-easymotion-/)
-" map <silent> z? <Plug>(incsearch-easymotion-?)
-" map <silent> zg/ <Plug>(incsearch-easymotion-stay)
-
-let g:incsearch#auto_nohlsearch = 1 " auto-hide search highlighting
-map <silent> n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
+"Plug 'haya14busa/incsearch.vim' " incremental search
+"Plug 'haya14busa/incsearch-fuzzy.vim' " fuzzy
+"Plug 'haya14busa/incsearch-easymotion.vim' " easymotion integration
+"
+"map <leader>/ <Plug>(incsearch-fuzzy-/)
+"map <leader>? <Plug>(incsearch-fuzzy-?)
+"" map g/ <Plug>(incsearch-fuzzy-staym
+"
+"" map <silent> z/ <Plug>(incsearch-easymotion-/)
+"" map <silent> z? <Plug>(incsearch-easymotion-?)
+"" map <silent> zg/ <Plug>(incsearch-easymotion-stay)
+"
+"let g:incsearch#auto_nohlsearch = 1 " auto-hide search highlighting
+"map <silent> n  <Plug>(incsearch-nohl-n)
+"map N  <Plug>(incsearch-nohl-N)
+"map *  <Plug>(incsearch-nohl-*)
+"map #  <Plug>(incsearch-nohl-#)
+"map g* <Plug>(incsearch-nohl-g*)
+"map g# <Plug>(incsearch-nohl-g#)
 
 " }}}
 
 " tmux navigator {{{
 
-Plug 'fogine/vim-i3wm-tmux-navigator' " navigate vim/tmux/i3 splits
-" Plug 'christoomey/vim-tmux-navigator' " navigate vim/tmux splits
-
-" Disable tmux navigator when zooming the Vim pane
-let g:tmux_navigator_disable_when_zoomed = 1
-
-" disble default mappings
-let g:tmux_navigator_no_mappings = 1
-
-" make navigation work in all modes
-nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
-
-inoremap <silent> <C-h> <Esc>:TmuxNavigateLeft<cr>
-inoremap <silent> <C-j> <Esc>:TmuxNavigateDown<cr>
-inoremap <silent> <C-k> <Esc>:TmuxNavigateUp<cr>
-inoremap <silent> <C-l> <Esc>:TmuxNavigateRight<cr>
-
-vnoremap <silent> <c-h> :<C-U>TmuxNavigateLeft()<cr>
-vnoremap <silent> <c-j> :<C-U>TmuxNavigateDown()<cr>
-vnoremap <silent> <c-k> :<C-U>TmuxNavigateUp()<cr>
-vnoremap <silent> <c-l> :<C-U>TmuxNavigateRight()<cr>
-
-" handle term mode
-tmap <C-h> <C-\><C-n><C-h>i
-tmap <C-j> <C-\><C-n><C-j>i
-tmap <C-k> <C-\><C-n><C-k>i
-tmap <C-l> <C-\><C-n><C-l>i
+"Plug 'fogine/vim-i3wm-tmux-navigator' " navigate vim/tmux/i3 splits
+"" Plug 'christoomey/vim-tmux-navigator' " navigate vim/tmux splits
+"
+"" Disable tmux navigator when zooming the Vim pane
+"let g:tmux_navigator_disable_when_zoomed = 1
+"
+"" disble default mappings
+"let g:tmux_navigator_no_mappings = 1
+"
+"" make navigation work in all modes
+"nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+"nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+"nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+"nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+"
+"inoremap <silent> <C-h> <Esc>:TmuxNavigateLeft<cr>
+"inoremap <silent> <C-j> <Esc>:TmuxNavigateDown<cr>
+"inoremap <silent> <C-k> <Esc>:TmuxNavigateUp<cr>
+"inoremap <silent> <C-l> <Esc>:TmuxNavigateRight<cr>
+"
+"vnoremap <silent> <c-h> :<C-U>TmuxNavigateLeft()<cr>
+"vnoremap <silent> <c-j> :<C-U>TmuxNavigateDown()<cr>
+"vnoremap <silent> <c-k> :<C-U>TmuxNavigateUp()<cr>
+"vnoremap <silent> <c-l> :<C-U>TmuxNavigateRight()<cr>
+"
+"" handle term mode
+"tmap <C-h> <C-\><C-n><C-h>i
+"tmap <C-j> <C-\><C-n><C-j>i
+"tmap <C-k> <C-\><C-n><C-k>i
+"tmap <C-l> <C-\><C-n><C-l>i
 
 " }}}
 
 " FZF {{{
+let g:fzf_vim = {}
+"let g:fzf_vim.preview_window = ['hidden,right,50%,<70(up,40%)', 'ctrl-/']
+let g:fzf_preview_window = ['right:hidden', 'ctrl-/']
 
-Plug 'junegunn/fzf' " fzf fuzzy-find wrapper
+" override 'show changes'
+command! -bang -nargs=? GF call fzf#vim#gitfiles(<q-args> == "?" ? '?' : {}, {'options': ['--layout=default', '--preview-window=down,50%']}, <bang>0)
+
+
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-
-let g:fzf_layout = { 'down': '~25%' }
-imap z= <plug>(fzf-complete-word)
+"
+"let g:fzf_layout = { 'down': '~25%' }
+"imap z= <plug>(fzf-complete-word)
 nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>n :Files<CR>
-nnoremap <leader>v :History<CR>
+nnoremap <leader>m :Files<CR>
+nnoremap <leader>n :History<CR>
+nnoremap <C-Tab> :History<CR>
+
+
+Plug 'norcalli/nvim-colorizer.lua'
 
 " }}}
 
@@ -273,6 +294,8 @@ let g:pandoc#modules#enabled = ["formatting", "folding", "toc"]
 let g:pandoc#formatting#mode = "h"
 
 " }}}
+Plug 'rust-lang/rust.vim'
+Plug 'arzg/vim-rust-syntax-ext'
 
 " vimwiki {{{
 
@@ -306,9 +329,10 @@ Plug 'airblade/vim-rooter' " start in the right place
 let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_silent_chdir = 1
 let g:rooter_resolve_links = 1
+let g:rooter_patterns = ['cargo.toml', 'package.json', '.git']
 
 " only if requested
-let g:rooter_manual_only = 1
+"let g:rooter_manual_only = 1
 
 " cwd to root
 nmap <leader>;r :Rooter<cr>
@@ -321,28 +345,28 @@ set autochdir
 
 " goyo {{{
 
-Plug 'junegunn/goyo.vim' " distraction-free writing in vim
+"Plug 'junegunn/goyo.vim' " distraction-free writing in vim
 
 " let g:goyo_height = 100
 " let g:goyo_width = 100
 
 " }}}
 
-Plug 'ChristianChiarulli/codi.vim'
+"Plug 'ChristianChiarulli/codi.vim'
 
 " vim  pandoc markdown preview {{{
 
 "let g:md_args = "--template eisvogel --listings --latex-engine=xelatex"
 
-Plug 'skywind3000/asyncrun.vim'
-Plug 'conornewton/vim-pandoc-markdown-preview'
+"Plug 'skywind3000/asyncrun.vim'
+"Plug 'conornewton/vim-pandoc-markdown-preview'
 
 let g:md_pdf_viewer="zathura"
 
 " }}}
 
 " vim-localvimrc {{{
-Plug 'embear/vim-localvimrc' 
+Plug 'embear/vim-localvimrc'
 
 let g:localvimrc_whitelist='/home/shiro/.local/.*'
 let g:localvimrc_sandbox=0
@@ -367,6 +391,7 @@ call arpeggio#map('i', '', 0, 'jk', '<esc>:w<cr>') " save
 call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
 
 
+lua require'colorizer'.setup()
 " }}}
 
 
@@ -378,3 +403,35 @@ call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
 ""     " otherwise, use :FZF
 ""     nmap <silent> <leader>t :FZF<cr>
 "" endif
+
+"source ~/.config/nvim/plugins.lua
+
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+"https://stackoverflow.com/questions/9464844/how-to-get-group-name-of-highlighting-under-cursor-in-vim
+
+"function! SynStack ()
+"    for i1 in synstack(line("."), col("."))
+"        let i2 = synIDtrans(i1)
+"        let n1 = synIDattr(i1, "name")
+"        let n2 = synIDattr(i2, "name")
+"        echo n1 "->" n2
+"    endfor
+"endfunction
+map gm :call SynStack()<CR>
+
+
+
+"let g:gitgutter_floating_window_options = {}
+
+"let g:gitgutter_floating_window_options = {'border': 'rounded'}
+"let g:gitgutter_floating_window_options['border'] = 'rounded'

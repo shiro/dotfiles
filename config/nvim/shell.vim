@@ -1,6 +1,6 @@
 " Section General {{{
 
-colorscheme wpgtk
+colorscheme hyrule
 
 " custom trailing whitespace color
 hi ExtraWhitespace guibg=#ce840d ctermbg=red
@@ -17,6 +17,8 @@ set autoread " detect when a file is changed
 set history=1000 " change history to 1000
 set textwidth=120
 
+set signcolumn=yes " always show gutter
+
 set backupdir=/tmp
 set directory=/tmp
 set undodir=/tmp
@@ -26,7 +28,7 @@ set laststatus=0
 
 set title " change terminal title
 
-" set termguicolors " enable 24bit truecolor support
+set termguicolors " enable 24bit truecolor support
 
 set updatetime=100 " update every 100ms
 
@@ -37,7 +39,7 @@ set shortmess+=A " ignore swapfile warning
 " User Interface {{{
 
 " switch cursor to line when in insert mode, and block when not
-set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:hor10-Cursor/lCullll,r-cr:hor10-Cursor/lCursor
+set guicursor=n-v-c:block-Cursor,i-ci:hor10-Cursor/lCullll,r-cr:hor10-Cursor/lCursor
 
 
 if &term =~ '256color'
@@ -224,6 +226,11 @@ augroup END
 
 " utility functions {{{
 
+augroup HiglightTODO
+    autocmd!
+    autocmd WinEnter,VimEnter * :silent! call matchadd('Todo', 'TODO', -1)
+augroup END
+
 " get syntax element names and colors {{{
 function! GetSyntaxID()
     return synID(line('.'), col('.'), 1)
@@ -285,4 +292,4 @@ endfunction
 " let g:onedark_terminal_italics=1
 
 " print hovered syntax element name
-map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+"map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>

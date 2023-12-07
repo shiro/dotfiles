@@ -1,0 +1,19 @@
+{
+  "outline.previewBorder": true,
+  "diagnostic.floatConfig": {
+    "border": true,
+    "rounded": true,
+  },
+  "hover.floatConfig": {
+    "border": true,
+    "rounded": true,
+  },
+  "suggest.floatConfig": {
+    "border": true,
+    "rounded": true,
+  },
+  "suggest.pumFloatConfig": {
+    "border": true,
+    "rounded": true,
+  }
+}

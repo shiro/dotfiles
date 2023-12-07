@@ -12,7 +12,7 @@ let g:colors_name = "hyrule"
 
 hi Normal guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 "hi clear -- no settings --
-hi IncSearch guifg=#c0d5c1 guibg=NONE guisp=#36548f gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+"hi IncSearch guifg=#c0d5c1 guibg=NONE guisp=#36548f gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi WildMenu guifg=#000000 guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi SignColumn guifg=#275d78 guibg=NONE guisp=#eb7373 gui=NONE ctermfg=6 ctermbg=NONE cterm=NONE
 hi SpecialComment guifg=#9e9a98 guibg=NONE guisp=#334455 gui=NONE ctermfg=247 ctermbg=NONE cterm=NONE
@@ -42,7 +42,7 @@ hi StatusLine guifg=#9ba89b guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=108 ctermb
 hi Label guifg=#ffccff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=225 ctermbg=NONE cterm=NONE
 hi CTagsImport guifg=NONE guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi PMenuSel guifg=#ce840d guibg=NONE guisp=#333231 gui=NONE ctermfg=172 ctermbg=NONE cterm=NONE
-hi Search guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+"hi Search guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi CTagsGlobalVariable guifg=NONE guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi Delimiter guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Statement guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=NONE cterm=NONE
@@ -59,7 +59,7 @@ hi Union guifg=#b5219f guibg=NONE guisp=#eb7373 gui=NONE ctermfg=126 ctermbg=NON
 hi TabLineFill guifg=NONE guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi Question guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi WarningMsg guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
-hi VisualNOS guifg=#bdb84f guibg=NONE guisp=#eb7373 gui=NONE ctermfg=143 ctermbg=NONE cterm=NONE
+"hi VisualNOS guifg=#bdb84f guibg=NONE guisp=#eb7373 gui=NONE ctermfg=143 ctermbg=NONE cterm=NONE
 hi DiffDelete guifg=#c0d5c1 guibg=#664444 guisp=#664444 gui=NONE ctermfg=151 ctermbg=95 cterm=NONE
 hi ModeMsg guifg=#ffeecc guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=230 ctermbg=NONE cterm=NONE
 hi CursorColumn guifg=#c0d5c1 guibg=NONE guisp=#2c445c gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
@@ -68,7 +68,7 @@ hi Function guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=N
 hi FoldColumn guifg=#85807c guibg=NONE guisp=#30343d gui=NONE ctermfg=102 ctermbg=NONE cterm=NONE
 hi PreProc guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi EnumerationName guifg=#606331 guibg=NONE guisp=#eb7373 gui=NONE ctermfg=58 ctermbg=NONE cterm=NONE
-hi Visual guifg=#ffffff guibg=NONE guisp=#557799 gui=NONE ctermfg=15 ctermbg=NONE cterm=NONE
+"hi Visual guifg=#ffffff guibg=NONE guisp=#557799 gui=NONE ctermfg=15 ctermbg=NONE cterm=NONE
 hi MoreMsg guifg=#ffeecc guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=230 ctermbg=NONE cterm=NONE
 hi SpellCap guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi VertSplit guifg=#ffffff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=15 ctermbg=NONE cterm=NONE
@@ -76,7 +76,7 @@ hi Exception guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=
 hi Keyword guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi Type guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi DiffChange guifg=#c0d5c1 guibg=#3a5738 guisp=#3a5738 gui=NONE ctermfg=151 ctermbg=65 cterm=NONE
-hi Cursor guifg=#2d2c2b guibg=NONE guisp=#c0d5c1 gui=NONE ctermfg=236 ctermbg=NONE cterm=NONE
+"hi Cursor guifg=#2d2c2b guibg=NONE guisp=#c0d5c1 gui=NONE ctermfg=236 ctermbg=NONE cterm=NONE
 hi SpellLocal guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Error guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
 hi PMenu guifg=#90c93f guibg=NONE guisp=#3b3a39 gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
@@ -99,6 +99,90 @@ hi DiffAdd guifg=#c0d5c1 guibg=#2c445c guisp=#2c445c gui=NONE ctermfg=151 ctermb
 hi TabLine guifg=NONE guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi titled guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi htmlh2 guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+
+
+
+let test='#ff0000'
+
+
+let bg='#2D2C2B'
+let shadow='#383735'
+let error='#CC4542'
+let white='#C0D5C1'
+let yellow='#F5C504'
+let lightGreen='#90C93F'
+let darkGreen='#569E16'
+let brown='#93784E'
+let orange='#CE830D'
+let cyan='#007E8A'
+let dirt='#7A7A43'
+let red='#DD6718'
+let lightRed='#CC4542'
+let gray='#716D6A'
+let caret='#989BA2'
+let selection='#161A1F'
+
+
+exe 'hi Cursor guifg='.test.' guibg='.white.' gui=bold,underline'
+exe 'hi Visual guibg='.selection
+exe 'hi CocHighlightText guibg=NONE guifg='.yellow
+exe 'hi CocFadeOut guibg=NONE'
+exe 'hi CocErrorSign guibg=NONE'
+exe 'hi CocWarningSign guibg=NONE'
+exe 'hi CocInfoSign guibg=NONE'
+exe 'hi CocHintSign guibg=NONE'
+exe 'hi CocErrorVirtualText guibg=NONE'
+exe 'hi CocWarningVirtualText guibg=NONE'
+exe 'hi CocInfoVirtualText guibg=NONE'
+exe 'hi CocHintVirtualText guibg=NONE'
+exe 'hi CocErrorHighlight guibg=NONE'
+exe 'hi CocWarningHighlight guibg=NONE'
+exe 'hi CocInfoHighlight guibg=NONE'
+exe 'hi CocHintHighlight guibg=NONE'
+exe 'hi CocDeprecatedHighlight guibg=NONE'
+exe 'hi CocUnusedHighlight guibg=NONE'
+exe 'hi CocErrorLine guibg=NONE'
+exe 'hi CocWarningLine guibg=NONE'
+exe 'hi CocInfoLine guibg=NONE'
+exe 'hi CocHintLine guibg=NONE'
+exe 'hi Search guifg='.white.' gui=underline'
+
+" Rust
+exe 'hi rustModPath guifg='.white
+exe 'hi rsDelimiter guifg='.white
+exe 'hi rsAttribute guifg='.yellow
+exe 'hi rustEnum guifg='.darkGreen
+exe 'hi rsUserFunc guifg='.lightGreen
+exe 'hi rsUse guifg='.lightGreen
+exe 'hi rsUserMethod guifg='.lightGreen
+exe 'hi rsForeignFunc guifg='.lightGreen
+exe 'hi rsForeignType guifg='.darkGreen
+exe 'hi rsTrue guifg='.lightGreen
+exe 'hi rsNumber guifg='.orange
+exe 'hi rsTypeParamDef guifg='.cyan
+exe 'hi rsLibraryType guifg='.darkGreen
+exe 'hi rsUserConst guifg='.darkGreen
+exe 'hi rsUserType guifg='.darkGreen
+exe 'hi rsTypeDef guifg='.white
+exe 'hi rsFuncDef guifg='.orange
+exe 'hi rsUserMacro guifg='.red
+exe 'hi rsLibraryMacro guifg='.red
+exe 'hi rsStaticLifetime guifg='.cyan
+exe 'hi rsModule guifg='.white
+exe 'hi rustAttribute guifg='.white
+"exe 'hi CocFloating guifg='.white
+exe 'hi DiagnosticError guifg='.error
+"exe 'hi FloatShadow guibg='.lightGreen
+"set winblend=30
+
+"DiagnosticWarn
+"DiagnosticInfo
+"DiagnosticHint
+"DiagnosticOk
+
+
+" Vim
+exe 'hi vimVar guifg='.white
 
 hi link TagbarAccessPublic Error
 hi link TagbarAccessProtected Error
