@@ -38,6 +38,9 @@ nnoremap <C-q> :qa!<CR>
 nnoremap <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
 
+" copy path to current buffer
+nmap <leader>yy :let @+ = expand("%")<cr>
+
 "nnoremap [e :action GotoPreviousError<CR>
 "nnoremap ]e :action GotoNextError<CR>
 nnoremap <leader>e :action ShowErrorDescription<CR>

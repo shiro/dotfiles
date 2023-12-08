@@ -10,7 +10,10 @@ vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
 --vim.g['coc_fzf_opts'] = { '--layout=reverse' }
 
 
+-- syntax highlight
+Plug 'nvim-treesitter/nvim-treesitter'
 
+-- LSP server, auto-complete
 vim.g['coc_global_extensions'] = {
   'coc-json',
   'coc-vimlsp',
@@ -20,10 +23,6 @@ vim.g['coc_global_extensions'] = {
   'coc-prettier',
   'coc-eslint',
 }
-
-
-Plug('rust-lang/rust.vim')
-
 Plug('neoclide/coc.nvim', {branch = 'master', ['do'] = 'npm ci'})
 Plug 'antoinemadec/coc-fzf'
 
@@ -75,6 +74,26 @@ call'plug#end'
 --  cmds_list = {}
 --})
 
+require'colorizer'.setup()
+
+-- tree-sitter {{{
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+  incremental_selection = {
+    enable = true,
+  },
+  indent = {
+    enable = true
+  },
+}
+--- }}}
 
 
 
@@ -164,6 +183,6 @@ vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
   callback = function()
     _G.format()
-    vim.cmd.write()
+    vim.cmd.write({mods = {silent = true}})
   end
 })
