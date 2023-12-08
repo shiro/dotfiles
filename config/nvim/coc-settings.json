@@ -1,5 +1,9 @@
 {
   "outline.previewBorder": true,
+  "diagnostic.errorSign": "☢️",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.hintSign": "❓",
+  "diagnostic.infoSign": "ℹ",
   "diagnostic.floatConfig": {
     "border": true,
     "rounded": true,
@@ -19,5 +23,5 @@
   "signature.floatConfig": {
     "border": true,
     "rounded": true,
-  }
+  },
 }

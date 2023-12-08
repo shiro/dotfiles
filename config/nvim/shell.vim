@@ -58,7 +58,7 @@ set expandtab " we do not like tabs being displayed
 set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
 set tabstop=2 " the visible width of tabs
 " set softtabstop=4 " edit as if the tabs are 4 characters wide
-set shiftwidth=2 " number of spaces to use for indent and unindent
+set shiftwidth=4 " number of spaces to use for indent and unindent
 " set shiftround " round indent to a multiple of 'shiftwidth'
 " set completeopt+=longest
 

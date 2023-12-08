@@ -1,18 +1,169 @@
 local call = vim.call
 local cmd = vim.cmd
 local Plug = vim.fn['plug#']
-local PATH = "~/.config/nvim/plugged"
+--local PATH = "~/.config/nvim/plugged"
+--call('plug#begin', PATH)
+
+
+vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
+--vim.g['fzf_vim.preview_window'] = { 'right,50%', 'ctrl-/' }
+--vim.g['coc_fzf_opts'] = { '--layout=reverse' }
 
 
 
-call('plug#begin', PATH)
-  Plug 'nvim-lua/plenary.nvim'
-  Plug('ipod825/libp.nvim')
-  Plug('ipod825/ranger.nvim', {branch = 'main'})
+vim.g['coc_global_extensions'] = {
+  'coc-json',
+  'coc-vimlsp',
+  'coc-rust-analyzer',
+  'coc-tsserver',
+  'coc-styled-components',
+  'coc-prettier',
+  'coc-eslint',
+}
+
+
+Plug('rust-lang/rust.vim')
+
+Plug('neoclide/coc.nvim', {branch = 'master', ['do'] = 'npm ci'})
+Plug 'antoinemadec/coc-fzf'
+
+-- Plug 'ray-x/guihua.lua'
+-- Plug 'ray-x/forgit.nvim'
+
+-- language-specific stuff {{{
+
+-- rust
+Plug('rust-lang/rust.vim', {['for'] = 'rust'})
+Plug('arzg/vim-rust-syntax-ext', {['for'] = 'rust'})
+
+-- }}}
+
+-- misc {{{
+
+-- enables repeating other supported plugins with the . command
+Plug 'tpope/vim-repeat'
+
+-- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
+Plug 'tpope/vim-surround'
+
+-- convinient pair mappings
+--Plug 'tpope/vim-unimpaired'
+
+-- show color hex codes
+Plug 'norcalli/nvim-colorizer.lua'
+
+-- fix tmux not reporting fo
+-- Plug 'tmux-plugins/vim-tmux-focus-events'
+
+--- }}}
+
 call'plug#end'
 
-require("libp").setup()
-require("ranger").setup()
+
+--require'forgit'.setup({
+--  debug = false,
+--  diff_pager = 'diff-so-fancy',
+--  diff_cmd = '',
+--  fugitive = false,
+--  abbreviate = false,
+--  git_alias = true,
+--  show_result = 'quickfix',
+--
+--  shell_mode = true,
+--  height_ratio = 0.6,
+--  width_ratio = 0.6,
+--  cmds_list = {}
+--})
 
 
 
+
+vim.api.nvim_set_keymap('n', 'gd', "<Plug>(coc-definition)", { silent = true });
+vim.api.nvim_set_keymap('n', 'gy', "<Plug>(coc-type-definition)", { silent = true });
+vim.api.nvim_set_keymap('n', 'gi', "<Plug>(coc-implementation)", { silent = true });
+vim.api.nvim_set_keymap('n', 'gr', "<Plug>(coc-references)", { silent = true });
+vim.api.nvim_set_keymap('n', ']e', "<Plug>(coc-diagnostic-next)", { silent = true });
+vim.api.nvim_set_keymap('n', '[e', "<Plug>(coc-diagnostic-prev)", { silent = true });
+vim.api.nvim_set_keymap('n', '<A-S-e>', "<Plug>(coc-rename)", { silent = true });
+vim.api.nvim_set_keymap('n', '<A-S-r>', "<Plug>(coc-refactor)", { silent = true });
+vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silent = true });
+vim.api.nvim_set_keymap('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
+-- show outline (hierarchy)
+vim.api.nvim_set_keymap('n', 'go', ":CocFzfList outline<CR>", { silent = true });
+-- list warnings/errors
+vim.api.nvim_set_keymap('n', 'ge', ":CocFzfList diagnostics<CR>", { silent = true });
+-- list all local changes
+vim.api.nvim_set_keymap('n', 'gD', ":GF?<CR>", { silent = true });
+
+vim.keymap.set('i', '<C-Space>', 'coc#refresh()', { expr = true, silent = true})
+
+-- highlight the symbol under cursor
+vim.api.nvim_create_augroup("CocGroup", {})
+vim.api.nvim_create_autocmd("CursorHold", {
+    group = "CocGroup",
+    command = "silent call CocActionAsync('highlight')",
+    desc = "Highlight symbol under cursor on CursorHold"
+})
+
+vim.api.nvim_create_autocmd("User", {
+    group = "CocGroup",
+    pattern = "CocJumpPlaceholder",
+    command = "call CocActionAsync('showSignatureHelp')",
+    desc = "Update signature help on jump placeholder"
+})
+
+
+-- show docs
+function _G.show_docs()
+    --local cw = vim.fn.expand('<cword>')
+    --if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
+    --    vim.api.nvim_command('h ' .. cw)
+    if vim.api.nvim_eval('coc#rpc#ready()') then
+        vim.fn.CocActionAsync('doHover')
+    else
+        vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
+    end
+end
+vim.keymap.set("n", "<C-S-p>", '<CMD>lua _G.show_docs()<CR>', {noremap = true, silent = true})
+
+
+vim.keymap.set("n", "<A-S-i>", ':Files<CR>', {noremap = true, silent = true})
+
+local opts = {silent = true, noremap = true, expr = true, replace_keycodes = false}
+
+-- tab/S-tab completion menu
+function _G.check_back_space()
+    local col = vim.fn.col('.') - 1
+    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end
+vim.keymap.set("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
+vim.keymap.set("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
+-- code lens
+vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
+-- make <CR> accept selected completion item or notify coc.nvim to format
+vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+-- reformat code
+function _G.format()
+  if vim.bo.filetype == 'rust' then
+     vim.cmd('RustFmt')
+  elseif vim.bo.filetype == 'typescriptreact' then
+    vim.cmd('CocCommand prettier.forceFormatDocument')
+  end
+end
+vim.keymap.set('n', 'gl', '<CMD>lua _G.format()<CR>', {silent = true})
+
+
+-- auto-format on save
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {'*.rs', '*.tsx'},
+  callback = _G.format
+})
+
+-- auto-save on focus lost/buffer change
+vim.o.autowriteall = true
+vim.api.nvim_create_autocmd("FocusLost", {
+  callback = function()
+    _G.format()
+    vim.cmd.write()
+  end
+})

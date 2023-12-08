@@ -1,15 +1,6 @@
 -- vim.cmd('source ' '~/.config/nvim/plugins.vim')
 
 
-vim.o.autowriteall = true -- automatically :write before running commands and changing files
-
-
-local autosaveBuffer = vim.api.nvim_create_augroup("autosaveBuffer", { clear = true })
-vim.api.nvim_create_autocmd("FocusLost", {
-  command = ":silent wa"
-})
-
-
 local call = vim.call
 local cmd = vim.cmd
 local Plug = vim.fn['plug#']
@@ -21,27 +12,20 @@ vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
 --vim.g['coc_fzf_opts'] = { '--layout=reverse' }
 
 
-vim.omnifunc = 'ale#completion#OmniFunc'
-vim.g['ale_completion_enabled'] = 1
-vim.g['ale_completion_enabled#statustext'] = 1
-vim.g['ale_completion_autoimport'] = 1
-vim.g['ale_sign_column_always'] = 1
-vim.g['ale_fix_on_save'] = 1
-
-
 
 vim.g['coc_global_extensions'] = {
   'coc-json',
   'coc-vimlsp',
   'coc-rust-analyzer',
   'coc-tsserver',
+  'coc-styled-components',
+  'coc-prettier',
+  'coc-eslint',
 }
 
 call('plug#begin', PATH)
-  Plug 'tpope/vim-fugitive'
-
-  Plug('junegunn/fzf', {dir = '~/.fzf', run = './install --all'})
-  Plug('junegunn/fzf.vim')
+  --Plug('junegunn/fzf', {dir = '~/.fzf', run = './install --all'})
+  --Plug('junegunn/fzf.vim')
 
   -- Plug 'cespare/vim-toml'
   Plug('rust-lang/rust.vim')
@@ -110,7 +94,10 @@ vim.api.nvim_create_autocmd("User", {
     desc = "Update signature help on jump placeholder"
 })
 
-
+function _G.check_back_space()
+    local col = vim.fn.col('.') - 1
+    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end
 
 -- Use K to show documentation in preview window
 function _G.show_docs()
@@ -138,10 +125,30 @@ vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
 vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 
 -- format
-vim.keymap.set("n", "gl", "<Plug>(coc-format-selected)", {silent = true})
+--vim.keymap.set("n", "gl", "<Plug>(coc-format-selected)", {silent = true})
 --xmap <leader>f  <Plug>(coc-format-selected)
 --nmap <leader>f  <Plug>(coc-format-selected)
 
+-- prettier
+--command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+--vim.keymap.set('n', 'gl', ':CocCommand prettier.forceFormatDocument<CR>', {silent = true})
+
+function _G.format()
+  if vim.bo.filetype == 'rust' then
+     vim.cmd('RustFmt')
+  elseif vim.bo.filetype == 'typescriptreact' then
+    vim.cmd('CocCommand prettier.forceFormatDocument')
+  --vim.keymap.set('n', 'gl', ':CocCommand prettier.forceFormatDocument<CR>', {silent = true})
+  end
+end
+
+--map("", "<Leader>f", "<cmd>:lua require('utils').format<CR>")
+
+vim.keymap.set('n', 'gl', '<CMD>lua _G.format()<CR>', {silent = true})
+vim.api.nvim_create_autocmd('BufWritePre', {
+ pattern = {'*.rs', '*.tsx'},
+ callback = _G.format
+})
 
 --inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<CR>"
 --inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
@@ -154,4 +161,17 @@ vim.keymap.set("n", "gl", "<Plug>(coc-format-selected)", {silent = true})
 --nmap <silent> <YOUR PREFERRED KEY HERE> :ALEGoToDefinition<CR>
 --nmap <silent> <YOUR PREFERRED KEY HERE> :ALEFindReferences<CR>
 --vim.api.nvim_set_keymap('n', 'gd', ":ALEGoToDefinition<CR>", { silent = true });
+
+
+--vim.api.nvim_create_autocmd("FocusLost", {                                                 
+--  command = ":silent wa"                                                                   
+--})                                                                                         
+
+vim.o.autowriteall = true -- automatically :write before running commands and changing files
+vim.api.nvim_create_autocmd("FocusLost", {
+  callback = function()
+    _G.format()
+    vim.cmd.write()
+  end
+})
 

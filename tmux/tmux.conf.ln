@@ -30,6 +30,9 @@ setw -g pane-base-index 1
 # renumber windows sequentially after closing any of them
 set -g renumber-windows on
 
+# propagate focus events
+set -g focus-events on
+
 # use xsel for copy
 set -s copy-command 'xsel -i'
 

@@ -3,44 +3,11 @@ runtime plug/plug.vim
 call plug#begin('~/.config/nvim/plugged')
 
 
-" NERDTree [disabled] {{{
-" Plug 'scrooloose/nerdtree', "{ 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-" Plug 'Xuyuanp/nerdtree-git-plugin'
-
-" nmap <silent> <leader>u :NERDTreeToggle<cr>
-
-" " " expand to the path of the file in the current buffer
-" " nmap <silent> <leader>y :NERDTreeFind<cr>
-
-" " close vim if only window remaining
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" autocmd bufenter * if (winnr("$") == 1) | q | endif
-
-" let NERDTreeMinimalUI=1 " hide help
-" let NERDTreeShowHidden=1 " show hidden files
-" let NERDTreeDirArrowExpandable = '▷'
-" let NERDTreeDirArrowCollapsible = '▼'
-
-" let g:NERDTreeIndicatorMapCustom = {
-"     \ "Modified"  : "✹",
-"     \ "Staged"    : "✚",
-"     \ "Untracked" : "✭",
-"     \ "Renamed"   : "➜",
-"     \ "Unmerged"  : "═",
-"     \ "Deleted"   : "✖",
-"     \ "Dirty"     : "✗",
-"     \ "Clean"     : "✔︎",
-"     \ 'Ignored'   : '☒',
-"     \ "Unknown"   : "?"
-"     \ }
-
-" }}}
-
-" nanger {{{
+" ranger {{{
 
 Plug 'rbgrouleff/bclose.vim'
 Plug 'rafaqz/ranger.vim'
-"
+
 let g:ranger_map_keys = 0 " use own keymaps
 
 
@@ -50,8 +17,6 @@ nnoremap <leader>l :RangerEdit<CR>
 " map <C-M-t> :RangerWorkingDirectory<CR>.
 
 " }}}
-
-" Plug 'benmills/vimux' " tmux integration for vim
 
 Plug 'tpope/vim-commentary' " comment stuff out
 vmap <C-_> gc
@@ -96,16 +61,11 @@ let g:gitgutter_map_keys = 0
 nnoremap <leader>gg :GitGutterLineHighlightsToggle<CR>
 nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
 
-
 nnoremap <C-A-Z> <Plug>(GitGutterUndoHunk)
 nnoremap [c <Plug>(GitGutterPrevHunk) \| :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> \| <Plug>(GitGutterPreviewHunk)
 nnoremap ]c <Plug>(GitGutterNextHunk) \| :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> \| <Plug>(GitGutterPreviewHunk)
 
 " }}}
-
-"Plug 'tpope/vim-repeat' " enables repeating other supported plugins with the . command
-Plug 'tpope/vim-surround' " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
-"Plug 'tpope/vim-unimpaired' " convinient pair mappings
 
 " vim-easy-align {{{
 
@@ -119,15 +79,12 @@ nmap ga <Plug>(EasyAlign)
 
 " }}}
 
-Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
+" Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 
-" yank ring [DISABLED](slows down nvim a LOT) {{{
 
-" Plug 'vim-scripts/YankRing.vim' " yank ring
-
-"let g:yankring_history_file = '.local/share/misc/yankring_history.txt' " history file location
-
-" }}}
+Plug 'nvim-treesitter/nvim-treesitter'
+" for arg highlight see
+" https://github.com/m-demare/hlargs.nvim/#supported-languages
 
 " ConflictMotions {{{
 
@@ -137,16 +94,6 @@ Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 "Plug 'vim-scripts/CountJump'
 "Plug 'vim-scripts/visualrepeat'
 "Plug 'vim-scripts/ingo-library'
-
-" }}}
-
-" syntax {{{
-
-"Plug 'cakebaker/scss-syntax.vim' " sass
-"
-"Plug 'chr4/nginx.vim' " nginx.conf
-"
-"Plug 'elzr/vim-json' " JSON
 
 " }}}
 
@@ -161,16 +108,7 @@ Plug 'ntpeters/vim-better-whitespace' " show trailing whitespace
 
 " }}}
 
-"Plug '~/project/autojump.vim'
-
 Plug 'kana/vim-arpeggio' " chord keybinds
-
-" deoplete.nvim {{{
-
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" let g:deoplete#enable_at_startup = 1
-
-" }}}
 
 " vim-grammarous {{{
 
@@ -254,6 +192,7 @@ Plug 'kana/vim-arpeggio' " chord keybinds
 " }}}
 
 " FZF {{{
+
 let g:fzf_vim = {}
 "let g:fzf_vim.preview_window = ['hidden,right,50%,<70(up,40%)', 'ctrl-/']
 let g:fzf_preview_window = ['right:hidden', 'ctrl-/']
@@ -264,7 +203,7 @@ command! -bang -nargs=? GF call fzf#vim#gitfiles(<q-args> == "?" ? '?' : {}, {'o
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-"
+
 "let g:fzf_layout = { 'down': '~25%' }
 "imap z= <plug>(fzf-complete-word)
 nnoremap <leader>b :Buffers<CR>
@@ -273,29 +212,26 @@ nnoremap <leader>n :History<CR>
 nnoremap <C-Tab> :History<CR>
 
 
-Plug 'norcalli/nvim-colorizer.lua'
-
 " }}}
+
 
 " pandoc {{{
 
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-
-" enter opens current link
-" au FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
-
-let g:pandoc#folding#fold_yaml = 1
-let g:pandoc#folding#fold_fenced_codeblocks = 1
-let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
-let g:pandoc#filetypes#pandoc_markdown = 0
-let g:pandoc#folding#mode = ["syntax"]
-let g:pandoc#modules#enabled = ["formatting", "folding", "toc"]
-let g:pandoc#formatting#mode = "h"
+"Plug 'vim-pandoc/vim-pandoc'
+"Plug 'vim-pandoc/vim-pandoc-syntax'
+"
+"" enter opens current link
+"" au FileType pandoc nmap <CR> <Plug>(pandoc-keyboard-links-open)
+"
+"let g:pandoc#folding#fold_yaml = 1
+"let g:pandoc#folding#fold_fenced_codeblocks = 1
+"let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
+"let g:pandoc#filetypes#pandoc_markdown = 0
+"let g:pandoc#folding#mode = ["syntax"]
+"let g:pandoc#modules#enabled = ["formatting", "folding", "toc"]
+"let g:pandoc#formatting#mode = "h"
 
 " }}}
-Plug 'rust-lang/rust.vim'
-Plug 'arzg/vim-rust-syntax-ext'
 
 " vimwiki {{{
 
@@ -329,7 +265,7 @@ Plug 'airblade/vim-rooter' " start in the right place
 let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_silent_chdir = 1
 let g:rooter_resolve_links = 1
-let g:rooter_patterns = ['cargo.toml', 'package.json', '.git']
+let g:rooter_patterns = ['cargo.toml', '.git']
 
 " only if requested
 "let g:rooter_manual_only = 1
@@ -352,8 +288,6 @@ set autochdir
 
 " }}}
 
-"Plug 'ChristianChiarulli/codi.vim'
-
 " vim  pandoc markdown preview {{{
 
 "let g:md_args = "--template eisvogel --listings --latex-engine=xelatex"
@@ -361,7 +295,7 @@ set autochdir
 "Plug 'skywind3000/asyncrun.vim'
 "Plug 'conornewton/vim-pandoc-markdown-preview'
 
-let g:md_pdf_viewer="zathura"
+"let g:md_pdf_viewer="zathura"
 
 " }}}
 
@@ -374,7 +308,10 @@ let g:localvimrc_sandbox=0
 " }}}
 
 
-call plug#end()
+
+source ~/.config/nvim/plugins.lua
+"call plug#end()
+
 
 " chords {{{
 
@@ -395,43 +332,32 @@ lua require'colorizer'.setup()
 " }}}
 
 
-" todo add this
-"" if isdirectory(".git")
-""     " if in a git project, use :GFiles
-""     nmap <silent> <leader>t :GFiles<cr>
-"" else
-""     " otherwise, use :FZF
-""     nmap <silent> <leader>t :FZF<cr>
-"" endif
-
-"source ~/.config/nvim/plugins.lua
-
-function! SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
-function! SynGroup()
-    let l:s = synID(line('.'), col('.'), 1)
-    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
-"https://stackoverflow.com/questions/9464844/how-to-get-group-name-of-highlighting-under-cursor-in-vim
-
-"function! SynStack ()
-"    for i1 in synstack(line("."), col("."))
-"        let i2 = synIDtrans(i1)
-"        let n1 = synIDattr(i1, "name")
-"        let n2 = synIDattr(i2, "name")
-"        echo n1 "->" n2
-"    endfor
-"endfunction
-map gm :call SynStack()<CR>
 
 
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+  incremental_selection = {
+    enable = true,
+  },
+  indent = {
+    enable = true
+  },
+}
+EOF
 
-"let g:gitgutter_floating_window_options = {}
+" show syntax groups
+map gm :Inspect<CR>
 
-"let g:gitgutter_floating_window_options = {'border': 'rounded'}
-"let g:gitgutter_floating_window_options['border'] = 'rounded'
+" copy path to current buffer
+nmap <leader>yy :let @+ = expand("%")<cr>
+
+" init cwd
+" Rooter

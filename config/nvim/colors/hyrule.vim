@@ -60,7 +60,7 @@ hi TabLineFill guifg=NONE guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg
 hi Question guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi WarningMsg guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
 "hi VisualNOS guifg=#bdb84f guibg=NONE guisp=#eb7373 gui=NONE ctermfg=143 ctermbg=NONE cterm=NONE
-hi DiffDelete guifg=#c0d5c1 guibg=#664444 guisp=#664444 gui=NONE ctermfg=151 ctermbg=95 cterm=NONE
+"hi DiffDelete guifg=#c0d5c1 guibg=#664444 guisp=#664444 gui=NONE ctermfg=151 ctermbg=95 cterm=NONE
 hi ModeMsg guifg=#ffeecc guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=230 ctermbg=NONE cterm=NONE
 hi CursorColumn guifg=#c0d5c1 guibg=NONE guisp=#2c445c gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Define guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
@@ -95,7 +95,7 @@ hi Directory guifg=#337700 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=2 ctermbg=N
 hi Structure guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Macro guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Underlined guifg=#99ccff guibg=NONE guisp=#2d2c2b gui=underline ctermfg=153 ctermbg=NONE cterm=underline
-hi DiffAdd guifg=#c0d5c1 guibg=#2c445c guisp=#2c445c gui=NONE ctermfg=151 ctermbg=17 cterm=NONE
+"hi DiffAdd guifg=#c0d5c1 guibg=#2c445c guisp=#2c445c gui=NONE ctermfg=151 ctermbg=17 cterm=NONE
 hi TabLine guifg=NONE guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi titled guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi htmlh2 guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
@@ -114,6 +114,7 @@ let lightGreen='#90C93F'
 let darkGreen='#569E16'
 let brown='#93784E'
 let orange='#CE830D'
+let blue='#458383'
 let cyan='#007E8A'
 let dirt='#7A7A43'
 let red='#DD6718'
@@ -121,32 +122,77 @@ let lightRed='#CC4542'
 let gray='#716D6A'
 let caret='#989BA2'
 let selection='#161A1F'
+let diffAdd='#304D2E'
+let diffMod='#2E455D'
+let diffDel='#533232'
 
 
 exe 'hi Cursor guifg='.test.' guibg='.white.' gui=bold,underline'
 exe 'hi Visual guibg='.selection
+exe 'hi DiffAdd guibg=NONE guifg='.lightGreen
+exe 'hi DiffDelete guibg=NONE guifg='.red
 exe 'hi CocHighlightText guibg=NONE guifg='.yellow
 exe 'hi CocFadeOut guibg=NONE'
-exe 'hi CocErrorSign guibg=NONE'
-exe 'hi CocWarningSign guibg=NONE'
-exe 'hi CocInfoSign guibg=NONE'
-exe 'hi CocHintSign guibg=NONE'
+exe 'hi CocErrorSign guibg=NONE guifg='.red
+exe 'hi CocWarningSign guibg=NONE guifg='.gray
+exe 'hi CocInfoSign guibg=NONE guifg='.gray
+exe 'hi CocHintSign guibg=NONE guifg='.gray
 exe 'hi CocErrorVirtualText guibg=NONE'
 exe 'hi CocWarningVirtualText guibg=NONE'
 exe 'hi CocInfoVirtualText guibg=NONE'
 exe 'hi CocHintVirtualText guibg=NONE'
-exe 'hi CocErrorHighlight guibg=NONE'
-exe 'hi CocWarningHighlight guibg=NONE'
+exe 'hi CocErrorHighlight guibg=NONE guifg='.red
+exe 'hi CocWarningHighlight guibg=NONE guifg='.test
 exe 'hi CocInfoHighlight guibg=NONE'
-exe 'hi CocHintHighlight guibg=NONE'
+exe 'hi CocHintHighlight guibg=NONE guifg='.brown
 exe 'hi CocDeprecatedHighlight guibg=NONE'
-exe 'hi CocUnusedHighlight guibg=NONE'
+exe 'hi CocUnusedHighlight guibg=NONE guifg='.gray
 exe 'hi CocErrorLine guibg=NONE'
 exe 'hi CocWarningLine guibg=NONE'
 exe 'hi CocInfoLine guibg=NONE'
 exe 'hi CocHintLine guibg=NONE'
 exe 'hi Search guibg='.lightGreen.' guifg='.bg.' gui=NONE'
 exe 'hi IncSearch guibg='.yellow.' guifg='.bg.' gui=NONE'
+exe 'hi Include guifg='.lightGreen
+exe 'hi Type guifg='.darkGreen
+exe 'hi @constant.builtin.tsx guifg='.yellow
+"exe 'hi GitGutterAdd guifg=NONE guibg='.yellow
+exe 'hi GitGutterAdd guifg='.diffAdd.' guibg='.diffAdd
+exe 'hi GitGutterChange guifg='.diffMod.' guibg='.diffMod
+exe 'hi GitGutterDelete guifg='.diffDel.' guibg='.diffDel
+exe 'hi diffAdded guifg='.lightGreen
+exe 'hi diffChanged guifg='.cyan
+exe 'hi diffRemoved guifg='.red
+
+" JSON
+
+exe 'hi @label.json guifg='.lightGreen
+
+" TypeScript
+
+exe 'hi typescriptExport guifg='.lightGreen
+exe 'hi typescriptImport guifg='.lightGreen
+exe 'hi tsxTagName guifg='.lightGreen
+exe 'hi @tag.tsx guifg='.lightGreen
+exe 'hi @variable.tsx guifg='.blue
+exe 'hi @constructor.tsx guifg='.lightGreen
+exe 'hi tsxAttrib guifg='.darkGreen
+exe 'hi @tag.attribute.tsx guifg='.darkGreen
+exe 'hi typescriptVariable guifg='.lightGreen
+exe 'hi typescriptIdentifierName guifg='.cyan
+exe 'hi typescriptInterfaceName guifg='.white
+exe 'hi typescriptMember guifg='.white
+exe 'hi @tag.delimiter.tsx guifg='.white
+exe 'hi @method.call.tsx guifg='.dirt
+exe 'hi typescriptEndColons guifg='.white
+exe 'hi typescriptTypeReference guifg='.darkGreen
+exe 'hi typescriptSpecial guifg='.darkGreen
+exe 'hi typescriptObjectLabel guifg='.white
+exe 'hi typescriptObjectStaticMethod guifg='.dirt
+exe 'hi typescriptBraces guifg='.white
+exe 'hi typescriptArrowFuncArg guifg='.white
+exe 'hi typescriptStatementKeyword guifg='.lightGreen
+exe 'hi typescriptVariableDeclaration guifg='.orange
 
 " Rust
 exe 'hi rustModPath guifg='.white
