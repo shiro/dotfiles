@@ -6,23 +6,24 @@
   "diagnostic.infoSign": "ℹ",
   "diagnostic.floatConfig": {
     "border": true,
-    "rounded": true,
+    "rounded": true
   },
   "hover.floatConfig": {
     "border": true,
-    "rounded": true,
+    "rounded": true
   },
   "suggest.floatConfig": {
     "border": true,
-    "rounded": true,
+    "rounded": true
   },
   "suggest.pumFloatConfig": {
     "border": true,
-    "rounded": true,
+    "rounded": true
   },
   "signature.floatConfig": {
     "border": true,
-    "rounded": true,
+    "rounded": true
   },
-  "sumneko-lua.enableNvimLuaDev": true
+  "sumneko-lua.enableNvimLuaDev": true,
+  "coc.preferences.formatOnSave": true
 }
