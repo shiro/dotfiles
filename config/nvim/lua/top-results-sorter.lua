@@ -55,7 +55,7 @@ M.sorter = function(opts)
 
     local fzy = opts.fzy_mod or require "telescope.algos.fzy"
     local OFFSET = -fzy.get_score_floor()
-    local RATIO = 0.5
+    local RATIO = 0.7
 
     return Sorter:new {
         discard = true,
@@ -66,27 +66,28 @@ M.sorter = function(opts)
             end
 
             local recency = Recent:get_recency(line)
-
-            if line == "src/window/hyprland_window.rs" then
-                print("got", recency)
-            end
             if recency ~= nil then
+                print(line, recency)
                 -- remove currently open buffer
                 if recency == 0 then return 10 end
+                -- make sure worst recency is still better than none
+                recency = recency * 0.99
+            else
+                -- fallback to "worst case"
+                recency = 1
             end
 
-            local fzy_score = fzy.score(prompt, line)
+            local fzy_score = 1
+            if prompt ~= "" then
+                fzy_score = fzy.score(prompt, line)
 
-            -- return "worst case"
-            if fzy_score == fzy.get_score_min() then
-                fzy_score = 0
-            end
-
-            -- map to [0..1] (lower is better)
-            fzy_score = (1 / (fzy_score + OFFSET))
-
-            if recency == nil then
-                return 5 + fzy_score
+                if fzy_score == fzy.get_score_min() then
+                    -- return "worst case"
+                    fzy_score = 1
+                else
+                    -- map to [0..1] (lower is better)
+                    fzy_score = (1 / (fzy_score + OFFSET))
+                end
             end
 
             return fzy_score * RATIO + recency * (1 - RATIO)

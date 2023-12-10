@@ -68,8 +68,9 @@ Plug 'fannheyward/telescope-coc.nvim'
 
 call 'plug#end'
 
+local telescope_actions = require "telescope.actions"
 require('telescope').setup {
-    --defaults = { mappings = { i = { ["<esc>"] = telescope_actions.close } } },
+    defaults = { mappings = { i = { ["<esc>"] = telescope_actions.close } } },
     file_ignore_patterns = {
         "node%_modules/.*",
         "./target/.*",
@@ -109,7 +110,7 @@ function _G.foo()
     })
 end
 
-vim.keymap.set("n", "<leader>ff", '<CMD>lua _G.foo()<CR>', {})
+vim.keymap.set("n", "<leader>f", '<CMD>lua _G.foo()<CR>', {})
 
 --vim.api.nvim_set_keymap('n', "<leader>ff",
 --    function()
