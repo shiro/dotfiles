@@ -10,6 +10,12 @@ noremap <Leader>" :set number!<CR>
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
+" center after jump
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap <C-f> <C-f>zz
+nnoremap <C-b> <C-b>zz
+
 " search / replace for word under the cursor
 " nnoremap <leader>/ "fyiw :/<c-r>f<cr>
 " nnoremap <leader>? "fyiw :/<c-r>F<cr>
