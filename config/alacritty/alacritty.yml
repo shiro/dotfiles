@@ -460,9 +460,9 @@ colors:
 # at once.
 key_bindings:
   # fix Tab and C-S-Tab key sequences not being passed
-  - { key: Tab, mods: Control, chars: "\x1b[27;5;9~" }
-  - { key: Tab, mods: Control|Shift, chars: "\x1b[27;6;9~" }
-  - { key: P, mods: Control|Shift, chars: "\x1b[80;5u" }
+  - { key: Tab, mods: Control, chars: "\e[27;5;9~" }
+  - { key: Tab, mods: Control|Shift, chars: "\e[27;6;9~" }
+  - { key: P, mods: Control|Shift, chars: "\e[80;5u" }
   # (Windows, Linux, and BSD only)
   #- { key: V,        mods: Control|Shift, action: Paste            }
   #- { key: C,        mods: Control|Shift, action: Copy             }

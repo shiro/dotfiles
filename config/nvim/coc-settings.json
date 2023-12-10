@@ -24,4 +24,5 @@
     "border": true,
     "rounded": true,
   },
+  "sumneko-lua.enableNvimLuaDev": true
 }

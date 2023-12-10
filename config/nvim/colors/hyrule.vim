@@ -211,6 +211,7 @@ exe 'hi rsLibraryType guifg='.darkGreen
 exe 'hi rsUserConst guifg='.darkGreen
 exe 'hi rsUserType guifg='.darkGreen
 exe 'hi rsTypeDef guifg='.white
+exe 'hi @constant.builtin.rust guifg='.darkGreen
 exe 'hi rsFuncDef guifg='.orange
 exe 'hi rsUserMacro guifg='.red
 exe 'hi rsLibraryMacro guifg='.red

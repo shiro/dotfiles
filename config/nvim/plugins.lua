@@ -1,3 +1,5 @@
+local utils = require "utils"
+
 local call = vim.call
 local cmd = vim.cmd
 local Plug = vim.fn['plug#']
@@ -22,6 +24,9 @@ vim.g['coc_global_extensions'] = {
   'coc-styled-components',
   'coc-prettier',
   'coc-eslint',
+  -- 'coc-lua',
+  'coc-sumneko-lua',
+  'coc-pyright',
 }
 Plug('neoclide/coc.nvim', {branch = 'master', ['do'] = 'npm ci'})
 Plug 'antoinemadec/coc-fzf'
@@ -56,8 +61,53 @@ Plug 'norcalli/nvim-colorizer.lua'
 
 --- }}}
 
-call'plug#end'
+Plug('nvim-lua/plenary.nvim')
+Plug('nvim-telescope/telescope.nvim', {tag = '0.1.5'})
 
+call 'plug#end'
+
+require('telescope').setup{
+    --defaults = { mappings = { i = { ["<esc>"] = telescope_actions.close } } },
+    file_ignore_patterns = {
+        "node%_modules/.*",
+        "./target/.*",
+    }
+}
+local tele_builtin = require('telescope.builtin')
+local tele_theme_dropdown = require "telescope.themes".get_dropdown()
+local tele_theme_cursor = require "telescope.themes".get_cursor()
+local tele_theme_default = {}
+function dynamic_theme()
+    local width = vim.api.nvim_win_get_width(0)
+    local height = vim.api.nvim_win_get_height(0)
+
+    if width / 2 > height then
+        return tele_theme_default
+    else
+        return tele_theme_dropdown
+    end
+end
+local theme = dynamic_theme
+--require("dressing").setup { select = { telescope = tele_theme_cursor } }
+--vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({sort_lastused= 1})<CR>', {})
+function _G.foo()
+        tele_builtin.find_files( {
+            sorter = require("top-results-sorter").sorter(),
+            previewer = false,
+            --find_command = { "bash", "-c",
+            --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
+        })
+end
+vim.keymap.set("n", "<leader>ff", '<CMD>lua _G.foo()<CR>', {})
+
+--vim.api.nvim_set_keymap('n', "<leader>ff",
+--    function()
+--        tele_builtin.find_files(utils.spread(theme()) {
+--            sorter = require("top-result-sorter").sorter(),
+--            --find_command = { "bash", "-c",
+--            --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
+--        })
+--    end, {})
 
 --require'forgit'.setup({
 --  debug = false,
@@ -78,21 +128,15 @@ require'colorizer'.setup()
 
 -- tree-sitter {{{
 require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-  incremental_selection = {
-    enable = true,
-  },
-  indent = {
-    enable = true
-  },
+  ensure_installed = {"typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
+  auto_install = true,
+  highlight = { enable = true },
+  incremental_selection = { enable = true },
+  indent = { enable = true },
+  context_commentstring = { enable = true },
 }
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 --- }}}
 
 
@@ -106,7 +150,6 @@ vim.api.nvim_set_keymap('n', '[e', "<Plug>(coc-diagnostic-prev)", { silent = tru
 vim.api.nvim_set_keymap('n', '<A-S-e>', "<Plug>(coc-rename)", { silent = true });
 vim.api.nvim_set_keymap('n', '<A-S-r>', "<Plug>(coc-refactor)", { silent = true });
 vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silent = true });
-vim.api.nvim_set_keymap('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 -- show outline (hierarchy)
 vim.api.nvim_set_keymap('n', 'go', ":CocFzfList outline<CR>", { silent = true });
 -- list warnings/errors
@@ -134,7 +177,7 @@ vim.api.nvim_create_autocmd("User", {
 
 -- show docs
 function _G.show_docs()
-    --local cw = vim.fn.expand('<cword>')
+    local cw = vim.fn.expand('<cword>')
     --if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
     --    vim.api.nvim_command('h ' .. cw)
     if vim.api.nvim_eval('coc#rpc#ready()') then
@@ -144,6 +187,9 @@ function _G.show_docs()
     end
 end
 vim.keymap.set("n", "<C-S-p>", '<CMD>lua _G.show_docs()<CR>', {noremap = true, silent = true})
+vim.keymap.set("n", "<F12>", '<CMD>lua _G.show_docs()<CR>', {noremap = true, silent = true})
+vim.keymap.set('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
+vim.keymap.set('i', '<F12>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 
 
 vim.keymap.set("n", "<A-S-i>", ':Files<CR>', {noremap = true, silent = true})
@@ -181,6 +227,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 -- auto-save on focus lost/buffer change
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
+  pattern = '*.*',
   callback = function()
     _G.format()
     vim.cmd.write({mods = {silent = true}})
