@@ -107,6 +107,8 @@ endif
 xnoremap dp :diffput<cr>:diffu<cr>
 xnoremap do :diffget<cr>:diffu<cr>
 
+map <silent> g[ :!copyq next<cr><enter>
+map <silent> g] :!copyq previous<cr><enter>
 
 " moving up and down as you would expect
 nnoremap <silent> j gj
