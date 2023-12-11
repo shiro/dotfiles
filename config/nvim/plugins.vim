@@ -2,71 +2,6 @@ runtime plug/plug.vim
 
 call plug#begin('~/.config/nvim/plugged')
 
-
-" ranger {{{
-
-Plug 'rbgrouleff/bclose.vim'
-Plug 'rafaqz/ranger.vim'
-
-let g:ranger_map_keys = 0 " use own keymaps
-
-
-" nnoremap <leader>m :set nosplitright<CR>:RangerVSplit<CR>:set splitright<CR>
-nnoremap <leader>l :RangerEdit<CR>
-" nnoremap <leader>m :RangerWorkingDirectory<CR>
-" map <C-M-t> :RangerWorkingDirectory<CR>.
-
-" }}}
-
-Plug 'tpope/vim-commentary' " comment stuff out
-vmap <C-_> gc
-nmap <C-_> gclj
-
-" fugitive {{{
-
-Plug 'tpope/vim-fugitive' " amazing git wrapper for vim
-
-set diffopt+=vertical " vertical splits on diff
-
-" keymaps
-nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit -v -q<CR>
-nnoremap <leader>gt :Gcommit -v -q %:p<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>ge :Gedit<CR>
-"nnoremap <leader>gr :Gread<CR>
-nnoremap <leader>gw :Gwrite<CR><CR>
-nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
-nnoremap <leader>gp :Ggrep<Space>
-"nnoremap <leader>gm :Gmove<Space>
-nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>go :Git checkout<Space>
-nnoremap <leader>gps :Dispatch! git push<CR>
-nnoremap <leader>gpl :Dispatch! git pull<CR>
-
-" 72 is the number
-autocmd Filetype gitcommit setlocal spell textwidth=72
-" auto cleanup buffers
-autocmd BufReadPost fugitive://* set bufhidden=delete
-
-" }}}
-
-" git gutter {{{
-
-Plug 'airblade/vim-gitgutter' " git gutter to the left
-
-let g:gitgutter_map_keys = 0
-
-nnoremap <leader>gg :GitGutterLineHighlightsToggle<CR>
-nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
-
-nnoremap <C-A-Z> <Plug>(GitGutterUndoHunk)
-nnoremap [c <Plug>(GitGutterPrevHunk) \| :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> \| <Plug>(GitGutterPreviewHunk)
-nnoremap ]c <Plug>(GitGutterNextHunk) \| :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> \| <Plug>(GitGutterPreviewHunk)
-
-" }}}
-
 " vim-easy-align {{{
 
 Plug 'junegunn/vim-easy-align' " align everything
@@ -305,26 +240,3 @@ let g:localvimrc_sandbox=0
 
 " }}}
 
-
-
-source ~/.config/nvim/plugins.lua
-"call plug#end()
-
-
-" chords {{{
-
-" general
-call arpeggio#map('n', '', 0, 'wq', ':wq<cr>') " write-quit
-call arpeggio#map('n', '', 0, 'we', ':wqa<cr>') " write-quit-all
-call arpeggio#map('i', '', 0, 'wq', '<esc>:wq<cr>') " write-quit
-
-" insert mode
-call arpeggio#map('i', '', 0, 'fun', 'function')
-
-call arpeggio#map('i', '', 0, 'jk', '<esc>:w<cr>') " save
-
-call arpeggio#map('n', '', 0, 'ag', ':Ag<cr>') " Ag
-" }}}
-
-" init cwd
-" Rooter

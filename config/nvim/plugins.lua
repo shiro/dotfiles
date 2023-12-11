@@ -1,22 +1,27 @@
--- local utils = require "utils"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
 
-local call = vim.call
-local cmd = vim.cmd
-local Plug = vim.fn['plug#']
-
---local PATH = "~/.config/nvim/plugged"
---call('plug#begin', PATH)
 
 
 vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
 --vim.g['fzf_vim.preview_window'] = { 'right,50%', 'ctrl-/' }
 --vim.g['coc_fzf_opts'] = { '--layout=reverse' }
 
-
--- syntax highlight
-Plug 'nvim-treesitter/nvim-treesitter'
-
 -- LSP server, auto-complete
+
+-- Plug 'ray-x/guihua.lua'
+-- Plug 'ray-x/forgit.nvim'
+
 vim.g['coc_global_extensions'] = {
     'coc-json',
     'coc-vimlsp',
@@ -29,120 +34,224 @@ vim.g['coc_global_extensions'] = {
     'coc-sumneko-lua',
     'coc-pyright',
 }
-Plug('neoclide/coc.nvim', { branch = 'master', ['do'] = 'npm ci' })
-Plug 'antoinemadec/coc-fzf'
 
--- Plug 'ray-x/guihua.lua'
--- Plug 'ray-x/forgit.nvim'
-
--- language-specific stuff {{{
-
--- rust
-Plug('rust-lang/rust.vim', { ['for'] = 'rust' })
-Plug('arzg/vim-rust-syntax-ext', { ['for'] = 'rust' })
-
--- }}}
-
--- misc {{{
-
--- enables repeating other supported plugins with the . command
-Plug 'tpope/vim-repeat'
-
--- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
-Plug 'tpope/vim-surround'
-
--- convinient pair mappings
---Plug 'tpope/vim-unimpaired'
-
--- show color hex codes
-Plug 'norcalli/nvim-colorizer.lua'
-
--- fix tmux not reporting fo
--- Plug 'tmux-plugins/vim-tmux-focus-events'
-
---- }}}
-
-Plug('nvim-lua/plenary.nvim')
-Plug('nvim-telescope/telescope.nvim', { tag = '0.1.5' })
-Plug 'fannheyward/telescope-coc.nvim'
-
-call 'plug#end'
-
-local telescope_actions = require "telescope.actions"
-require('telescope').setup {
-    defaults = { mappings = { i = { ["<esc>"] = telescope_actions.close } } },
-    file_ignore_patterns = {
-        "node%_modules/.*",
-        "./target/.*",
+--call 'plug#end'
+require("lazy").setup({
+    -- chord keybinds
+    {
+        'kana/vim-arpeggio',
+        config = function()
+            -- write-quit
+            vim.api.nvim_command("call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
+            -- write-quit-all
+            vim.api.nvim_command("call arpeggio#map('n', '', 0, 'we', ':wqa<cr>')")
+            -- write-quit
+            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
+            -- insert mode
+            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'fun', 'function')")
+            -- save
+            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'jk', '<ESC>:w<CR>')")
+            -- Ag
+            -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'ag', ':Ag<CR>')")
+        end
     },
-    extensions = {
-        coc = {
-            -- theme = 'ivy',
-            -- use for list picker
-            prefer_locations = true,
-        }
-    }
-}
-local sorter = require("top-results-sorter").sorter()
-local tele_builtin = require('telescope.builtin')
-local tele_theme_dropdown = require "telescope.themes".get_dropdown()
-local tele_theme_cursor = require "telescope.themes".get_cursor()
-local tele_theme_default = {}
-function dynamic_theme()
-    local width = vim.api.nvim_win_get_width(0)
-    local height = vim.api.nvim_win_get_height(0)
 
-    if width / 2 > height then
-        return tele_theme_default
-    else
-        return tele_theme_dropdown
-    end
-end
 
-local theme = dynamic_theme
---require("dressing").setup { select = { telescope = tele_theme_cursor } }
---vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({sort_lastused= 1})<CR>', {})
-function _G.find_files()
-    tele_builtin.find_files({
-        sorter = sorter,
-        previewer = false,
-        --find_command = { "bash", "-c",
-        --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
-    })
-end
+    -- CWD managmnent
+    {
+        'airblade/vim-rooter',
 
-vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
-vim.keymap.set("n", "<C-Tab>", '<CMD>lua _G.find_files()<CR>', {})
+        config = function()
+            vim.g['rooter_change_directory_for_non_project_files'] = 'current'
+            vim.g['rooter_silent_chdir'] = 1
+            vim.g['rooter_resolve_links'] = 1
+            vim.g['rooter_patterns'] = { 'cargo.toml', '.git' }
 
---require'forgit'.setup({
---  debug = false,
---  diff_pager = 'diff-so-fancy',
---  diff_cmd = '',
---  fugitive = false,
---  abbreviate = false,
---  git_alias = true,
---  show_result = 'quickfix',
---
---  shell_mode = true,
---  height_ratio = 0.6,
---  width_ratio = 0.6,
---  cmds_list = {}
---})
+            -- only if requested
+            vim.g['rooter_manual_only'] = 1
 
-require 'colorizer'.setup()
+            -- cwd to root
+            -- nmap <leader>;r :Rooter<cr>
+            -- cwd to current
+            -- nmap <leader>;t :cd %:p:h<cr>
+            -- auto change cwd to current file
+            -- set autochdir
+        end,
+    },
 
--- tree-sitter {{{
-require 'nvim-treesitter.configs'.setup {
-    ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
-    auto_install = true,
-    highlight = { enable = true },
-    incremental_selection = { enable = true },
-    indent = { enable = true },
-    context_commentstring = { enable = true },
-}
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
---- }}}
+    -- GIT
+    {
+        'tpope/vim-fugitive',
+        config = function()
+            vim.opt.diffopt = vim.opt.diffopt + "vertical"
+
+            vim.keymap.set("n", "<leader>gd", ':Gdiff<CR>', {})
+            -- nnoremap <leader>ga :Git add %:p<CR><CR>
+            -- nnoremap <leader>gs :Gstatus<CR>
+            -- nnoremap <leader>gc :Gcommit -v -q<CR>
+            -- nnoremap <leader>gt :Gcommit -v -q %:p<CR>
+            -- nnoremap <leader>ge :Gedit<CR>
+            -- "nnoremap <leader>gr :Gread<CR>
+            -- nnoremap <leader>gw :Gwrite<CR><CR>
+            -- nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
+            -- nnoremap <leader>gp :Ggrep<Space>
+            -- "nnoremap <leader>gm :Gmove<Space>
+            -- nnoremap <leader>gb :Git branch<Space>
+            -- nnoremap <leader>go :Git checkout<Space>
+            -- nnoremap <leader>gps :Dispatch! git push<CR>
+            -- nnoremap <leader>gpl :Dispatch! git pull<CR>
+
+            -- " 72 is the number
+            -- autocmd Filetype gitcommit setlocal spell textwidth=72
+            -- " auto cleanup buffers
+            -- autocmd BufReadPost fugitive://* set bufhidden=delete
+        end
+    },
+
+
+    -- syntax highlight
+    {
+        'nvim-treesitter/nvim-treesitter',
+        config = function()
+            require('nvim-treesitter.configs').setup({
+                ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
+                auto_install = true,
+                highlight = { enable = true },
+                incremental_selection = { enable = true },
+                indent = { enable = true },
+                context_commentstring = { enable = true },
+            })
+            vim.o.foldmethod = "expr"
+            vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+        end,
+    },
+    {
+        'neoclide/coc.nvim',
+        branch = 'master',
+        build = 'npm ci',
+        config = function()
+        end
+    },
+    'antoinemadec/coc-fzf',
+
+    -- commnets
+    {
+        'tpope/vim-commentary',
+        config = function()
+            vim.keymap.set("v", "<C-_>", "gc", {})
+            vim.keymap.set("n", "<C-_>", "gclj", {})
+        end
+    },
+
+    -- show color hex codes
+    {
+        'norcalli/nvim-colorizer.lua',
+        config = function()
+            require('colorizer').setup()
+        end,
+    },
+    {
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.5',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            local telescope_actions = require "telescope.actions"
+            require('telescope').setup({
+                defaults = { mappings = { i = { ["<esc>"] = telescope_actions.close } } },
+                file_ignore_patterns = {
+                    "node%_modules/.*",
+                    "./target/.*",
+                },
+                extensions = {
+                    coc = {
+                        -- theme = 'ivy',
+                        -- use for list picker
+                        prefer_locations = true,
+                    }
+                }
+            })
+            local sorter = require("top-results-sorter").sorter()
+            local tele_builtin = require('telescope.builtin')
+            local tele_theme_dropdown = require "telescope.themes".get_dropdown()
+            -- local tele_theme_cursor = require "telescope.themes".get_cursor()
+            local tele_theme_default = {}
+            function dynamic_theme()
+                local width = vim.api.nvim_win_get_width(0)
+                local height = vim.api.nvim_win_get_height(0)
+
+                if width / 2 > height then
+                    return tele_theme_default
+                else
+                    return tele_theme_dropdown
+                end
+            end
+
+            local theme = dynamic_theme
+            --require("dressing").setup { select = { telescope = tele_theme_cursor } }
+            --vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({sort_lastused= 1})<CR>', {})
+            function _G.find_files()
+                tele_builtin.find_files({
+                    sorter = sorter,
+                    previewer = false,
+                    --find_command = { "bash", "-c",
+                    --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
+                })
+            end
+
+            vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
+            vim.keymap.set("n", "<C-Tab>", '<CMD>lua _G.find_files()<CR>', {})
+        end,
+    },
+    'fannheyward/telescope-coc.nvim',
+
+    -- git gutter to the left
+    {
+        'airblade/vim-gitgutter',
+        config = function()
+            vim.g['gitgutter_map_keys'] = 0
+
+            -- nnoremap <leader>gg :GitGutterLineHighlightsToggle<CR>
+            -- nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
+            vim.api.nvim_set_keymap('n', '<C-A-Z>',
+                "<Plug>(GitGutterUndoHunk)",
+                { silent = true });
+            vim.api.nvim_set_keymap('n', '[c',
+                "<Plug>(GitGutterPrevHunk) | :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> | <Plug>(GitGutterPreviewHunk)",
+                { silent = true });
+            vim.api.nvim_set_keymap('n', ']c',
+                "<Plug>(GitGutterNextHunk) | :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> | <Plug>(GitGutterPreviewHunk)",
+                { silent = true });
+        end
+    },
+
+    {
+        'rafaqz/ranger.vim',
+        dependencies = { 'rbgrouleff/bclose.vim' },
+        config = function()
+            vim.g['ranger_map_keys'] = 0
+            vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
+        end,
+    },
+    -- language-specific stuff {{{
+
+    -- rust
+    { 'rust-lang/rust.vim',       ft = 'rust' },
+    { 'arzg/vim-rust-syntax-ext', ft = 'rust' },
+
+    -- }}}
+    -- misc {{{
+
+    -- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
+    'tpope/vim-surround',
+
+    -- convinient pair mappings
+    --Plug 'tpope/vim-unimpaired'
+
+    -- enables repeating other supported plugins with the . command
+    'tpope/vim-repeat',
+
+    -- }}}
+})
 
 
 
@@ -229,7 +338,6 @@ function _G.format()
     end
 end
 
--- vim.keymap.set('n', 'gl', '<CMD>lua _G.format()<CR>', {silent = true})
 vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
 vim.keymap.set("n", "gl", "<Plug>(coc-format-selected)j", { silent = true })
 
@@ -239,19 +347,6 @@ vim.api.nvim_create_autocmd("FileType", {
     command = "setl formatexpr=CocAction('formatSelected')",
     desc = "Setup formatexpr specified filetype(s)."
 })
--- vim.api.nvim_create_autocmd("FileType", {
---     group = "CocGroup",
---     pattern = "rust",
---     command = "setl formatexpr=RustFmt",
---     desc = "Setup formatexpr specified filetype(s)."
--- })
-
-
--- auto-format on save
--- vim.api.nvim_create_autocmd('BufWritePre', {
---   pattern = {'*.rs', '*.tsx'},
---   callback = _G.format
--- })
 
 -- auto-save on focus lost/buffer change
 vim.o.autowriteall = true
