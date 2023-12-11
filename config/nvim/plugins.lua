@@ -11,15 +11,15 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- needed to avoid comment plugin warning
+vim.g.skip_ts_context_commentstring_module = true
 
 
 vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
 --vim.g['fzf_vim.preview_window'] = { 'right,50%', 'ctrl-/' }
 --vim.g['coc_fzf_opts'] = { '--layout=reverse' }
 
--- LSP server, auto-complete
 
--- Plug 'ray-x/guihua.lua'
 -- Plug 'ray-x/forgit.nvim'
 
 vim.g['coc_global_extensions'] = {
@@ -125,6 +125,8 @@ require("lazy").setup({
             vim.o.foldexpr = "nvim_treesitter#foldexpr()"
         end,
     },
+
+    -- LSP server, auto-complete
     {
         'neoclide/coc.nvim',
         branch = 'master',
@@ -136,12 +138,28 @@ require("lazy").setup({
 
     -- commnets
     {
-        'tpope/vim-commentary',
+        'numToStr/Comment.nvim',
+        dependencies = {
+            'JoosepAlviste/nvim-ts-context-commentstring',
+        },
+        opts = {
+            --pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+        },
+        lazy = false,
         config = function()
-            vim.keymap.set("v", "<C-_>", "gc", {})
-            vim.keymap.set("n", "<C-_>", "gclj", {})
+            require('Comment').setup({
+                pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+            })
+
+            vim.api.nvim_command("xmap <C-_> gc")
+            vim.api.nvim_command("nmap <C-_> gcc")
+            --vim.keymap.set("v", "<C-_>", "gc", {})
+            --vim.keymap.set("n", "<C-_>", "gcc", {})
         end
     },
+    --{
+    --    'JoosepAlviste/nvim-ts-context-commentstring',
+    --}
 
     -- show color hex codes
     {
@@ -375,5 +393,15 @@ vim.api.nvim_create_autocmd("FocusLost", {
         -- only for files
         if vim.bo.buftype ~= "" then return end
         vim.cmd.write({ mods = { silent = true } })
+    end
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = "CocGroup",
+    callback = function()
+        print(99)
+
+        --vim.keymap.set("v", "<C-_>", "gc", {})
+        --vim.keymap.set("n", "<C-_>", "gcc", {})
     end
 })
