@@ -77,8 +77,9 @@ require('telescope').setup {
     },
     extensions = {
         coc = {
-            theme = 'ivy',
-            prefer_locations = true, -- use for list picker
+            -- theme = 'ivy',
+            -- use for list picker
+            prefer_locations = true,
         }
     }
 }
@@ -101,7 +102,7 @@ end
 local theme = dynamic_theme
 --require("dressing").setup { select = { telescope = tele_theme_cursor } }
 --vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({sort_lastused= 1})<CR>', {})
-function _G.foo()
+function _G.find_files()
     tele_builtin.find_files({
         sorter = sorter,
         previewer = false,
@@ -110,16 +111,7 @@ function _G.foo()
     })
 end
 
-vim.keymap.set("n", "<leader>f", '<CMD>lua _G.foo()<CR>', {})
-
---vim.api.nvim_set_keymap('n', "<leader>ff",
---    function()
---        tele_builtin.find_files(utils.spread(theme()) {
---            sorter = require("top-result-sorter").sorter(),
---            --find_command = { "bash", "-c",
---            --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
---        })
---    end, {})
+vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
 
 --require'forgit'.setup({
 --  debug = false,
@@ -263,9 +255,15 @@ vim.api.nvim_create_autocmd("FileType", {
 -- auto-save on focus lost/buffer change
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
-    pattern = '*.*',
+    group = "CocGroup",
+    pattern = '*',
     callback = function()
-        _G.format()
+        -- only for files
+        if vim.bo.buftype ~= "" then return end
+
+        if vim.api.nvim_eval('coc#rpc#ready()') then
+            vim.fn.CocAction("format")
+        end
         vim.cmd.write({ mods = { silent = true } })
     end
 })
