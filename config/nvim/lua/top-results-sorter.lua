@@ -3,6 +3,11 @@ local Sorter = require "telescope.sorters".Sorter
 local sorters = require('telescope.sorters')
 local fzy_sorter = sorters.get_fzy_sorter()
 
+function basename(str)
+    local name = string.gsub(str, "(.*/)(.*)", "%2")
+    return name
+end
+
 HistMap = {}
 function HistMap:new()
     local o = {}
@@ -67,7 +72,6 @@ M.sorter = function(opts)
 
             local recency = Recent:get_recency(line)
             if recency ~= nil then
-                print(line, recency)
                 -- remove currently open buffer
                 if recency == 0 then return 10 end
                 -- make sure worst recency is still better than none
@@ -78,8 +82,10 @@ M.sorter = function(opts)
             end
 
             local fzy_score = 1
+            local fzy_filename_score = 1
             if prompt ~= "" then
                 fzy_score = fzy.score(prompt, line)
+                fzy_filename_score = fzy.score(prompt, basename(line))
 
                 if fzy_score == fzy.get_score_min() then
                     -- return "worst case"
@@ -88,9 +94,18 @@ M.sorter = function(opts)
                     -- map to [0..1] (lower is better)
                     fzy_score = (1 / (fzy_score + OFFSET))
                 end
+
+                if fzy_filename_score == fzy.get_score_min() then
+                    -- return "worst case"
+                    fzy_filename_score = 1
+                else
+                    -- map to [0..1] (lower is better)
+                    fzy_filename_score = (1 / (fzy_filename_score + OFFSET))
+                end
             end
 
-            return fzy_score * RATIO + recency * (1 - RATIO)
+            return (fzy_score * 0.7 + fzy_filename_score * 0.3) * RATIO
+                + recency * (1 - RATIO)
         end,
         highlighter = fzy_sorter.highlighter
     }

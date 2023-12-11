@@ -7,8 +7,8 @@ noremap <Leader>' :set relativenumber!<CR>
 noremap <Leader>" :set number!<CR>
 
 " scroll faster
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
+nnoremap <C-y> 3kzz
+nnoremap <C-e> 3jzz
 
 " center after jump
 nnoremap <C-d> <C-d>zz

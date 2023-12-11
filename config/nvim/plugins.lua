@@ -112,7 +112,7 @@ function _G.find_files()
 end
 
 vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
-vim.keymap.set("n", "<C-Tab>", '<cmd>Lua _G.find_files()<CR>', {})
+vim.keymap.set("n", "<C-Tab>", '<CMD>lua _G.find_files()<CR>', {})
 
 --require'forgit'.setup({
 --  debug = false,
@@ -263,7 +263,6 @@ vim.api.nvim_create_autocmd("FocusLost", {
         '*.jsx',
         '*.py',
         '*.rs',
-        '*.toml',
         '*.ts',
         '*.tsx',
     },
