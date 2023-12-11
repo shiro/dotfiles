@@ -23,6 +23,7 @@ vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
 -- Plug 'ray-x/forgit.nvim'
 
 vim.g['coc_global_extensions'] = {
+    'coc-snippets',
     'coc-json',
     'coc-vimlsp',
     'coc-rust-analyzer',
@@ -56,11 +57,9 @@ require("lazy").setup({
         end
     },
 
-
     -- CWD managmnent
     {
         'airblade/vim-rooter',
-
         config = function()
             vim.g['rooter_change_directory_for_non_project_files'] = 'current'
             vim.g['rooter_silent_chdir'] = 1
@@ -108,7 +107,6 @@ require("lazy").setup({
         end
     },
 
-
     -- syntax highlight
     {
         'nvim-treesitter/nvim-treesitter',
@@ -152,14 +150,11 @@ require("lazy").setup({
             })
 
             vim.api.nvim_command("xmap <C-_> gc")
-            vim.api.nvim_command("nmap <C-_> gcc")
+            vim.api.nvim_command("nmap <C-_> gccj")
             --vim.keymap.set("v", "<C-_>", "gc", {})
             --vim.keymap.set("n", "<C-_>", "gcc", {})
         end
     },
-    --{
-    --    'JoosepAlviste/nvim-ts-context-commentstring',
-    --}
 
     -- show color hex codes
     {
@@ -294,9 +289,9 @@ vim.api.nvim_set_keymap('n', 'go', ":CocFzfList outline<CR>", { silent = true })
 -- list warnings/errors
 -- vim.api.nvim_set_keymap('n', 'ge', ":CocFzfList diagnostics<CR>", { silent = true });
 -- list all local changes
-vim.api.nvim_set_keymap('n', 'gD', ":GF?<CR>", { silent = true });
+vim.api.nvim_set_keymap("n", 'gD', ":GF?<CR>", { silent = true });
 
-vim.keymap.set('i', '<C-Space>', 'coc#refresh()', { expr = true, silent = true })
+vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
 
 -- highlight the symbol under cursor
 vim.api.nvim_create_augroup("CocGroup", {})
@@ -316,23 +311,23 @@ vim.api.nvim_create_autocmd("User", {
 
 -- show docs
 function _G.show_docs()
-    local cw = vim.fn.expand('<cword>')
+    local cw = vim.fn.expand("<cword>")
     --if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
     --    vim.api.nvim_command('h ' .. cw)
-    if vim.api.nvim_eval('coc#rpc#ready()') then
-        vim.fn.CocActionAsync('doHover')
+    if vim.api.nvim_eval("coc#rpc#ready()") then
+        vim.fn.CocActionAsync("doHover")
     else
-        vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
+        vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
     end
 end
 
-vim.keymap.set("n", "<C-S-p>", '<CMD>lua _G.show_docs()<CR>', { noremap = true, silent = true })
-vim.keymap.set("n", "<F12>", '<CMD>lua _G.show_docs()<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 vim.keymap.set('i', '<F12>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 
 
-vim.keymap.set("n", "<A-S-i>", ':Files<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<A-S-i>", '  :Files<CR>', { noremap = true, silent = true })
 
 -- tab/S-tab completion menu
 function _G.check_back_space()
@@ -340,22 +335,26 @@ function _G.check_back_space()
     return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
 end
 
-vim.keymap.set("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()',
-    opts)
-vim.keymap.set("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
--- code lens
-vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
 -- make <CR> accept selected completion item or notify coc.nvim to format
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
--- reformat code
-function _G.format()
-    if vim.bo.filetype == 'rust' then
-        vim.cmd('RustFmt')
-    elseif vim.bo.filetype == 'typescriptreact' then
-        vim.cmd('CocCommand prettier.forceFormatDocument')
-    end
-end
+-- vim.keymap.set("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()',
+-- opts)
 
+
+vim.keymap.set("i", "<TAB>",
+    "coc#pum#visible() ? coc#_select_confirm() :" ..
+    [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
+    "v:lua.check_back_space() ? '<TAB>' :" ..
+    "coc#refresh()"
+    , opts)
+
+
+-- coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+vim.keymap.set("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
+vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+-- code lens
+-- vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
+
+-- reformat code
 vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
 vim.keymap.set("n", "gl", "<Plug>(coc-format-selected)j", { silent = true })
 
@@ -393,15 +392,5 @@ vim.api.nvim_create_autocmd("FocusLost", {
         -- only for files
         if vim.bo.buftype ~= "" then return end
         vim.cmd.write({ mods = { silent = true } })
-    end
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-    group = "CocGroup",
-    callback = function()
-        print(99)
-
-        --vim.keymap.set("v", "<C-_>", "gc", {})
-        --vim.keymap.set("n", "<C-_>", "gcc", {})
     end
 })

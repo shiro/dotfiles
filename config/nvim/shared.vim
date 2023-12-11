@@ -16,6 +16,9 @@ nnoremap <C-u> <C-u>zz
 nnoremap <C-f> <C-f>zz
 nnoremap <C-b> <C-b>zz
 
+" jump to last insert position
+nnoremap g; `^zz
+
 " search / replace for word under the cursor
 " nnoremap <leader>/ "fyiw :/<c-r>f<cr>
 " nnoremap <leader>? "fyiw :/<c-r>F<cr>
