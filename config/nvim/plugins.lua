@@ -112,6 +112,7 @@ function _G.find_files()
 end
 
 vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
+vim.keymap.set("n", "<C-Tab>", '<cmd>Lua _G.find_files()<CR>', {})
 
 --require'forgit'.setup({
 --  debug = false,
@@ -256,14 +257,29 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
     group = "CocGroup",
-    pattern = '*',
+    pattern = {
+        '*.js',
+        '*.json',
+        '*.jsx',
+        '*.py',
+        '*.rs',
+        '*.toml',
+        '*.ts',
+        '*.tsx',
+    },
     callback = function()
         -- only for files
         if vim.bo.buftype ~= "" then return end
-
         if vim.api.nvim_eval('coc#rpc#ready()') then
             vim.fn.CocAction("format")
         end
+    end
+})
+vim.api.nvim_create_autocmd("FocusLost", {
+    group = "CocGroup",
+    callback = function()
+        -- only for files
+        if vim.bo.buftype ~= "" then return end
         vim.cmd.write({ mods = { silent = true } })
     end
 })

@@ -164,6 +164,10 @@ exe 'hi diffAdded guifg='.lightGreen
 exe 'hi diffChanged guifg='.cyan
 exe 'hi diffRemoved guifg='.red
 
+exe 'hi TelescopeMatching guifg='.orange
+exe 'hi TelescopeSelectionCaret guibg='.shadow
+exe 'hi TelescopeSelection guibg='.shadow
+
 " JSON
 
 exe 'hi @label.json guifg='.lightGreen

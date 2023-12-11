@@ -146,8 +146,8 @@ bind-key , swap-window -t -1 \; previous-window
 bind-key . swap-window -t +1 \; next-window
 
 # go to next/previous window
-bind-key -n C-Tab next-window
-bind-key -n C-S-Tab previous-window
+bind-key -n M-Left previous-window
+bind-key -n M-Right next-window
 # bind -n M-f find-window
 
 bind h select-pane -L
@@ -215,3 +215,7 @@ bind -n M-t source-file ~/.dotfiles/tmux/keysoff.conf
 
 # Local config
 # if-shell "[ -f ~/.tmux.conf.local ]" 'source ~/.tmux.conf.local'
+
+# passthrough keys
+bind-key -n C-Tab send '\e[27;5;9~'
+bind-key -n C-S-Tab send '\e[27;6;9~'
