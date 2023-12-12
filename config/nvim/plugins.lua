@@ -185,7 +185,11 @@ require("lazy").setup({
     {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.5',
-        dependencies = { 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'nvim-tree/nvim-web-devicons',
+            'fannheyward/telescope-coc.nvim',
+        },
         config = function()
             local telescope_actions = require "telescope.actions"
             require('telescope').setup({
@@ -210,6 +214,7 @@ require("lazy").setup({
                     }
                 }
             })
+            require('telescope').load_extension('coc')
             local sorter = require("top-results-sorter").sorter()
             local tele_builtin = require('telescope.builtin')
             local tele_theme_dropdown = require "telescope.themes".get_dropdown()
@@ -255,11 +260,18 @@ require("lazy").setup({
                     options = { layout_strategy = "vertical" }
                 })
             end, {})
+            vim.keymap.set("n", "<leader>s", function()
+                require("telescopePickers").prettyWorkspaceSymbolsPicker({
+                    sorter = sorter,
+                    -- previewer = false,
+                    prompt_title = "Workspace symbols",
+                    layout_strategy = "vertical",
+                })
+            end, {})
 
-            vim.api.nvim_create_user_command('Hihglights', "lua require('telescope.builtin').highlights()", {})
+            vim.api.nvim_create_user_command('Highlights', "lua require('telescope.builtin').highlights()", {})
         end,
     },
-    'fannheyward/telescope-coc.nvim',
 
     -- git gutter to the left
     {
@@ -449,7 +461,7 @@ vim.api.nvim_create_autocmd("FocusLost", {
     },
     callback = function()
         -- only for files
-        if vim.bo.buftype ~= "" then return end
+        if vim.bo.buftype ~= nil then return end
         if vim.api.nvim_eval('coc#rpc#ready()') then
             vim.fn.CocAction("format")
         end
@@ -459,7 +471,7 @@ vim.api.nvim_create_autocmd("FocusLost", {
     group = "CocGroup",
     callback = function()
         -- only for files
-        if vim.bo.buftype ~= "" then return end
+        if vim.bo.buftype ~= nil then return end
         vim.cmd.write({ mods = { silent = true } })
     end
 })

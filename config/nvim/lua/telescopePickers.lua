@@ -82,20 +82,17 @@ function M.prettyFilesPicker(pickerAndOptions)
     end
 end
 
-function M.prettyGrepPicker(pickerAndOptions)
-    if type(pickerAndOptions) ~= 'table' or pickerAndOptions.picker == nil then
+function M.prettyGrepPicker(opts)
+    if type(opts) ~= 'table' or opts.picker == nil then
         print("Incorrect argument format. Correct format is: { picker = 'desiredPicker', (optional) options = { ... } }")
-
-        -- Avoid further computation
         return
     end
 
-    options = pickerAndOptions.options or {}
+    options = opts.options or {}
 
     local originalEntryMaker = telescopeMakeEntryModule.gen_from_vimgrep(options)
 
     options.entry_maker = function(line)
-        -- Generate the Original Entry table
         local originalEntryTable = originalEntryMaker(line)
 
         local displayer = telescopeEntryDisplayModule.create({
@@ -109,19 +106,9 @@ function M.prettyGrepPicker(pickerAndOptions)
         })
 
         originalEntryTable.display = function(entry)
-            ---- Get File columns data ----
-            -------------------------------
-
-            -- Get the Tail and the Path to display
             local tail, pathToDisplay = M.getPathAndTail(entry.filename)
-
-            -- Get the Icon with its corresponding Highlight information
             local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
 
-            ---- Format Text for display ----
-            ---------------------------------
-
-            -- Add coordinates if required by 'options'
             local coordinates = ""
 
             if not options.disable_coordinates then
@@ -154,16 +141,65 @@ function M.prettyGrepPicker(pickerAndOptions)
         return originalEntryTable
     end
 
-    -- Finally, check which file picker was requested and open it with its associated options
-    if pickerAndOptions.picker == 'live_grep' then
+    if opts.picker == 'live_grep' then
         require('telescope.builtin').live_grep(options)
-    elseif pickerAndOptions.picker == 'grep_string' then
+    elseif opts.picker == 'grep_string' then
         require('telescope.builtin').grep_string(options)
-    elseif pickerAndOptions.picker == '' then
+    elseif opts.picker == '' then
         print("Picker was not specified")
     else
         print("Picker is not supported by Pretty Grep Picker")
     end
+end
+
+function M.prettyWorkspaceSymbolsPicker(opts)
+    if opts ~= nil and type(opts) ~= 'table' then
+        print("Options must be a table.")
+        return
+    end
+
+    options = opts or {}
+
+    local originalEntryMaker = telescopeMakeEntryModule.gen_from_lsp_symbols(options)
+
+    options.entry_maker = function(line)
+        local originalEntryTable = originalEntryMaker(line)
+
+        local displayer = telescopeEntryDisplayModule.create({
+            separator = ' ',
+            items = {
+                { width = fileTypeIconWidth },
+                { width = 15 },
+                { width = 30 },
+                { width = nil },
+                { remaining = true },
+            },
+        })
+
+        originalEntryTable.display = function(entry)
+            local tail, pathToDisplay = M.getPathAndTail(entry.filename)
+            local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
+
+            -- local tail, _ = M.getPathAndTail(entry.filename)
+            local tailForDisplay = tail .. ' '
+            local pathToDisplay = telescopeUtilities.transform_path({
+                path_display = { shorten = { num = 2, exclude = { -2, -1 } }, 'truncate' },
+
+            }, entry.value.filename)
+
+            return displayer {
+                { icon,                      iconHighlight },
+                { entry.symbol_type:lower(), 'TelescopeResultsVariable' },
+                { entry.symbol_name,         'TelescopeResultsConstant' },
+                tailForDisplay,
+                { pathToDisplay, 'TelescopeResultsComment' },
+            }
+        end
+
+        return originalEntryTable
+    end
+
+    require('telescope._extensions').manager.coc.workspace_symbols(options)
 end
 
 return M
