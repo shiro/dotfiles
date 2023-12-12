@@ -462,7 +462,9 @@ key_bindings:
   # fix Tab and C-S-Tab key sequences not being passed
   - { key: Tab, mods: Control, chars: "\e[27;5;9~" }
   - { key: Tab, mods: Control|Shift, chars: "\e[27;6;9~" }
+  - { key: F, mods: Control|Shift, chars: "\e[70;5u" }
   - { key: P, mods: Control|Shift, chars: "\e[80;5u" }
+  - { key: R, mods: Control|Shift, chars: "\e[82;5u" }
   # (Windows, Linux, and BSD only)
   #- { key: V,        mods: Control|Shift, action: Paste            }
   #- { key: C,        mods: Control|Shift, action: Copy             }

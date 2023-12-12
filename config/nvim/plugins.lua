@@ -132,6 +132,15 @@ require("lazy").setup({
         config = function()
         end
     },
+    {
+        "tjdevries/coc-zsh",
+        ft = 'zsh',
+    },
+    {
+        "josa42/coc-sh",
+        build = "npm ci",
+        ft = 'sh',
+    },
     'antoinemadec/coc-fzf',
 
     -- commnets
@@ -154,6 +163,16 @@ require("lazy").setup({
             --vim.keymap.set("v", "<C-_>", "gc", {})
             --vim.keymap.set("n", "<C-_>", "gcc", {})
         end
+    },
+
+    -- find and replace
+    {
+        'nvim-pack/nvim-spectre',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            vim.keymap.set("n", "<C-S-R>", "<cmd>lua require('spectre').toggle()<CR>", { silent = true })
+            vim.keymap.set("n", "<Leader>R", "<cmd>lua require('spectre').toggle()<CR>", { silent = true })
+        end,
     },
 
     -- show color hex codes
@@ -206,13 +225,16 @@ require("lazy").setup({
                 tele_builtin.find_files({
                     sorter = sorter,
                     previewer = false,
+                    -- layout_config = { prompt_position = "top" },
                     --find_command = { "bash", "-c",
                     --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
                 })
             end
 
-            vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
-            vim.keymap.set("n", "<C-Tab>", '<CMD>lua _G.find_files()<CR>', {})
+            vim.keymap.set("n", "<leader>f", "<CMD>lua _G.find_files()<CR>", {})
+            vim.keymap.set("n", "<C-Tab>", "<CMD>lua _G.find_files()<CR>", {})
+            vim.keymap.set("n", "<C-S-F>", ":Telescope live_grep<CR>", { silent = true })
+            vim.keymap.set("n", "<leader>F", ":Telescope live_grep<CR>", { silent = true })
             vim.api.nvim_create_user_command('Hihglights', "lua require('telescope.builtin').highlights()", {})
         end,
     },
