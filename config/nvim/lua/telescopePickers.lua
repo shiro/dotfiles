@@ -85,15 +85,14 @@ function M.prettyFilesPicker(pickerAndOptions)
     end
 end
 
-function M.prettyGitPicker(pickerAndOptions)
-    if type(pickerAndOptions) ~= 'table' or pickerAndOptions.picker == nil then
+function M.prettyGitPicker(opts)
+    if type(opts) ~= 'table' then
         M.printErrInvalidArgument()
         return
     end
+    options = opts or {}
 
-    options = pickerAndOptions.options or {}
-
-    local originalEntryMaker = telescopeMakeEntryModule.gen_from_file(options)
+    local originalEntryMaker = telescopeMakeEntryModule.gen_from_git_status(options)
 
     options.entry_maker = function(line)
         local originalEntryTable = originalEntryMaker(line)
@@ -102,10 +101,15 @@ function M.prettyGitPicker(pickerAndOptions)
             separator = ' ',
             items = {
                 { width = fileTypeIconWidth },
+                { width = 2 },
                 { width = nil },
                 { remaining = true },
             },
         })
+
+        local filepath = line:sub(4)
+        originalEntryTable.path = filepath
+        originalEntryTable.ordinal = filepath
 
         originalEntryTable.display = function(entry)
             local changeline = entry.value:sub(0, 3)
@@ -120,35 +124,33 @@ function M.prettyGitPicker(pickerAndOptions)
             end
 
             local highlight = ""
-            if changeline == "?? " then
+            if entry.status == "??" then
                 highlight = "DiffAdd"
-            elseif changeline:sub(2, 2) == "M" then
+            elseif entry.status:sub(2, 2) == "M" then
                 highlight = "DiffChange"
-            elseif changeline:sub(1, 1) == "M" then
+            elseif entry.status:sub(1, 1) == "M" then
                 highlight = "DiffChange"
-            elseif changeline:sub(2, 2) == "D" then
+            elseif entry.status:sub(2, 2) == "D" then
                 highlight = "DiffDelete"
             end
 
-            local tailForDisplay = changeline .. tail .. ' '
+            local tailForDisplay =  tail .. ' '
 
             local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
 
             return displayer({
                 { icon,           iconHighlight },
-                { tailForDisplay, highlight },
+                {entry.status, highlight},
+                 tailForDisplay,
                 { pathToDisplay,  'TelescopeResultsComment' },
             })
         end
 
+
         return originalEntryTable
     end
 
-    if pickerAndOptions.picker == 'git_files' then
-        require('telescope.builtin').git_files(options)
-    else
-        print("Picker is not supported by Pretty Find Git")
-    end
+    require('telescope.builtin').git_status(options)
 end
 
 function M.prettyGrepPicker(opts)

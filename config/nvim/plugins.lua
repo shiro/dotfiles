@@ -208,7 +208,6 @@ require("lazy").setup({
                 },
                 extensions = {
                     coc = {
-                        -- theme = 'ivy',
                         -- use for list picker
                         prefer_locations = true,
                     }
@@ -232,17 +231,6 @@ require("lazy").setup({
             end
 
             local theme = dynamic_theme
-            --require("dressing").setup { select = { telescope = tele_theme_cursor } }
-            --vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({sort_lastused= 1})<CR>', {})
-            -- function _G.find_files()
-            --     tele_builtin.find_files({
-            --         sorter = sorter,
-            --         previewer = false,
-            --         -- layout_config = { prompt_position = "top" },
-            --         --find_command = { "bash", "-c",
-            --         --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
-            --     })
-            -- end
 
             vim.keymap.set("n", "<leader>f", function()
                 require("telescopePickers").prettyFilesPicker({
@@ -270,13 +258,8 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>d", function()
                 -- require("telescopePickers").prettyFilesPicker({
                 require("telescopePickers").prettyGitPicker({
-                    picker = "git_files",
-                    options = {
-                        sorter          = sorter,
-                        layout_strategy = "vertical",
-                        git_command     = { "git", "status", "-s" },
-                        -- git_command     = { "git", "diff", "--name-only" },
-                    }
+                    sorter          = sorter,
+                    layout_strategy = "vertical",
                 })
             end, {})
 
