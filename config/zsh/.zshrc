@@ -37,7 +37,7 @@ zit-lo "zsh-manydots-magic" "manydots-magic"
 zit-in "https://github.com/m45t3r/zit" "zit"
 
 # zit-in "https://github.com/zsh-vi-more/evil-registers" "zsh-vim-register"
-zit-in "kutsan/zsh-system-clipboard" "zsh-system-clipboard"
+zit-in "https://github.com/kutsan/zsh-system-clipboard" "zsh-system-clipboard"
 zit-lo "zsh-system-clipboard" "zsh-system-clipboard.zsh"
 
 
