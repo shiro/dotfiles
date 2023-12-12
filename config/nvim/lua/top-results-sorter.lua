@@ -55,19 +55,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 
-local Highlighter = {}
-function Highlighter:new(picker)
-    return setmetatable({
-        picker = picker,
-    }, self)
-end
-
-function Highlighter:hi_selection(row, caret)
-end
-
-function Highlighter:hi_multiselect(row, is_selected)
-end
-
 M.sorter = function(opts)
     opts = opts or {}
 
@@ -120,19 +107,7 @@ M.sorter = function(opts)
             return (fzy_score * 0.7 + fzy_filename_score * 0.3) * RATIO
                 + recency * (1 - RATIO)
         end,
-        -- highlighter = fzy_sorter.highlighter
-        highlighter = function(ngram_len, prompt, display)
-            -- return ngram_highlighter(ngram_len, prompt, display)
-            local highlights = fzy_sorter.highlighter(ngram_len, prompt, display)
-            local filename_start_idx = #display - #basename(display) + 1
-            if filename_start_idx == 1 then filename_start_idx = filename_start_idx + 2 end
-            -- print(filename_start_idx, basename(display))
-            table.insert(highlights, {
-                start = filename_start_idx,
-                finish = #display,
-            })
-            return highlights
-        end,
+        highlighter = fzy_sorter.highlighter
     }
 end
 

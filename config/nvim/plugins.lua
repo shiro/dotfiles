@@ -185,11 +185,19 @@ require("lazy").setup({
     {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.5',
-        dependencies = { 'nvim-lua/plenary.nvim' },
+        dependencies = { 'nvim-lua/plenary.nvim', 'nvim-tree/nvim-web-devicons' },
         config = function()
             local telescope_actions = require "telescope.actions"
             require('telescope').setup({
-                defaults = { mappings = { i = { ["<esc>"] = telescope_actions.close } } },
+                defaults = {
+                    mappings = { i = { ["<esc>"] = telescope_actions.close } },
+                    layout_config = {
+                        vertical = {
+                            height = 0.6,
+                            -- mirror = true,
+                        },
+                    }
+                },
                 file_ignore_patterns = {
                     "node%_modules/.*",
                     "./target/.*",
@@ -221,20 +229,33 @@ require("lazy").setup({
             local theme = dynamic_theme
             --require("dressing").setup { select = { telescope = tele_theme_cursor } }
             --vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files({sort_lastused= 1})<CR>', {})
-            function _G.find_files()
-                tele_builtin.find_files({
-                    sorter = sorter,
-                    previewer = false,
-                    -- layout_config = { prompt_position = "top" },
-                    --find_command = { "bash", "-c",
-                    --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
-                })
-            end
+            -- function _G.find_files()
+            --     tele_builtin.find_files({
+            --         sorter = sorter,
+            --         previewer = false,
+            --         -- layout_config = { prompt_position = "top" },
+            --         --find_command = { "bash", "-c",
+            --         --    "PATH=$PATH:~/.cargo/bin rg --files --one-file-system --color never --sort modified" }
+            --     })
+            -- end
 
-            vim.keymap.set("n", "<leader>f", "<CMD>lua _G.find_files()<CR>", {})
-            vim.keymap.set("n", "<C-Tab>", "<CMD>lua _G.find_files()<CR>", {})
-            vim.keymap.set("n", "<C-S-F>", ":Telescope live_grep<CR>", { silent = true })
-            vim.keymap.set("n", "<leader>F", ":Telescope live_grep<CR>", { silent = true })
+            vim.keymap.set("n", "<leader>f", function()
+                require("telescopePickers").prettyFilesPicker({
+                    picker = "find_files",
+                    options = {
+                        sorter = sorter,
+                        previewer = false,
+                        layout_strategy = "vertical",
+                    }
+                })
+            end, {})
+            vim.keymap.set("n", "<leader>F", function()
+                require("telescopePickers").prettyGrepPicker({
+                    picker = "live_grep",
+                    options = { layout_strategy = "vertical" }
+                })
+            end, {})
+
             vim.api.nvim_create_user_command('Hihglights', "lua require('telescope.builtin').highlights()", {})
         end,
     },
