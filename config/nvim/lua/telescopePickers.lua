@@ -26,9 +26,13 @@ function M.getPathAndTail(fileName)
     return bufferNameTail, pathToDisplay
 end
 
+function M.printErrInvalidArgument(opts)
+    print("Incorrect argument format. Correct format is: { picker = 'desiredPicker', (optional) options = { ... } }")
+end
+
 function M.prettyFilesPicker(pickerAndOptions)
     if type(pickerAndOptions) ~= 'table' or pickerAndOptions.picker == nil then
-        print("Incorrect argument format. Correct format is: { picker = 'desiredPicker', (optional) options = { ... } }")
+        M.printErrInvalidArgument()
         return
     end
 
@@ -68,7 +72,6 @@ function M.prettyFilesPicker(pickerAndOptions)
         return originalEntryTable
     end
 
-    -- Finally, check which file picker was requested and open it with its associated options
     if pickerAndOptions.picker == 'find_files' then
         require('telescope.builtin').find_files(options)
     elseif pickerAndOptions.picker == 'git_files' then
@@ -82,9 +85,75 @@ function M.prettyFilesPicker(pickerAndOptions)
     end
 end
 
+function M.prettyGitPicker(pickerAndOptions)
+    if type(pickerAndOptions) ~= 'table' or pickerAndOptions.picker == nil then
+        M.printErrInvalidArgument()
+        return
+    end
+
+    options = pickerAndOptions.options or {}
+
+    local originalEntryMaker = telescopeMakeEntryModule.gen_from_file(options)
+
+    options.entry_maker = function(line)
+        local originalEntryTable = originalEntryMaker(line)
+
+        local displayer = telescopeEntryDisplayModule.create({
+            separator = ' ',
+            items = {
+                { width = fileTypeIconWidth },
+                { width = nil },
+                { remaining = true },
+            },
+        })
+
+        originalEntryTable.display = function(entry)
+            local changeline = entry.value:sub(0, 3)
+            local filepath = entry.value:sub(4)
+
+            local tail, pathToDisplay = M.getPathAndTail(filepath)
+
+            -- if directory, get the basename and append '/'
+            if tail == "" then
+                tail, _ = M.getPathAndTail(filepath:sub(1, -2))
+                tail = tail .. "/"
+            end
+
+            local highlight = ""
+            if changeline == "?? " then
+                highlight = "DiffAdd"
+            elseif changeline:sub(2, 2) == "M" then
+                highlight = "DiffChange"
+            elseif changeline:sub(1, 1) == "M" then
+                highlight = "DiffChange"
+            elseif changeline:sub(2, 2) == "D" then
+                highlight = "DiffDelete"
+            end
+
+            local tailForDisplay = changeline .. tail .. ' '
+
+            local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
+
+            return displayer({
+                { icon,           iconHighlight },
+                { tailForDisplay, highlight },
+                { pathToDisplay,  'TelescopeResultsComment' },
+            })
+        end
+
+        return originalEntryTable
+    end
+
+    if pickerAndOptions.picker == 'git_files' then
+        require('telescope.builtin').git_files(options)
+    else
+        print("Picker is not supported by Pretty Find Git")
+    end
+end
+
 function M.prettyGrepPicker(opts)
     if type(opts) ~= 'table' or opts.picker == nil then
-        print("Incorrect argument format. Correct format is: { picker = 'desiredPicker', (optional) options = { ... } }")
+        M.printErrInvalidArgument()
         return
     end
 
@@ -154,7 +223,7 @@ end
 
 function M.prettyWorkspaceSymbolsPicker(opts)
     if opts ~= nil and type(opts) ~= 'table' then
-        print("Options must be a table.")
+        M.printErrInvalidArgument()
         return
     end
 

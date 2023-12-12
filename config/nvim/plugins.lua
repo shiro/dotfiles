@@ -263,9 +263,20 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>s", function()
                 require("telescopePickers").prettyWorkspaceSymbolsPicker({
                     sorter = sorter,
-                    -- previewer = false,
                     prompt_title = "Workspace symbols",
                     layout_strategy = "vertical",
+                })
+            end, {})
+            vim.keymap.set("n", "<leader>d", function()
+                -- require("telescopePickers").prettyFilesPicker({
+                require("telescopePickers").prettyGitPicker({
+                    picker = "git_files",
+                    options = {
+                        sorter          = sorter,
+                        layout_strategy = "vertical",
+                        git_command     = { "git", "status", "-s" },
+                        -- git_command     = { "git", "diff", "--name-only" },
+                    }
                 })
             end, {})
 

@@ -75,7 +75,7 @@ hi VertSplit guifg=#ffffff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=15 ctermbg=
 hi Exception guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=NONE cterm=NONE
 hi Keyword guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi Type guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
-hi DiffChange guifg=#c0d5c1 guibg=#3a5738 guisp=#3a5738 gui=NONE ctermfg=151 ctermbg=65 cterm=NONE
+" hi DiffChange guifg=#c0d5c1 guibg=#3a5738 guisp=#3a5738 gui=NONE ctermfg=151 ctermbg=65 cterm=NONE
 "hi Cursor guifg=#2d2c2b guibg=NONE guisp=#c0d5c1 gui=NONE ctermfg=236 ctermbg=NONE cterm=NONE
 hi SpellLocal guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Error guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
@@ -130,6 +130,7 @@ let diffDel='#533232'
 exe 'hi Cursor guifg='.test.' guibg='.white.' gui=bold,underline'
 exe 'hi Visual guibg='.selection
 exe 'hi DiffAdd guibg=NONE guifg='.lightGreen
+exe 'hi DiffChange guibg=NONE guifg='.cyan
 exe 'hi DiffDelete guibg=NONE guifg='.red
 exe 'hi CocHighlightText guibg=NONE guifg='.yellow
 exe 'hi CocFadeOut guibg=NONE'
