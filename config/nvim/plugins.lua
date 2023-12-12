@@ -213,8 +213,7 @@ require("lazy").setup({
 
             vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
             vim.keymap.set("n", "<C-Tab>", '<CMD>lua _G.find_files()<CR>', {})
-            -- require('telescope.builtin').highlights()
-            -- vim.api.nvim_create_user_command('Upper', 'echo toupper(<q-args>)', { nargs = 1 })
+            vim.api.nvim_create_user_command('Hihglights', "lua require('telescope.builtin').highlights()", {})
         end,
     },
     'fannheyward/telescope-coc.nvim',

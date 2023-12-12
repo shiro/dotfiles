@@ -160,7 +160,7 @@ colors:
     #bright_foreground: '#ffffff'
 
   cursor:
-    #  text: '#000000'
+    text: "#11242f"
     cursor: "#e7e7f1"
 
   #selection:
