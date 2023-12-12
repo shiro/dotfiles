@@ -28,5 +28,6 @@
   "coc.preferences.formatOnSave": true,
   "snippets.priority": 105,
   "snippets.ultisnips.pythonPrompt": false,
-  "signature.preferShownAbove": false
+  "signature.preferShownAbove": false,
+  "coc.source.around.enable": false
 }

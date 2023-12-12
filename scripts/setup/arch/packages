@@ -1,11 +1,9 @@
 [REQUIRED]
 
-
-copyq [clipboard manager]
+cliphist [clipboard manager]
 neovim [editor]
 ranger [file manager]
 tmux [terminal multiplexer]
-wl-clip-persist-git [keep wayland clipbard after window close]
 jq [json parsing in CLI]
 diff-so-fancy [nicer diffs]
 fzf [fuzzy search]
@@ -21,7 +19,6 @@ htop-vim [process manager]
 
 
 [OPTIONAL]
-
 
 ashuffle [shuffle mpd music]
 xwaylandvideobridge-git [stream video on wayland]
@@ -41,3 +38,7 @@ keepassxc [password manager]
 irssi [IRC client]
 nsxiv [image viewer]
 dragon-drop-git [drag-n-drop]
+
+[UNTESTED]
+
+wl-clip-persist-git [keep wayland clipbard after window close]

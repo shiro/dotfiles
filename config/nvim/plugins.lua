@@ -213,6 +213,8 @@ require("lazy").setup({
 
             vim.keymap.set("n", "<leader>f", '<CMD>lua _G.find_files()<CR>', {})
             vim.keymap.set("n", "<C-Tab>", '<CMD>lua _G.find_files()<CR>', {})
+            -- require('telescope.builtin').highlights()
+            -- vim.api.nvim_create_user_command('Upper', 'echo toupper(<q-args>)', { nargs = 1 })
         end,
     },
     'fannheyward/telescope-coc.nvim',
@@ -308,6 +310,18 @@ vim.api.nvim_create_autocmd("User", {
     desc = "Update signature help on jump placeholder"
 })
 
+-- _G.CloseAllFloatingWindows = function()
+--     local closed_windows = {}
+--     for _, win in ipairs(vim.api.nvim_list_wins()) do
+--         local config = vim.api.nvim_win_get_config(win)
+--         if config.relative ~= "" then          -- is_floating_window?
+--             vim.api.nvim_win_close(win, false) -- do not force
+--             table.insert(closed_windows, win)
+--         end
+--     end
+--     print(string.format('Closed %d windows: %s', #closed_windows, vim.inspect(closed_windows)))
+-- end
+-- vim.keymap.set('i', '<ESC>', "coc#util#has_float() ? <CMD>lua _G.show_docs()<CR> : <ESC>", { expr = true });
 
 -- show docs
 function _G.show_docs()
