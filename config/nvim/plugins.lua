@@ -346,18 +346,37 @@ vim.keymap.set("i", "<TAB>",
 vim.keymap.set("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
 vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 -- code lens
--- vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
+vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
 
 -- reformat code
 vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
-vim.keymap.set("n", "gl", "<Plug>(coc-format-selected)j", { silent = true })
+vim.keymap.set("n", "gl", "<Plug>(coc-format)", { silent = true })
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "CocGroup",
     pattern = "lua",
     command = "setl formatexpr=CocAction('formatSelected')",
-    desc = "Setup formatexpr specified filetype(s)."
 })
+
+-- language specific {{{
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "CocGroup",
+    pattern = "rust",
+    callback = function()
+        vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'println!(\"\");<left><left><left>')")
+    end
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "CocGroup",
+    pattern = "typescriptreact",
+    callback = function()
+        vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'console.log();<left><left>')")
+    end
+})
+
+-- }}}
 
 -- auto-save on focus lost/buffer change
 vim.o.autowriteall = true

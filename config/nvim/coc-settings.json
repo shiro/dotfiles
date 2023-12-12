@@ -26,5 +26,7 @@
   },
   "sumneko-lua.enableNvimLuaDev": true,
   "coc.preferences.formatOnSave": true,
-  "snippets.ultisnips.pythonPrompt": false
+  "snippets.priority": 105,
+  "snippets.ultisnips.pythonPrompt": false,
+  "signature.preferShownAbove": false
 }
