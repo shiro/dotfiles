@@ -51,9 +51,18 @@ require("lazy").setup({
             -- insert mode
             vim.api.nvim_command("call arpeggio#map('i', '', 0, 'fun', 'function')")
             -- save
-            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'jk', '<ESC>:w<CR>')")
+            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'jk', '<ESC>')")
+            -- close buffer
+            vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'ap', '<ESC>:q<CR>')")
+            -- only buffer
+            vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'ao', '<C-w>o')")
             -- Ag
             -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'ag', ':Ag<CR>')")
+
+
+            -- files, surpress false warning about jk being mapped already
+            vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'jk', ':Files<cr>')")
+            vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'df', '<CMD>wincmd w<CR>')")
         end
     },
 
@@ -200,7 +209,8 @@ require("lazy").setup({
                             height = 0.6,
                             -- mirror = true,
                         },
-                    }
+                    },
+                    layout_strategy = "flex",
                 },
                 file_ignore_patterns = {
                     "node%_modules/.*",
@@ -216,50 +226,52 @@ require("lazy").setup({
             require('telescope').load_extension('coc')
             local sorter = require("top-results-sorter").sorter()
             local tele_builtin = require('telescope.builtin')
-            local tele_theme_dropdown = require "telescope.themes".get_dropdown()
-            -- local tele_theme_cursor = require "telescope.themes".get_cursor()
-            local tele_theme_default = {}
-            function dynamic_theme()
-                local width = vim.api.nvim_win_get_width(0)
-                local height = vim.api.nvim_win_get_height(0)
+            function layout()
+                local width = vim.fn.winwidth(0)
+                local height = vim.fn.winheight(0)
 
-                if width / 2 > height then
-                    return tele_theme_default
-                else
-                    return tele_theme_dropdown
-                end
+                if (width / 2) > height then return "horizontal" end
+                return "vertical"
             end
 
-            local theme = dynamic_theme
-
-            vim.keymap.set("n", "<leader>f", function()
+            function files()
                 require("telescopePickers").prettyFilesPicker({
                     picker = "find_files",
                     options = {
                         sorter = sorter,
                         previewer = false,
-                        layout_strategy = "vertical",
                     }
                 })
+            end
+
+            vim.api.nvim_create_user_command('Files', files, {})
+
+            vim.keymap.set("n", "<leader>f", function()
+                files()
             end, {})
             vim.keymap.set("n", "<leader>F", function()
                 require("telescopePickers").prettyGrepPicker({
                     picker = "live_grep",
-                    options = { layout_strategy = "vertical" }
+                    options = { layout_strategy = layout() }
                 })
             end, {})
             vim.keymap.set("n", "<leader>s", function()
                 require("telescopePickers").prettyWorkspaceSymbolsPicker({
                     sorter = sorter,
                     prompt_title = "Workspace symbols",
-                    layout_strategy = "vertical",
+                    layout_strategy = layout(),
                 })
             end, {})
             vim.keymap.set("n", "<leader>d", function()
-                -- require("telescopePickers").prettyFilesPicker({
                 require("telescopePickers").prettyGitPicker({
                     sorter          = sorter,
-                    layout_strategy = "vertical",
+                    layout_strategy = layout(),
+                })
+            end, {})
+            vim.keymap.set("n", "<leader>z", function()
+                tele_builtin.git_bcommits({
+                    -- sorter          = sorter,
+                    layout_strategy = layout(),
                 })
             end, {})
 
@@ -270,10 +282,21 @@ require("lazy").setup({
     -- git gutter to the left
     {
         'airblade/vim-gitgutter',
+        init = function()
+            vim.g["gitgutter_map_keys"] = 0
+            vim.g["gitgutter_show_msg_on_hunk_jumping"] = 0
+            -- vim.g["gitgutter_signs"] = 0
+            vim.g["gitgutter_highlight_linenrs"] = 1
+            vim.g["gitgutter_sign_allow_clobber"] = 0
+            vim.g["gitgutter_sign_removed"] = "⠀"
+            vim.g["gitgutter_sign_added"] = "⠀"
+            vim.g["gitgutter_sign_modified"] = "⠀"
+            vim.g["gitgutter_sign_removed"] = "⠀"
+            vim.g["gitgutter_sign_removed_first_line"] = "⠀"
+            vim.g["gitgutter_sign_removed_above_and_below"] = "⠀"
+            vim.g["gitgutter_sign_modified_removed"] = "⠀"
+        end,
         config = function()
-            vim.g['gitgutter_map_keys'] = 0
-
-            -- nnoremap <leader>gg :GitGutterLineHighlightsToggle<CR>
             -- nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
             vim.api.nvim_set_keymap('n', '<C-A-Z>',
                 "<Plug>(GitGutterUndoHunk)",
@@ -334,7 +357,7 @@ vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silen
 -- :Telescope coc workspace_symbols
 
 -- show outline (hierarchy)
-vim.api.nvim_set_keymap('n', 'go', ":CocFzfList outline<CR>", { silent = true });
+vim.api.nvim_set_keymap('n', 'go', ":call CocActionAsync('showOutline')<cr>", { silent = true });
 -- vim.api.nvim_set_keymap("n", "go", ":CocList outline<CR>", opts)
 -- list warnings/errors
 -- vim.api.nvim_set_keymap('n', 'ge', ":CocFzfList diagnostics<CR>", { silent = true });
@@ -383,8 +406,10 @@ function _G.show_docs()
     end
 end
 
+vim.keymap.set("n", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 vim.keymap.set('i', '<F12>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 

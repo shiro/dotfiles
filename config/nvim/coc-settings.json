@@ -29,5 +29,9 @@
   "snippets.priority": 105,
   "snippets.ultisnips.pythonPrompt": false,
   "signature.preferShownAbove": false,
-  "coc.source.around.enable": false
+  "coc.source.around.enable": false,
+  "diagnostic.enableHighlightLineNumber": false,
+  "outline.sortBy": "position",
+  "outline.previewBorderRounded": true,
+  "outline.autoPreview": true
 }

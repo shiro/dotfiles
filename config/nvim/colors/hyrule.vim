@@ -22,11 +22,11 @@ hi Folded guifg=#85807c guibg=NONE guisp=#30343d gui=NONE ctermfg=102 ctermbg=NO
 hi PreCondit guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi Include guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Float guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
-hi StatusLineNC guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+" hi StatusLineNC guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi CTagsMember guifg=NONE guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi NonText guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi CTagsGlobalConstant guifg=NONE guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
-hi DiffText guifg=#c0d5c1 guibg=#664444 guisp=#664444 gui=NONE ctermfg=151 ctermbg=95 cterm=NONE
+" hi DiffText guifg=#c0d5c1 guibg=#664444 guisp=#664444 gui=NONE ctermfg=151 ctermbg=95 cterm=NONE
 hi ErrorMsg guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
 hi Ignore guifg=#cccccc guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=252 ctermbg=NONE cterm=NONE
 hi Debug guifg=#ff9999 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
@@ -37,8 +37,8 @@ hi Conditional guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 cterm
 hi StorageClass guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=NONE cterm=NONE
 hi Todo guifg=#359ce6 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=74 ctermbg=NONE cterm=NONE
 hi Special guifg=#bbddff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=153 ctermbg=NONE cterm=NONE
-hi LineNr guifg=#aaaaaa guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=248 ctermbg=NONE cterm=NONE
-hi StatusLine guifg=#9ba89b guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=108 ctermbg=NONE cterm=NONE
+" hi LineNr guifg=#aaaaaa guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=248 ctermbg=NONE cterm=NONE
+" hi StatusLine guifg=#9ba89b guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=108 ctermbg=NONE cterm=NONE
 hi Label guifg=#ffccff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=225 ctermbg=NONE cterm=NONE
 hi CTagsImport guifg=NONE guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi PMenuSel guifg=#ce840d guibg=NONE guisp=#333231 gui=NONE ctermfg=172 ctermbg=NONE cterm=NONE
@@ -54,7 +54,7 @@ hi TabLineSel guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermb
 hi Number guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Boolean guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Operator guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
-hi CursorLine guifg=#c0d5c1 guibg=NONE guisp=#2c445c gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+" hi CursorLine guifg=#c0d5c1 guibg=NONE guisp=#2c445c gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Union guifg=#b5219f guibg=NONE guisp=#eb7373 gui=NONE ctermfg=126 ctermbg=NONE cterm=NONE
 hi TabLineFill guifg=NONE guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi Question guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
@@ -62,7 +62,7 @@ hi WarningMsg guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermb
 "hi VisualNOS guifg=#bdb84f guibg=NONE guisp=#eb7373 gui=NONE ctermfg=143 ctermbg=NONE cterm=NONE
 "hi DiffDelete guifg=#c0d5c1 guibg=#664444 guisp=#664444 gui=NONE ctermfg=151 ctermbg=95 cterm=NONE
 hi ModeMsg guifg=#ffeecc guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=230 ctermbg=NONE cterm=NONE
-hi CursorColumn guifg=#c0d5c1 guibg=NONE guisp=#2c445c gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+" hi CursorColumn guifg=#c0d5c1 guibg=NONE guisp=#2c445c gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi Define guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Function guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=NONE cterm=NONE
 hi FoldColumn guifg=#85807c guibg=NONE guisp=#30343d gui=NONE ctermfg=102 ctermbg=NONE cterm=NONE
@@ -123,15 +123,18 @@ let gray='#716D6A'
 let caret='#989BA2'
 let selection='#161A1F'
 let diffAdd='#304D2E'
+let diffAddFg='#50804C'
 let diffMod='#2E455D'
+let diffModFg='#446588'
+let diffModDark='#323334'
 let diffDel='#533232'
+let diffDelFg='#7F4D4D'
+let ore='#5B5957'
 
 
 exe 'hi Cursor guifg='.test.' guibg='.white.' gui=bold,underline'
 exe 'hi Visual guibg='.selection
-exe 'hi DiffAdd guibg=NONE guifg='.lightGreen
-exe 'hi DiffChange guibg=NONE guifg='.cyan
-exe 'hi DiffDelete guibg=NONE guifg='.red
+exe 'hi LineNr guibg=None guifg='.ore
 exe 'hi CocHighlightText guibg=NONE guifg='.yellow
 exe 'hi CocFadeOut guibg=NONE'
 exe 'hi CocErrorSign guibg=NONE guifg='.red
@@ -158,17 +161,34 @@ exe 'hi IncSearch guibg='.yellow.' guifg='.bg.' gui=NONE'
 exe 'hi Include guifg='.lightGreen
 exe 'hi Type guifg='.darkGreen
 exe 'hi @constant.builtin.tsx guifg='.yellow
-"exe 'hi GitGutterAdd guifg=NONE guibg='.yellow
-exe 'hi GitGutterAdd guifg='.diffAdd.' guibg='.diffAdd
-exe 'hi GitGutterChange guifg='.diffMod.' guibg='.diffMod
-exe 'hi GitGutterDelete guifg='.diffDel.' guibg='.diffDel
-exe 'hi diffAdded guifg='.lightGreen
-exe 'hi diffChanged guifg='.cyan
-exe 'hi diffRemoved guifg='.red
-
 exe 'hi TelescopeMatching guifg='.orange
 exe 'hi TelescopeSelectionCaret guibg='.shadow
 exe 'hi TelescopeSelection guibg='.shadow
+exe 'hi CocFloating guifg='.white
+exe 'hi FloatBorder guifg='.white
+
+
+" diff
+exe 'hi @text.diff.add.diff guifg='.white
+exe 'hi @text.diff.delete.diff guifg='.white
+exe 'hi DiffAdd guibg='.diffAdd.' guifg=None'
+exe 'hi DiffChange gui=None guibg='.diffModDark.' guifg=None'
+exe 'hi DiffDelete gui=None guibg='.diffDel.' guifg='.diffDel
+exe 'hi DiffText gui=None guibg='.diffMod.' guifg=None'
+exe 'hi GitGutterAdd guifg='.diffAdd.' guibg='.diffAdd
+exe 'hi GitGutterAddLineNr guifg='.diffAddFg.' guibg='.diffAdd
+exe 'hi GitGutterChange guifg='.diffMod.' guibg='.diffMod
+exe 'hi GitGutterChangeLineNr guifg='.diffModFg.' guibg='.diffMod
+exe 'hi GitGutterDelete guifg='.diffDel.' guibg='.diffDel
+exe 'hi GitGutterDeleteLineNr guifg='.diffDelFg.' guibg='.diffDel
+exe 'hi diffAdded guifg='.white.' guibg='.diffAdd
+exe 'hi diffChanged guifg='.white.' guibg='.diffMod
+exe 'hi diffRemoved guifg='.white.' guibg='.diffDel
+
+exe 'hi WinSeparator guifg='.shadow
+exe 'hi StatusLine guifg='.bg.' guibg='.ore
+exe 'hi StatusLineNC guifg='.bg.' guibg='.ore
+
 
 " JSON
 
@@ -231,6 +251,9 @@ exe 'hi rustAttribute guifg='.white
 exe 'hi DiagnosticError guifg='.error
 "exe 'hi FloatShadow guibg='.lightGreen
 "set winblend=30
+exe 'hi GitGutterAddIntraLine guifg=None guibg='.diffMod.' gui=None'
+exe 'hi GitGutterDeleteIntraLine guifg=None guibg='.diffDel.' gui=None'
+
 
 "DiagnosticWarn
 "DiagnosticInfo

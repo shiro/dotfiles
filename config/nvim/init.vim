@@ -18,6 +18,7 @@ noremap <Leader><F2> :so ~/.config/nvim/ide.lua<CR>
 
 source ~/.config/nvim/shared.vim
 source ~/.config/nvim/shell.vim
+source ~/.config/nvim/shell.lua
 source ~/.config/nvim/plugins.lua
 
 if exists('g:vscode')
