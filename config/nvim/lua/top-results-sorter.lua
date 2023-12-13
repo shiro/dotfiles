@@ -58,16 +58,12 @@ function get_cwd_hash()
     local cwd = vim.fn.getcwd()
     local hash = cwd:gsub("^/", ""):gsub("/", "--")
     local data_dir = os.getenv("XDG_DATA_HOME")
-    if os.getenv("XDG_DATA_HOME") == nil then
-        return nil
-    end
+    if data_dir == nil then return nil end
     data_dir = data_dir .. "/nvim/recent-files"
     return data_dir .. "/" .. hash
 end
 
 function save_history()
-    print("save")
-
     local hash = get_cwd_hash()
     if hash == nil then return end
 
@@ -83,7 +79,6 @@ function save_history()
 end
 
 function load_history()
-    print("load")
     local hash = get_cwd_hash()
     if hash == nil then return end
     local fd = io.open(hash, "r")
