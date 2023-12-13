@@ -159,12 +159,14 @@ exe "hi CocHintLine guibg=NONE"
 exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
 exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
-exe "hi Include guifg=".lightGreen
-exe "hi Type guifg=".darkGreen
-exe "hi @constant.builtin.tsx guifg=".yellow
+
+" omnibar
 exe "hi TelescopeMatching guifg=".orange
 exe "hi TelescopeSelectionCaret guibg=".shadow
 exe "hi TelescopeSelection guibg=".shadow
+
+" popups
+exe "hi FgCocHintFloatBgCocFloating guifg=".yellow
 exe "hi CocFloating guifg=".white
 exe "hi FloatBorder guifg=".white
 
@@ -172,6 +174,8 @@ exe "hi FloatBorder guifg=".white
 exe "hi Tag guibg=None guifg=".lightGreen
 exe "hi String guibg=None guifg=".orange
 exe "hi Constant guibg=None guifg=".yellow
+exe "hi Include guifg=".lightGreen
+exe "hi Type guifg=".darkGreen
 
 
 " diff
@@ -205,6 +209,7 @@ exe "hi @label.json guifg=".lightGreen
 exe "hi typescriptExport guifg=".lightGreen
 exe "hi typescriptImport guifg=".lightGreen
 exe "hi tsxTagName guifg=".lightGreen
+exe "hi @constant.builtin.tsx guifg=".yellow
 exe "hi @tag.tsx guifg=".lightGreen
 exe "hi @variable.tsx guifg=".blue
 exe "hi @constructor.tsx guifg=".lightGreen
