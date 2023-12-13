@@ -8,6 +8,16 @@ function basename(str)
     return name
 end
 
+--function get_cwd_hash()
+--    local cwd = string.gsub(vim.fn.getcwd(), "/", "--")
+--end
+--
+--function save()
+--end
+--
+--function load()
+--end
+
 HistMap = {}
 function HistMap:new()
     local o = {}

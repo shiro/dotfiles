@@ -139,10 +139,6 @@ require("lazy").setup({
         build = 'npm ci',
     },
     {
-        "neoclide/coc-pairs",
-        build = "yarn install --frozen-lockfile",
-    },
-    {
         "tjdevries/coc-zsh",
         ft = 'zsh',
     },
@@ -159,11 +155,9 @@ require("lazy").setup({
         dependencies = {
             'JoosepAlviste/nvim-ts-context-commentstring',
         },
-        opts = {
-            --pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-        },
         lazy = false,
         config = function()
+            require('ts_context_commentstring').setup { enable_autocmd = false }
             require('Comment').setup({
                 pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
             })
