@@ -241,6 +241,7 @@ require("lazy").setup({
                     options = {
                         sorter = sorter,
                         previewer = false,
+                        layout_strategy = layout(),
                     }
                 })
             end
@@ -269,9 +270,8 @@ require("lazy").setup({
                     layout_strategy = layout(),
                 })
             end, {})
-            vim.keymap.set("n", "<leader>z", function()
+            vim.keymap.set("n", "<leader>h", function()
                 tele_builtin.git_bcommits({
-                    -- sorter          = sorter,
                     layout_strategy = layout(),
                 })
             end, {})

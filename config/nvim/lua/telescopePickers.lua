@@ -112,8 +112,8 @@ function M.prettyGitPicker(opts)
         originalEntryTable.ordinal = filepath
 
         originalEntryTable.display = function(entry)
-            local changeline = entry.value:sub(0, 3)
-            local filepath = entry.value:sub(4)
+            local status = entry.status
+            if status:sub(2, 2) == " " then status = status:sub(1, 1) .. "⠀" end
 
             local tail, pathToDisplay = M.getPathAndTail(filepath)
 
@@ -125,24 +125,25 @@ function M.prettyGitPicker(opts)
 
             local highlight = ""
             if entry.status == "??" then
-                highlight = "DiffAdd"
+                status = " A"
+                highlight = "diffAdded"
             elseif entry.status:sub(2, 2) == "M" then
-                highlight = "DiffChange"
+                highlight = "diffChanged"
             elseif entry.status:sub(1, 1) == "M" then
-                highlight = "DiffChange"
+                highlight = "diffChanged"
             elseif entry.status:sub(2, 2) == "D" then
-                highlight = "DiffDelete"
+                highlight = "diffRemoved"
             end
 
-            local tailForDisplay =  tail .. ' '
+            local tailForDisplay = tail .. ' '
 
             local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
 
             return displayer({
-                { icon,           iconHighlight },
-                {entry.status, highlight},
-                 tailForDisplay,
-                { pathToDisplay,  'TelescopeResultsComment' },
+                { icon,   iconHighlight },
+                { status, highlight },
+                tailForDisplay,
+                { pathToDisplay, 'TelescopeResultsComment' },
             })
         end
 
