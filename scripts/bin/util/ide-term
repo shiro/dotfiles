@@ -1,3 +1,3 @@
 #!/bin/sh
 
-alacritty --class IDE --config-file=$HOME/.config/alacritty/ide.yml -e zsh -is eval 'tmux'
+alacritty --class IDE --config-file=$HOME/.config/alacritty/ide.yml -e zsh -ic tmux

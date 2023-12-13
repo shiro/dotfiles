@@ -186,8 +186,8 @@ exe 'hi diffChanged guifg='.white.' guibg='.diffMod
 exe 'hi diffRemoved guifg='.white.' guibg='.diffDel
 
 exe 'hi WinSeparator guifg='.shadow
-exe 'hi StatusLine guifg='.bg.' guibg='.ore
-exe 'hi StatusLineNC guifg='.bg.' guibg='.ore
+exe 'hi StatusLine gui=None guifg='.ore
+exe 'hi StatusLineNC gui=None guifg='.ore
 
 
 " JSON
