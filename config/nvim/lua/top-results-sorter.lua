@@ -8,23 +8,15 @@ function basename(str)
     return name
 end
 
---function get_cwd_hash()
---    local cwd = string.gsub(vim.fn.getcwd(), "/", "--")
---end
---
---function save()
---end
---
---function load()
---end
-
 HistMap = {}
-function HistMap:new()
-    local o = {}
+function HistMap:new(from)
+    local o = from or {}
     setmetatable(o, self)
     self.__index = self
-    o.len = 0
-    o.map = {}
+    if from == nil then
+        o.len = 0
+        o.map = {}
+    end
     return o
 end
 
@@ -53,13 +45,63 @@ function HistMap:get_recency(path)
     return self.map[path] / (self.len - 1)
 end
 
-Recent = HistMap:new()
+M.Recent = HistMap:new()
+
+function get_cwd_hash()
+    local cwd = vim.fn.getcwd()
+    local hash = cwd:gsub("^/", ""):gsub("/", "--")
+    local data_dir = os.getenv("XDG_DATA_HOME")
+    if os.getenv("XDG_DATA_HOME") == nil then
+        return nil
+    end
+    data_dir = data_dir .. "/nvim/recent-files"
+    return data_dir .. "/" .. hash
+end
+
+function save_history()
+    local hash = get_cwd_hash()
+    if hash == nil then return end
+
+    -- ensure the data dir exists
+    local data_dir = basename(hash)
+    os.execute("mkdir -p \"" .. data_dir .. "\"")
+
+    local fd = io.open(hash, "w")
+    if fd == nil then return end
+    raw = vim.json.encode(M.Recent)
+    fd:write(raw)
+    fd:close()
+end
+
+function load_history()
+    local hash = get_cwd_hash()
+    if hash == nil then return end
+    local fd = io.open(hash, "r")
+    if fd == nil then return end
+    local raw = fd:read("*a")
+    M.Recent = HistMap:new(vim.json.decode(raw))
+    fd:close()
+end
+
+vim.api.nvim_create_autocmd({ "FocusGained" }, {
+    callback = load_history,
+})
+
+vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
+    callback = save_history,
+})
+
+M.first_run = true
 
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
         local path = vim.fn.expand('%')
         if path ~= "" then
-            Recent:push(path)
+            if M.first_run then
+                M.first_run = false
+                load_history()
+            end
+            M.Recent:push(path)
         end
     end
 })
@@ -80,7 +122,7 @@ M.sorter = function(opts)
                 return -1
             end
 
-            local recency = Recent:get_recency(line)
+            local recency = M.Recent:get_recency(line)
             if recency ~= nil then
                 -- remove currently open buffer
                 if recency == 0 then return 10 end
