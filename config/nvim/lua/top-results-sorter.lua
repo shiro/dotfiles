@@ -47,6 +47,13 @@ end
 
 M.Recent = HistMap:new()
 
+function push_current_path()
+    local path = vim.fn.expand('%')
+    if path ~= "" then
+        M.Recent:push(path)
+    end
+end
+
 function get_cwd_hash()
     local cwd = vim.fn.getcwd()
     local hash = cwd:gsub("^/", ""):gsub("/", "--")
@@ -59,6 +66,8 @@ function get_cwd_hash()
 end
 
 function save_history()
+    print("save")
+
     local hash = get_cwd_hash()
     if hash == nil then return end
 
@@ -74,6 +83,7 @@ function save_history()
 end
 
 function load_history()
+    print("load")
     local hash = get_cwd_hash()
     if hash == nil then return end
     local fd = io.open(hash, "r")
@@ -81,6 +91,7 @@ function load_history()
     local raw = fd:read("*a")
     M.Recent = HistMap:new(vim.json.decode(raw))
     fd:close()
+    push_current_path()
 end
 
 vim.api.nvim_create_autocmd({ "FocusGained" }, {
@@ -95,14 +106,12 @@ M.first_run = true
 
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
-        local path = vim.fn.expand('%')
-        if path ~= "" then
-            if M.first_run then
-                M.first_run = false
-                load_history()
-            end
-            M.Recent:push(path)
+        if M.first_run then
+            M.first_run = false
+            load_history()
+            return
         end
+        push_current_path()
     end
 })
 

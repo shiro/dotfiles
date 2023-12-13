@@ -81,10 +81,10 @@ hi SpellLocal guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermb
 hi Error guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
 hi PMenu guifg=#90c93f guibg=NONE guisp=#3b3a39 gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi SpecialKey guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
-hi Constant guifg=#ffffff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=15 ctermbg=NONE cterm=NONE
+" hi Constant guifg=#ffffff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=15 ctermbg=NONE cterm=NONE
 hi DefinedName guifg=#026191 guibg=NONE guisp=#eb7373 gui=NONE ctermfg=24 ctermbg=NONE cterm=NONE
-hi Tag guifg=#bbddff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=153 ctermbg=NONE cterm=NONE
-hi String guifg=#ce840d guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=172 ctermbg=NONE cterm=NONE
+" hi Tag guifg=#bbddff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=153 ctermbg=NONE cterm=NONE
+" hi String guifg=#ce840d guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=172 ctermbg=NONE cterm=NONE
 hi PMenuThumb guifg=NONE guibg=NONE guisp=#90c93f gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi MatchParen guifg=#ce840d guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=172 ctermbg=NONE cterm=NONE
 hi LocalVariable guifg=#ff1c1c guibg=NONE guisp=#eb7373 gui=NONE ctermfg=196 ctermbg=NONE cterm=NONE
@@ -132,127 +132,133 @@ let diffDelFg='#7F4D4D'
 let ore='#5B5957'
 
 
-exe 'hi Cursor guifg='.test.' guibg='.white.' gui=bold,underline'
-exe 'hi Visual guibg='.selection
-exe 'hi LineNr guibg=None guifg='.ore
-exe 'hi CocHighlightText guibg=NONE guifg='.yellow
-exe 'hi CocFadeOut guibg=NONE'
-exe 'hi CocErrorSign guibg=NONE guifg='.red
-exe 'hi CocWarningSign guibg=NONE guifg='.gray
-exe 'hi CocInfoSign guibg=NONE guifg='.gray
-exe 'hi CocHintSign guibg=NONE guifg='.gray
-exe 'hi CocErrorVirtualText guibg=NONE'
-exe 'hi CocWarningVirtualText guibg=NONE'
-exe 'hi CocInfoVirtualText guibg=NONE'
-exe 'hi CocHintVirtualText guibg=NONE'
-exe 'hi CocErrorHighlight guibg=NONE guifg='.red
-exe 'hi CocWarningHighlight guibg=NONE guifg='.test
-exe 'hi CocInfoHighlight guibg=NONE'
-exe 'hi CocHintHighlight guibg=NONE guifg='.brown
-exe 'hi CocDeprecatedHighlight guibg=NONE'
-exe 'hi CocUnusedHighlight guibg=NONE guifg='.gray
-exe 'hi CocErrorLine guibg=NONE'
-exe 'hi CocWarningLine guibg=NONE'
-exe 'hi CocInfoLine guibg=NONE'
-exe 'hi CocHintLine guibg=NONE'
-exe 'hi Search guibg='.lightGreen.' guifg='.bg.' gui=NONE'
-exe 'hi CurSearch guibg='.yellow.' guifg='.bg.' gui=NONE'
-exe 'hi IncSearch guibg='.yellow.' guifg='.bg.' gui=NONE'
-exe 'hi Include guifg='.lightGreen
-exe 'hi Type guifg='.darkGreen
-exe 'hi @constant.builtin.tsx guifg='.yellow
-exe 'hi TelescopeMatching guifg='.orange
-exe 'hi TelescopeSelectionCaret guibg='.shadow
-exe 'hi TelescopeSelection guibg='.shadow
-exe 'hi CocFloating guifg='.white
-exe 'hi FloatBorder guifg='.white
+" editor
+exe "hi Cursor guifg=".test." guibg=".white." gui=bold,underline"
+exe "hi Visual guibg=".selection
+exe "hi LineNr guibg=None guifg=".ore
+exe "hi CocHighlightText guibg=NONE guifg=".yellow
+exe "hi CocFadeOut guibg=NONE"
+exe "hi CocErrorSign guibg=NONE guifg=".red
+exe "hi CocWarningSign guibg=NONE guifg=".gray
+exe "hi CocInfoSign guibg=NONE guifg=".gray
+exe "hi CocHintSign guibg=NONE guifg=".gray
+exe "hi CocErrorVirtualText guibg=NONE"
+exe "hi CocWarningVirtualText guibg=NONE"
+exe "hi CocInfoVirtualText guibg=NONE"
+exe "hi CocHintVirtualText guibg=NONE"
+exe "hi CocErrorHighlight guibg=NONE guifg=".red
+exe "hi CocWarningHighlight guibg=NONE guifg=".test
+exe "hi CocInfoHighlight guibg=NONE"
+exe "hi CocHintHighlight guibg=NONE guifg=".brown
+exe "hi CocDeprecatedHighlight guibg=NONE"
+exe "hi CocUnusedHighlight guibg=NONE guifg=".gray
+exe "hi CocErrorLine guibg=NONE"
+exe "hi CocWarningLine guibg=NONE"
+exe "hi CocInfoLine guibg=NONE"
+exe "hi CocHintLine guibg=NONE"
+exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
+exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
+exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
+exe "hi Include guifg=".lightGreen
+exe "hi Type guifg=".darkGreen
+exe "hi @constant.builtin.tsx guifg=".yellow
+exe "hi TelescopeMatching guifg=".orange
+exe "hi TelescopeSelectionCaret guibg=".shadow
+exe "hi TelescopeSelection guibg=".shadow
+exe "hi CocFloating guifg=".white
+exe "hi FloatBorder guifg=".white
+
+" language agnostic
+exe "hi Tag guibg=None guifg=".lightGreen
+exe "hi String guibg=None guifg=".orange
+exe "hi Constant guibg=None guifg=".yellow
 
 
 " diff
-exe 'hi @text.diff.add.diff guifg='.white
-exe 'hi @text.diff.delete.diff guifg='.white
-exe 'hi DiffAdd guibg='.diffAdd.' guifg=None'
-exe 'hi DiffChange gui=None guibg='.diffModDark.' guifg=None'
-exe 'hi DiffDelete gui=None guibg='.diffDel.' guifg='.diffDel
-exe 'hi DiffText gui=None guibg='.diffMod.' guifg=None'
-exe 'hi GitGutterAdd guifg='.diffAdd.' guibg='.diffAdd
-exe 'hi GitGutterAddLineNr guifg='.diffAddFg.' guibg='.diffAdd
-exe 'hi GitGutterChange guifg='.diffMod.' guibg='.diffMod
-exe 'hi GitGutterChangeLineNr guifg='.diffModFg.' guibg='.diffMod
-exe 'hi GitGutterDelete guifg='.diffDel.' guibg='.diffDel
-exe 'hi GitGutterDeleteLineNr guifg='.diffDelFg.' guibg='.diffDel
-exe 'hi diffAdded guifg='.white.' guibg='.diffAdd
-exe 'hi diffChanged guifg='.white.' guibg='.diffMod
-exe 'hi diffRemoved guifg='.white.' guibg='.diffDel
+exe "hi @text.diff.add.diff guifg=".white
+exe "hi @text.diff.delete.diff guifg=".white
+exe "hi DiffAdd guibg=".diffAdd." guifg=None"
+exe "hi DiffChange gui=None guibg=".diffModDark." guifg=None"
+exe "hi DiffDelete gui=None guibg=".diffDel." guifg=".diffDel
+exe "hi DiffText gui=None guibg=".diffMod." guifg=None"
+exe "hi GitGutterAdd guifg=".diffAdd." guibg=".diffAdd
+exe "hi GitGutterAddLineNr guifg=".diffAddFg." guibg=".diffAdd
+exe "hi GitGutterChange guifg=".diffMod." guibg=".diffMod
+exe "hi GitGutterChangeLineNr guifg=".diffModFg." guibg=".diffMod
+exe "hi GitGutterDelete guifg=".diffDel." guibg=".diffDel
+exe "hi GitGutterDeleteLineNr guifg=".diffDelFg." guibg=".diffDel
+exe "hi diffAdded guifg=".white." guibg=".diffAdd
+exe "hi diffChanged guifg=".white." guibg=".diffMod
+exe "hi diffRemoved guifg=".white." guibg=".diffDel
 
-exe 'hi WinSeparator guifg='.shadow
-exe 'hi StatusLine gui=None guifg='.ore
-exe 'hi StatusLineNC gui=None guifg='.ore
+exe "hi WinSeparator guifg=".shadow
+exe "hi StatusLine gui=None guifg=".ore
+exe "hi StatusLineNC gui=None guifg=".ore
 
 
 " JSON
 
-exe 'hi @label.json guifg='.lightGreen
+exe "hi @label.json guifg=".lightGreen
 
 " TypeScript
 
-exe 'hi typescriptExport guifg='.lightGreen
-exe 'hi typescriptImport guifg='.lightGreen
-exe 'hi tsxTagName guifg='.lightGreen
-exe 'hi @tag.tsx guifg='.lightGreen
-exe 'hi @variable.tsx guifg='.blue
-exe 'hi @constructor.tsx guifg='.lightGreen
-exe 'hi tsxAttrib guifg='.darkGreen
-exe 'hi @tag.attribute.tsx guifg='.darkGreen
-exe 'hi typescriptVariable guifg='.lightGreen
-exe 'hi typescriptIdentifierName guifg='.cyan
-exe 'hi typescriptInterfaceName guifg='.white
-exe 'hi typescriptMember guifg='.white
-exe 'hi @tag.delimiter.tsx guifg='.white
-exe 'hi @method.call.tsx guifg='.dirt
-exe 'hi typescriptEndColons guifg='.white
-exe 'hi typescriptTypeReference guifg='.darkGreen
-exe 'hi typescriptSpecial guifg='.darkGreen
-exe 'hi typescriptObjectLabel guifg='.white
-exe 'hi typescriptObjectStaticMethod guifg='.dirt
-exe 'hi typescriptBraces guifg='.white
-exe 'hi typescriptArrowFuncArg guifg='.white
-exe 'hi typescriptStatementKeyword guifg='.lightGreen
-exe 'hi typescriptVariableDeclaration guifg='.orange
+exe "hi typescriptExport guifg=".lightGreen
+exe "hi typescriptImport guifg=".lightGreen
+exe "hi tsxTagName guifg=".lightGreen
+exe "hi @tag.tsx guifg=".lightGreen
+exe "hi @variable.tsx guifg=".blue
+exe "hi @constructor.tsx guifg=".lightGreen
+exe "hi tsxAttrib guifg=".darkGreen
+exe "hi @tag.attribute.tsx guifg=".darkGreen
+exe "hi typescriptVariable guifg=".lightGreen
+exe "hi typescriptIdentifierName guifg=".cyan
+exe "hi typescriptInterfaceName guifg=".white
+exe "hi typescriptMember guifg=".white
+exe "hi @tag.delimiter.tsx guifg=".white
+exe "hi @method.call.tsx guifg=".dirt
+exe "hi typescriptEndColons guifg=".white
+exe "hi typescriptTypeReference guifg=".darkGreen
+exe "hi typescriptSpecial guifg=".darkGreen
+exe "hi typescriptObjectLabel guifg=".white
+exe "hi typescriptObjectStaticMethod guifg=".dirt
+exe "hi typescriptBraces guifg=".white
+exe "hi typescriptArrowFuncArg guifg=".white
+exe "hi typescriptStatementKeyword guifg=".lightGreen
+exe "hi typescriptVariableDeclaration guifg=".orange
 
 " Rust
-exe 'hi rustModPath guifg='.white
-exe 'hi rsDelimiter guifg='.white
-exe 'hi rsAttribute guifg='.yellow
-exe 'hi rustEnum guifg='.darkGreen
-exe 'hi rsUserFunc guifg='.lightGreen
-exe 'hi rsUse guifg='.lightGreen
-exe 'hi rsUserMethod guifg='.lightGreen
-exe 'hi rsForeignFunc guifg='.lightGreen
-exe 'hi rsForeignType guifg='.darkGreen
-exe 'hi rsTrue guifg='.lightGreen
-exe 'hi rsNumber guifg='.orange
-exe 'hi rsTypeParamDef guifg='.cyan
-exe 'hi rsLibraryType guifg='.darkGreen
-exe 'hi rsUserConst guifg='.darkGreen
-exe 'hi rsUserType guifg='.darkGreen
-exe 'hi rsTypeDef guifg='.white
-exe 'hi @constant.builtin.rust guifg='.darkGreen
-exe 'hi @function.rust guifg='.dirt
-exe 'hi @function.call.rust guifg='.lightGreen
-exe 'hi @constant.rust guifg='.darkGreen
-exe 'hi rsFuncDef guifg='.orange
-exe 'hi rsUserMacro guifg='.red
-exe 'hi rsLibraryMacro guifg='.red
-exe 'hi rsStaticLifetime guifg='.cyan
-exe 'hi rsModule guifg='.white
-exe 'hi rustAttribute guifg='.white
-"exe 'hi CocFloating guifg='.white
-exe 'hi DiagnosticError guifg='.error
-"exe 'hi FloatShadow guibg='.lightGreen
+exe "hi rustModPath guifg=".white
+exe "hi rsDelimiter guifg=".white
+exe "hi rsAttribute guifg=".yellow
+exe "hi rustEnum guifg=".darkGreen
+exe "hi rsUserFunc guifg=".lightGreen
+exe "hi rsUse guifg=".lightGreen
+exe "hi rsUserMethod guifg=".lightGreen
+exe "hi rsForeignFunc guifg=".lightGreen
+exe "hi rsForeignType guifg=".darkGreen
+exe "hi rsTrue guifg=".lightGreen
+exe "hi rsNumber guifg=".orange
+exe "hi rsTypeParamDef guifg=".cyan
+exe "hi rsLibraryType guifg=".darkGreen
+exe "hi rsUserConst guifg=".darkGreen
+exe "hi rsUserType guifg=".darkGreen
+exe "hi rsTypeDef guifg=".white
+exe "hi @constant.builtin.rust guifg=".darkGreen
+exe "hi @function.rust guifg=".dirt
+exe "hi @function.call.rust guifg=".lightGreen
+exe "hi @constant.rust guifg=".darkGreen
+exe "hi rsFuncDef guifg=".orange
+exe "hi rsUserMacro guifg=".red
+exe "hi rsLibraryMacro guifg=".red
+exe "hi rsStaticLifetime guifg=".cyan
+exe "hi rsModule guifg=".white
+exe "hi rustAttribute guifg=".white
+"exe "hi CocFloating guifg=".white
+exe "hi DiagnosticError guifg=".error
+"exe "hi FloatShadow guibg=".lightGreen
 "set winblend=30
-exe 'hi GitGutterAddIntraLine guifg=None guibg='.diffMod.' gui=None'
-exe 'hi GitGutterDeleteIntraLine guifg=None guibg='.diffDel.' gui=None'
+exe "hi GitGutterAddIntraLine guifg=None guibg=".diffMod." gui=None"
+exe "hi GitGutterDeleteIntraLine guifg=None guibg=".diffDel." gui=None"
 
 
 "DiagnosticWarn
