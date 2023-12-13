@@ -23,17 +23,16 @@ vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
 -- Plug 'ray-x/forgit.nvim'
 
 vim.g['coc_global_extensions'] = {
-    'coc-snippets',
-    'coc-json',
-    'coc-vimlsp',
-    'coc-rust-analyzer',
-    'coc-tsserver',
-    'coc-styled-components',
-    'coc-prettier',
-    'coc-eslint',
-    -- 'coc-lua',
-    'coc-sumneko-lua',
-    'coc-pyright',
+    "coc-snippets",
+    "coc-json",
+    "coc-vimlsp",
+    "coc-rust-analyzer",
+    "coc-tsserver",
+    "coc-styled-components",
+    "coc-prettier",
+    "coc-eslint",
+    "coc-sumneko-lua",
+    "coc-pyright",
 }
 
 --call 'plug#end'
@@ -138,8 +137,10 @@ require("lazy").setup({
         'neoclide/coc.nvim',
         branch = 'master',
         build = 'npm ci',
-        config = function()
-        end
+    },
+    {
+        "neoclide/coc-pairs",
+        build = "yarn install --frozen-lockfile",
     },
     {
         "tjdevries/coc-zsh",
@@ -347,15 +348,29 @@ local opts = { silent = true, noremap = true, expr = true, replace_keycodes = fa
 vim.api.nvim_set_keymap('n', 'gd', "<Plug>(coc-definition)", { silent = true });
 vim.api.nvim_set_keymap('n', 'gy', "<Plug>(coc-type-definition)", { silent = true });
 vim.api.nvim_set_keymap('n', 'gi', "<Plug>(coc-implementation)", { silent = true });
-vim.api.nvim_set_keymap('n', 'gr', ":Telescope coc references<CR>", { silent = true });
+-- vim.api.nvim_set_keymap('n', 'gr', ":Telescope coc references<CR>", { silent = true });
+
+vim.keymap.set('n', 'gr', function()
+    require('telescope._extensions').manager.coc.references_used({
+        layout_strategy = "vertical",
+        on_complete = {
+            function(picker)
+                -- remove this on_complete callback
+                picker:clear_completion_callbacks()
+                -- if we have exactly one match, select it
+                if picker.manager.linked_states.size == 1 then
+                    require("telescope.actions").select_default(picker.prompt_bufnr)
+                end
+            end,
+        }
+    })
+end)
+
 vim.api.nvim_set_keymap('n', ']e', "<Plug>(coc-diagnostic-next)", { silent = true });
 vim.api.nvim_set_keymap('n', '[e', "<Plug>(coc-diagnostic-prev)", { silent = true });
 vim.api.nvim_set_keymap('n', '<A-S-e>', "<Plug>(coc-rename)", { silent = true });
 vim.api.nvim_set_keymap('n', '<A-S-r>', "<Plug>(coc-refactor)", { silent = true });
 vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silent = true });
--- TODO go to symbol
--- :Telescope coc workspace_symbols
-
 -- show outline (hierarchy)
 vim.api.nvim_set_keymap('n', 'go', ":call CocActionAsync('showOutline')<cr>", { silent = true });
 -- vim.api.nvim_set_keymap("n", "go", ":CocList outline<CR>", opts)
@@ -432,8 +447,10 @@ vim.keymap.set("i", "<TAB>",
 
 vim.keymap.set("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
 vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
--- code lens
-vim.keymap.set("n", "ga", "<Plug>(coc-codelens-action)", opts)
+-- code actions
+vim.keymap.set("n", "ga", "<Plug>(coc-codeaction-cursor)", { silent = true })
+-- refactor
+vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
 
 -- reformat code
 vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })

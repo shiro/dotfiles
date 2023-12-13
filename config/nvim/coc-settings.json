@@ -33,5 +33,6 @@
   "diagnostic.enableHighlightLineNumber": false,
   "outline.sortBy": "position",
   "outline.previewBorderRounded": true,
-  "outline.autoPreview": true
+  "outline.autoPreview": true,
+  "typescript.inlayHints.variableTypes.enabled": true
 }

@@ -3,6 +3,7 @@
 cliphist [clipboard manager]
 neovim [editor]
 ranger [file manager]
+highlihgt [syntax highlighter for ranger previews]
 tmux [terminal multiplexer]
 jq [json parsing in CLI]
 diff-so-fancy [nicer diffs]
