@@ -5,7 +5,7 @@ if not vim.loop.fs_stat(lazypath) then
         "clone",
         "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
+        "--branch=stable",
         lazypath,
     })
 end
@@ -69,15 +69,15 @@ require("lazy").setup({
 
     -- CWD managmnent
     {
-        'airblade/vim-rooter',
-        config = function()
-            vim.g['rooter_change_directory_for_non_project_files'] = 'current'
-            vim.g['rooter_silent_chdir'] = 1
-            vim.g['rooter_resolve_links'] = 1
-            vim.g['rooter_patterns'] = { 'cargo.toml', '.git' }
+        "airblade/vim-rooter",
+        init = function()
+            vim.g["rooter_change_directory_for_non_project_files"] = 'current'
+            vim.g["rooter_silent_chdir"] = 1
+            vim.g["rooter_resolve_links"] = 1
+            vim.g["rooter_patterns"] = { "cargo.toml", ".git" }
 
             -- only if requested
-            vim.g['rooter_manual_only'] = 1
+            vim.g["rooter_manual_only"] = 1
 
             -- cwd to root
             -- nmap <leader>;r :Rooter<cr>
@@ -90,11 +90,15 @@ require("lazy").setup({
 
     -- GIT
     {
-        'tpope/vim-fugitive',
-        config = function()
+        "tpope/vim-fugitive",
+        lazy = true,
+        keys = {
+            { "<leader>gd", ":Gdiff<CR>" },
+        },
+        init = function()
             vim.opt.diffopt = vim.opt.diffopt + "vertical"
 
-            vim.keymap.set("n", "<leader>gd", ':Gdiff<CR>', {})
+            -- vim.keymap.set("n", "<leader>gd", ':Gdiff<CR>', {})
             -- nnoremap <leader>ga :Git add %:p<CR><CR>
             -- nnoremap <leader>gs :Gstatus<CR>
             -- nnoremap <leader>gc :Gcommit -v -q<CR>
@@ -155,7 +159,6 @@ require("lazy").setup({
         build = "npm ci",
         ft = "sh",
     },
-    'antoinemadec/coc-fzf',
 
     -- commnets
     {
@@ -163,52 +166,55 @@ require("lazy").setup({
         dependencies = {
             "JoosepAlviste/nvim-ts-context-commentstring",
         },
-        lazy = false,
+        lazy = true,
         init = function()
             -- avoid comment plugin warning
             vim.g.skip_ts_context_commentstring_module = true
         end,
+        keys = {
+            { "<C-_>", "", mode = "n" },
+            { "<C-_>", "", mode = "x" },
+        },
         config = function()
-            require('ts_context_commentstring').setup { enable_autocmd = false }
-            require('Comment').setup({
-                pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+            require("ts_context_commentstring").setup { enable_autocmd = false }
+            require("Comment").setup({
+                pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
             })
 
             vim.api.nvim_command("xmap <C-_> gc")
             vim.api.nvim_command("nmap <C-_> gccj")
-            --vim.keymap.set("v", "<C-_>", "gc", {})
-            --vim.keymap.set("n", "<C-_>", "gcc", {})
         end
     },
 
     -- find and replace
     {
-        'nvim-pack/nvim-spectre',
-        dependencies = { 'nvim-lua/plenary.nvim' },
-        config = function()
-            vim.keymap.set("n", "<C-S-R>", "<cmd>lua require('spectre').toggle()<CR>", { silent = true })
-            vim.keymap.set("n", "<Leader>R", "<cmd>lua require('spectre').toggle()<CR>", { silent = true })
-        end,
+        "nvim-pack/nvim-spectre",
+        lazy = true,
+        dependencies = { "nvim-lua/plenary.nvim" },
+        keys = {
+            { "<C-S-R>",   "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
+            { "<Leader>R", "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
+        },
     },
 
     -- show color hex codes
     {
-        'norcalli/nvim-colorizer.lua',
+        "norcalli/nvim-colorizer.lua",
         config = function()
             require('colorizer').setup()
         end,
     },
     {
-        'nvim-telescope/telescope.nvim',
+        "nvim-telescope/telescope.nvim",
         tag = '0.1.5',
         dependencies = {
-            'nvim-lua/plenary.nvim',
-            'nvim-tree/nvim-web-devicons',
-            'fannheyward/telescope-coc.nvim',
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons",
+            "fannheyward/telescope-coc.nvim",
         },
         config = function()
             local telescope_actions = require "telescope.actions"
-            require('telescope').setup({
+            require("telescope").setup({
                 defaults = {
                     mappings = { i = { ["<esc>"] = telescope_actions.close } },
                     layout_config = {
@@ -230,9 +236,9 @@ require("lazy").setup({
                     }
                 }
             })
-            require('telescope').load_extension('coc')
+            require("telescope").load_extension("coc")
             local sorter = require("top-results-sorter").sorter()
-            local tele_builtin = require('telescope.builtin')
+            local tele_builtin = require("telescope.builtin")
             local actions = require("telescope.actions")
             function layout()
                 local width = vim.fn.winwidth(0)
@@ -244,7 +250,7 @@ require("lazy").setup({
 
             function files(show_hidden)
                 local find_command = nil
-                if show_hidden then find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } end
+                if show_hidden then find_command = { "rg", "--files", "--hidden", "-g", "!.git" } end
 
                 require("telescopePickers").prettyFilesPicker({
                     picker = "find_files",
@@ -329,11 +335,15 @@ require("lazy").setup({
 
     -- file manager {{{
     {
-        'rafaqz/ranger.vim',
-        dependencies = { 'rbgrouleff/bclose.vim' },
-        config = function()
-            vim.g['ranger_map_keys'] = 0
-            vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
+        "rafaqz/ranger.vim",
+        lazy = true,
+        keys = {
+            { "<leader>l", ":RangerEdit<CR>" },
+        },
+        dependencies = { "rbgrouleff/bclose.vim" },
+        init = function()
+            vim.g["ranger_map_keys"] = 0
+            -- vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
         end,
     },
     -- {
@@ -439,8 +449,8 @@ function toggleOutline()
 end
 
 vim.keymap.set('n', 'go', toggleOutline, { silent = true });
--- list warnings/errors
--- vim.api.nvim_set_keymap('n', 'ge', ":CocFzfList diagnostics<CR>", { silent = true });
+-- list warnings/errors in telescope
+-- TODO
 -- list all local changes
 vim.api.nvim_set_keymap("n", 'gD', ":GF?<CR>", { silent = true });
 
