@@ -305,6 +305,7 @@ require("lazy").setup({
         end
     },
 
+    -- file manager {{{
     {
         'rafaqz/ranger.vim',
         dependencies = { 'rbgrouleff/bclose.vim' },
@@ -313,6 +314,22 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
         end,
     },
+    -- {
+    --     'kevinhwang91/rnvimr',
+    --     init = function()
+    --         vim.g["rnvimr_draw_border"] = 0
+    --         vim.g["rnvimr_layout"] = {
+    --             width = 140,
+    --             relative = 'editor',
+    --             -- width= 'float2nr(round(0.7 * &columns))',
+    --             height = 60,
+    --             col = 0,
+    --             row = 5,
+    --             style = 'minimal',
+    --         }
+    --     end,
+    -- },
+    --- }}}
     -- language-specific stuff {{{
 
     -- rust

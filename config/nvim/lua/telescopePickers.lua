@@ -125,7 +125,9 @@ function M.prettyGitPicker(opts)
 
             local highlight = ""
             if entry.status == "??" then
-                status = " A"
+                status = "⠀A"
+                highlight = "diffAdded"
+            elseif entry.status:sub(1, 1) == "A" then
                 highlight = "diffAdded"
             elseif entry.status:sub(2, 2) == "M" then
                 highlight = "diffChanged"

@@ -118,8 +118,8 @@ nnoremap <silent> $ g$
 
 
 " quickly paste from default buffer
-inoremap <C-r><C-r> <C-r>*
-cnoremap <C-r><C-r> <C-r>*
+inoremap <C-r><C-r> <C-r>+
+cnoremap <C-r><C-r> <C-r>+
 
 " make some bindings work in term mode
 tmap <C-q> <C-\><C-n><C-q>

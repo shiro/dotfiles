@@ -8,6 +8,10 @@ function basename(str)
     return name
 end
 
+function dirname(str)
+    return str:match("(.*/)")
+end
+
 HistMap = {}
 function HistMap:new(from)
     local o = from or {}
@@ -68,7 +72,7 @@ function save_history()
     if hash == nil then return end
 
     -- ensure the data dir exists
-    local data_dir = basename(hash)
+    local data_dir = dirname(hash)
     os.execute("mkdir -p \"" .. data_dir .. "\"")
 
     local fd = io.open(hash, "w")

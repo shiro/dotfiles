@@ -4,3 +4,6 @@
 [submodule "color_themes/hyrule_woods"]
 	path = color_themes/hyrule_woods
 	url = https://github.com/shiro/hyrule_woods
+[submodule "config/ranger/plugins/ranger-rzf-filter"]
+	path = config/ranger/plugins/ranger-rzf-filter
+	url = https://github.com/MuXiu1997/ranger-fzf-filter

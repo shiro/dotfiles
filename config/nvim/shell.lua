@@ -5,6 +5,9 @@ vim.opt.wrap           = true
 vim.opt.number         = true
 vim.opt.relativenumber = true
 
+-- draw command bar over status bar when used
+vim.opt.cmdheight      = 0
+
 -- use histogram as the diff algo
 -- vim.opt.diffopt:append({ "algorithm:histogram" })
 vim.opt.diffopt:append({ "algorithm:patience" })

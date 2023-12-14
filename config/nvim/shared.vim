@@ -7,8 +7,8 @@ noremap <Leader>' :set relativenumber!<CR>
 noremap <Leader>" :set number!<CR>
 
 " scroll faster
-nnoremap <C-y> 3k
-nnoremap <C-e> 3j
+nnoremap <C-y> 3kzz
+nnoremap <C-e> 3jzz
 
 " center after jump
 nnoremap <C-d> <C-d>zz
@@ -37,25 +37,18 @@ nnoremap <C-n> <C-o>
 nnoremap <C-m> <C-i>
 
 " save active buffer
-nnoremap <leader>w :w<cr>
-nnoremap <leader>W :wa<cr>
+nnoremap <silent> <leader>w :w<cr>
+nnoremap <silent> <leader>W :wa<cr>
 
 " window navigation
 nnoremap <C-]> <C-w>s
 nnoremap <C-\> <C-w>v
 nnoremap <C-q> :qa!<CR>
-nnoremap <C-o> :only<cr>
+nnoremap <silent> <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
 
 " copy path to current buffer
-nmap <leader>yy :let @+ = expand("%")<cr>
-
-"nnoremap [e :action GotoPreviousError<CR>
-"nnoremap ]e :action GotoNextError<CR>
-nnoremap <leader>e :action ShowErrorDescription<CR>
-
-
-inoremap jj <ESC>
+nmap <silent> <leader>yy :let @+ = expand("%")<cr>
 
 " not working because of ideavim bugs in diff window
 " nnoremap <c-w>i :action Diff.FocusOppositePane<CR>
