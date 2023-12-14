@@ -383,8 +383,37 @@ vim.api.nvim_set_keymap('n', '<A-S-e>', "<Plug>(coc-rename)", { silent = true })
 vim.api.nvim_set_keymap('n', '<A-S-r>', "<Plug>(coc-refactor)", { silent = true });
 vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silent = true });
 -- show outline (hierarchy)
-vim.api.nvim_set_keymap('n', 'go', ":call CocActionAsync('showOutline')<cr>", { silent = true });
--- vim.api.nvim_set_keymap("n", "go", ":CocList outline<CR>", opts)
+
+function set_timeout(timeout, callback)
+    local uv = vim.loop
+    local timer = uv.new_timer()
+    local function ontimeout()
+        uv.timer_stop(timer)
+        uv.close(timer)
+        callback(timer)
+    end
+    uv.timer_start(timer, timeout, 0, ontimeout)
+    return timer
+end
+
+function toggleOutline()
+    local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+    if win_id == -1 then
+        vim.fn.CocAction("showOutline", 1)
+
+        set_timeout(300, function()
+            vim.schedule(function()
+                local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+                if win_id == -1 then return end
+                vim.api.nvim_set_current_win(win_id)
+            end)
+        end);
+    else
+        vim.api.nvim_command("call coc#window#close(" .. win_id .. ")")
+    end
+end
+
+vim.keymap.set('n', 'go', toggleOutline, { silent = true });
 -- list warnings/errors
 -- vim.api.nvim_set_keymap('n', 'ge', ":CocFzfList diagnostics<CR>", { silent = true });
 -- list all local changes
