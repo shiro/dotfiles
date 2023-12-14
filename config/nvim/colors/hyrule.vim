@@ -18,7 +18,7 @@ hi SignColumn guifg=#275d78 guibg=NONE guisp=#eb7373 gui=NONE ctermfg=6 ctermbg=
 hi SpecialComment guifg=#9e9a98 guibg=NONE guisp=#334455 gui=NONE ctermfg=247 ctermbg=NONE cterm=NONE
 hi Typedef guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Title guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
-hi Folded guifg=#85807c guibg=NONE guisp=#30343d gui=NONE ctermfg=102 ctermbg=NONE cterm=NONE
+" hi Folded guifg=#85807c guibg=NONE guisp=#30343d gui=NONE ctermfg=102 ctermbg=NONE cterm=NONE
 hi PreCondit guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi Include guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
 hi Float guifg=#f5c504 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=220 ctermbg=NONE cterm=NONE
@@ -161,6 +161,7 @@ exe "hi CocHintLine guibg=NONE guifg=None"
 exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
 exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
+exe "hi Folded guibg=None guifg=".brown." gui=NONE"
 
 " omnibar
 exe "hi TelescopeMatching guifg=".orange
