@@ -25,6 +25,7 @@ setopt auto_menu         # show completion menu on successive tab press
 setopt complete_in_word  # middle of word completion
 setopt always_to_end
 setopt interactivecomments # allow comments in CLI
+setopt menu_complete # show suggestions on first tab if ambigous
 
 
 # case, hypthen insensitive completion
