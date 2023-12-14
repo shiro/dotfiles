@@ -12,20 +12,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 
-vim.g.coc_global_extensions = {
-    "coc-vimlsp",
-    "coc-eslint",
-    "coc-snippets",
-    "coc-sumneko-lua",
-    "coc-json",
-    "coc-styled-components",
-    "coc-tsserver",
-    "coc-tsserver",
-    "coc-rust-analyzer",
-    "coc-sh",
-}
-
-
 require("lazy").setup({
     -- pretty folds {{{
     {
@@ -109,7 +95,7 @@ require("lazy").setup({
         init = function()
             vim.opt.diffopt = vim.opt.diffopt + "vertical"
 
-            -- vim.keymap.set("n", "<leader>gd", ':Gdiff<CR>', {})
+            -- vim.keymap.set("n", "<leader>gd", ":Gdiff<CR>", {})
             -- nnoremap <leader>ga :Git add %:p<CR><CR>
             -- nnoremap <leader>gs :Gstatus<CR>
             -- nnoremap <leader>gc :Gcommit -v -q<CR>
@@ -137,7 +123,7 @@ require("lazy").setup({
     {
         "nvim-treesitter/nvim-treesitter",
         config = function()
-            require('nvim-treesitter.configs').setup({
+            require("nvim-treesitter.configs").setup({
                 -- ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
                 auto_install = true,
                 highlight = { enable = true },
@@ -156,6 +142,20 @@ require("lazy").setup({
         "neoclide/coc.nvim",
         branch = "master",
         build = "npm ci",
+        init = function()
+            vim.g.coc_global_extensions = {
+                "coc-vimlsp",
+                "coc-eslint",
+                "coc-snippets",
+                "coc-sumneko-lua",
+                "coc-json",
+                "coc-styled-components",
+                "coc-tsserver",
+                "coc-tsserver",
+                "coc-rust-analyzer",
+                "coc-sh",
+            }
+        end
     },
     {
         "tjdevries/coc-zsh",
@@ -205,16 +205,15 @@ require("lazy").setup({
     -- show color hex codes {{{
     {
         "norcalli/nvim-colorizer.lua",
-        config = function()
-            require('colorizer').setup()
-        end,
+        config = function() require("colorizer").setup() end,
     },
     -- }}}
 
     -- find files, changes and more {{{
     {
         "nvim-telescope/telescope.nvim",
-        tag = '0.1.5',
+        -- tag = "0.1.5",
+        branch = "master",
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons",
@@ -278,7 +277,7 @@ require("lazy").setup({
                 })
             end
 
-            vim.api.nvim_create_user_command('Files', function() files() end, {})
+            vim.api.nvim_create_user_command("Files", function() files() end, {})
             vim.keymap.set("n", "<leader>f", files, {})
 
             vim.keymap.set("n", "<leader>F", function()
@@ -306,14 +305,21 @@ require("lazy").setup({
                 })
             end, {})
 
-            vim.api.nvim_create_user_command('Highlights', "lua require('telescope.builtin').highlights()", {})
+            vim.keymap.set("x", "<leader>h", function()
+                print(vim.v.count)
+                tele_builtin.git_bcommits_range({
+                    layout_strategy = layout(),
+                })
+            end, {})
+
+            vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
         end,
     },
     -- }}}
 
     -- git gutter {{{
     {
-        'airblade/vim-gitgutter',
+        "airblade/vim-gitgutter",
         init = function()
             vim.g.gitgutter_map_keys = 0
             vim.g.gitgutter_show_msg_on_hunk_jumping = 0
@@ -330,13 +336,13 @@ require("lazy").setup({
         end,
         config = function()
             -- nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
-            vim.api.nvim_set_keymap('n', '<C-A-Z>',
+            vim.api.nvim_set_keymap("n", "<C-A-Z>",
                 "<Plug>(GitGutterUndoHunk)",
                 { silent = true });
-            vim.api.nvim_set_keymap('n', '[c',
+            vim.api.nvim_set_keymap("n", "[c",
                 "<Plug>(GitGutterPrevHunk) | :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> | <Plug>(GitGutterPreviewHunk)",
                 { silent = true });
-            vim.api.nvim_set_keymap('n', ']c',
+            vim.api.nvim_set_keymap("n", "]c",
                 "<Plug>(GitGutterNextHunk) | :let g:gitgutter_floating_window_options['border'] = 'rounded'<CR> | <Plug>(GitGutterPreviewHunk)",
                 { silent = true });
         end
@@ -376,21 +382,21 @@ require("lazy").setup({
     -- language-specific stuff {{{
 
     -- rust
-    { 'rust-lang/rust.vim',       ft = 'rust' },
-    { 'arzg/vim-rust-syntax-ext', ft = 'rust' },
+    { "rust-lang/rust.vim",       ft = "rust" },
+    { "arzg/vim-rust-syntax-ext", ft = "rust" },
 
     -- }}}
 
     -- misc {{{
 
     -- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
-    'tpope/vim-surround',
+    "tpope/vim-surround",
 
     -- convinient pair mappings
-    --Plug 'tpope/vim-unimpaired'
+    --Plug "tpope/vim-unimpaired"
 
     -- enables repeating other supported plugins with the . command
-    'tpope/vim-repeat',
+    "tpope/vim-repeat",
 
     -- }}}
 })
@@ -400,12 +406,12 @@ require("lazy").setup({
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
 
 
-vim.api.nvim_set_keymap('n', 'gd', "<Plug>(coc-definition)", { silent = true });
-vim.api.nvim_set_keymap('n', 'gy', "<Plug>(coc-type-definition)", { silent = true });
-vim.api.nvim_set_keymap('n', 'gi', "<Plug>(coc-implementation)", { silent = true });
+vim.api.nvim_set_keymap("n", "gd", "<Plug>(coc-definition)", { silent = true });
+vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true });
+vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true });
 
-vim.keymap.set('n', 'gr', function()
-    require('telescope._extensions').manager.coc.references_used({
+vim.keymap.set("n", "gr", function()
+    require("telescope._extensions").manager.coc.references_used({
         layout_strategy = "vertical",
         on_complete = {
             function(picker)
@@ -420,11 +426,11 @@ vim.keymap.set('n', 'gr', function()
     })
 end)
 
-vim.api.nvim_set_keymap('n', ']e', "<Plug>(coc-diagnostic-next)", { silent = true });
-vim.api.nvim_set_keymap('n', '[e', "<Plug>(coc-diagnostic-prev)", { silent = true });
-vim.api.nvim_set_keymap('n', '<A-S-e>', "<Plug>(coc-rename)", { silent = true });
-vim.api.nvim_set_keymap('n', '<A-S-r>', "<Plug>(coc-refactor)", { silent = true });
-vim.api.nvim_set_keymap('v', '<A-S-r>', "<Plug>(coc-refactor-selected)", { silent = true });
+vim.api.nvim_set_keymap("n", "]e", "<Plug>(coc-diagnostic-next)", { silent = true });
+vim.api.nvim_set_keymap("n", "[e", "<Plug>(coc-diagnostic-prev)", { silent = true });
+vim.api.nvim_set_keymap("n", "<A-S-e>", "<Plug>(coc-rename)", { silent = true });
+vim.api.nvim_set_keymap("n", "<A-S-r>", "<Plug>(coc-refactor)", { silent = true });
+vim.api.nvim_set_keymap("v", "<A-S-r>", "<Plug>(coc-refactor-selected)", { silent = true });
 -- show outline (hierarchy)
 
 function set_timeout(timeout, callback)
@@ -459,11 +465,11 @@ function toggleOutline()
     end
 end
 
-vim.keymap.set('n', 'go', toggleOutline, { silent = true });
+vim.keymap.set("n", "go", toggleOutline, { silent = true });
 -- list warnings/errors in telescope
 -- TODO
 -- list all local changes
-vim.api.nvim_set_keymap("n", 'gD', ":GF?<CR>", { silent = true });
+vim.api.nvim_set_keymap("n", "gD", ":GF?<CR>", { silent = true });
 
 vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
 
@@ -511,28 +517,23 @@ vim.keymap.set("n", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, si
 vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set('i', '<C-S-p>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
-vim.keymap.set('i', '<F12>', "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
-
-
-vim.keymap.set("n", "<A-S-i>", '  :Files<CR>', { noremap = true, silent = true })
+vim.keymap.set("i", "<C-S-p>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
+vim.keymap.set("i", "<F12>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 
 -- tab/S-tab completion menu
 function _G.check_back_space()
-    local col = vim.fn.col('.') - 1
-    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+    local col = vim.fn.col(".") - 1
+    return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
 end
 
--- make <CR> accept selected completion item or notify coc.nvim to format
+-- make <TAB> and <CR> accept selected completion item
 vim.keymap.set("i", "<TAB>",
-    "coc#pum#visible() ? coc#_select_confirm() :" ..
+    "coc#pum#visible() ? coc#pum#confirm() :" ..
     [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
     "v:lua.check_back_space() ? '<TAB>' :" ..
     "coc#refresh()"
     , opts)
-
-vim.keymap.set("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#insert() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 -- code actions
 vim.keymap.set("n", "ga", "<Plug>(coc-codeaction-cursor)", { silent = true })
 -- refactor
@@ -572,15 +573,6 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
     group = "CocGroup",
-    -- pattern = {
-    --     '*.js',
-    --     '*.json',
-    --     '*.jsx',
-    --     '*.py',
-    --     '*.rs',
-    --     '*.ts',
-    --     '*.tsx',
-    -- },
     callback = function()
         -- only for files
         if vim.bo.buftype ~= "" then return end
@@ -603,7 +595,7 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "CocOpenFloat",
     group = "CocGroup",
     callback = function()
-        win_id = vim.g['coc_last_float_win']
+        win_id = vim.g.coc_last_float_win
         vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
     end
 })

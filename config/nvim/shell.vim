@@ -3,10 +3,9 @@
 colorscheme hyrule
 
 " custom trailing whitespace color
-hi ExtraWhitespace guibg=#ce840d ctermbg=red
-
-hi VimwikiLink                 ctermfg=13
-hi VimwikiCode                 ctermfg=3
+" hi ExtraWhitespace guibg=#ce840d ctermbg=red
+" hi VimwikiLink                 ctermfg=13
+" hi VimwikiCode                 ctermfg=3
 
 set encoding=utf-8 " The encoding displayed.
 set fileencoding=utf-8 " The encoding written to file.

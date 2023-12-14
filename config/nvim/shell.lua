@@ -21,6 +21,9 @@ vim.opt.laststatus = 3
 -- jump to next split
 vim.keymap.set("n", "<M-i>", "<CMD>wincmd w<CR>", { noremap = true, silent = true })
 
+-- show message history
+vim.keymap.set("n", "<leader>m", ":messages<cr>", { silent = true })
+
 -- save/restore undo history to a temporary file
 local data_dir = os.getenv("XDG_DATA_HOME")
 if data_dir ~= nil then
