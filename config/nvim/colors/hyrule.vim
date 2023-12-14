@@ -152,12 +152,12 @@ exe "hi CocErrorHighlight guibg=NONE guifg=".red
 exe "hi CocWarningHighlight guibg=NONE guifg=".test
 exe "hi CocInfoHighlight guibg=NONE"
 exe "hi CocHintHighlight guibg=NONE guifg=".brown
-exe "hi CocDeprecatedHighlight guibg=NONE"
+exe "hi CocDeprecatedHighlight guibg=NONE guifg=".gray
 exe "hi CocUnusedHighlight guibg=NONE guifg=".gray
-exe "hi CocErrorLine guibg=NONE"
-exe "hi CocWarningLine guibg=NONE"
-exe "hi CocInfoLine guibg=NONE"
-exe "hi CocHintLine guibg=NONE"
+exe "hi CocErrorLine guibg=NONE guifg=".red
+exe "hi CocWarningLine guibg=NONE guifg=".gray
+exe "hi CocInfoLine guibg=NONE guifg=".gray
+exe "hi CocHintLine guibg=NONE guifg=".gray
 exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
 exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"

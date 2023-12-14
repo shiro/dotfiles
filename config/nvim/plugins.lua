@@ -35,8 +35,31 @@ vim.g['coc_global_extensions'] = {
     "coc-pyright",
 }
 
---call 'plug#end'
 require("lazy").setup({
+    -- {
+    --     "rmagatti/auto-session",
+    --     config = function()
+    --         require("auto-session").setup({
+    --             -- log_level = "error",
+    --             auto_session_suppress_dirs = {},
+    --         })
+    --     end,
+    -- },
+    {
+        'anuvyklack/pretty-fold.nvim',
+        config = function()
+            require('pretty-fold').setup({
+                fill_char = " ",
+                sections = {
+                    left = { 'content' },
+                    right = {
+                        ' ', 'number_of_folded_lines',
+                        function(config) return config.fill_char:rep(3) end,
+                    },
+                },
+            })
+        end,
+    },
     -- chord keybinds
     {
         'kana/vim-arpeggio',
@@ -127,7 +150,7 @@ require("lazy").setup({
                 indent = { enable = true },
                 context_commentstring = { enable = true },
             })
-            vim.o.foldmethod = "expr"
+            -- vim.o.foldmethod = "expr"
             vim.o.foldexpr = "nvim_treesitter#foldexpr()"
         end,
     },
@@ -401,9 +424,12 @@ function toggleOutline()
     if win_id == -1 then
         vim.fn.CocAction("showOutline", 1)
 
+        -- local foo = vim.api.nvim_eval("coc#float#get_float_by_kind('outline-preview')")
+        -- print(foo)
+
         set_timeout(300, function()
             vim.schedule(function()
-                local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+                win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
                 if win_id == -1 then return end
                 vim.api.nvim_set_current_win(win_id)
             end)
@@ -549,5 +575,15 @@ vim.api.nvim_create_autocmd("FocusLost", {
         -- only for files
         if vim.bo.buftype ~= nil then return end
         vim.cmd.write({ mods = { silent = true } })
+    end
+})
+
+-- disable wraps for coc preview buffers
+vim.api.nvim_create_autocmd("User", {
+    pattern = 'CocOpenFloat',
+    group = "CocGroup",
+    callback = function()
+        win_id = vim.g['coc_last_float_win']
+        vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
     end
 })

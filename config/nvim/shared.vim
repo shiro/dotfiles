@@ -103,10 +103,10 @@ set showmatch               " show matching braces
 
 set noerrorbells
 
-set foldmethod=manual       " manual folding as default
-set foldnestmax=10          " deepest fold is 10 levels
+set foldmethod=indent       " default fold method
+set foldnestmax=99          " deepest fold level
 set nofoldenable            " don't fold by default
-set foldlevel=0             " all folds closed
+set foldlevel=999           " all folds open
 
 set wildmode=list:longest   " complete files like a shell
 
