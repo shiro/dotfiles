@@ -11,22 +11,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- needed to avoid comment plugin warning
-vim.g.skip_ts_context_commentstring_module = true
-
-
-vim.g['fzf_layout'] = { window = { width = 0.9, height = 1.0 } }
---vim.g['fzf_vim.preview_window'] = { 'right,50%', 'ctrl-/' }
---vim.g['coc_fzf_opts'] = { '--layout=reverse' }
-
-
--- Plug 'ray-x/forgit.nvim'
 
 vim.g['coc_global_extensions'] = {
     "coc-snippets",
     "coc-json",
     "coc-vimlsp",
-    "coc-rust-analyzer",
     "coc-tsserver",
     "coc-styled-components",
     "coc-prettier",
@@ -36,24 +25,15 @@ vim.g['coc_global_extensions'] = {
 }
 
 require("lazy").setup({
-    -- {
-    --     "rmagatti/auto-session",
-    --     config = function()
-    --         require("auto-session").setup({
-    --             -- log_level = "error",
-    --             auto_session_suppress_dirs = {},
-    --         })
-    --     end,
-    -- },
     {
-        'anuvyklack/pretty-fold.nvim',
+        "anuvyklack/pretty-fold.nvim",
         config = function()
-            require('pretty-fold').setup({
+            require("pretty-fold").setup({
                 fill_char = " ",
                 sections = {
-                    left = { 'content' },
+                    left = { "content" },
                     right = {
-                        ' ', 'number_of_folded_lines',
+                        " ", "number_of_folded_lines",
                         function(config) return config.fill_char:rep(3) end,
                     },
                 },
@@ -62,7 +42,7 @@ require("lazy").setup({
     },
     -- chord keybinds
     {
-        'kana/vim-arpeggio',
+        "kana/vim-arpeggio",
         config = function()
             -- write-quit
             vim.api.nvim_command("call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
@@ -80,7 +60,6 @@ require("lazy").setup({
             vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'ao', '<C-w>o')")
             -- Ag
             -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'ag', ':Ag<CR>')")
-
 
             -- files, surpress false warning about jk being mapped already
             vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'jk', ':Files<cr>')")
@@ -140,7 +119,7 @@ require("lazy").setup({
 
     -- syntax highlight
     {
-        'nvim-treesitter/nvim-treesitter',
+        "nvim-treesitter/nvim-treesitter",
         config = function()
             require('nvim-treesitter.configs').setup({
                 ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
@@ -157,28 +136,38 @@ require("lazy").setup({
 
     -- LSP server, auto-complete
     {
-        'neoclide/coc.nvim',
-        branch = 'master',
-        build = 'npm ci',
+        "neoclide/coc.nvim",
+        branch = "master",
+        build = "npm ci",
+    },
+    {
+        "fannheyward/coc-rust-analyzer",
+        branch = "master",
+        build = "npm ci",
+        ft = "rust",
     },
     {
         "tjdevries/coc-zsh",
-        ft = 'zsh',
+        ft = "zsh",
     },
     {
         "josa42/coc-sh",
         build = "npm ci",
-        ft = 'sh',
+        ft = "sh",
     },
     'antoinemadec/coc-fzf',
 
     -- commnets
     {
-        'numToStr/Comment.nvim',
+        "numToStr/Comment.nvim",
         dependencies = {
-            'JoosepAlviste/nvim-ts-context-commentstring',
+            "JoosepAlviste/nvim-ts-context-commentstring",
         },
         lazy = false,
+        init = function()
+            -- avoid comment plugin warning
+            vim.g.skip_ts_context_commentstring_module = true
+        end,
         config = function()
             require('ts_context_commentstring').setup { enable_autocmd = false }
             require('Comment').setup({
@@ -562,35 +551,35 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
     group = "CocGroup",
-    pattern = {
-        '*.js',
-        '*.json',
-        '*.jsx',
-        '*.py',
-        '*.rs',
-        '*.ts',
-        '*.tsx',
-    },
+    -- pattern = {
+    --     '*.js',
+    --     '*.json',
+    --     '*.jsx',
+    --     '*.py',
+    --     '*.rs',
+    --     '*.ts',
+    --     '*.tsx',
+    -- },
     callback = function()
         -- only for files
-        if vim.bo.buftype ~= nil then return end
-        if vim.api.nvim_eval('coc#rpc#ready()') then
-            vim.fn.CocAction("format")
-        end
+        if vim.bo.buftype ~= "" then return end
+        if not vim.api.nvim_eval("coc#rpc#ready()") then return end
+        if not vim.fn.CocAction("hasProvider", "format") then return end
+        vim.fn.CocAction("format")
     end
 })
 vim.api.nvim_create_autocmd("FocusLost", {
     group = "CocGroup",
     callback = function()
         -- only for files
-        if vim.bo.buftype ~= nil then return end
+        if vim.bo.buftype ~= "" then return end
         vim.cmd.write({ mods = { silent = true } })
     end
 })
 
 -- disable wraps for coc preview buffers
 vim.api.nvim_create_autocmd("User", {
-    pattern = 'CocOpenFloat',
+    pattern = "CocOpenFloat",
     group = "CocGroup",
     callback = function()
         win_id = vim.g['coc_last_float_win']

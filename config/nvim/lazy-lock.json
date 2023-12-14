@@ -2,6 +2,7 @@
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
   "bclose.vim": { "branch": "master", "commit": "99018b4a2dd18aea1cbd3aa23565b01a0f8c5b73" },
   "coc-fzf": { "branch": "master", "commit": "5fae5a15497750483e21fc207aa6005f340f02f2" },
+  "coc-rust-analyzer": { "branch": "master", "commit": "4669d5d6441e3942fc5584aaf745f2be427d74b8" },
   "coc-sh": { "branch": "main", "commit": "a75b179c9fd52a8141a616f134d30b5899e92554" },
   "coc-zsh": { "branch": "master", "commit": "ef6b0caaeec0fea6fe9f64c19ce87e0282f31da9" },
   "coc.nvim": { "branch": "master", "commit": "e10877749538a9875e359abe69974b0d0ca697ca" },
