@@ -259,6 +259,7 @@ require("lazy").setup({
                         sorter = sorter,
                         previewer = false,
                         layout_strategy = layout(),
+                        find_command = { 'rg', '--files', '--hidden', '-g', '!.git' },
                     }
                 })
             end
