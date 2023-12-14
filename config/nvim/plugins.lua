@@ -244,6 +244,7 @@ require("lazy").setup({
             require('telescope').load_extension('coc')
             local sorter = require("top-results-sorter").sorter()
             local tele_builtin = require('telescope.builtin')
+            local actions = require("telescope.actions")
             function layout()
                 local width = vim.fn.winwidth(0)
                 local height = vim.fn.winheight(0)
@@ -252,23 +253,31 @@ require("lazy").setup({
                 return "vertical"
             end
 
-            function files()
+            function files(show_hidden)
+                local find_command = nil
+                if show_hidden then find_command = { 'rg', '--files', '--hidden', '-g', '!.git' } end
+
                 require("telescopePickers").prettyFilesPicker({
                     picker = "find_files",
                     options = {
                         sorter = sorter,
                         previewer = false,
                         layout_strategy = layout(),
-                        find_command = { 'rg', '--files', '--hidden', '-g', '!.git' },
+                        find_command = find_command,
+                        attach_mappings = function(_, map)
+                            map("n", "zh", function(prompt_bufnr)
+                                actions.close(prompt_bufnr)
+                                files(not show_hidden)
+                            end)
+                            return true
+                        end,
                     }
                 })
             end
 
-            vim.api.nvim_create_user_command('Files', files, {})
+            vim.api.nvim_create_user_command('Files', function() files() end, {})
+            vim.keymap.set("n", "<leader>f", files, {})
 
-            vim.keymap.set("n", "<leader>f", function()
-                files()
-            end, {})
             vim.keymap.set("n", "<leader>F", function()
                 require("telescopePickers").prettyGrepPicker({
                     picker = "live_grep",
