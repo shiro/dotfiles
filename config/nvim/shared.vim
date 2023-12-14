@@ -7,14 +7,8 @@ noremap <Leader>' :set relativenumber!<CR>
 noremap <Leader>" :set number!<CR>
 
 " scroll faster
-nnoremap <C-y> 3kzz
-nnoremap <C-e> 3jzz
-
-" center after jump
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
-nnoremap <C-f> <C-f>zz
-nnoremap <C-b> <C-b>zz
+nnoremap <C-y> 3k
+nnoremap <C-e> 3j
 
 " jump to last insert position
 nnoremap g; `^

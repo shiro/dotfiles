@@ -659,3 +659,35 @@ vim.api.nvim_create_autocmd("User", {
         vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
     end
 })
+
+-- move cursor and scroll by a fixed distance, with center support
+function Jump(distance, center)
+    local view_info = vim.fn.winsaveview()
+    if view_info == nil then return end
+
+    local height       = vim.fn.winheight(0)
+    local cursor_row   = view_info.lnum
+    local buffer_lines = vim.fn.line("$", vim.api.nvim_get_current_win())
+
+    local target_row   = math.min(cursor_row + distance, buffer_lines)
+    if center then
+        -- scroll center cursor
+        view_info.topline = target_row - math.floor(height / 2)
+    else
+        -- scroll by distance
+        view_info.topline = math.max(view_info.topline + distance, 1)
+    end
+    -- avoid scrolling past last line
+    view_info.topline = math.min(view_info.topline, math.max(buffer_lines - height - 6, 1))
+    view_info.lnum = target_row
+
+    vim.fn.winrestview(view_info)
+end
+
+vim.keymap.set("n", "<C-u>", function() Jump(math.max(vim.v.count, 1) * -18, true) end, {})
+vim.keymap.set("n", "<C-d>", function() Jump(math.max(vim.v.count, 1) * 18, true) end, {})
+vim.keymap.set("n", "<C-b>", function() Jump(math.max(vim.v.count, 1) * -32, true) end, {})
+vim.keymap.set("n", "<C-f>", function() Jump(math.max(vim.v.count, 1) * 32, true) end, {})
+
+vim.keymap.set("n", "<C-y>", function() Jump(math.max(vim.v.count, 1) * -3) end, {})
+vim.keymap.set("n", "<C-e>", function() Jump(math.max(vim.v.count, 1) * 3) end, {})

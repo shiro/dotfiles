@@ -1,38 +1,41 @@
 {
-  "outline.previewBorder": true,
-  "diagnostic.errorSign": "☢️",
-  "diagnostic.warningSign": "⚠",
-  "diagnostic.hintSign": "❓",
-  "diagnostic.infoSign": "ℹ",
-  "diagnostic.floatConfig": {
-    "border": true,
-    "rounded": true
-  },
-  "hover.floatConfig": {
-    "border": true,
-    "rounded": true
-  },
-  "suggest.floatConfig": {
-    "border": true,
-    "rounded": true
-  },
-  "suggest.pumFloatConfig": {
-    "border": true,
-    "rounded": true
-  },
-  "signature.floatConfig": {
-    "border": true,
-    "rounded": true
-  },
-  "sumneko-lua.enableNvimLuaDev": true,
-  "coc.preferences.formatOnSave": true,
-  "snippets.priority": 105,
-  "snippets.ultisnips.pythonPrompt": false,
-  "signature.preferShownAbove": false,
-  "coc.source.around.enable": false,
-  "diagnostic.enableHighlightLineNumber": false,
-  "outline.sortBy": "position",
-  "outline.previewBorderRounded": true,
-  "outline.autoPreview": true,
-  "typescript.inlayHints.variableTypes.enabled": true
+    "outline.previewBorder": true,
+    "diagnostic.errorSign": "☢️",
+    "diagnostic.warningSign": "⚠",
+    "diagnostic.hintSign": "❓",
+    "diagnostic.infoSign": "ℹ",
+    "diagnostic.floatConfig": {
+        "border": true,
+        "rounded": true
+    },
+    "hover.floatConfig": {
+        "border": true,
+        "rounded": true
+    },
+    "suggest.floatConfig": {
+        "border": true,
+        "rounded": true
+    },
+    "suggest.pumFloatConfig": {
+        "border": true,
+        "rounded": true
+    },
+    "signature.floatConfig": {
+        "border": true,
+        "rounded": true
+    },
+    "sumneko-lua.enableNvimLuaDev": true,
+    "coc.preferences.formatOnSave": true,
+    "snippets.priority": 105,
+    "snippets.ultisnips.pythonPrompt": false,
+    "signature.preferShownAbove": false,
+    "coc.source.around.enable": false,
+    "diagnostic.enableHighlightLineNumber": false,
+    "outline.sortBy": "position",
+    "outline.previewBorderRounded": true,
+    "outline.autoPreview": true,
+    "notification.disabledProgressSources": [
+        "*"
+    ],
+    "typescript.inlayHints.variableTypes.enabled": true
 }
