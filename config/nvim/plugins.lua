@@ -13,9 +13,18 @@ vim.opt.rtp:prepend(lazypath)
 
 
 vim.g.coc_global_extensions = {
-    -- this doesn't build right now, so add it here
     "coc-vimlsp",
+    "coc-eslint",
+    "coc-snippets",
+    "coc-sumneko-lua",
+    "coc-json",
+    "coc-styled-components",
+    "coc-tsserver",
+    "coc-tsserver",
+    "coc-rust-analyzer",
+    "coc-sh",
 }
+
 
 require("lazy").setup({
     -- pretty folds {{{
@@ -141,77 +150,13 @@ require("lazy").setup({
 
     -- LSP server, auto-complete {{{
     {
-        "neoclide/coc-json",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        ft = "json",
-    },
-    {
-        "xiyaowong/coc-sumneko-lua",
-        branch = "main",
-        build = "yarn install --frozen-lockfile",
-        ft = "lua",
-    },
-    {
-        "fannheyward/coc-pyright",
-        branch = "master",
-        build = "npm ci",
-        ft = "python",
-    },
-    {
-        "neoclide/coc-snippets",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-    },
-    {
-        "neoclide/coc-prettier",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-    },
-    {
-        "neoclide/coc-eslint",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-    },
-    {
-        "fannheyward/coc-styled-components",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-    },
-    {
-        "neoclide/coc-tsserver",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-    },
-    {
-        "neoclide/coc-tsserver",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-    },
-    {
         "neoclide/coc.nvim",
         branch = "master",
         build = "npm ci",
     },
     {
-        "fannheyward/coc-rust-analyzer",
-        branch = "master",
-        build = "npm ci",
-        ft = "rust",
-    },
-    {
         "tjdevries/coc-zsh",
         ft = "zsh",
-    },
-    {
-        "josa42/coc-sh",
-        build = "npm ci",
-        ft = "sh",
     },
     -- }}}
 
@@ -659,6 +604,12 @@ vim.api.nvim_create_autocmd("User", {
         vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
     end
 })
+
+-- show command bar message when recording macros
+-- https://github.com/neovim/neovim/issues/19193
+vim.api.nvim_create_autocmd("RecordingEnter", { group = "CocGroup", command = "set cmdheight=1" })
+vim.api.nvim_create_autocmd("RecordingLeave", { group = "CocGroup", command = "set cmdheight=0" })
+
 
 -- move cursor and scroll by a fixed distance, with center support
 function Jump(distance, center)
