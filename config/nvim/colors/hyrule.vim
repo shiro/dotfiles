@@ -155,9 +155,9 @@ exe "hi CocHintHighlight guibg=NONE guifg=".brown
 exe "hi CocDeprecatedHighlight guibg=NONE guifg=".gray
 exe "hi CocUnusedHighlight guibg=NONE guifg=".gray
 exe "hi CocErrorLine guibg=NONE guifg=".red
-exe "hi CocWarningLine guibg=NONE guifg=".gray
-exe "hi CocInfoLine guibg=NONE guifg=".gray
-exe "hi CocHintLine guibg=NONE guifg=".gray
+exe "hi CocWarningLine guibg=NONE guifg=None"
+exe "hi CocInfoLine guibg=NONE guifg=None"
+exe "hi CocHintLine guibg=NONE guifg=None"
 exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
 exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
