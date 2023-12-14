@@ -12,19 +12,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 
-vim.g['coc_global_extensions'] = {
-    "coc-snippets",
-    "coc-json",
+vim.g.coc_global_extensions = {
+    -- this doesn't build right now, so add it here
     "coc-vimlsp",
-    "coc-tsserver",
-    "coc-styled-components",
-    "coc-prettier",
-    "coc-eslint",
-    "coc-sumneko-lua",
-    "coc-pyright",
 }
 
 require("lazy").setup({
+    -- pretty folds {{{
     {
         "anuvyklack/pretty-fold.nvim",
         config = function()
@@ -37,10 +31,13 @@ require("lazy").setup({
                         function(config) return config.fill_char:rep(3) end,
                     },
                 },
+                process_comment_signs = false,
             })
         end,
     },
-    -- chord keybinds
+    -- }}}
+
+    -- chord keybinds {{{
     {
         "kana/vim-arpeggio",
         config = function()
@@ -66,18 +63,19 @@ require("lazy").setup({
             vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'df', '<CMD>wincmd w<CR>')")
         end
     },
+    -- }}}
 
-    -- CWD managmnent
+    -- CWD managmnent {{{
     {
         "airblade/vim-rooter",
         init = function()
-            vim.g["rooter_change_directory_for_non_project_files"] = 'current'
-            vim.g["rooter_silent_chdir"] = 1
-            vim.g["rooter_resolve_links"] = 1
-            vim.g["rooter_patterns"] = { "cargo.toml", ".git" }
+            vim.g.rooter_change_directory_for_non_project_files = "current"
+            vim.g.rooter_silent_chdir = 1
+            vim.g.rooter_resolve_links = 1
+            vim.g.rooter_patterns = { "cargo.toml", ".git" }
 
             -- only if requested
-            vim.g["rooter_manual_only"] = 1
+            vim.g.rooter_manual_only = 1
 
             -- cwd to root
             -- nmap <leader>;r :Rooter<cr>
@@ -87,8 +85,9 @@ require("lazy").setup({
             -- set autochdir
         end,
     },
+    -- }}}
 
-    -- GIT
+    -- GIT {{{
     {
         "tpope/vim-fugitive",
         lazy = true,
@@ -120,13 +119,14 @@ require("lazy").setup({
             -- autocmd BufReadPost fugitive://* set bufhidden=delete
         end
     },
+    -- }}}
 
-    -- syntax highlight
+    -- syntax highlight {{{
     {
         "nvim-treesitter/nvim-treesitter",
         config = function()
             require('nvim-treesitter.configs').setup({
-                ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
+                -- ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
                 auto_install = true,
                 highlight = { enable = true },
                 incremental_selection = { enable = true },
@@ -137,8 +137,62 @@ require("lazy").setup({
             vim.o.foldexpr = "nvim_treesitter#foldexpr()"
         end,
     },
+    -- }}}
 
-    -- LSP server, auto-complete
+    -- LSP server, auto-complete {{{
+    {
+        "neoclide/coc-json",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+        ft = "json",
+    },
+    {
+        "xiyaowong/coc-sumneko-lua",
+        branch = "main",
+        build = "yarn install --frozen-lockfile",
+        ft = "lua",
+    },
+    {
+        "fannheyward/coc-pyright",
+        branch = "master",
+        build = "npm ci",
+        ft = "python",
+    },
+    {
+        "neoclide/coc-snippets",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+    },
+    {
+        "neoclide/coc-prettier",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    },
+    {
+        "neoclide/coc-eslint",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    },
+    {
+        "fannheyward/coc-styled-components",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    },
+    {
+        "neoclide/coc-tsserver",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    },
+    {
+        "neoclide/coc-tsserver",
+        branch = "master",
+        build = "yarn install --frozen-lockfile",
+        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    },
     {
         "neoclide/coc.nvim",
         branch = "master",
@@ -159,8 +213,9 @@ require("lazy").setup({
         build = "npm ci",
         ft = "sh",
     },
+    -- }}}
 
-    -- commnets
+    -- comments {{{
     {
         "numToStr/Comment.nvim",
         dependencies = {
@@ -185,8 +240,9 @@ require("lazy").setup({
             vim.api.nvim_command("nmap <C-_> gccj")
         end
     },
+    -- }}}
 
-    -- find and replace
+    -- find and replace {{{
     {
         "nvim-pack/nvim-spectre",
         lazy = true,
@@ -196,14 +252,18 @@ require("lazy").setup({
             { "<Leader>R", "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
         },
     },
+    -- }}}
 
-    -- show color hex codes
+    -- show color hex codes {{{
     {
         "norcalli/nvim-colorizer.lua",
         config = function()
             require('colorizer').setup()
         end,
     },
+    -- }}}
+
+    -- find files, changes and more {{{
     {
         "nvim-telescope/telescope.nvim",
         tag = '0.1.5',
@@ -301,23 +361,24 @@ require("lazy").setup({
             vim.api.nvim_create_user_command('Highlights', "lua require('telescope.builtin').highlights()", {})
         end,
     },
+    -- }}}
 
-    -- git gutter to the left
+    -- git gutter {{{
     {
         'airblade/vim-gitgutter',
         init = function()
-            vim.g["gitgutter_map_keys"] = 0
-            vim.g["gitgutter_show_msg_on_hunk_jumping"] = 0
+            vim.g.gitgutter_map_keys = 0
+            vim.g.gitgutter_show_msg_on_hunk_jumping = 0
             -- vim.g["gitgutter_signs"] = 0
-            vim.g["gitgutter_highlight_linenrs"] = 1
-            vim.g["gitgutter_sign_allow_clobber"] = 0
-            vim.g["gitgutter_sign_removed"] = "⠀"
-            vim.g["gitgutter_sign_added"] = "⠀"
-            vim.g["gitgutter_sign_modified"] = "⠀"
-            vim.g["gitgutter_sign_removed"] = "⠀"
-            vim.g["gitgutter_sign_removed_first_line"] = "⠀"
-            vim.g["gitgutter_sign_removed_above_and_below"] = "⠀"
-            vim.g["gitgutter_sign_modified_removed"] = "⠀"
+            vim.g.gitgutter_highlight_linenrs = 1
+            vim.g.gitgutter_sign_allow_clobber = 0
+            vim.g.gitgutter_sign_removed = "⠀"
+            vim.g.gitgutter_sign_added = "⠀"
+            vim.g.gitgutter_sign_modified = "⠀"
+            vim.g.gitgutter_sign_removed = "⠀"
+            vim.g.gitgutter_sign_removed_first_line = "⠀"
+            vim.g.gitgutter_sign_removed_above_and_below = "⠀"
+            vim.g.gitgutter_sign_modified_removed = "⠀"
         end,
         config = function()
             -- nnoremap <leader>gh <Plug>(GitGutterPreviewHunk)
@@ -332,6 +393,7 @@ require("lazy").setup({
                 { silent = true });
         end
     },
+    -- }}}
 
     -- file manager {{{
     {
@@ -342,7 +404,7 @@ require("lazy").setup({
         },
         dependencies = { "rbgrouleff/bclose.vim" },
         init = function()
-            vim.g["ranger_map_keys"] = 0
+            vim.g.ranger_map_keys = 0
             -- vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
         end,
     },
@@ -362,6 +424,7 @@ require("lazy").setup({
     --     end,
     -- },
     --- }}}
+
     -- language-specific stuff {{{
 
     -- rust
@@ -369,6 +432,7 @@ require("lazy").setup({
     { 'arzg/vim-rust-syntax-ext', ft = 'rust' },
 
     -- }}}
+
     -- misc {{{
 
     -- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
@@ -391,7 +455,6 @@ local opts = { silent = true, noremap = true, expr = true, replace_keycodes = fa
 vim.api.nvim_set_keymap('n', 'gd', "<Plug>(coc-definition)", { silent = true });
 vim.api.nvim_set_keymap('n', 'gy', "<Plug>(coc-type-definition)", { silent = true });
 vim.api.nvim_set_keymap('n', 'gi', "<Plug>(coc-implementation)", { silent = true });
--- vim.api.nvim_set_keymap('n', 'gr', ":Telescope coc references<CR>", { silent = true });
 
 vim.keymap.set('n', 'gr', function()
     require('telescope._extensions').manager.coc.references_used({
