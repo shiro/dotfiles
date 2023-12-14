@@ -49,6 +49,9 @@ require("lazy").setup({
     -- chord keybinds {{{
     {
         "kana/vim-arpeggio",
+        init = function()
+            -- vim.g.arpeggio_timeoutlen = 40
+        end,
         config = function()
             -- write-quit
             vim.api.nvim_command("call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
@@ -69,7 +72,7 @@ require("lazy").setup({
 
             -- files, surpress false warning about jk being mapped already
             vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'jk', ':Files<cr>')")
-            vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'df', '<CMD>wincmd w<CR>')")
+            vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'dj', '<CMD>wincmd w<CR>')")
         end
     },
     -- }}}
