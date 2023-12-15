@@ -154,7 +154,9 @@ require("lazy").setup({
                 "coc-tsserver",
                 "coc-emmet",
                 "coc-rust-analyzer",
+                "coc-prettier",
                 "coc-sh",
+                "coc-react-refactor",
             }
         end
     },
@@ -536,9 +538,11 @@ vim.keymap.set("i", "<TAB>",
     , opts)
 vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#insert() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 -- code actions
-vim.keymap.set("n", "ga", "<Plug>(coc-codeaction-cursor)", { silent = true })
+vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
+vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
 -- refactor
 vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
+vim.api.nvim_create_user_command("RenameFile", "CocCommand workspace.renameCurrentFile", {})
 
 -- reformat code
 vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
@@ -590,7 +594,9 @@ vim.api.nvim_create_autocmd("FocusLost", {
     callback = function()
         -- only for files
         if vim.bo.buftype ~= "" then return end
-        if vim.api.nvim_buf_get_name(0) == "" then return end
+        local filename = vim.api.nvim_buf_get_name(0)
+        if filename == "" then return end
+        if vim.fn.filereadable(filename) ~= 1 then return end
         vim.cmd.write({ mods = { silent = true } })
     end
 })
