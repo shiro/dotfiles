@@ -517,6 +517,9 @@ vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, si
 vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("i", "<C-S-p>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
 vim.keymap.set("i", "<F12>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
+-- undo/redo
+vim.keymap.set("n", "<leader>u", "<cmd>CocCommand workspace.undo<cr>')", { silent = true });
+vim.keymap.set("n", "<leader><S-u>", "<cmd>CocCommand workspace.redo<cr>')", { silent = true });
 
 -- tab/S-tab completion menu
 function _G.check_back_space()
