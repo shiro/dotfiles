@@ -40,15 +40,15 @@ require("lazy").setup({
         end,
         config = function()
             -- write-quit
-            vim.api.nvim_command("call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
+            vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
             -- write-quit-all
-            vim.api.nvim_command("call arpeggio#map('n', '', 0, 'we', ':wqa<cr>')")
+            vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'we', ':wqa<cr>')")
             -- write-quit
-            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
+            vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
             -- insert mode
-            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'fun', 'function')")
+            vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'fun', 'function')")
             -- save
-            vim.api.nvim_command("call arpeggio#map('i', '', 0, 'jk', '<ESC>')")
+            vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'jk', '<ESC>')")
             -- close buffer
             vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'ap', '<ESC>:q<CR>')")
             -- only buffer
@@ -138,6 +138,38 @@ require("lazy").setup({
     -- }}}
 
     -- LSP server, auto-complete {{{
+    -- {
+    --     "jose-elias-alvarez/typescript.nvim",
+    --     dependencies = { "neovim/nvim-lspconfig" },
+    --     lazy = true,
+    --     -- cmd = "TypescriptRenameFile",
+    --     keys = {
+    --         { "<leader><f2>", "" },
+    --     },
+    --     -- ft = "typescriptreact",
+    --     config = function()
+    --         require("typescript").setup({
+    --             disable_commands = false,
+    --             -- debug = false,            -- enable debug logging for commands
+    --             -- go_to_source_definition = {
+    --             --     fallback = true,      -- fall back to standard LSP definition on failure
+    --             -- },
+    --             -- server = {                -- pass options to lspconfig's setup method
+    --             --     on_attach = ...,
+    --             -- },
+    --         })
+    --         -- print(99)
+    --
+    --         vim.keymap.set("n", "<leader><f2>", ":e<cr>:TypescriptRenameFile<CR>", {})
+    --     end
+    -- },
+    {
+        -- "neoclide/coc-tsserver",
+        "shiro/coc-tsserver",
+        -- branch = "master",
+        branch = "fix/fileRenameUpdateImports",
+        build = "yarn install --frozen-lockfile",
+    },
     {
         "neoclide/coc.nvim",
         branch = "master",
@@ -150,8 +182,7 @@ require("lazy").setup({
                 "coc-sumneko-lua",
                 "coc-json",
                 "coc-styled-components",
-                "coc-tsserver",
-                "coc-tsserver",
+                -- "coc-tsserver",
                 "coc-emmet",
                 "coc-rust-analyzer",
                 "coc-prettier",
@@ -376,6 +407,9 @@ require("lazy").setup({
     --             style = 'minimal',
     --         }
     --     end,
+    --     config = function()
+    --         vim.keymap.set("n", "<leader>l", ":RnvimrToggle<CR>", {})
+    --     end,
     -- },
     --- }}}
 
@@ -388,6 +422,9 @@ require("lazy").setup({
     -- }}}
 
     -- misc {{{
+
+    -- detect file shiftwidth, tab mode
+    "tpope/vim-sleuth",
 
     -- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
     "tpope/vim-surround",
@@ -542,7 +579,7 @@ vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = tru
 vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
 -- refactor
 vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
-vim.api.nvim_create_user_command("RenameFile", "CocCommand workspace.renameCurrentFile", {})
+vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
 
 -- reformat code
 vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })

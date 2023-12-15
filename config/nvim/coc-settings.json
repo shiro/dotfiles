@@ -33,6 +33,8 @@
     "diagnostic.enableHighlightLineNumber": false,
     "outline.sortBy": "position",
     "outline.previewBorderRounded": true,
+    "prettier.requireConfig": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
     "outline.autoPreview": true,
     "notification.disabledProgressSources": [
         "*"

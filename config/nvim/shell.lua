@@ -18,6 +18,9 @@ vim.opt.diffopt:append({ "followwrap" })
 -- disable status line
 vim.opt.laststatus = 3
 
+-- don't show diff fill chars
+vim.opt.fillchars = { diff = " " }
+
 -- jump to next split
 vim.keymap.set("n", "<M-i>", "<CMD>wincmd w<CR>", { noremap = true, silent = true })
 

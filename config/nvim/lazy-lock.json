@@ -1,6 +1,7 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
   "bclose.vim": { "branch": "master", "commit": "99018b4a2dd18aea1cbd3aa23565b01a0f8c5b73" },
+  "coc-tsserver": { "branch": "fix/fileRenameUpdateImports", "commit": "0514b8394b96166546b1a9df66f9b7e220bfd300" },
   "coc-zsh": { "branch": "master", "commit": "ef6b0caaeec0fea6fe9f64c19ce87e0282f31da9" },
   "coc.nvim": { "branch": "master", "commit": "e10877749538a9875e359abe69974b0d0ca697ca" },
   "lazy.nvim": { "branch": "main", "commit": "96584866b9c5e998cbae300594d0ccfd0c464627" },
@@ -21,6 +22,6 @@
   "vim-repeat": { "branch": "master", "commit": "24afe922e6a05891756ecf331f39a1f6743d3d5a" },
   "vim-rooter": { "branch": "master", "commit": "1353fa47ee3a81083c284e28ff4f7d92655d7c9e" },
   "vim-rust-syntax-ext": { "branch": "master", "commit": "019cd6ac05aa6da7179945911cadc8a21d6e1abc" },
-  "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" },
-  "vim-tmux-navigator": { "branch": "master", "commit": "7db70e08ea03b3e4d91f63713d76134512e28d7e" }
+  "vim-sleuth": { "branch": "master", "commit": "1cc4557420f215d02c4d2645a748a816c220e99b" },
+  "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" }
 }

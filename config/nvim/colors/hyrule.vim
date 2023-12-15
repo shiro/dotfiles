@@ -162,6 +162,8 @@ exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
 exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi Folded guibg=None guifg=".brown." gui=NONE"
+exe "hi Directory guifg=".lightGreen
+exe "hi qfLineNr guifg=".brown
 
 " omnibar
 exe "hi TelescopeMatching guifg=".orange
@@ -186,7 +188,7 @@ exe "hi @text.diff.add.diff guibg="..diffAddDark.." guifg=".white
 exe "hi @text.diff.delete.diff guibg="..diffDelDark.." guifg=".white
 exe "hi DiffAdd guibg=".diffAdd." guifg=None"
 exe "hi DiffChange gui=None guibg=".diffModDark." guifg=None"
-exe "hi DiffDelete gui=None guibg=".diffDel." guifg=".diffDel
+exe "hi DiffDelete gui=None guibg=".diffDel." guifg=None"
 exe "hi DiffText gui=None guibg=".diffMod." guifg=None"
 exe "hi GitGutterAdd guifg=".diffAdd." guibg=".diffAdd
 exe "hi GitGutterAddLineNr guifg=".diffAddFg." guibg=".diffAdd
