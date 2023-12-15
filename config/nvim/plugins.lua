@@ -137,6 +137,47 @@ require("lazy").setup({
     },
     -- }}}
 
+    -- movement {{{
+    {
+        "ggandor/leap.nvim",
+        init = function()
+        end,
+        config = function()
+            local leap = require('leap')
+            leap.add_default_mappings()
+            leap.labels = 'sfnjklhodweimbuyvrgtaqpcxz/SFNJKLHODWEMBUYVRGTAQPCXZ?'
+        end
+    },
+    {
+        "ggandor/leap-spooky.nvim",
+        config = function()
+            require("leap-spooky").setup({})
+
+            -- remove all insert mode binds starting with 'i'
+            for _, value in ipairs(vim.api.nvim_get_keymap("x")) do
+                if value.lhs:sub(1, 1) == "i" then
+                    vim.keymap.del("x", value.lhs, {})
+                end
+            end
+        end
+    },
+    {
+        "haya14busa/incsearch.vim",
+        dependencies = { "haya14busa/incsearch-fuzzy.vim" },
+        keys         = {
+            { "<leader>/", "<Plug>(incsearch-fuzzy-/)" },
+            { "<leader>?", "<Plug>(incsearch-fuzzy-?)" },
+        },
+        init         = function()
+            vim.g["incsearch#auto_nohlsearch"] = 1
+        end,
+        config       = function()
+            -- vim.keymap.set("n", "<leader>/", "<Plug>(incsearch-fuzzy-/)", {})
+            -- vim.keymap.set("n", "<leader>?", "<Plug>(incsearch-fuzzy-?)", {})
+        end,
+    },
+    -- }}}
+
     -- LSP server, auto-complete {{{
     -- {
     --     "jose-elias-alvarez/typescript.nvim",
@@ -387,9 +428,14 @@ require("lazy").setup({
     -- file manager {{{
     {
         "rafaqz/ranger.vim",
+        -- lazy = true,
+        -- keys = { { "<leader>l", "" } },
         dependencies = { "rbgrouleff/bclose.vim" },
         init = function()
             vim.g.ranger_map_keys = 0
+            -- vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
+        end,
+        config = function()
             vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
         end,
     },
@@ -689,3 +735,7 @@ vim.keymap.set("n", "<C-e>", function() Jump(math.max(vim.v.count, 1) * 3) end, 
 -- paste with indent by default, this needs to be after plugins
 vim.keymap.set("n", "p", "]p=`]", { silent = true, noremap = true })
 vim.keymap.set("n", "<S-p>", "]P=`]", { silent = true, noremap = true })
+
+
+-- restore substitute
+vim.keymap.set("x", "z", "s", { noremap = true })

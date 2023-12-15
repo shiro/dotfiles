@@ -204,6 +204,12 @@ exe "hi WinSeparator guifg=".shadow
 exe "hi StatusLine gui=None guifg=".ore
 exe "hi StatusLineNC gui=None guifg=".ore
 
+" motion
+
+hi link LeapBackdrop Comment
+exe "hi LeapMatch gui=bold guifg=".white
+exe "hi LeapLabelPrimary gui=bold guifg=".darkGreen
+exe "hi LeapLabelSecondary gui=bold guifg=".lightGreen
 
 " JSON
 
