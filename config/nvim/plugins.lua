@@ -50,7 +50,7 @@ require("lazy").setup({
             -- save
             vim.api.nvim_command("call arpeggio#map('i', '', 0, 'jk', '<ESC>')")
             -- close buffer
-            vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'ap', '<ESC>:q<CR>')")
+            vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'ap', '<ESC>:q<CR>')")
             -- only buffer
             vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'ao', '<C-w>o')")
             -- Ag
@@ -58,7 +58,7 @@ require("lazy").setup({
 
             -- files, surpress false warning about jk being mapped already
             vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'jk', ':Files<cr>')")
-            vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'dj', '<CMD>wincmd w<CR>')")
+            -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'di', '<CMD>wincmd w<CR>')")
         end
     },
     -- }}}
@@ -152,6 +152,7 @@ require("lazy").setup({
                 "coc-styled-components",
                 "coc-tsserver",
                 "coc-tsserver",
+                "coc-emmet",
                 "coc-rust-analyzer",
                 "coc-sh",
             }
@@ -261,6 +262,7 @@ require("lazy").setup({
 
                 require("telescopePickers").prettyFilesPicker({
                     picker = "find_files",
+
                     options = {
                         sorter = sorter,
                         previewer = false,
@@ -352,14 +354,10 @@ require("lazy").setup({
     -- file manager {{{
     {
         "rafaqz/ranger.vim",
-        lazy = true,
-        keys = {
-            { "<leader>l", ":RangerEdit<CR>" },
-        },
         dependencies = { "rbgrouleff/bclose.vim" },
         init = function()
             vim.g.ranger_map_keys = 0
-            -- vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
+            vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
         end,
     },
     -- {
@@ -576,9 +574,12 @@ vim.api.nvim_create_autocmd("FocusLost", {
     callback = function()
         -- only for files
         if vim.bo.buftype ~= "" then return end
-        if not vim.api.nvim_eval("coc#rpc#ready()") then return end
-        if not vim.fn.CocAction("hasProvider", "format") then return end
-        vim.fn.CocAction("format")
+        -- ignore errors
+        pcall(function()
+            if not vim.api.nvim_eval("coc#rpc#ready()") then return end
+            if not vim.fn.CocAction("hasProvider", "format") then return end
+            vim.fn.CocAction("format")
+        end)
     end
 })
 vim.api.nvim_create_autocmd("FocusLost", {
@@ -586,6 +587,7 @@ vim.api.nvim_create_autocmd("FocusLost", {
     callback = function()
         -- only for files
         if vim.bo.buftype ~= "" then return end
+        if vim.api.nvim_buf_get_name(0) == "" then return end
         vim.cmd.write({ mods = { silent = true } })
     end
 })
@@ -637,3 +639,7 @@ vim.keymap.set("n", "<C-f>", function() Jump(math.max(vim.v.count, 1) * 32, true
 
 vim.keymap.set("n", "<C-y>", function() Jump(math.max(vim.v.count, 1) * -3) end, {})
 vim.keymap.set("n", "<C-e>", function() Jump(math.max(vim.v.count, 1) * 3) end, {})
+
+-- paste with indent by default, this needs to be after plugins
+vim.keymap.set("n", "p", "]p=`]", { silent = true, noremap = true })
+vim.keymap.set("n", "<S-p>", "]P=`]", { silent = true, noremap = true })
