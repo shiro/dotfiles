@@ -1,6 +1,7 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
   "bclose.vim": { "branch": "master", "commit": "99018b4a2dd18aea1cbd3aa23565b01a0f8c5b73" },
+  "cinnamon.nvim": { "branch": "master", "commit": "c406ffda3a0302f32c23b24ab756ea20467d6578" },
   "coc-tsserver": { "branch": "fix/fileRenameUpdateImports", "commit": "0514b8394b96166546b1a9df66f9b7e220bfd300" },
   "coc-zsh": { "branch": "master", "commit": "ef6b0caaeec0fea6fe9f64c19ce87e0282f31da9" },
   "coc.nvim": { "branch": "master", "commit": "e10877749538a9875e359abe69974b0d0ca697ca" },

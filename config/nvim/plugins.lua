@@ -59,6 +59,10 @@ require("lazy").setup({
             -- files, surpress false warning about jk being mapped already
             vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'jk', ':Files<cr>')")
             -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'di', '<CMD>wincmd w<CR>')")
+
+            -- common movement shortcuts
+            vim.api.nvim_create_user_command("ReplaceWord", function() vim.fn.feedkeys("cimw") end, {})
+            vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mw', '<cmd>silent ReplaceWord<cr>')")
         end
     },
     -- }}}
@@ -132,7 +136,7 @@ require("lazy").setup({
                 context_commentstring = { enable = true },
             })
             -- vim.o.foldmethod = "expr"
-            vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+            -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
         end,
     },
     -- }}}
@@ -143,9 +147,10 @@ require("lazy").setup({
         init = function()
         end,
         config = function()
-            local leap = require('leap')
+            local leap = require("leap")
+            leap.opts.case_sensitive = true
+            leap.opts.labels = "sfnjklhodweimbuyvrgtaqpcxz/SFNJKLODWEMBUYVRGTAQPCXZ?"
             leap.add_default_mappings()
-            leap.labels = 'sfnjklhodweimbuyvrgtaqpcxz/SFNJKLHODWEMBUYVRGTAQPCXZ?'
         end
     },
     {
@@ -153,9 +158,11 @@ require("lazy").setup({
         config = function()
             require("leap-spooky").setup({})
 
-            -- remove all insert mode binds starting with 'i'
+            -- remove all insert mode binds we don't like
             for _, value in ipairs(vim.api.nvim_get_keymap("x")) do
-                if value.lhs:sub(1, 1) == "i" then
+                if value.lhs:sub(1, 1) == "i" or
+                    value.lhs:sub(1, 1) == "x"
+                then
                     vim.keymap.del("x", value.lhs, {})
                 end
             end
@@ -614,12 +621,12 @@ end
 
 -- make <TAB> and <CR> accept selected completion item
 vim.keymap.set("i", "<TAB>",
-    "coc#pum#visible() ? coc#pum#confirm() :" ..
+    "coc#pum#visible() ? coc#pum#insert() :" ..
     [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
     "v:lua.check_back_space() ? '<TAB>' :" ..
     "coc#refresh()"
     , opts)
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#insert() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 -- code actions
 vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
 vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
@@ -707,7 +714,7 @@ function Jump(distance, center)
 
     local height       = vim.fn.winheight(0)
     local cursor_row   = view_info.lnum
-    local buffer_lines = vim.fn.line("$", vim.api.nvim_get_current_win())
+    local buffer_lines = vim.fn.line("$")
 
     local target_row   = math.min(cursor_row + distance, buffer_lines)
     if center then
@@ -736,6 +743,15 @@ vim.keymap.set("n", "<C-e>", function() Jump(math.max(vim.v.count, 1) * 3) end, 
 vim.keymap.set("n", "p", "]p=`]", { silent = true, noremap = true })
 vim.keymap.set("n", "<S-p>", "]P=`]", { silent = true, noremap = true })
 
-
--- restore substitute
+-- restore substitute functionality
 vim.keymap.set("x", "z", "s", { noremap = true })
+
+-- set foldmethod since its being overriden by plugins
+vim.opt.foldmethod = "indent"
+
+-- TODO more plugins!
+-- https://neovimcraft.com/plugin/jackMort/ChatGPT.nvim
+-- https://neovimcraft.com/plugin/folke/noice.nvim
+-- rust
+-- https://github.com/Saecki/crates.nvim
+-- https://neovimcraft.com/plugin/simrat39/rust-tools.nvim
