@@ -186,6 +186,47 @@ require("lazy").setup({
     -- }}}
 
     -- LSP server, auto-complete {{{
+
+    {
+        "williamboman/mason.nvim",
+        dependencies = { "williamboman/mason-lspconfig.nvim" },
+        config = function()
+            require("mason").setup({
+                ui = {
+                    icons = {
+                        package_installed = "",
+                        package_pending = "",
+                        package_uninstalled = "",
+                    },
+                }
+            })
+            require("mason-lspconfig").setup()
+        end,
+    },
+    {
+        'mrcjkb/rustaceanvim',
+        version = '^3',
+        ft = { 'rust' },
+    },
+    -- {
+    --     "simrat39/rust-tools.nvim",
+    --     dependencies = { "neovim/nvim-lspconfig" },
+    --     config = function()
+    --         local rt = require("rust-tools")
+    --
+    --         rt.setup({
+    --             server = {
+    --                 on_attach = function(_, bufnr)
+    --                     -- Hover actions
+    --                     vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+    --                     -- Code action groups
+    --                     vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    --                 end,
+    --             },
+    --         })
+    --     end,
+    -- },
+
     -- {
     --     "jose-elias-alvarez/typescript.nvim",
     --     dependencies = { "neovim/nvim-lspconfig" },
@@ -211,38 +252,6 @@ require("lazy").setup({
     --         vim.keymap.set("n", "<leader><f2>", ":e<cr>:TypescriptRenameFile<CR>", {})
     --     end
     -- },
-    {
-        -- "neoclide/coc-tsserver",
-        "shiro/coc-tsserver",
-        -- branch = "master",
-        branch = "fix/fileRenameUpdateImports",
-        build = "yarn install --frozen-lockfile",
-    },
-    {
-        "neoclide/coc.nvim",
-        branch = "master",
-        build = "npm ci",
-        init = function()
-            vim.g.coc_global_extensions = {
-                "coc-vimlsp",
-                "coc-eslint",
-                "coc-snippets",
-                "coc-sumneko-lua",
-                "coc-json",
-                "coc-styled-components",
-                -- "coc-tsserver",
-                "coc-emmet",
-                "coc-rust-analyzer",
-                "coc-prettier",
-                "coc-sh",
-                "coc-react-refactor",
-            }
-        end
-    },
-    {
-        "tjdevries/coc-zsh",
-        ft = "zsh",
-    },
     -- }}}
 
     -- comments {{{
@@ -299,7 +308,6 @@ require("lazy").setup({
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons",
-            "fannheyward/telescope-coc.nvim",
         },
         config = function()
             local telescope_actions = require "telescope.actions"
@@ -319,13 +327,8 @@ require("lazy").setup({
                     "./target/.*",
                 },
                 extensions = {
-                    coc = {
-                        -- use for list picker
-                        prefer_locations = true,
-                    }
                 }
             })
-            require("telescope").load_extension("coc")
             local sorter = require("top-results-sorter").sorter()
             local tele_builtin = require("telescope.builtin")
             local actions = require("telescope.actions")
@@ -493,90 +496,90 @@ require("lazy").setup({
 
 
 
-local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
+-- local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
 
 
-vim.api.nvim_set_keymap("n", "gd", "<Plug>(coc-definition)", { silent = true });
-vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true });
-vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true });
-
-vim.keymap.set("n", "gr", function()
-    require("telescope._extensions").manager.coc.references_used({
-        layout_strategy = "vertical",
-        on_complete = {
-            function(picker)
-                -- remove this on_complete callback
-                picker:clear_completion_callbacks()
-                -- if we have exactly one match, select it
-                if picker.manager.linked_states.size == 1 then
-                    require("telescope.actions").select_default(picker.prompt_bufnr)
-                end
-            end,
-        }
-    })
-end)
-
-vim.api.nvim_set_keymap("n", "]e", "<Plug>(coc-diagnostic-next)", { silent = true });
-vim.api.nvim_set_keymap("n", "[e", "<Plug>(coc-diagnostic-prev)", { silent = true });
-vim.api.nvim_set_keymap("n", "<A-S-e>", "<Plug>(coc-rename)", { silent = true });
-vim.api.nvim_set_keymap("n", "<A-S-r>", "<Plug>(coc-refactor)", { silent = true });
-vim.api.nvim_set_keymap("v", "<A-S-r>", "<Plug>(coc-refactor-selected)", { silent = true });
--- show outline (hierarchy)
-
-function set_timeout(timeout, callback)
-    local uv = vim.loop
-    local timer = uv.new_timer()
-    local function ontimeout()
-        uv.timer_stop(timer)
-        uv.close(timer)
-        callback(timer)
-    end
-    uv.timer_start(timer, timeout, 0, ontimeout)
-    return timer
-end
-
-function toggleOutline()
-    local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
-    if win_id == -1 then
-        vim.fn.CocAction("showOutline", 1)
-
-        -- local foo = vim.api.nvim_eval("coc#float#get_float_by_kind('outline-preview')")
-        -- print(foo)
-
-        set_timeout(300, function()
-            vim.schedule(function()
-                win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
-                if win_id == -1 then return end
-                vim.api.nvim_set_current_win(win_id)
-            end)
-        end);
-    else
-        vim.api.nvim_command("call coc#window#close(" .. win_id .. ")")
-    end
-end
-
-vim.keymap.set("n", "go", toggleOutline, { silent = true });
--- list warnings/errors in telescope
--- TODO
--- list all local changes
-vim.api.nvim_set_keymap("n", "gD", ":GF?<CR>", { silent = true });
-
-vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "gd", "<Plug>(coc-definition)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true });
+--
+-- vim.keymap.set("n", "gr", function()
+--     require("telescope._extensions").manager.coc.references_used({
+--         layout_strategy = "vertical",
+--         on_complete = {
+--             function(picker)
+--                 -- remove this on_complete callback
+--                 picker:clear_completion_callbacks()
+--                 -- if we have exactly one match, select it
+--                 if picker.manager.linked_states.size == 1 then
+--                     require("telescope.actions").select_default(picker.prompt_bufnr)
+--                 end
+--             end,
+--         }
+--     })
+-- end)
+--
+-- vim.api.nvim_set_keymap("n", "]e", "<Plug>(coc-diagnostic-next)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "[e", "<Plug>(coc-diagnostic-prev)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "<A-S-e>", "<Plug>(coc-rename)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "<A-S-r>", "<Plug>(coc-refactor)", { silent = true });
+-- vim.api.nvim_set_keymap("v", "<A-S-r>", "<Plug>(coc-refactor-selected)", { silent = true });
+-- -- show outline (hierarchy)
+--
+-- function set_timeout(timeout, callback)
+--     local uv = vim.loop
+--     local timer = uv.new_timer()
+--     local function ontimeout()
+--         uv.timer_stop(timer)
+--         uv.close(timer)
+--         callback(timer)
+--     end
+--     uv.timer_start(timer, timeout, 0, ontimeout)
+--     return timer
+-- end
+--
+-- function toggleOutline()
+--     local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+--     if win_id == -1 then
+--         vim.fn.CocAction("showOutline", 1)
+--
+--         -- local foo = vim.api.nvim_eval("coc#float#get_float_by_kind('outline-preview')")
+--         -- print(foo)
+--
+--         set_timeout(300, function()
+--             vim.schedule(function()
+--                 win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+--                 if win_id == -1 then return end
+--                 vim.api.nvim_set_current_win(win_id)
+--             end)
+--         end);
+--     else
+--         vim.api.nvim_command("call coc#window#close(" .. win_id .. ")")
+--     end
+-- end
+--
+-- vim.keymap.set("n", "go", toggleOutline, { silent = true });
+-- -- list warnings/errors in telescope
+-- -- TODO
+-- -- list all local changes
+-- vim.api.nvim_set_keymap("n", "gD", ":GF?<CR>", { silent = true });
+--
+-- vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
 
 -- highlight the symbol under cursor
 vim.api.nvim_create_augroup("CocGroup", {})
-vim.api.nvim_create_autocmd("CursorHold", {
-    group = "CocGroup",
-    command = "silent call CocActionAsync('highlight')",
-    desc = "Highlight symbol under cursor on CursorHold"
-})
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--     group = "CocGroup",
+--     command = "silent call CocActionAsync('highlight')",
+--     desc = "Highlight symbol under cursor on CursorHold"
+-- })
 
-vim.api.nvim_create_autocmd("User", {
-    group = "CocGroup",
-    pattern = "CocJumpPlaceholder",
-    command = "call CocActionAsync('showSignatureHelp')",
-    desc = "Update signature help on jump placeholder"
-})
+-- vim.api.nvim_create_autocmd("User", {
+--     group = "CocGroup",
+--     pattern = "CocJumpPlaceholder",
+--     command = "call CocActionAsync('showSignatureHelp')",
+--     desc = "Update signature help on jump placeholder"
+-- })
 
 -- _G.CloseAllFloatingWindows = function()
 --     local closed_windows = {}
@@ -592,57 +595,57 @@ vim.api.nvim_create_autocmd("User", {
 -- vim.keymap.set('i', '<ESC>', "coc#util#has_float() ? <CMD>lua _G.show_docs()<CR> : <ESC>", { expr = true });
 
 -- show docs
-function _G.show_docs()
-    local cw = vim.fn.expand("<cword>")
-    --if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
-    --    vim.api.nvim_command('h ' .. cw)
-    if vim.api.nvim_eval("coc#rpc#ready()") then
-        vim.fn.CocActionAsync("doHover")
-    else
-        vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
-    end
-end
-
-vim.keymap.set("n", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("i", "<C-S-p>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
-vim.keymap.set("i", "<F12>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
--- undo/redo
-vim.keymap.set("n", "<leader>u", "<cmd>CocCommand workspace.undo<cr>')", { silent = true });
-vim.keymap.set("n", "<leader><S-u>", "<cmd>CocCommand workspace.redo<cr>')", { silent = true });
+-- function _G.show_docs()
+--     local cw = vim.fn.expand("<cword>")
+--     --if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
+--     --    vim.api.nvim_command('h ' .. cw)
+--     if vim.api.nvim_eval("coc#rpc#ready()") then
+--         vim.fn.CocActionAsync("doHover")
+--     else
+--         vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
+--     end
+-- end
+--
+-- vim.keymap.set("n", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("i", "<C-S-p>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
+-- vim.keymap.set("i", "<F12>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true });
+-- -- undo/redo
+-- vim.keymap.set("n", "<leader>u", "<cmd>CocCommand workspace.undo<cr>')", { silent = true });
+-- vim.keymap.set("n", "<leader><S-u>", "<cmd>CocCommand workspace.redo<cr>')", { silent = true });
 
 -- tab/S-tab completion menu
-function _G.check_back_space()
-    local col = vim.fn.col(".") - 1
-    return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
-end
-
--- make <TAB> and <CR> accept selected completion item
-vim.keymap.set("i", "<TAB>",
-    "coc#pum#visible() ? coc#pum#insert() :" ..
-    [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
-    "v:lua.check_back_space() ? '<TAB>' :" ..
-    "coc#refresh()"
-    , opts)
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
--- code actions
-vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
-vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
--- refactor
-vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
-vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
-
--- reformat code
-vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
-vim.keymap.set("n", "gl", "<Plug>(coc-format)", { silent = true })
-
-vim.api.nvim_create_autocmd("FileType", {
-    group = "CocGroup",
-    pattern = "lua",
-    command = "setl formatexpr=CocAction('formatSelected')",
-})
+-- function _G.check_back_space()
+--     local col = vim.fn.col(".") - 1
+--     return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
+-- end
+--
+-- -- make <TAB> and <CR> accept selected completion item
+-- vim.keymap.set("i", "<TAB>",
+--     "coc#pum#visible() ? coc#pum#insert() :" ..
+--     [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
+--     "v:lua.check_back_space() ? '<TAB>' :" ..
+--     "coc#refresh()"
+--     , opts)
+-- vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+-- -- code actions
+-- vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
+-- vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
+-- -- refactor
+-- vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
+-- vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
+--
+-- -- reformat code
+-- vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
+-- vim.keymap.set("n", "gl", "<Plug>(coc-format)", { silent = true })
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+--     group = "CocGroup",
+--     pattern = "lua",
+--     command = "setl formatexpr=CocAction('formatSelected')",
+-- })
 
 -- language specific {{{
 
@@ -665,41 +668,41 @@ vim.api.nvim_create_autocmd("FileType", {
 -- }}}
 
 -- auto-save on focus lost/buffer change
-vim.o.autowriteall = true
-vim.api.nvim_create_autocmd("FocusLost", {
-    group = "CocGroup",
-    callback = function()
-        -- only for files
-        if vim.bo.buftype ~= "" then return end
-        -- ignore errors
-        pcall(function()
-            if not vim.api.nvim_eval("coc#rpc#ready()") then return end
-            if not vim.fn.CocAction("hasProvider", "format") then return end
-            vim.fn.CocAction("format")
-        end)
-    end
-})
-vim.api.nvim_create_autocmd("FocusLost", {
-    group = "CocGroup",
-    callback = function()
-        -- only for files
-        if vim.bo.buftype ~= "" then return end
-        local filename = vim.api.nvim_buf_get_name(0)
-        if filename == "" then return end
-        if vim.fn.filereadable(filename) ~= 1 then return end
-        vim.cmd.write({ mods = { silent = true } })
-    end
-})
+-- vim.o.autowriteall = true
+-- vim.api.nvim_create_autocmd("FocusLost", {
+--     group = "CocGroup",
+--     callback = function()
+--         -- only for files
+--         if vim.bo.buftype ~= "" then return end
+--         -- ignore errors
+--         pcall(function()
+--             if not vim.api.nvim_eval("coc#rpc#ready()") then return end
+--             if not vim.fn.CocAction("hasProvider", "format") then return end
+--             vim.fn.CocAction("format")
+--         end)
+--     end
+-- })
+-- vim.api.nvim_create_autocmd("FocusLost", {
+--     group = "CocGroup",
+--     callback = function()
+--         -- only for files
+--         if vim.bo.buftype ~= "" then return end
+--         local filename = vim.api.nvim_buf_get_name(0)
+--         if filename == "" then return end
+--         if vim.fn.filereadable(filename) ~= 1 then return end
+--         vim.cmd.write({ mods = { silent = true } })
+--     end
+-- })
 
 -- disable wraps for coc preview buffers
-vim.api.nvim_create_autocmd("User", {
-    pattern = "CocOpenFloat",
-    group = "CocGroup",
-    callback = function()
-        win_id = vim.g.coc_last_float_win
-        vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
-    end
-})
+-- vim.api.nvim_create_autocmd("User", {
+--     pattern = "CocOpenFloat",
+--     group = "CocGroup",
+--     callback = function()
+--         win_id = vim.g.coc_last_float_win
+--         vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
+--     end
+-- })
 
 -- show command bar message when recording macros
 -- https://github.com/neovim/neovim/issues/19193
