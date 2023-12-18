@@ -657,6 +657,7 @@ vim.api.nvim_create_autocmd("FocusLost", {
         if vim.bo.buftype ~= "" then return end
         local filename = vim.api.nvim_buf_get_name(0)
         if filename == "" then return end
+        if not vim.opt.modified:get() then return end
         if vim.fn.filereadable(filename) ~= 1 then return end
         vim.cmd.write({ mods = { silent = true } })
     end
