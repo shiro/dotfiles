@@ -178,39 +178,10 @@ require("lazy").setup({
         init         = function()
             vim.g["incsearch#auto_nohlsearch"] = 1
         end,
-        config       = function()
-            -- vim.keymap.set("n", "<leader>/", "<Plug>(incsearch-fuzzy-/)", {})
-            -- vim.keymap.set("n", "<leader>?", "<Plug>(incsearch-fuzzy-?)", {})
-        end,
     },
     -- }}}
 
     -- LSP server, auto-complete {{{
-    -- {
-    --     "jose-elias-alvarez/typescript.nvim",
-    --     dependencies = { "neovim/nvim-lspconfig" },
-    --     lazy = true,
-    --     -- cmd = "TypescriptRenameFile",
-    --     keys = {
-    --         { "<leader><f2>", "" },
-    --     },
-    --     -- ft = "typescriptreact",
-    --     config = function()
-    --         require("typescript").setup({
-    --             disable_commands = false,
-    --             -- debug = false,            -- enable debug logging for commands
-    --             -- go_to_source_definition = {
-    --             --     fallback = true,      -- fall back to standard LSP definition on failure
-    --             -- },
-    --             -- server = {                -- pass options to lspconfig's setup method
-    --             --     on_attach = ...,
-    --             -- },
-    --         })
-    --         -- print(99)
-    --
-    --         vim.keymap.set("n", "<leader><f2>", ":e<cr>:TypescriptRenameFile<CR>", {})
-    --     end
-    -- },
     {
         -- "neoclide/coc-tsserver",
         "shiro/coc-tsserver",
