@@ -120,7 +120,7 @@ M.sorter = function(opts)
 
     local fzy = opts.fzy_mod or require "telescope.algos.fzy"
     local OFFSET = -fzy.get_score_floor()
-    local RATIO = 0.7
+    local RECENCY_RATIO = 0.5
 
     return Sorter:new {
         discard = true,
@@ -164,8 +164,8 @@ M.sorter = function(opts)
                 end
             end
 
-            return (fzy_score * 0.7 + fzy_filename_score * 0.3) * RATIO
-                + recency * (1 - RATIO)
+            return (fzy_score * 0.7 + fzy_filename_score * 0.3) * (1 - RECENCY_RATIO)
+                + recency * RECENCY_RATIO
         end,
         highlighter = fzy_sorter.highlighter
     }
