@@ -209,6 +209,7 @@ require("lazy").setup({
                 "coc-prettier",
                 "coc-sh",
                 "coc-react-refactor",
+                "@yaegassy/coc-tailwindcss3",
             }
         end
     },

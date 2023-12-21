@@ -35,6 +35,7 @@
     "outline.previewBorderRounded": true,
     "prettier.requireConfig": true,
     "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.preferences.importModuleSpecifier": "non-relative",
     "outline.autoPreview": true,
     "notification.disabledProgressSources": [
         "*"
