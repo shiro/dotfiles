@@ -630,7 +630,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "CocGroup",
-    pattern = "typescriptreact",
+    pattern = { "javascript", "typescript", "typescriptreact" },
     callback = function()
         vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'console.log();<left><left>')")
     end
@@ -638,32 +638,47 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- }}}
 
+function format(opts)
+    -- only for files
+    if vim.bo.buftype ~= "" then return end
+    -- ignore errors
+    pcall(function()
+        if not vim.api.nvim_eval("coc#rpc#ready()") then return end
+        vim.fn.CocActionAsync("hasProvider", "format", function(err, res)
+            if not res then return end
+
+            if vim.bo.filetype == "typescriptreact" then
+                -- vim.api.nvim_command("CocCommand tsserver.executeAutofix");
+                vim.fn.CocActionAsync("runCommand", "tsserver.executeAutofix", function()
+                    vim.fn.CocActionAsync("format", opts.callback)
+                end)
+                return
+            end
+
+            vim.fn.CocActionAsync("format", opts.callback)
+        end)
+    end)
+end
+
+function save()
+    -- only for files
+    if vim.bo.buftype ~= "" then return end
+    local filename = vim.api.nvim_buf_get_name(0)
+    if filename == "" then return end
+    if not vim.opt.modified:get() then return end
+    if vim.fn.filereadable(filename) ~= 1 then return end
+    vim.cmd.write({ mods = { silent = true } })
+end
+
+-- format on explicit save
+vim.keymap.set("n", "<leader>w", function()
+    format({ callback = save })
+end, {})
 -- auto-save on focus lost/buffer change
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
     group = "CocGroup",
-    callback = function()
-        -- only for files
-        if vim.bo.buftype ~= "" then return end
-        -- ignore errors
-        pcall(function()
-            if not vim.api.nvim_eval("coc#rpc#ready()") then return end
-            if not vim.fn.CocAction("hasProvider", "format") then return end
-            vim.fn.CocAction("format")
-        end)
-    end
-})
-vim.api.nvim_create_autocmd("FocusLost", {
-    group = "CocGroup",
-    callback = function()
-        -- only for files
-        if vim.bo.buftype ~= "" then return end
-        local filename = vim.api.nvim_buf_get_name(0)
-        if filename == "" then return end
-        if not vim.opt.modified:get() then return end
-        if vim.fn.filereadable(filename) ~= 1 then return end
-        vim.cmd.write({ mods = { silent = true } })
-    end
+    callback = save,
 })
 
 -- disable wraps for coc preview buffers
