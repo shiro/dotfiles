@@ -192,23 +192,32 @@ require("lazy").setup({
         build = "yarn install --frozen-lockfile",
     },
     {
+        -- "neoclide/coc-tsserver",
+        -- "shiro/coc-styled-components",
+        -- branch = "master",
+        dir = "~/tmp/coc-styled-components",
+        -- build = "yarn install --frozen-lockfile",
+    },
+    {
         "neoclide/coc.nvim",
         branch = "master",
         build = "npm ci",
         init = function()
             vim.g.coc_global_extensions = {
                 "coc-vimlsp",
+                "coc-yaml",
                 "coc-eslint",
                 "coc-snippets",
                 "coc-sumneko-lua",
                 "coc-json",
-                "coc-styled-components",
+                -- "coc-styled-components",
                 -- "coc-tsserver",
                 "coc-emmet",
                 "coc-rust-analyzer",
                 "coc-prettier",
                 "coc-sh",
                 "coc-react-refactor",
+                "coc-css",
                 "@yaegassy/coc-tailwindcss3",
             }
         end
