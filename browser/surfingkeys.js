@@ -62,8 +62,6 @@ mapkey('zf', 'Open an Image in a new tab', function() {
 
 map('<Alt-t>', '<Alt-s>');
 
-map('<ArrowRight>', 'R');
-map('<ArrowLeft>', 'E');
 
 // history forward
 map("L", "D");
