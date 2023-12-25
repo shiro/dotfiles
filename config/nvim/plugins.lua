@@ -192,11 +192,12 @@ require("lazy").setup({
         build = "yarn install --frozen-lockfile",
     },
     {
+        "shiro/coc-styled-components",
         -- "neoclide/coc-tsserver",
         -- "shiro/coc-styled-components",
-        -- branch = "master",
-        dir = "~/tmp/coc-styled-components",
-        -- build = "yarn install --frozen-lockfile",
+        branch = "master",
+        -- dir = "~/tmp/coc-styled-components",
+        build = "yarn install --frozen-lockfile",
     },
     {
         "neoclide/coc.nvim",
