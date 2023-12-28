@@ -1,3 +1,9 @@
 #!/bin/sh
 
-nice -n 18 snp yay -Syu --devel --nocombinedupgrade
+wrappers=()
+
+if command -v snp &> /dev/null; then
+  wrappers+=("snp")
+fi
+
+nice -n 18 $wrappers yay -Syu --devel --nocombinedupgrade
