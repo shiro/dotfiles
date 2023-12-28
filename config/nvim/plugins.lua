@@ -284,6 +284,7 @@ require("lazy").setup({
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons",
             "fannheyward/telescope-coc.nvim",
+            "natecraddock/telescope-zf-native.nvim",
         },
         config = function()
             local telescope_actions = require "telescope.actions"
@@ -309,7 +310,10 @@ require("lazy").setup({
                     }
                 }
             })
+
             require("telescope").load_extension("coc")
+            require("telescope").load_extension("zf-native")
+
             local sorter = require("top-results-sorter").sorter()
             local tele_builtin = require("telescope.builtin")
             local actions = require("telescope.actions")
