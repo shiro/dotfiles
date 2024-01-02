@@ -31,7 +31,6 @@ require("lazy").setup({
         end,
     },
     -- }}}
-
     -- quickfix {{{
     {
         "kevinhwang91/nvim-bqf",
@@ -43,7 +42,10 @@ require("lazy").setup({
         end,
     },
     -- }}}
-
+    {
+        "stevearc/dressing.nvim",
+        opts = {},
+    },
     -- chord keybinds {{{
     {
         "kana/vim-arpeggio",
@@ -189,56 +191,217 @@ require("lazy").setup({
             { "<leader>/", "<Plug>(incsearch-fuzzy-/)" },
             { "<leader>?", "<Plug>(incsearch-fuzzy-?)" },
         },
-        init         = function()
+        init = function()
             vim.g["incsearch#auto_nohlsearch"] = 1
         end,
     },
     -- }}}
 
     -- LSP server, auto-complete {{{
+    -- {
+    --     "williamboman/mason-lspconfig.nvim",
+    --     dependencies = { "williamboman/mason.nvim" },
+    --     opts = {
+    --         ensure_installed = {
+    --             "eslint-lsp",
+    --             "prettierd",
+    --             "tailwindcss-language-server",
+    --             "typescript-language-server",
+    --             "lua-language-server",
+    --         },
+    --     },
+    -- },
+    -- {
+    --     "nvimtools/none-ls.nvim",
+    --     event = "VeryLazy",
+    --     opts = function()
+    --         return require("custom.configs.null-ls")
+    --     end,
+    -- },
     {
-        -- "neoclide/coc-tsserver",
-        "shiro/coc-tsserver",
-        -- branch = "master",
-        branch = "fix/fileRenameUpdateImports",
-        build = "yarn install --frozen-lockfile",
-    },
-    {
-        "shiro/coc-styled-components",
-        -- "neoclide/coc-tsserver",
-        -- "shiro/coc-styled-components",
-        branch = "master",
-        -- dir = "~/tmp/coc-styled-components",
-        build = "yarn install --frozen-lockfile",
-    },
-    {
-        "neoclide/coc.nvim",
-        branch = "master",
-        build = "npm ci",
+        "neovim/nvim-lspconfig",
+        dependencies = {
+            "williamboman/mason.nvim", 
+            "williamboman/mason-lspconfig.nvim",
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+        },
         init = function()
-            vim.g.coc_global_extensions = {
-                "coc-vimlsp",
-                "coc-yaml",
-                "coc-eslint",
-                "coc-snippets",
-                "coc-sumneko-lua",
-                "coc-json",
-                -- "coc-styled-components",
-                -- "coc-tsserver",
-                "coc-emmet",
-                "coc-rust-analyzer",
-                "coc-prettier",
-                "coc-sh",
-                "coc-react-refactor",
-                "coc-css",
-                "@yaegassy/coc-tailwindcss3",
-            }
-        end
+            vim.diagnostic.config({
+                update_in_insert = true,
+                float = { border = "rounded" },
+            })
+            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+                vim.lsp.handlers.signature_help, {
+                    border = "rounded",
+                    close_events = {"BufHidden", "InsertLeave"},
+                }
+            )
+            vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+                vim.lsp.diagnostic.on_publish_diagnostics, {
+                    virtual_text = false,
+                    -- update_in_insert = true,
+                }
+            )
+            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+                vim.lsp.handlers.hover, {
+                    border = "rounded",
+                }
+            )
+        end,
+        config = function()
+            local lspconfig = require("lspconfig")
+            require("mason").setup()
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    -- "eslint-lsp",
+                    -- "prettierd",
+                    -- "tailwindcss-language-server",
+                    "tsserver",
+                    "lua_ls",
+                    "rust_analyzer@nightly",
+                    "prettierd",
+                },
+                automatic_installation = true,
+            })
+            require("mason-tool-installer").setup({
+                    ensure_installed = {
+                        -- "standardrb",
+                        -- "prettier",
+                        "prettierd",
+                        -- "ktlint",
+                        -- "eslint_d",
+                        -- "google-java-format",
+                        -- "ktlint",
+                        -- "standardrb",
+                        -- "htmlbeautifier",
+                        -- "beautysh",
+                        -- "buf",
+                        -- "rustfmt",
+                        -- "yamlfix",
+                        -- "taplo",
+                },
+            })
+            -- lspconfig.rust_analyzer.setup({})
+
+            -- local on_attach = lspconfig.on_attach
+            -- local capabilities = lspconfig.capabilities
+
+            local servers = { --[[ "tsserver", ]] "jsonls", "tailwindcss", "eslint", "rust_analyzer" }
+
+            for _, lsp in ipairs(servers) do
+                lspconfig[lsp].setup {
+                    -- on_attach = on_attach,
+                    -- capabilities = capabilities,
+                }
+            end
+        end,
     },
     {
-        "tjdevries/coc-zsh",
-        ft = "zsh",
+        "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        -- opts = {},
+        ft = {"typescript", "typescriptreact", "javascript", "javascriptreact"},
+        config = function()
+            require("typescript-tools").setup({
+                settings = {
+                    publish_diagnostic_on = "change",
+                    tsserver_file_preferences = {
+                        importModuleSpecifierPreference = "non-relative",
+                    },
+                    tsserver_plugins = {
+                        -- for TypeScript v4.9+
+                        "@styled/typescript-styled-plugin",
+                        -- or for older TypeScript versions
+                        -- "typescript-styled-plugin",
+                    },
+                },
+            })
+        end,
     },
+    {
+        "stevearc/conform.nvim",
+        event = { "BufReadPre", "BufNewFile" },
+        config = function()
+            local conform = require("conform")
+
+            conform.setup({
+                formatters_by_ft = {
+                    lua = { "stylua" },
+                    svelte = { { "prettierd", "prettier" } },
+                    javascript = { { "prettierd", "prettier" } },
+                    typescript = { { "prettierd", "prettier" } },
+                    javascriptreact = { { "prettierd", "prettier" } },
+                    typescriptreact = { { "prettierd", "prettier" } },
+                    json = { { "prettierd", "prettier" } },
+                    graphql = { { "prettierd", "prettier" } },
+                    java = { "google-java-format" },
+                    kotlin = { "ktlint" },
+                    ruby = { "standardrb" },
+                    markdown = { { "prettierd", "prettier" } },
+                    erb = { "htmlbeautifier" },
+                    html = { "htmlbeautifier" },
+                    bash = { "beautysh" },
+                    proto = { "buf" },
+                    rust = { "rustfmt" },
+                    yaml = { "yamlfix" },
+                    toml = { "taplo" },
+                    css = { { "prettierd", "prettier" } },
+                    scss = { { "prettierd", "prettier" } },
+                },
+            })
+
+            vim.keymap.set({ "n", "v" }, "gl", function()
+                conform.format({
+                    lsp_fallback = true,
+                    async = false,
+                    timeout_ms = 500,
+                })
+            end, { desc = "Format file or range (in visual mode)" })
+        end,
+    },
+    -- {
+    --     -- "neoclide/coc-tsserver",
+    --     "shiro/coc-tsserver",
+    --     -- branch = "master",
+    --     branch = "fix/fileRenameUpdateImports",
+    --     build = "yarn install --frozen-lockfile",
+    -- },
+    -- {
+    --     "shiro/coc-styled-components",
+    --     -- "neoclide/coc-tsserver",
+    --     -- "shiro/coc-styled-components",
+    --     branch = "master",
+    --     -- dir = "~/tmp/coc-styled-components",
+    --     build = "yarn install --frozen-lockfile",
+    -- },
+    -- {
+    --     "neoclide/coc.nvim",
+    --     branch = "master",
+    --     build = "npm ci",
+    --     init = function()
+    --         vim.g.coc_global_extensions = {
+    --             "coc-vimlsp",
+    --             "coc-yaml",
+    --             "coc-eslint",
+    --             "coc-snippets",
+    --             "coc-sumneko-lua",
+    --             "coc-json",
+    --             -- "coc-styled-components",
+    --             -- "coc-tsserver",
+    --             "coc-emmet",
+    --             "coc-rust-analyzer",
+    --             "coc-prettier",
+    --             "coc-sh",
+    --             "coc-react-refactor",
+    --             "coc-css",
+    --             "@yaegassy/coc-tailwindcss3",
+    --         }
+    --     end
+    -- },
+    -- {
+    --     "tjdevries/coc-zsh",
+    --     ft = "zsh",
+    -- },
     -- }}}
 
     -- comments {{{
@@ -295,7 +458,7 @@ require("lazy").setup({
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons",
-            "fannheyward/telescope-coc.nvim",
+            -- "fannheyward/telescope-coc.nvim",
             "natecraddock/telescope-zf-native.nvim",
         },
         config = function()
@@ -315,15 +478,15 @@ require("lazy").setup({
                     "node%_modules/.*",
                     "./target/.*",
                 },
-                extensions = {
-                    coc = {
-                        -- use for list picker
-                        prefer_locations = true,
-                    }
-                }
+                -- extensions = {
+                --     coc = {
+                --         -- use for list picker
+                --         prefer_locations = true,
+                --     }
+                -- }
             })
 
-            require("telescope").load_extension("coc")
+            -- require("telescope").load_extension("coc")
             require("telescope").load_extension("zf-native")
 
             local sorter = require("top-results-sorter").sorter()
@@ -389,11 +552,26 @@ require("lazy").setup({
             end, {})
 
             vim.keymap.set("x", "<leader>h", function()
-                print(vim.v.count)
                 tele_builtin.git_bcommits_range({
                     layout_strategy = layout(),
                 })
             end, {})
+
+            vim.keymap.set("n", "gr", function()
+                require("telescope.builtin").lsp_references({
+                    layout_strategy = layout(),
+                    -- on_complete = {
+                    --     function(picker)
+                    --         -- remove this on_complete callback
+                    --         picker:clear_completion_callbacks()
+                    --         -- if we have exactly one match, select it
+                    --         if picker.manager.linked_states.size == 1 then
+                    --             require("telescope.actions").select_default(picker.prompt_bufnr)
+                    --         end
+                    --     end,
+                    -- }
+                })
+            end)
 
             vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
         end,
@@ -496,29 +674,26 @@ require("lazy").setup({
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
 
 
-vim.api.nvim_set_keymap("n", "gd", "<Plug>(coc-definition)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "gd", "<Plug>(coc-definition)", { silent = true });
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    local opts = { buffer = ev.buf }
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    end
+})
 vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true });
 vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true });
+vim.keymap.set("n", "[e", vim.diagnostic.goto_prev)
+vim.keymap.set("n", "]e", vim.diagnostic.goto_next)
+-- vim.diagnostic.goto_next({
+--     severity = vim.diagnostic.severity.ERROR,
+-- })
 
-vim.keymap.set("n", "gr", function()
-    require("telescope._extensions").manager.coc.references_used({
-        layout_strategy = "vertical",
-        on_complete = {
-            function(picker)
-                -- remove this on_complete callback
-                picker:clear_completion_callbacks()
-                -- if we have exactly one match, select it
-                if picker.manager.linked_states.size == 1 then
-                    require("telescope.actions").select_default(picker.prompt_bufnr)
-                end
-            end,
-        }
-    })
-end)
-
-vim.api.nvim_set_keymap("n", "]e", "<Plug>(coc-diagnostic-next)", { silent = true });
-vim.api.nvim_set_keymap("n", "[e", "<Plug>(coc-diagnostic-prev)", { silent = true });
-vim.api.nvim_set_keymap("n", "<A-S-e>", "<Plug>(coc-rename)", { silent = true });
+-- vim.api.nvim_set_keymap("n", "<A-S-e>", "<Plug>(coc-rename)", { silent = true });
+vim.keymap.set("n", "<A-S-e>", vim.lsp.buf.rename, { silent = true })
 vim.api.nvim_set_keymap("n", "<A-S-r>", "<Plug>(coc-refactor)", { silent = true });
 vim.api.nvim_set_keymap("v", "<A-S-r>", "<Plug>(coc-refactor-selected)", { silent = true });
 -- show outline (hierarchy)
@@ -565,18 +740,18 @@ vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true }
 
 -- highlight the symbol under cursor
 vim.api.nvim_create_augroup("CocGroup", {})
-vim.api.nvim_create_autocmd("CursorHold", {
-    group = "CocGroup",
-    command = "silent call CocActionAsync('highlight')",
-    desc = "Highlight symbol under cursor on CursorHold"
-})
-
-vim.api.nvim_create_autocmd("User", {
-    group = "CocGroup",
-    pattern = "CocJumpPlaceholder",
-    command = "call CocActionAsync('showSignatureHelp')",
-    desc = "Update signature help on jump placeholder"
-})
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--     group = "CocGroup",
+--     command = "silent call CocActionAsync('highlight')",
+--     desc = "Highlight symbol under cursor on CursorHold"
+-- })
+--
+-- vim.api.nvim_create_autocmd("User", {
+--     group = "CocGroup",
+--     pattern = "CocJumpPlaceholder",
+--     command = "call CocActionAsync('showSignatureHelp')",
+--     desc = "Update signature help on jump placeholder"
+-- })
 
 -- _G.CloseAllFloatingWindows = function()
 --     local closed_windows = {}
@@ -603,7 +778,7 @@ function _G.show_docs()
     end
 end
 
-vim.keymap.set("n", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<C-P>", vim.lsp.buf.hover, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
@@ -620,23 +795,34 @@ function _G.check_back_space()
 end
 
 -- make <TAB> and <CR> accept selected completion item
-vim.keymap.set("i", "<TAB>",
-    "coc#pum#visible() ? coc#pum#insert() :" ..
-    [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
-    "v:lua.check_back_space() ? '<TAB>' :" ..
-    "coc#refresh()"
-    , opts)
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+-- vim.keymap.set("i", "<TAB>",
+--     "coc#pum#visible() ? coc#pum#insert() :" ..
+--     [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
+--     "v:lua.check_back_space() ? '<TAB>' :" ..
+--     "coc#refresh()"
+--     , opts)
+-- vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 -- code actions
-vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
-vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
+-- vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
+-- vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
+vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
 -- refactor
 vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
 vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
 
+local function quickfix()
+    vim.lsp.buf.code_action({
+        filter = function(a) return a.isPreferred end,
+        apply = true
+    })
+end
+vim.keymap.set("n", "<leader>qf", quickfix, {silent = true})
+
+
 -- reformat code
-vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
-vim.keymap.set("n", "gl", "<Plug>(coc-format)", { silent = true })
+-- vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
+-- vim.keymap.set("n", "gl", "<Plug>(coc-format)", { silent = true })
+vim.keymap.set("n", "gl", function() vim.lsp.buf.format({ async = true }) end, opts)
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "CocGroup",
@@ -710,20 +896,21 @@ function format(opts)
     if vim.bo.buftype ~= "" then return end
     -- ignore errors
     pcall(function()
-        if not vim.api.nvim_eval("coc#rpc#ready()") then return end
-        vim.fn.CocActionAsync("hasProvider", "format", function(err, res)
-            if not res then return end
-
-            if vim.bo.filetype == "typescriptreact" then
-                -- vim.api.nvim_command("CocCommand tsserver.executeAutofix");
-                vim.fn.CocActionAsync("runCommand", "tsserver.executeAutofix", function()
-                    vim.fn.CocActionAsync("format", opts.callback)
-                end)
-                return
-            end
-
-            vim.fn.CocActionAsync("format", opts.callback)
-        end)
+        vim.lsp.buf.format({ async = true })
+    --     if not vim.api.nvim_eval("coc#rpc#ready()") then return end
+    --     vim.fn.CocActionAsync("hasProvider", "format", function(err, res)
+    --         if not res then return end
+    --
+    --         if vim.bo.filetype == "typescriptreact" then
+    --             -- vim.api.nvim_command("CocCommand tsserver.executeAutofix");
+    --             vim.fn.CocActionAsync("runCommand", "tsserver.executeAutofix", function()
+    --                 vim.fn.CocActionAsync("format", opts.callback)
+    --             end)
+    --             return
+    --         end
+    --
+    --         vim.fn.CocActionAsync("format", opts.callback)
+    --     end)
     end)
 end
 

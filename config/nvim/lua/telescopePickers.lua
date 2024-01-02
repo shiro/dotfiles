@@ -1,10 +1,10 @@
 local M = {}
 
-local telescopeUtilities = require('telescope.utils')
-local telescopeMakeEntryModule = require('telescope.make_entry')
-local plenaryStrings = require('plenary.strings')
-local devIcons = require('nvim-web-devicons')
-local telescopeEntryDisplayModule = require('telescope.pickers.entry_display')
+local telescopeUtilities = require("telescope.utils")
+local telescopeMakeEntryModule = require("telescope.make_entry")
+local plenaryStrings = require("plenary.strings")
+local devIcons = require("nvim-web-devicons")
+local telescopeEntryDisplayModule = require("telescope.pickers.entry_display")
 
 local fileTypeIconWidth = plenaryStrings.strdisplaywidth(devIcons.get_icon('fname', { default = true }))
 
@@ -65,7 +65,7 @@ function M.prettyFilesPicker(pickerAndOptions)
             return displayer({
                 { icon,          iconHighlight },
                 tailForDisplay,
-                { pathToDisplay, 'TelescopeResultsComment' },
+                { pathToDisplay, "TelescopeResultsComment" },
             })
         end
 
@@ -73,11 +73,11 @@ function M.prettyFilesPicker(pickerAndOptions)
     end
 
     if pickerAndOptions.picker == 'find_files' then
-        require('telescope.builtin').find_files(options)
+        require("telescope.builtin").find_files(options)
     elseif pickerAndOptions.picker == 'git_files' then
-        require('telescope.builtin').git_files(options)
+        require("telescope.builtin").git_files(options)
     elseif pickerAndOptions.picker == 'oldfiles' then
-        require('telescope.builtin').oldfiles(options)
+        require("telescope.builtin").oldfiles(options)
     elseif pickerAndOptions.picker == '' then
         print("Picker was not specified")
     else
@@ -153,7 +153,7 @@ function M.prettyGitPicker(opts)
         return originalEntryTable
     end
 
-    require('telescope.builtin').git_status(options)
+    require("telescope.builtin").git_status(options)
 end
 
 function M.prettyGrepPicker(opts)
@@ -273,7 +273,8 @@ function M.prettyWorkspaceSymbolsPicker(opts)
         return originalEntryTable
     end
 
-    require('telescope._extensions').manager.coc.workspace_symbols(options)
+    -- require('telescope._extensions').manager.coc.workspace_symbols(options)
+    require("telescope.builtin").lsp_dynamic_workspace_symbols(options)
 end
 
 return M

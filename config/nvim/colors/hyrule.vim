@@ -31,7 +31,7 @@ hi ErrorMsg guifg=#eb7373 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=
 hi Ignore guifg=#cccccc guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=252 ctermbg=NONE cterm=NONE
 hi Debug guifg=#ff9999 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=210 ctermbg=NONE cterm=NONE
 hi PMenuSbar guifg=NONE guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
-hi Identifier guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
+" hi Identifier guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
 hi SpecialChar guifg=#bbddff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=153 ctermbg=NONE cterm=NONE
 hi Conditional guifg=#90c93f guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=149 ctermbg=NONE cterm=NONE
 hi StorageClass guifg=#569e16 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=70 ctermbg=NONE cterm=NONE
@@ -165,6 +165,8 @@ exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi Folded guibg=None guifg=".brown." gui=NONE"
 exe "hi Directory guifg=".lightGreen
 exe "hi qfLineNr guifg=".brown
+exe "hi @lsp guifg=None guibg=None gui=None"
+exe "hi Identifier guifg=None guibg=None gui=None"
 
 " quickfix
 
