@@ -138,6 +138,7 @@ let ore='#5B5957'
 exe "hi Cursor guifg=".test." guibg=".white." gui=bold,underline"
 exe "hi Visual guibg=".selection
 exe "hi LineNr guibg=None guifg=".ore
+exe "hi CursorLineNr guibg=None guifg=".orange
 exe "hi CocHighlightText guibg=NONE guifg=".yellow
 exe "hi CocFadeOut guibg=NONE"
 exe "hi CocErrorSign guibg=NONE guifg=".red
@@ -164,6 +165,10 @@ exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi Folded guibg=None guifg=".brown." gui=NONE"
 exe "hi Directory guifg=".lightGreen
 exe "hi qfLineNr guifg=".brown
+
+" quickfix
+
+exe "hi BqfPreviewThumb guibg=".orange
 
 " omnibar
 exe "hi TelescopeMatching guifg=".orange

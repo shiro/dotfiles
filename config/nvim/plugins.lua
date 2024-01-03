@@ -32,6 +32,18 @@ require("lazy").setup({
     },
     -- }}}
 
+    -- quickfix {{{
+    {
+        "kevinhwang91/nvim-bqf",
+        ft = "qf",
+        config = function()
+            require('bqf').setup({
+                preview = { winblend = 0 },
+            })
+        end,
+    },
+    -- }}}
+
     -- chord keybinds {{{
     {
         "kana/vim-arpeggio",
@@ -649,6 +661,47 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'console.log();<left><left>')")
     end
 })
+
+-- quickfix
+vim.api.nvim_create_autocmd("FileType", {
+    group = "CocGroup",
+    pattern = "qf",
+    callback = function()
+        print(99)
+        vim.keymap.set("n", "dd", function()
+            local curqfidx = vim.fn.line('.')
+            local entries = vim.fn.getqflist()
+            if entries == nil then return end
+            if #entries == 0 then return end
+            -- remove the item from the quickfix list
+            table.remove(entries, curqfidx)
+            vim.fn.setqflist(entries, "r")
+            -- reopen quickfix window to refresh the list
+            vim.cmd('copen')
+            local new_idx = curqfidx < #entries and curqfidx or math.max(curqfidx - 1, 1)
+            local winid = vim.fn.win_getid()
+            if winid == nil then return end
+            vim.api.nvim_win_set_cursor(winid, { new_idx, 0 })
+        end, { silent = true, noremap = true, buffer = 0 })
+    end
+})
+
+vim.keymap.set("n", "<leader>n", function()
+    local qf_exists = false
+    local info = vim.fn.getwininfo()
+    if info == nil then return end
+    for _, win in pairs(info) do
+        if win["quickfix"] == 1 then qf_exists = true end
+    end
+    if qf_exists == true then
+        return vim.cmd("cclose")
+    end
+    local info = vim.fn.getwininfo()
+    if info == nil then return end
+    if not vim.tbl_isempty(info) then
+        return vim.cmd("copen")
+    end
+end, {})
 
 -- }}}
 
