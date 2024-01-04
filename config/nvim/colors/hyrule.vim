@@ -139,7 +139,9 @@ exe "hi Cursor guifg=".test." guibg=".white." gui=bold,underline"
 exe "hi Visual guibg=".selection
 exe "hi LineNr guibg=None guifg=".ore
 exe "hi CursorLineNr guibg=None guifg=".orange
-exe "hi CocHighlightText guibg=NONE guifg=".yellow
+exe "hi IlluminatedWordText guibg=NONE guifg=".yellow
+exe "hi IlluminatedWordRead guibg=NONE guifg=".yellow
+exe "hi IlluminatedWordWrite guibg=NONE guifg=".yellow
 exe "hi CocFadeOut guibg=NONE"
 exe "hi CocErrorSign guibg=NONE guifg=".red
 exe "hi CocWarningSign guibg=NONE guifg=".gray
@@ -282,6 +284,9 @@ exe "hi DiagnosticError guifg=".error
 "set winblend=30
 exe "hi GitGutterAddIntraLine guifg=None guibg=".diffMod." gui=None"
 exe "hi GitGutterDeleteIntraLine guifg=None guibg=".diffDel." gui=None"
+
+" CSS
+exe "hi @property.css guifg=".white
 
 
 "DiagnosticWarn
