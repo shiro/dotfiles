@@ -1,5 +1,5 @@
 {
-    "output": ["eDP-1"],
+    "output": ["DP-4"],
     "layer": "top",
     "position": "top",
     "spacing": 4,
