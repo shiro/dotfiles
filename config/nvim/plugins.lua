@@ -11,6 +11,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.api.nvim_create_augroup("default", { clear = true })
+
 require("lazy").setup({
 	-- pretty folds {{{
 	{
@@ -33,9 +35,10 @@ require("lazy").setup({
 		end,
 	},
 	-- }}}
-	-- highlight symbol under cursor
+	-- highlight symbol under cursor {{{
 	{
 		"RRethy/vim-illuminate",
+		event = "VeryLazy",
 		config = function()
 			require("illuminate").configure({
 				providers = {
@@ -46,21 +49,16 @@ require("lazy").setup({
 			})
 		end,
 	},
-	-- quickfix {{{
+	-- }}}
+	-- better quickfix window {{{
 	{
 		"kevinhwang91/nvim-bqf",
 		ft = "qf",
 		config = function()
-			require("bqf").setup({
-				preview = { winblend = 0 },
-			})
+			require("bqf").setup({ preview = { winblend = 0 } })
 		end,
 	},
 	-- }}}
-	{
-		"stevearc/dressing.nvim",
-		opts = {},
-	},
 	-- chord keybinds {{{
 	{
 		"kana/vim-arpeggio",
@@ -212,41 +210,30 @@ require("lazy").setup({
 	-- }}}
 
 	-- LSP server, auto-complete {{{
-	-- {
-	--     "williamboman/mason-lspconfig.nvim",
-	--     dependencies = { "williamboman/mason.nvim" },
-	--     opts = {
-	--         ensure_installed = {
-	--             "eslint-lsp",
-	--             "prettierd",
-	--             "tailwindcss-language-server",
-	--             "typescript-language-server",
-	--             "lua-language-server",
-	--         },
-	--     },
-	-- },
-	-- {
-	-- 	"nvimtools/none-ls.nvim",
-	-- 	dependencies = { "nvim-lua/plenary.nvim" },
-	-- 	-- event = "VeryLazy",
-	-- 	--     opts = function()
-	-- 	--         return require("custom.configs.null-ls")
-	-- 	--     end,
-	-- 	config = function()
-	-- 		local null_ls = require("null-ls")
-	-- 		null_ls.setup({
-	-- 			sources = {
-	-- 				null_ls.builtins.formatting.stylua,
-	-- 				null_ls.builtins.diagnostics.eslint,
-	-- 				-- null_ls.builtins.completion.spell,
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
+	{
+		"nvimtools/none-ls.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
+		--     opts = function()
+		--         return require("custom.configs.null-ls")
+		--     end,
+		config = function()
+			local null_ls = require("null-ls")
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.stylua,
+					null_ls.builtins.diagnostics.eslint,
+					-- null_ls.builtins.completion.spell,
+				},
+			})
+		end,
+	},
+	-- lua VIM documentation
 	{
 		"folke/neodev.nvim",
 		opts = {},
-		ft = { "lua" },
+		ft = "lua",
+		event = "VeryLazy",
 	},
 	{
 		"neovim/nvim-lspconfig",
@@ -269,6 +256,7 @@ require("lazy").setup({
 			end
 
 			vim.diagnostic.config({
+				virtual_text = false,
 				update_in_insert = true,
 				float = { border = "rounded" },
 				signs = { priority = 200 },
@@ -277,12 +265,6 @@ require("lazy").setup({
 				border = "rounded",
 				close_events = { "BufHidden", "InsertLeave" },
 			})
-			vim.lsp.handlers["textDocument/publishDiagnostics"] =
-				vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-					-- severity_sort = true,
-					virtual_text = false,
-					-- update_in_insert = true,
-				})
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 				border = "rounded",
 			})
@@ -306,37 +288,13 @@ require("lazy").setup({
 			for _, lsp in ipairs(servers) do
 				lspconfig[lsp].setup({})
 			end
-
-			-- lua
-			-- lspconfig.lua_ls.setup({
-			-- 	on_init = function(client)
-			-- 		local path = client.workspace_folders[1].name
-			-- 		if
-			-- 			not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc")
-			-- 		then
-			-- 			client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-			-- 				Lua = {
-			-- 					-- runtime = { version = "LuaJIT" },
-			-- 					workspace = {
-			-- 						checkThirdParty = false,
-			-- 						library = { vim.env.VIMRUNTIME },
-			-- 					},
-			-- 					telemetry = { enable = false },
-			-- 				},
-			-- 			})
-			-- 			client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-			-- 		end
-			-- 		return true
-			-- 	end,
-			-- })
 		end,
 	},
 	-- autoamtically close/rename JSX tags
 	{
 		"windwp/nvim-ts-autotag",
-		opts = {
-			-- enable_close_on_slash = true,
-		},
+		event = "VeryLazy",
+		opts = {},
 		ft = { "typescriptreact", "javascriptreact" },
 	},
 	{
@@ -355,7 +313,8 @@ require("lazy").setup({
 	},
 	{
 		"stevearc/conform.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		-- event = { "BufReadPre", "BufNewFile" },
+		event = "VeryLazy",
 		cmd = { "ConformInfo" },
 		config = function()
 			local conform = require("conform")
@@ -488,14 +447,6 @@ require("lazy").setup({
 			{ "<C-S-R>", "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
 			{ "<Leader>R", "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
 		},
-	},
-	-- }}}
-	-- show color hex codes {{{
-	{
-		"norcalli/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup()
-		end,
 	},
 	-- }}}
 	-- find files, changes and more {{{
@@ -666,36 +617,38 @@ require("lazy").setup({
 
 	-- file manager {{{
 	{
-		"rafaqz/ranger.vim",
-		-- lazy = true,
-		-- keys = { { "<leader>l", "" } },
-		dependencies = { "rbgrouleff/bclose.vim" },
+		"kevinhwang91/rnvimr",
+		keys = { { "<leader>l", "" } },
 		init = function()
-			vim.g.ranger_map_keys = 0
-			-- vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
+			vim.g.rnvimr_draw_border = 0
+			vim.g.rnvimr_layout = {
+				relative = "editor",
+				width = vim.fn.winwidth(0),
+				height = vim.fn.winheight(0) / 2,
+				col = 0,
+				row = vim.fn.winheight(0) / 4,
+				style = "minimal",
+			}
+			-- vim.g.rnvimr_ranger_views = {
+			-- 	-- { minwidth = 50, maxwidth = 89, ratio = { 1, 1 } },
+			-- 	{ ratio = { 1, 1 } },
+			-- }
+			vim.g.rnvimr_ranger_cmd = {
+				"ranger",
+				"--cmd=set preview_directories false",
+				"--cmd=set column_ratios 2,5,0",
+				"--cmd=set preview_files false",
+				"--cmd=set preview_images truefalse",
+				"--cmd=set padding_right false",
+				"--cmd=set collapse_preview true",
+			}
 		end,
 		config = function()
-			vim.keymap.set("n", "<leader>l", ":RangerEdit<CR>", {})
+			vim.keymap.set("n", "<leader>l", function()
+				vim.api.nvim_command("RnvimrToggle")
+			end, {})
 		end,
 	},
-	-- {
-	--     'kevinhwang91/rnvimr',
-	--     init = function()
-	--         vim.g["rnvimr_draw_border"] = 0
-	--         vim.g["rnvimr_layout"] = {
-	--             width = 140,
-	--             relative = 'editor',
-	--             -- width= 'float2nr(round(0.7 * &columns))',
-	--             height = 60,
-	--             col = 0,
-	--             row = 5,
-	--             style = 'minimal',
-	--         }
-	--     end,
-	--     config = function()
-	--         vim.keymap.set("n", "<leader>l", ":RnvimrToggle<CR>", {})
-	--     end,
-	-- },
 	--- }}}
 
 	-- language-specific stuff {{{
@@ -712,7 +665,10 @@ require("lazy").setup({
 	"tpope/vim-sleuth",
 
 	-- mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
-	"tpope/vim-surround",
+	{
+		"tpope/vim-surround",
+		event = "VeryLazy",
+	},
 
 	-- convinient pair mappings
 	--Plug "tpope/vim-unimpaired"
@@ -720,11 +676,34 @@ require("lazy").setup({
 	-- enables repeating other supported plugins with the . command
 	"tpope/vim-repeat",
 	-- }}}
+	-- pretty UI {{{
+	{
+		"stevearc/dressing.nvim",
+		opts = {},
+		event = "VeryLazy",
+	},
+	-- }}}
+	-- show color hex codes {{{
+	{
+		"NvChad/nvim-colorizer.lua",
+		event = "VeryLazy",
+		config = function()
+			require("colorizer").setup()
+			require("colorizer").attach_to_buffer(0, { mode = "virtualtext" })
+
+			vim.api.nvim_create_autocmd("BufEnter", {
+				group = "default",
+				callback = function()
+					require("colorizer").attach_to_buffer(0, { mode = "virtualtext" })
+				end,
+			})
+		end,
+	},
+	-- }}}
 })
 
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
 
--- vim.api.nvim_set_keymap("n", "gd", "<Plug>(coc-definition)", { silent = true });
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
@@ -734,8 +713,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 	end,
 })
-vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
-vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true })
+-- vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
+-- vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true })
 vim.keymap.set("n", "<leader>[e", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>]e", vim.diagnostic.goto_next)
 vim.keymap.set("n", "[e", function()
@@ -750,50 +729,47 @@ vim.keymap.set("n", "<A-S-e>", vim.lsp.buf.rename, { silent = true })
 -- vim.api.nvim_set_keymap("v", "<A-S-r>", "<Plug>(coc-refactor-selected)", { silent = true })
 -- show outline (hierarchy)
 
-function set_timeout(timeout, callback)
-	local uv = vim.loop
-	local timer = uv.new_timer()
-	local function ontimeout()
-		uv.timer_stop(timer)
-		uv.close(timer)
-		callback(timer)
-	end
-	uv.timer_start(timer, timeout, 0, ontimeout)
-	return timer
-end
+-- function set_timeout(timeout, callback)
+-- 	local uv = vim.loop
+-- 	local timer = uv.new_timer()
+-- 	local function ontimeout()
+-- 		uv.timer_stop(timer)
+-- 		uv.close(timer)
+-- 		callback(timer)
+-- 	end
+-- 	uv.timer_start(timer, timeout, 0, ontimeout)
+-- 	return timer
+-- end
 
-function toggleOutline()
-	local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
-	if win_id == -1 then
-		vim.fn.CocAction("showOutline", 1)
-
-		-- local foo = vim.api.nvim_eval("coc#float#get_float_by_kind('outline-preview')")
-		-- print(foo)
-
-		set_timeout(300, function()
-			vim.schedule(function()
-				win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
-				if win_id == -1 then
-					return
-				end
-				vim.api.nvim_set_current_win(win_id)
-			end)
-		end)
-	else
-		vim.api.nvim_command("call coc#window#close(" .. win_id .. ")")
-	end
-end
-
-vim.keymap.set("n", "go", toggleOutline, { silent = true })
+-- function toggleOutline()
+-- 	local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+-- 	if win_id == -1 then
+-- 		vim.fn.CocAction("showOutline", 1)
+--
+-- 		-- local foo = vim.api.nvim_eval("coc#float#get_float_by_kind('outline-preview')")
+-- 		-- print(foo)
+--
+-- 		set_timeout(300, function()
+-- 			vim.schedule(function()
+-- 				win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
+-- 				if win_id == -1 then
+-- 					return
+-- 				end
+-- 				vim.api.nvim_set_current_win(win_id)
+-- 			end)
+-- 		end)
+-- 	else
+-- 		vim.api.nvim_command("call coc#window#close(" .. win_id .. ")")
+-- 	end
+-- end
+--
+-- vim.keymap.set("n", "go", toggleOutline, { silent = true })
 -- list warnings/errors in telescope
 -- TODO
--- list all local changes
-vim.api.nvim_set_keymap("n", "gD", ":GF?<CR>", { silent = true })
 
-vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
+-- vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
 
 -- highlight the symbol under cursor
-vim.api.nvim_create_augroup("CocGroup", {})
 -- vim.api.nvim_create_autocmd("CursorHold", {
 --     group = "CocGroup",
 --     command = "silent call CocActionAsync('highlight')",
@@ -848,20 +824,10 @@ function _G.check_back_space()
 	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
 end
 
--- make <TAB> and <CR> accept selected completion item
--- vim.keymap.set("i", "<TAB>",
---     "coc#pum#visible() ? coc#pum#insert() :" ..
---     [[coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :]] ..
---     "v:lua.check_back_space() ? '<TAB>' :" ..
---     "coc#refresh()"
---     , opts)
--- vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 -- code actions
--- vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-cursor)", { silent = true })
--- vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", { silent = true })
 vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
 -- refactor
-vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
+-- vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
 vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
 
 local function quickfix()
@@ -875,14 +841,12 @@ end
 vim.keymap.set("n", "<leader>qf", quickfix, { silent = true })
 
 -- reformat code
--- vim.keymap.set("x", "gl", "<Plug>(coc-format-selected)", { silent = true })
--- vim.keymap.set("n", "gl", "<Plug>(coc-format)", { silent = true })
 vim.keymap.set("n", "gl", function()
-	vim.lsp.buf.format({ async = true })
+	format()
 end, opts)
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = "CocGroup",
+	group = "default",
 	pattern = "lua",
 	command = "setl formatexpr=CocAction('formatSelected')",
 })
@@ -890,7 +854,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- language specific {{{
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = "CocGroup",
+	group = "default",
 	pattern = "rust",
 	callback = function()
 		vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'println!(\"\");<left><left><left>')")
@@ -898,7 +862,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = "CocGroup",
+	group = "default",
 	pattern = { "javascript", "typescript", "typescriptreact" },
 	callback = function()
 		vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'console.log();<left><left>')")
@@ -907,7 +871,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- quickfix
 vim.api.nvim_create_autocmd("FileType", {
-	group = "CocGroup",
+	group = "default",
 	pattern = "qf",
 	callback = function()
 		print(99)
@@ -1017,14 +981,14 @@ end, {})
 -- auto-save on focus lost/buffer change
 vim.o.autowriteall = true
 vim.api.nvim_create_autocmd("FocusLost", {
-	group = "CocGroup",
+	group = "default",
 	callback = save,
 })
 
 -- disable wraps for coc preview buffers
 vim.api.nvim_create_autocmd("User", {
 	pattern = "CocOpenFloat",
-	group = "CocGroup",
+	group = "default",
 	callback = function()
 		win_id = vim.g.coc_last_float_win
 		vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
@@ -1033,8 +997,8 @@ vim.api.nvim_create_autocmd("User", {
 
 -- show command bar message when recording macros
 -- https://github.com/neovim/neovim/issues/19193
-vim.api.nvim_create_autocmd("RecordingEnter", { group = "CocGroup", command = "set cmdheight=1" })
-vim.api.nvim_create_autocmd("RecordingLeave", { group = "CocGroup", command = "set cmdheight=0" })
+vim.api.nvim_create_autocmd("RecordingEnter", { group = "default", command = "set cmdheight=1" })
+vim.api.nvim_create_autocmd("RecordingLeave", { group = "default", command = "set cmdheight=0" })
 
 -- move cursor and scroll by a fixed distance, with center support
 function Jump(distance, center)
@@ -1098,6 +1062,3 @@ vim.opt.foldmethod = "indent"
 -- rust
 -- https://github.com/Saecki/crates.nvim
 -- https://neovimcraft.com/plugin/simrat39/rust-tools.nvim
-
--- highlight under cursor
--- https://github.com/RRethy/vim-illuminate
