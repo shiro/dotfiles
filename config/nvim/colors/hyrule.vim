@@ -282,8 +282,14 @@ exe "hi rustAttribute guifg=".white
 exe "hi DiagnosticError guifg=".error
 "exe "hi FloatShadow guibg=".lightGreen
 "set winblend=30
+
+" gutter
 exe "hi GitGutterAddIntraLine guifg=None guibg=".diffMod." gui=None"
 exe "hi GitGutterDeleteIntraLine guifg=None guibg=".diffDel." gui=None"
+exe "hi DiagnosticSignError guifg=".gray
+exe "hi DiagnosticSignHint guifg=".gray
+exe "hi DiagnosticSignWarn guifg=".gray
+exe "hi DiagnosticSignInfo guifg=".gray
 
 " CSS
 exe "hi @property.css guifg=".white
