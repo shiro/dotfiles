@@ -345,13 +345,13 @@ require("lazy").setup({
 				},
 			})
 
-			vim.keymap.set({ "n", "v" }, "gl", function()
-				conform.format({
-					lsp_fallback = true,
-					async = false,
-					timeout_ms = 500,
-				})
-			end, { desc = "Format file or range (in visual mode)" })
+			-- vim.keymap.set({ "n", "v" }, "gl", function()
+			-- 	conform.format({
+			-- 		lsp_fallback = true,
+			-- 		async = false,
+			-- 		timeout_ms = 500,
+			-- 	})
+			-- end, { desc = "Format file or range (in visual mode)" })
 		end,
 	},
 	{
@@ -379,6 +379,11 @@ require("lazy").setup({
 				},
 				completion = {
 					completeopt = "menu,menuone,noinsert",
+					-- autocomplete = {
+					-- 	cmp.TriggerEvent.TextChanged,
+					-- 	cmp.TriggerEvent.InsertEnter,
+					-- },
+					-- keyword_length = 0,
 				},
 				window = {
 					completion = cmp.config.window.bordered(),
@@ -841,9 +846,17 @@ end
 vim.keymap.set("n", "<leader>qf", quickfix, { silent = true })
 
 -- reformat code
+-- vim.keymap.set("n", "gl", function()
+-- 	-- organize_imports()
+-- 	format({
+-- 		callback = save,
+-- 	})
+-- end, opts)
+
 vim.keymap.set("n", "gl", function()
-	format()
-end, opts)
+	organize_imports()
+	format({ callback = save })
+end, {})
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = "default",
@@ -925,35 +938,25 @@ end, {})
 -- }}}
 
 function format(opts)
+	opts = opts or {}
 	-- only for files
 	if vim.bo.buftype ~= "" then
 		return
 	end
 
-	pcall(function()
-		require("conform").format({
-			async = true,
-			lsp_fallback = true,
-		}, opts.callback)
-	end)
-	-- ignore errors
 	-- pcall(function()
-	-- vim.lsp.buf.format({ async = true })
-	--     if not vim.api.nvim_eval("coc#rpc#ready()") then return end
-	--     vim.fn.CocActionAsync("hasProvider", "format", function(err, res)
-	--         if not res then return end
-	--
-	--         if vim.bo.filetype == "typescriptreact" then
-	--             -- vim.api.nvim_command("CocCommand tsserver.executeAutofix");
-	--             vim.fn.CocActionAsync("runCommand", "tsserver.executeAutofix", function()
-	--                 vim.fn.CocActionAsync("format", opts.callback)
-	--             end)
-	--             return
-	--         end
-	--
-	--         vim.fn.CocActionAsync("format", opts.callback)
-	--     end)
+	require("conform").format({
+		async = true,
+		lsp_fallback = true,
+		timeout_ms = 500,
+	}, opts.callback)
 	-- end)
+end
+
+function organize_imports()
+	if vim.bo.filetype == "typescriptreact" then
+		require("typescript-tools.api").organize_imports(true)
+	end
 end
 
 function save()
