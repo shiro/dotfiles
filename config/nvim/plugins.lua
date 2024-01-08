@@ -265,9 +265,7 @@ require("lazy").setup({
 				border = "rounded",
 				close_events = { "BufHidden", "InsertLeave" },
 			})
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-				border = "rounded",
-			})
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 		end,
 		config = function()
 			local lspconfig = require("lspconfig")
@@ -281,15 +279,33 @@ require("lazy").setup({
 					"rust-analyzer",
 					"tailwindcss-language-server",
 					"emmet-language-server",
+					"taplo",
 				},
 			})
-			local servers = { "lua_ls", "jsonls", "tailwindcss", "eslint", "rust_analyzer", "emmet_language_server" }
+			local servers =
+				{ "lua_ls", "jsonls", "tailwindcss", "eslint", "rust_analyzer", "emmet_language_server", "taplo" }
 
 			for _, lsp in ipairs(servers) do
 				lspconfig[lsp].setup({})
 			end
 		end,
 	},
+	-- }}}
+	-- refactoring {{{
+	{
+		"ThePrimeagen/refactoring.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-telescope/telescope.nvim",
+		},
+		lazy = true,
+		config = function()
+			require("telescope").load_extension("refactoring")
+			require("refactoring").setup()
+		end,
+	},
+	-- }}}
 	-- autoamtically close/rename JSX tags
 	{
 		"windwp/nvim-ts-autotag",
@@ -694,12 +710,12 @@ require("lazy").setup({
 		event = "VeryLazy",
 		config = function()
 			require("colorizer").setup()
-			require("colorizer").attach_to_buffer(0, { mode = "virtualtext" })
+			require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
 
 			vim.api.nvim_create_autocmd("BufEnter", {
 				group = "default",
 				callback = function()
-					require("colorizer").attach_to_buffer(0, { mode = "virtualtext" })
+					require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
 				end,
 			})
 		end,
@@ -833,6 +849,9 @@ end
 vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
 -- refactor
 -- vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
+vim.keymap.set({ "n", "x" }, "<leader>r", function()
+	require("telescope").extensions.refactoring.refactors()
+end, { silent = true })
 vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
 
 local function quickfix()

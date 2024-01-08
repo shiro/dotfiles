@@ -1,0 +1,71 @@
+[colors.bright]
+black = "#11242f"
+blue = "#589de2"
+cyan = "#5db5c8"
+green = "#5ea965"
+magenta = "#92b3df"
+red = "#e56567"
+white = "#e7e7f1"
+yellow = "#e5be4e"
+
+[colors.cursor]
+cursor = "#e7e7f1"
+text = "#11242f"
+
+[colors.normal]
+black = "#11242f"
+blue = "#4674a2"
+cyan = "#357a89"
+green = "#3f8f48"
+magenta = "#424f9e"
+red = "#954445"
+white = "#9ab4c2"
+yellow = "#aa8455"
+
+[colors.primary]
+background = "#2d2c2b"
+foreground = "#e7e7f1"
+
+[font]
+size = 11.0
+
+[font.bold]
+family = "Hack Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "Hack Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "Hack Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "Hack Nerd Font Mono"
+style = "Regular"
+
+[font.offset]
+x = -1
+y = 4
+
+[font.glyph_offset]
+x = 0
+y = 2
+
+[keyboard]
+bindings = [
+  { chars = "\u001B[27;5;9~", key = "Tab", mods = "Control" },
+  { chars = "\u001B[27;6;9~", key = "Tab", mods = "Control|Shift" },
+  { chars = "\u001B[70;5u", key = "F", mods = "Control|Shift" },
+  { chars = "\u001B[80;5u", key = "P", mods = "Control|Shift" },
+  { chars = "\u001B[82;5u", key = "R", mods = "Control|Shift" },
+]
+
+[window]
+decorations = "full"
+opacity = 1.0
+
+[window.padding]
+x = 18
+y = 18
