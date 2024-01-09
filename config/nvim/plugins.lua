@@ -99,6 +99,7 @@ require("lazy").setup({
 	-- CWD managmnent {{{
 	{
 		"airblade/vim-rooter",
+		event = "VeryLazy",
 		init = function()
 			vim.g.rooter_change_directory_for_non_project_files = "current"
 			vim.g.rooter_silent_chdir = 1
@@ -231,16 +232,19 @@ require("lazy").setup({
 	-- lua VIM documentation
 	{
 		"folke/neodev.nvim",
-		opts = {},
 		ft = "lua",
-		event = "VeryLazy",
+		dependencies = { "neovim/nvim-lspconfig" },
+		config = function()
+			require("neodev").setup({})
+			local lspconfig = require("lspconfig")
+			lspconfig["lua_ls"].setup({})
+		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			"folke/neodev.nvim",
 		},
 		init = function()
 			local signs = {
@@ -282,8 +286,7 @@ require("lazy").setup({
 					"taplo",
 				},
 			})
-			local servers =
-				{ "lua_ls", "jsonls", "tailwindcss", "eslint", "rust_analyzer", "emmet_language_server", "taplo" }
+			local servers = { "jsonls", "tailwindcss", "eslint", "rust_analyzer", "emmet_language_server", "taplo" }
 
 			for _, lsp in ipairs(servers) do
 				lspconfig[lsp].setup({})
@@ -475,6 +478,7 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		-- tag = "0.1.5",
 		branch = "master",
+		event = "VeryLazy",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
