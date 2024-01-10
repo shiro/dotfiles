@@ -977,7 +977,13 @@ function format(opts)
 end
 
 function organize_imports()
-	if vim.bo.filetype == "typescriptreact" then
+	if
+		vim.bo.filetype == "typescript"
+		or vim.bo.filetype == "typescriptreact"
+		or vim.bo.filetype == "javascript"
+		or vim.bo.filetype == "javascriptreact"
+	then
+		require("typescript-tools.api").add_missing_imports(true)
 		require("typescript-tools.api").organize_imports(true)
 	end
 end
