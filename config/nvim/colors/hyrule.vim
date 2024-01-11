@@ -169,6 +169,7 @@ exe "hi Directory guifg=".lightGreen
 exe "hi qfLineNr guifg=".brown
 exe "hi @lsp guifg=None guibg=None gui=None"
 exe "hi Identifier guifg=None guibg=None gui=None"
+exe "hi Conceal guifg=".gray." guibg=None gui=None"
 
 " quickfix
 
