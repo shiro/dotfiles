@@ -284,6 +284,8 @@ require("lazy").setup({
 					"tailwindcss-language-server",
 					"emmet-language-server",
 					"taplo",
+					"eslint-lsp",
+					"json-lsp",
 				},
 			})
 			local servers = { "jsonls", "tailwindcss", "eslint", "rust_analyzer", "emmet_language_server", "taplo" }
