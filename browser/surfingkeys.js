@@ -81,6 +81,7 @@ map('P', 'cc');
 map('gi', 'i');
 map('gf', 'w');
 map('H', 'S');
+map('u', 'U');
 map('L', 'D');
 map('gt', 'R');
 map('gT', 'E');
