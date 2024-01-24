@@ -332,6 +332,17 @@ require("lazy").setup({
 			})
 		end,
 	},
+	-- NPM package versions
+	{
+		"vuki656/package-info.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		ft = { "json" },
+		opts = {
+			hide_up_to_date = true,
+			icons = { enable = false },
+		},
+	},
+	-- formatting
 	{
 		"stevearc/conform.nvim",
 		-- event = { "BufReadPre", "BufNewFile" },

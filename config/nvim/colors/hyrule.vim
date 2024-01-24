@@ -105,33 +105,33 @@ hi htmlh2 guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NO
 let test='#ff0000'
 
 
-let bg='#2D2C2B'
-let shadow='#383735'
-let error='#CC4542'
-let white='#C0D5C1'
-let yellow='#F5C504'
-let lightGreen='#90C93F'
-let darkGreen='#569E16'
-let brown='#93784E'
-let orange='#CE830D'
-let blue='#458383'
-let cyan='#007E8A'
-let dirt='#7A7A43'
-let red='#DD6718'
-let lightRed='#CC4542'
-let gray='#716D6A'
-let caret='#989BA2'
-let selection='#161A1F'
-let diffAdd='#304D2E'
-let diffAddDark='#313630'
-let diffAddFg='#50804C'
-let diffMod='#2E455D'
-let diffModFg='#446588'
-let diffModDark='#323334'
-let diffDel='#533232'
-let diffDelDark='#363030'
-let diffDelFg='#7F4D4D'
-let ore='#5B5957'
+let bg="#2D2C2B"
+let shadow="#383735"
+let error="#CC4542"
+let white="#C0D5C1"
+let yellow="#F5C504"
+let lightGreen="#90C93F"
+let darkGreen="#569E16"
+let brown="#93784E"
+let orange="#CE830D"
+let blue="#458383"
+let cyan="#007E8A"
+let dirt="#7A7A43"
+let red="#DD6718"
+let lightRed="#CC4542"
+let gray="#716D6A"
+let caret="#989BA2"
+let selection="#161A1F"
+let diffAdd="#304D2E"
+let diffAddDark="#313630"
+let diffAddFg="#50804C"
+let diffMod="#2E455D"
+let diffModFg="#446588"
+let diffModDark="#323334"
+let diffDel="#533232"
+let diffDelDark="#363030"
+let diffDelFg="#7F4D4D"
+let ore="#5B5957"
 
 
 " editor
@@ -170,6 +170,10 @@ exe "hi qfLineNr guifg=".brown
 exe "hi @lsp guifg=None guibg=None gui=None"
 exe "hi Identifier guifg=None guibg=None gui=None"
 exe "hi Conceal guifg=".gray." guibg=None gui=None"
+exe "hi DiagnosticUnderlineError guifg=".error." guibg=None gui=None"
+
+" plugins
+exe "hi PackageInfoOutdatedVersion guifg=".gray
 
 " quickfix
 
