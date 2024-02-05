@@ -215,8 +215,8 @@ exe "hi diffChanged guifg=".white." guibg=".diffMod
 exe "hi diffRemoved guifg=".white." guibg=".diffDel
 
 exe "hi WinSeparator guifg=".shadow
-exe "hi StatusLine gui=None guifg=".ore
-exe "hi StatusLineNC gui=None guifg=".ore
+exe "hi StatusLine gui=None guifg=".ore.' guibg=None'
+exe "hi StatusLineNC gui=None guifg=".ore.' guibg=None'
 
 " motion
 
