@@ -15,7 +15,7 @@ is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
 
 # Enviormental variables
 # set-option -ga update-environment ' CYGWIN'
-set-option -g default-shell /bin/zsh
+# set-option -g default-shell zsh
 
 # use Ctrl-a for tmux commands
 unbind C-b
