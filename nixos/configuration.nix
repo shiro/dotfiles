@@ -4,6 +4,7 @@
   imports =
     [ 
       ./hardware-configuration.nix
+      # ./map2.nix
       # inputs.home-manager.nixosModules.default
     ];
 
@@ -91,7 +92,25 @@
     ranger
     silver-searcher
     # spice-vdagent
-    python3
+    (let map2 = python311.pkgs.buildPythonPackage rec {
+      version = "2.0.13";
+      pname = "map2";
+      format = "wheel";
+      src = fetchPypi {
+        inherit pname version format;
+        sha256 = "51b048efdb8810e812ee5c62b9cc5414d1eb6dbf9bb835b1a0ca2b9fe8e0c22f";
+        dist = "cp311";
+        python = "cp311";
+        abi = "cp311";
+        platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+      };
+    };
+    in python311.withPackages (python-pkgs: [
+      map2
+      # python-pkgs.pandas
+      python-pkgs.requests
+    ]))
+    ripgrep
     mako
     tmux
     wget
@@ -101,6 +120,7 @@
     ueberzugpp
     wl-clipboard
     xclip
+    diff-so-fancy
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
