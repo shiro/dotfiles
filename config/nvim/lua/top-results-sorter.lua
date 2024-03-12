@@ -107,6 +107,9 @@ function load_history()
 		return
 	end
 	local raw = fd:read("*a")
+	if raw == nil then
+		return
+	end
 	M.Recent = HistMap:new(vim.json.decode(raw, {}))
 	fd:close()
 	push_current_path()
