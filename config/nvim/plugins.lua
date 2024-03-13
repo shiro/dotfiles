@@ -243,6 +243,7 @@ require("lazy").setup({
 			"williamboman/mason.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 		},
+		event = "VeryLazy",
 		init = function()
 			local signs = {
 				Error = "☢️",
@@ -811,13 +812,6 @@ vim.keymap.set("n", "<A-S-e>", vim.lsp.buf.rename, { silent = true })
 --     desc = "Highlight symbol under cursor on CursorHold"
 -- })
 --
--- vim.api.nvim_create_autocmd("User", {
---     group = "CocGroup",
---     pattern = "CocJumpPlaceholder",
---     command = "call CocActionAsync('showSignatureHelp')",
---     desc = "Update signature help on jump placeholder"
--- })
-
 -- _G.CloseAllFloatingWindows = function()
 --     local closed_windows = {}
 --     for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -1027,16 +1021,6 @@ vim.api.nvim_create_autocmd("FocusLost", {
 	callback = save,
 })
 
--- disable wraps for coc preview buffers
-vim.api.nvim_create_autocmd("User", {
-	pattern = "CocOpenFloat",
-	group = "default",
-	callback = function()
-		win_id = vim.g.coc_last_float_win
-		vim.api.nvim_command("call win_execute(" .. win_id .. ", 'set nowrap')")
-	end,
-})
-
 -- show command bar message when recording macros
 -- https://github.com/neovim/neovim/issues/19193
 vim.api.nvim_create_autocmd("RecordingEnter", { group = "default", command = "set cmdheight=1" })
@@ -1104,3 +1088,29 @@ vim.opt.foldmethod = "indent"
 -- rust
 -- https://github.com/Saecki/crates.nvim
 -- https://neovimcraft.com/plugin/simrat39/rust-tools.nvim
+
+-- vim.api.nvim_create_autocmd("User", {
+-- 	pattern = "SuperLazy",
+-- 	group = "default",
+-- 	callback = function()
+-- 		print("hello")
+-- 	end,
+-- })
+
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	group = "default",
+-- 	callback = function()
+-- 		local uv = vim.loop
+-- 		local timer = uv.new_timer()
+-- 		timer:start(
+-- 			1000,
+-- 			0,
+-- 			vim.schedule_wrap(function()
+-- 				print("?")
+-- 				-- vim.api.nvim_exec_autocmds("User", { pattern = "SuperLazy" })
+-- 				-- vim.api.nvim_exec
+-- 				vim.api.nvim_command("LazyLoad")
+-- 			end)
+-- 		)
+-- 	end,
+-- })
