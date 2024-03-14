@@ -856,7 +856,6 @@ end
 -- code actions
 vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
 -- refactor
--- vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor)", { silent = true })
 vim.keymap.set({ "n", "x" }, "<leader>r", function()
 	require("telescope").extensions.refactoring.refactors()
 end, { silent = true })
