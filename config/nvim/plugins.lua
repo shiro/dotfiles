@@ -14,6 +14,11 @@ vim.opt.rtp:prepend(lazypath)
 vim.api.nvim_create_augroup("default", { clear = true })
 
 require("lazy").setup({
+	-- additional motion targets {{{
+	{
+		"https://github.com/wellle/targets.vim",
+	},
+	-- }}}
 	-- pretty folds {{{
 	{
 		"anuvyklack/pretty-fold.nvim",
@@ -88,14 +93,41 @@ require("lazy").setup({
 			-- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'di', '<CMD>wincmd w<CR>')")
 
 			-- common movement shortcuts
-			vim.api.nvim_create_user_command("ReplaceWord", function()
-				vim.fn.feedkeys("cimw")
-			end, {})
-			vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mw', '<cmd>silent ReplaceWord<cr>')")
+
+			-- vim.api.nvim_create_user_command("ArpeggioReplaceWord", function()
+			-- 	vim.fn.feedkeys("cimw")
+			-- end, {})
+			-- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mw', '<cmd>silent ArpeggioReplaceWord<cr>')")
+			--
+			-- vim.api.nvim_create_user_command("ArpeggioReplaceTag", function()
+			-- 	vim.fn.feedkeys("cimt")
+			-- end, {})
+			-- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mt', '<cmd>silent ArpeggioReplaceTag<cr>')")
+
+			registerMapping = function(name, mapping, target)
+				vim.api.nvim_create_user_command("ArpeggioLeap" .. name, function()
+					vim.fn.feedkeys("cim" .. target)
+				end, {})
+				vim.api.nvim_command(
+					"silent call arpeggio#map('n', 's', 0, '"
+						.. mapping
+						.. "', '<cmd>silent ArpeggioLeap"
+						.. name
+						.. "<cr>')"
+				)
+			end
+
+			registerMapping("Word", "mw", "w")
+			registerMapping("Tag", "mt", "t")
+			registerMapping("DQuote", "mq", '"')
+			registerMapping("SQuote", "ma", "'")
+			registerMapping("Backtick", "md", "`")
+			registerMapping("Brace", "mb", "{")
+			registerMapping("Bracket", "mv", "[")
+			registerMapping("Parenthesis", "mf", "(")
 		end,
 	},
 	-- }}}
-
 	-- CWD managmnent {{{
 	{
 		"airblade/vim-rooter",
@@ -118,7 +150,6 @@ require("lazy").setup({
 		end,
 	},
 	-- }}}
-
 	-- GIT {{{
 	{
 		"tpope/vim-fugitive",
@@ -152,7 +183,6 @@ require("lazy").setup({
 		end,
 	},
 	-- }}}
-
 	-- syntax highlight {{{
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -170,7 +200,6 @@ require("lazy").setup({
 		end,
 	},
 	-- }}}
-
 	-- movement {{{
 	{
 		"ggandor/leap.nvim",
@@ -210,7 +239,6 @@ require("lazy").setup({
 		end,
 	},
 	-- }}}
-
 	-- LSP server, auto-complete {{{
 	{
 		"nvimtools/none-ls.nvim",
@@ -310,13 +338,14 @@ require("lazy").setup({
 		end,
 	},
 	-- }}}
-	-- autoamtically close/rename JSX tags
+	-- autoamtically close/rename JSX tags {{{
 	{
 		"windwp/nvim-ts-autotag",
 		event = "VeryLazy",
 		opts = {},
 		ft = { "typescriptreact", "javascriptreact" },
 	},
+	-- }}}
 	{
 		"pmizio/typescript-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
