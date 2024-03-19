@@ -188,7 +188,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				-- ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
+				ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
 				auto_install = true,
 				highlight = { enable = true },
 				incremental_selection = { enable = true },
@@ -355,7 +355,10 @@ require("lazy").setup({
 				settings = {
 					publish_diagnostic_on = "change",
 					tsserver_file_preferences = { importModuleSpecifierPreference = "non-relative" },
-					tsserver_plugins = { "@styled/typescript-styled-plugin" },
+					tsserver_plugins = {
+						"@styled/typescript-styled-plugin",
+						-- "typescript-styled-plugin",
+					},
 				},
 			})
 		end,
