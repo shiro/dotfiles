@@ -1,93 +1,91 @@
 const {
-    aceVimMap,
-    imap,
-    mapkey,
-    imapkey,
-    getClickableElements,
-    vmapkey,
-    map,
-    unmap,
-    vunmap,
-    cmap,
-    addSearchAlias,
-    removeSearchAlias,
-    tabOpenLink,
-    readText,
-    Clipboard,
-    Front,
-    Hints,
-    Visual,
-    RUNTIME
+  aceVimMap,
+  imap,
+  mapkey,
+  imapkey,
+  getClickableElements,
+  vmapkey,
+  map,
+  unmap,
+  vunmap,
+  cmap,
+  addSearchAlias,
+  removeSearchAlias,
+  tabOpenLink,
+  readText,
+  Clipboard,
+  Front,
+  Hints,
+  Visual,
+  RUNTIME,
 } = api;
 
 // mapkey('<Ctrl-y>', 'Show me the money', function() {
 //     Front.showPopup('a well-known phrase uttered by characters in the 1996 film Jerry Maguire (Escape to close).');
 // });
 
-
 settings.scrollStepSize = 140;
 settings.newTabPosition = "last";
 
-
-mapkey('p', "Open the clipboard's URL in the current tab", function() {
-    Front.getContentFromClipboard(function(response) {
-        window.location.href = response.data;
-    });
-});
-
-map('B', 'b');
-mapkey('b', 'Open a Bookmark in current tab', function() {
-	Front.openOmnibar({type: "Bookmarks", tabbed: false});
-});
-
-// [HACKS] that might not be necessary sometime
-mapkey('cf', '#1Open multiple links in a new tab', function() {
-  Hints.create("", Hints.dispatchMouseClick, {tabbed: true, active: false, multipleHits: true});
-});
-
-
-// open stuff in new tab
-function getImageElements() {
-    return Array.from(document.querySelectorAll("img"));
-}
-
-mapkey('zf', 'Open an Image in a new tab', function() {
-  Hints.create(getImageElements(), function(imageElement) {
-    console.log(imageElement);
-    var url = imageElement.getAttribute('src');
-    window.open(url, '_blank');
+mapkey("p", "Open the clipboard's URL in the current tab", function () {
+  Front.getContentFromClipboard(function (response) {
+    window.location.href = response.data;
   });
 });
 
+map("B", "b");
+mapkey("b", "Open a Bookmark in current tab", function () {
+  Front.openOmnibar({ type: "Bookmarks", tabbed: false });
+});
 
-map('<Alt-t>', '<Alt-s>');
+// [HACKS] that might not be necessary sometime
+mapkey("cf", "#1Open multiple links in a new tab", function () {
+  Hints.create("", Hints.dispatchMouseClick, {
+    tabbed: true,
+    active: false,
+    multipleHits: true,
+  });
+});
 
+// open stuff in new tab
+function getImageElements() {
+  return Array.from(document.querySelectorAll("img"));
+}
+
+mapkey("zf", "Open an Image in a new tab", function () {
+  Hints.create(getImageElements(), function (imageElement) {
+    console.log(imageElement);
+    var url = imageElement.getAttribute("src");
+    window.open(url, "_blank");
+  });
+});
+
+map("<Alt-t>", "<Alt-s>");
 
 // history forward
 map("L", "D");
 // history back
-map('z', 'H');
+map("z", "H");
 
 // open links in new tab
-map('e', 'af');
+map("e", "af");
 
-map('F', 'C');
-map('o', 'go');
-map('O', 't');
-map('ö', 'gx$');
-map('u', 'e');
+map("F", "C");
+map("o", "go");
+map("O", "t");
+map("ö", "gx$");
+map("u", "e");
 
-map('P', 'cc');
-map('gi', 'i');
-map('gf', 'w');
-map('H', 'S');
-map('u', 'U');
-map('L', 'D');
-map('gt', 'R');
-map('gT', 'E');
-map('yf', 'ya');
-map('`', '\'');
-
+map("P", "cc");
+map("gi", "i");
+map("gf", "w");
+map("H", "S");
+map("u", "U");
+map("L", "D");
+map("gt", "R");
+map("gT", "E");
+map("yf", "ya");
+map("`", "'");
 
 unmap(".");
 unmap("gr");
@@ -112,10 +110,9 @@ unmap("spishow");
 unmap("sfrshow");
 
 // website specific bindings
-unmap('j', /youtube.com/);
-unmap('k', /youtube.com/);
-unmap('l', /youtube.com/);
-
+unmap("j", /youtube.com/);
+unmap("k", /youtube.com/);
+unmap("l", /youtube.com/);
 
 settings.theme = `
 /*.sk_theme {
@@ -150,4 +147,6 @@ settings.theme = `
 }
 
 */
-`
+`;
+// colemak
+// https://gist.github.com/Stvad/02d3d40b08e9505c548e00bba05ccea0

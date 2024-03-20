@@ -3,6 +3,22 @@
 " todo double leader map
 " noremap <Leader><Leader> V
 
+" colemak
+" nnoremap n j
+" nnoremap e k
+" nnoremap m h
+" nnoremap i l
+" nnoremap u i
+" nnoremap l u
+
+" nnoremap r s
+" nnoremap p r
+" nnoremap z b
+" nnoremap m h
+" nnoremap i l
+" nnoremap ; p
+" nnoremap j y
+
 noremap <Leader>' :set relativenumber!<CR>
 noremap <Leader>" :set number!<CR>
 
