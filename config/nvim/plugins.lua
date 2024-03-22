@@ -188,7 +188,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua" },
+				ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua", "sql" },
 				auto_install = true,
 				highlight = { enable = true },
 				incremental_selection = { enable = true },
@@ -689,6 +689,8 @@ require("lazy").setup({
 		"kevinhwang91/rnvimr",
 		keys = { { "<leader>l", "" } },
 		init = function()
+			vim.g.rnvimr_enable_ex = 1
+			vim.g.rnvimr_enable_picker = 1
 			vim.g.rnvimr_draw_border = 0
 			vim.g.rnvimr_layout = {
 				relative = "editor",
@@ -725,7 +727,14 @@ require("lazy").setup({
 	-- rust
 	{ "rust-lang/rust.vim", ft = "rust" },
 	{ "arzg/vim-rust-syntax-ext", ft = "rust" },
-
+	{
+		"saecki/crates.nvim",
+		ft = "toml",
+		tag = "stable",
+		config = function()
+			require("crates").setup()
+		end,
+	},
 	-- }}}
 
 	-- misc {{{
@@ -757,15 +766,15 @@ require("lazy").setup({
 		"NvChad/nvim-colorizer.lua",
 		event = "VeryLazy",
 		config = function()
-			require("colorizer").setup()
-			require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
-
-			vim.api.nvim_create_autocmd("BufEnter", {
-				group = "default",
-				callback = function()
-					require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
-				end,
-			})
+			require("colorizer").setup({ user_default_options = { mode = "virtualtext", names = false } })
+			-- require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
+			--
+			-- vim.api.nvim_create_autocmd("BufEnter", {
+			-- 	group = "default",
+			-- 	callback = function()
+			-- 		require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
+			-- 	end,
+			-- })
 		end,
 	},
 	-- }}}
