@@ -71,10 +71,12 @@ require("lazy").setup({
 			-- vim.g.arpeggio_timeoutlen = 40
 		end,
 		config = function()
+			-- write
+			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'we', ':w<cr>')")
 			-- write-quit
 			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
 			-- write-quit-all
-			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'we', ':wqa<cr>')")
+			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wr', ':wqa<cr>')")
 			-- write-quit
 			vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
 			-- insert mode
@@ -727,6 +729,11 @@ require("lazy").setup({
 	-- rust
 	{ "rust-lang/rust.vim", ft = "rust" },
 	{ "arzg/vim-rust-syntax-ext", ft = "rust" },
+	-- {
+	-- 	"mrcjkb/rustaceanvim",
+	-- 	version = "^4", -- Recommended
+	-- 	ft = { "rust" },
+	-- },
 	{
 		"saecki/crates.nvim",
 		ft = "toml",
@@ -880,14 +887,14 @@ function _G.show_docs()
 end
 
 vim.keymap.set("n", "<C-P>", vim.lsp.buf.hover, { noremap = true, silent = true })
-vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-vim.keymap.set("i", "<C-S-p>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true })
-vim.keymap.set("i", "<F12>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true })
+-- vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
+-- vim.keymap.set("i", "<C-S-p>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true })
+-- vim.keymap.set("i", "<F12>", "CocActionAsync('showSignatureHelp')", { silent = true, expr = true })
 -- undo/redo
-vim.keymap.set("n", "<leader>u", "<cmd>CocCommand workspace.undo<cr>')", { silent = true })
-vim.keymap.set("n", "<leader><S-u>", "<cmd>CocCommand workspace.redo<cr>')", { silent = true })
+-- vim.keymap.set("n", "<leader>u", "<cmd>CocCommand workspace.undo<cr>')", { silent = true })
+-- vim.keymap.set("n", "<leader><S-u>", "<cmd>CocCommand workspace.redo<cr>')", { silent = true })
 
 -- tab/S-tab completion menu
 function _G.check_back_space()
