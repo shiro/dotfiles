@@ -190,7 +190,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "rust", "json", "lua", "sql" },
+				ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "styled", "rust", "json", "lua", "sql" },
 				auto_install = true,
 				highlight = { enable = true },
 				incremental_selection = { enable = true },

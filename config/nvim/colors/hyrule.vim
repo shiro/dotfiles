@@ -297,7 +297,8 @@ exe "hi DiagnosticSignWarn guifg=".gray
 exe "hi DiagnosticSignInfo guifg=".gray
 
 " CSS
-exe "hi @property.css guifg=".white
+exe "hi @property.css guifg=".lightGreen
+hi link @property.styled @property.css
 
 
 "DiagnosticWarn
