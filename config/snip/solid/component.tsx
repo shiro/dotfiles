@@ -1,5 +1,3 @@
-/** @jsxRuntime automatic */
-/** @jsxImportSource solid-js */
 import {JSX, Component} from "solid-js";
 import {css} from "@linaria/core";
 import cn from "classnames";
@@ -13,14 +11,14 @@ const {{ name }}: Component<Props> = (props) => {
     const {children} = $destructure(props);
 
     return (
-        <div class={cn(Container)}>
+        <div class={cn(_{{ name }})}>
             {children}
         </div>
     );
 };
 
 
-const Container = css`
+const _{{ name }} = css`
 `;
 
 

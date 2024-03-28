@@ -72,7 +72,7 @@ require("lazy").setup({
 		end,
 		config = function()
 			-- write
-			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'we', ':w<cr>')")
+			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'we', ':FormatAndSave<cr>')")
 			-- write-quit
 			vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
 			-- write-quit-all
@@ -190,7 +190,18 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = { "typescript", "tsx", "javascript", "css", "scss", "styled", "rust", "json", "lua", "sql" },
+				ensure_installed = {
+					"typescript",
+					"tsx",
+					"javascript",
+					"css",
+					"scss",
+					"styled",
+					"rust",
+					"json",
+					"lua",
+					"sql",
+				},
 				auto_install = true,
 				highlight = { enable = true },
 				incremental_selection = { enable = true },
@@ -420,6 +431,52 @@ require("lazy").setup({
 		end,
 	},
 	{
+		"L3MON4D3/LuaSnip",
+		config = function()
+			local ls = require("luasnip")
+			local s = ls.snippet
+			local sn = ls.snippet_node
+			local t = ls.text_node
+			local i = ls.insert_node
+			local f = ls.function_node
+			local c = ls.choice_node
+			local d = ls.dynamic_node
+			local r = ls.restore_node
+			local fmt = require("luasnip.extras.fmt").fmt
+
+			ls.add_snippets("typescriptreact", {
+				s("comp", {
+					t("const "),
+					i(1, "Component"),
+					t({
+						": Component<any> = (props: any) => {",
+						"  const {children} = $destructure(props);",
+						"  return <div>{children}</div>;",
+						"};",
+					}),
+					i(0),
+				}),
+				s(
+					"For",
+					fmt(
+						[[
+						<For each={{{}}}>
+						{{({}) => <>
+							{}
+						</>}}
+						</For>
+						]],
+						{
+							i(1, "[]"),
+							i(2, "x"),
+							i(0),
+						}
+					)
+				),
+			})
+		end,
+	},
+	{
 		"hrsh7th/nvim-cmp",
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
@@ -434,12 +491,20 @@ require("lazy").setup({
 		event = "InsertEnter",
 		config = function()
 			local cmp = require("cmp")
+			local luasnip = require("luasnip")
 			vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
+			local has_words_before = function()
+				unpack = unpack or table.unpack
+				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+				return col ~= 0
+					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+			end
 
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+						require("luasnip").lsp_expand(args.body)
 					end,
 				},
 				completion = {
@@ -459,13 +524,35 @@ require("lazy").setup({
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					-- ["<CR>"] = cmp.mapping.confirm({ select = true }),
+					-- ["<Tab>"] = cmp.mapping(function(fallback)
+					["<CR>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							-- cmp.select_next_item()
+							cmp.confirm({ select = true })
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
+							-- elseif has_words_before() then
+							-- cmp.complete()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					["<S-Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
 				}),
 				sources = cmp.config.sources({
+					{ name = "luasnip" },
 					{ name = "nvim_lsp" },
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lua" },
-					{ name = "luasnip" },
 					-- { name = "orgmode" },
 				}, {
 					{ name = "buffer" },
@@ -953,7 +1040,21 @@ vim.api.nvim_create_autocmd("FileType", {
 	group = "default",
 	pattern = { "javascript", "typescript", "typescriptreact" },
 	callback = function()
-		vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'console.log();<left><left>')")
+		vim.api.nvim_command("call arpeggio#map('n', '', 0, 'al', 'aconsole.log();<left><left>')")
+		-- make import lazy
+		vim.keymap.set(
+			"n",
+			";1",
+			'0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
+			{ silent = true, noremap = true }
+		)
+		-- create component
+		vim.keymap.set(
+			"n",
+			";1",
+			'0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
+			{ silent = true, noremap = true }
+		)
 	end,
 })
 
@@ -1027,6 +1128,15 @@ function format(opts)
 	}, opts.callback)
 	-- end)
 end
+
+vim.api.nvim_create_user_command("Format", format, {})
+vim.api.nvim_create_user_command("FormatAndSave", function()
+	format({
+		callback = function()
+			save()
+		end,
+	})
+end, {})
 
 function organize_imports()
 	if
