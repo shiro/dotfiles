@@ -236,7 +236,13 @@ exe "hi typescriptImport guifg=".lightGreen
 exe "hi tsxTagName guifg=".lightGreen
 exe "hi @constant.builtin.tsx guifg=".yellow
 exe "hi @tag.tsx guifg=".lightGreen
+exe "hi @variable guifg=".blue
 exe "hi @variable.tsx guifg=".blue
+hi link @lsp.type.variable.typescriptreact @variable.tsx
+exe "hi @variable.member.tsx guifg=".blue
+hi link @tag.builtin.tsx @tag.tsx
+hi link @type.builtin.tsx @type.tsx
+exe "hi @punctuation.special.tsx guifg=".white
 exe "hi @constructor.tsx guifg=".lightGreen
 exe "hi tsxAttrib guifg=".darkGreen
 exe "hi @tag.attribute.tsx guifg=".darkGreen
