@@ -135,6 +135,7 @@ let ore="#5B5957"
 
 
 " editor
+exe "hi NormalFloat guibg=NONE"
 exe "hi Cursor guifg=".test." guibg=".white." gui=bold,underline"
 exe "hi Visual guibg=".selection
 exe "hi LineNr guibg=None guifg=".ore
