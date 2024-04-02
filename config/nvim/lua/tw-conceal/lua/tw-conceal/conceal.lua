@@ -28,6 +28,7 @@ function M.conceal_class(bufnr, config)
 	[
           ((string (string_fragment) @class_value))
           (_ (_ (_ (string (string_fragment) @class_value))))
+	  (_ (template_string) @class_value)
 	]
       ))
       ]]
