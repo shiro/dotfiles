@@ -211,6 +211,8 @@ exe "hi GitGutterChange guifg=".diffMod." guibg=".diffMod
 exe "hi GitGutterChangeLineNr guifg=".diffModFg." guibg=".diffMod
 exe "hi GitGutterDelete guifg=".diffDel." guibg=".diffDel
 exe "hi GitGutterDeleteLineNr guifg=".diffDelFg." guibg=".diffDel
+exe "hi @diff.minus.diff guifg=".diffDelFg." guibg=NONE guisp=NONE"
+exe "hi @diff.plus.diff guifg=".diffAddFg." guibg=NONE guisp=NONE"
 exe "hi diffAdded guifg=".white." guibg=".diffAdd
 exe "hi diffChanged guifg=".white." guibg=".diffMod
 exe "hi diffRemoved guifg=".white." guibg=".diffDel
@@ -296,8 +298,8 @@ exe "hi DiagnosticError guifg=".error
 "set winblend=30
 
 " gutter
-exe "hi GitGutterAddIntraLine guifg=None guibg=".diffMod." gui=None"
-exe "hi GitGutterDeleteIntraLine guifg=None guibg=".diffDel." gui=None"
+exe "hi GitGutterAddIntraLine guifg=".white." guibg=".diffMod." gui=None"
+exe "hi GitGutterDeleteIntraLine guifg=".white." guibg=".diffDel." gui=None"
 exe "hi DiagnosticSignError guifg=".gray
 exe "hi DiagnosticSignHint guifg=".gray
 exe "hi DiagnosticSignWarn guifg=".gray
