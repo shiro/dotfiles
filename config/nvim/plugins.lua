@@ -464,6 +464,20 @@ require("lazy").setup({
 					i(0),
 				}),
 				s(
+					"Show",
+					fmt(
+						[[
+						<Show when={{{}}}>
+							{}
+						</Show>
+						]],
+						{
+							i(1, "true"),
+							i(0),
+						}
+					)
+				),
+				s(
 					"For",
 					fmt(
 						[[
