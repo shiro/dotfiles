@@ -175,6 +175,7 @@ exe "hi DiagnosticUnderlineError guifg=".error." guibg=None gui=None"
 
 " plugins
 exe "hi PackageInfoOutdatedVersion guifg=".gray
+exe "hi NotifyBackground guibg=".bg
 
 " quickfix
 

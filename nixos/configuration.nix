@@ -167,13 +167,18 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    alacritty
-    cliphist
     fzf
     gcc
     htop-vim
     ranger
     silver-searcher
+    ripgrep
+    tmux
+    wget
+    rsync
+    xclip
+    diff-so-fancy
+    highlight
     # spice-vdagent
     (let map2 = python311.pkgs.buildPythonPackage rec {
       version = "2.0.13";
@@ -193,24 +198,19 @@ in
       # python-pkgs.pandas
       python-pkgs.requests
     ]))
-    ripgrep
-    mako
-    tmux
-    wget
-    zathura
+
+    cliphist
+    alacritty
     hyprpaper
-    rsync
+    zathura
     ueberzugpp
     wl-clipboard
-    xclip
-    diff-so-fancy
-    highlight
+    mako
 
     xorg.xkbcomp
     xorg.xkbutils
     libxkbcommon
     xorg.setxkbmap
-
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

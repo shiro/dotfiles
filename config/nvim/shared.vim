@@ -26,8 +26,14 @@ noremap <Leader>" :set number!<CR>
 nnoremap <C-y> 3k
 nnoremap <C-e> 3j
 
+" keep visual selection when indenting
+vnoremap < <gv
+vnoremap > >gv
+
 " jump to last insert position
 nnoremap g; `^
+
+vmap u :s/<C-r><C-r>//g<left><left>
 
 " search / replace for word under the cursor
 " nnoremap <leader>/ "fyiw :/<c-r>f<cr>
