@@ -5,12 +5,12 @@ local ls = require("luasnip")
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
-local s = ls.snippet
 local c = ls.choice_node
 local d = ls.dynamic_node
 local i = ls.insert_node
 local t = ls.text_node
 local sn = ls.snippet_node
+local sc = require("luasnip-more").context_snippet({ ft = "go" })
 
 local M = {}
 
@@ -154,45 +154,11 @@ local go_return_values = function(args)
   )
 end
 
-local function contains(tab, val)
-  for index, value in ipairs(tab) do
-    if value == val then
-      return true
-    end
-  end
-
-  return false
-end
-
-local contexts = { "block", "for_statement", "expression_statement" }
-local get_node_type = function()
-  local ts_utils = require("nvim-treesitter.ts_utils")
-  local node = ts_utils.get_node_at_cursor()
-
-  while node ~= nil do
-    for _, value in ipairs(contexts) do
-      if value == node:type() then
-        return value
-      end
-    end
-    node = node:parent()
-  end
-end
-
-local cs = function(trig, contexts, snippet)
-  return s({
-    trig = trig,
-    show_condition = function(line_to_cursor)
-      return contains(contexts, get_node_type())
-    end,
-  }, snippet)
-end
-
 M.register = function()
   ls.add_snippets("go", {
     -- cl - print line
     -- {{{
-    cs(
+    sc(
       "cl",
       { "block" },
       fmta(
@@ -207,7 +173,7 @@ fmt.Println(<finish>);
     -- }}}
     -- let - variable
     -- {{{
-    cs(
+    sc(
       "let",
       { "block" },
       fmta(
@@ -223,7 +189,7 @@ fmt.Println(<finish>);
     -- }}}
     -- forlet - for loop
     -- {{{
-    cs(
+    sc(
       "forlet",
       { "block" },
       fmta(
@@ -243,7 +209,7 @@ for <it> := 0; <it_rep> << <limit>; <it_rep>++{
     -- }}}
     -- efi - return if error
     -- {{{
-    cs(
+    sc(
       "efi",
       { "block" },
       fmta(
@@ -268,7 +234,7 @@ if <err_same> != nil {
     -- }}}
     -- ie - return if error
     -- {{{
-    cs("ie", { "block" }, fmta("if err != nil {\n\treturn <err>\n}", { err = i(1, "err") })),
+    sc("ie", { "block" }, fmta("if err != nil {\n\treturn <err>\n}", { err = i(1, "err") })),
     -- }}}
   })
 end

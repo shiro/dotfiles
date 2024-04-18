@@ -1,5 +1,6 @@
 local ls = require("luasnip")
 local s = ls.snippet
+local sc = require("luasnip-more").context_snippet({ ft = "javascript" })
 local sn = ls.snippet_node
 local t = ls.text_node
 local i = ls.insert_node
@@ -37,6 +38,32 @@ console.log(<finish>)
 () =>> {<finish>}
 ]],
           { finish = i(0) }
+        )
+      ),
+      -- }}}
+      -- fori - for-i loop
+      -- {{{
+      sc(
+        "fori",
+        { "statement_block" },
+        fmta(
+          [[
+for(let <iterable> = <initial>; <val> << <limit>; <change_expr>){
+  <finish>
+}
+]],
+          {
+            iterable = i(1, "i"),
+            initial = i(2, "0"),
+            val = rep(1),
+            limit = i(3),
+            change_expr = d(4, function(args)
+              return sn(nil, {
+                i(1, args[1][1] .. "++"),
+              })
+            end, { 1 }),
+            finish = i(0),
+          }
         )
       ),
       -- }}}
@@ -96,8 +123,9 @@ if(<cond>) {
       --}}}
       -- cv - constant variable
       -- {{{
-      s(
+      sc(
         "cv",
+        { "statement_block" },
         fmta(
           [[
 const <name> = <finish>;
@@ -115,8 +143,9 @@ const <name> = <finish>;
   ls.add_snippets("typescriptreact", {
     -- comp - component
     -- {{{
-    s(
+    sc(
       "comp",
+      { "program" },
       fmta(
         [[
 const <name>: Component<<any>> = (props: any) =>> {
@@ -133,33 +162,35 @@ const <name>: Component<<any>> = (props: any) =>> {
     -- }}}
     -- Show - Solid.JS Show component
     -- {{{
-    s(
+    sc(
       "Show",
-      fmt(
+      { "jsx_element" },
+      fmta(
         [[
-  <Show when={{{}}}>
-   {}
-  </Show>
-  ]],
+<<Show when={<cond>}>>
+  <finish>
+<</Show>>
+]],
         {
-          i(1, "true"),
-          i(0),
+          cond = i(1, "true"),
+          finish = i(0),
         }
       )
     ),
     -- }}}
     -- For - Solid.JS For component
     -- {{{
-    s(
+    sc(
       "For",
+      { "jsx_element" },
       fmta(
         [[
-        <<For each={<items>}>>
+<<For each={<items>}>>
   {(<item>) =>> <<>>
-   <finish>
+    <finish>
   <</>>}
-  <</For>>
-  ]],
+<</For>>
+]],
         {
           items = i(1, "[]"),
           item = i(2, "x"),

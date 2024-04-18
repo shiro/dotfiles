@@ -541,6 +541,12 @@ require("lazy").setup({
       require("snippets.go").register()
     end,
   },
+
+  {
+    dir = "~/.dotfiles/config/nvim/lua/luasnip-more",
+    dependencies = { "L3MON4D3/LuaSnip" },
+    opts = {},
+  },
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -636,8 +642,15 @@ require("lazy").setup({
           { name = "cmdline" },
         }),
       })
-      cmp.event:on("menu_opened", function(window)
-        set_timeout(0, function()
+      validation_token = 0
+
+      cmp.event:on("menu_opened", function()
+        _validation_token = validation_token
+        set_timeout(80, function()
+          if validation_token ~= _validation_token then
+            return
+          end
+          validation_token = validation_token + 1
           cmp.select_next_item({
             behavior = cmp.SelectBehavior.Select,
           })
