@@ -13,6 +13,14 @@ vim.opt.rtp:prepend(lazypath)
 
 vim.api.nvim_create_augroup("default", { clear = true })
 
+local notify = function(message)
+  if type(message) == "string" then
+    require("notify")(message)
+  else
+    require("notify")(vim.inspect(message))
+  end
+end
+
 require("lazy").setup({
   -- additional motion targets {{{
   {
@@ -510,6 +518,10 @@ require("lazy").setup({
   {
     "L3MON4D3/LuaSnip",
     config = function()
+      local luasnip = require("luasnip")
+      luasnip.setup({
+        load_ft_func = require("luasnip.extras.filetype_functions").from_cursor_pos,
+      })
       require("snippets.javascript").register()
       require("snippets.rust").register()
       require("snippets.go").register()
@@ -531,7 +543,7 @@ require("lazy").setup({
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      vim.opt.completeopt = { "menu", "menuone", "noselect" }
+      -- vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
       cmp.setup({
         snippet = {
@@ -541,11 +553,11 @@ require("lazy").setup({
         },
         completion = {
           completeopt = "menu,menuone,noinsert",
-          autocomplete = {
-            cmp.TriggerEvent.TextChanged,
-            cmp.TriggerEvent.InsertEnter,
-          },
-          keyword_length = 0,
+          -- autocomplete = {
+          --   cmp.TriggerEvent.TextChanged,
+          --   cmp.TriggerEvent.InsertEnter,
+          -- },
+          -- keyword_length = 0,
         },
         window = {
           completion = cmp.config.window.bordered(),
@@ -560,11 +572,10 @@ require("lazy").setup({
           -- ["<Tab>"] = cmp.mapping(function(fallback)
           ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
+              -- print(vim.inspect(cmp.get_active_entry()))
               cmp.confirm({ select = false })
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
-              -- elseif has_words_before() then
-              -- cmp.complete()
             else
               fallback()
             end
@@ -587,11 +598,14 @@ require("lazy").setup({
           { name = "luasnip" },
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
-          { name = "nvim_lua" },
         }, {
           { name = "buffer" },
           { name = "path" },
         }),
+      })
+
+      cmp.setup.filetype("lua", {
+        { name = "nvim_lua" },
       })
 
       cmp.setup.cmdline(":", {

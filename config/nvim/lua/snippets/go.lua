@@ -156,6 +156,56 @@ end
 
 M.register = function()
   ls.add_snippets("go", {
+    -- cl - print line
+    -- {{{
+    s(
+      "cl",
+      fmta(
+        [[
+fmt.Println(<finish>);
+]],
+        {
+          finish = i(0),
+        }
+      )
+    ),
+    -- }}}
+    -- let - variable
+    -- {{{
+    s(
+      "cv",
+      fmta(
+        [[
+<name> := <finish>
+]],
+        {
+          name = i(1),
+          finish = i(0),
+        }
+      )
+    ),
+    -- }}}
+    -- forlet - for loop
+    -- {{{
+    s(
+      "forlet",
+      fmta(
+        [[
+for <it> := 0; <it_rep> << <limit>; <it_rep>++{
+  <finish>
+}
+]],
+        {
+          it = i(1),
+          limit = i(2),
+          it_rep = rep(1),
+          finish = i(0),
+        }
+      )
+    ),
+    -- }}}
+    -- efi - return if error
+    -- {{{
     s(
       "efi",
       fmta(
@@ -177,36 +227,12 @@ if <err_same> != nil {
         }
       )
     ),
+    -- }}}
+    -- ie - return if error
+    -- {{{
     s("ie", fmta("if err != nil {\n\treturn <err>\n}", { err = i(1, "err") })),
+    -- }}}
   })
-
-  -- ls.add_snippets(
-  --   "go",
-  --   make {
-  --     main = {
-  --       t { "func main() {", "\t" },
-  --       i(0),
-  --       t { "", "}" },
-  --     },
-  --
-  --     ef = {
-  --       i(1, { "val" }),
-  --       t ", err := ",
-  --       i(2, { "f" }),
-  --       t "(",
-  --       i(3),
-  --       t ")",
-  --       i(0),
-  --     },
-  --
-  --     -- TODO: Fix this up so that it actually uses the tree sitter thing
-  --     ie = { "if err != nil {", "\treturn err", i(0), "}" },
-  --   }
-  -- )
-
-  -- ls.add_snippets("go", {
-  --   s("f", fmt("func {}({}) {} {{\n\t{}\n}}", { i(1, "name"), i(2), i(3), i(0) })),
-  -- })
 end
 
 return M

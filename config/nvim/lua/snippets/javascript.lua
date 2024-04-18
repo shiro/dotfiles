@@ -9,12 +9,15 @@ local d = ls.dynamic_node
 local r = ls.restore_node
 local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
+local rep = require("luasnip.extras").rep
 
 local M = {}
 
 M.register = function()
   for _, ft in ipairs({ "typescript", "typescriptreact" }) do
     ls.add_snippets(ft, {
+      -- cl - console log
+      -- {{{
       s(
         "cl",
         fmta(
@@ -24,6 +27,9 @@ console.log(<finish>)
           { finish = i(0) }
         )
       ),
+      -- }}}
+      -- fn - anonymous function
+      -- {{{
       s(
         "fn",
         fmta(
@@ -33,6 +39,9 @@ console.log(<finish>)
           { finish = i(0) }
         )
       ),
+      -- }}}
+      -- forof - for-of loop
+      -- {{{
       s(
         "forof",
         fmta(
@@ -48,6 +57,9 @@ for(const <val> of <iterable>){
           }
         )
       ),
+      -- }}}
+      -- if - if block statement
+      -- {{{
       s(
         "if",
         fmta(
@@ -62,10 +74,47 @@ if(<cond>) {
           }
         )
       ),
+      --}}}
+      -- map - array map function
+      -- {{{
+      s(
+        ".map",
+        fmta(
+          [[
+.map((<item>) =>> {
+  <finish>
+  return <item_rep>;
+})
+]],
+          {
+            item = i(1),
+            item_rep = rep(1),
+            finish = i(0),
+          }
+        )
+      ),
+      --}}}
+      -- cv - constant variable
+      -- {{{
+      s(
+        "cv",
+        fmta(
+          [[
+const <name> = <finish>;
+]],
+          {
+            name = i(1),
+            finish = i(0),
+          }
+        )
+      ),
+      --}}}
     })
   end
 
   ls.add_snippets("typescriptreact", {
+    -- comp - component
+    -- {{{
     s(
       "comp",
       fmta(
@@ -81,6 +130,9 @@ const <name>: Component<<any>> = (props: any) =>> {
         }
       )
     ),
+    -- }}}
+    -- Show - Solid.JS Show component
+    -- {{{
     s(
       "Show",
       fmt(
@@ -95,6 +147,9 @@ const <name>: Component<<any>> = (props: any) =>> {
         }
       )
     ),
+    -- }}}
+    -- For - Solid.JS For component
+    -- {{{
     s(
       "For",
       fmta(
@@ -112,6 +167,7 @@ const <name>: Component<<any>> = (props: any) =>> {
         }
       )
     ),
+    -- }}}
   })
 end
 
