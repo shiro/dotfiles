@@ -21,6 +21,20 @@ local notify = function(message)
   end
 end
 
+function set_timeout(timeout, callback)
+  local uv = vim.loop
+  local timer = uv.new_timer()
+  local function ontimeout()
+    uv.timer_stop(timer)
+    uv.close(timer)
+    vim.schedule(function()
+      callback(timer)
+    end)
+  end
+  uv.timer_start(timer, timeout, 0, ontimeout)
+  return timer
+end
+
 require("lazy").setup({
   -- additional motion targets {{{
   {
@@ -543,7 +557,8 @@ require("lazy").setup({
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
-      -- vim.opt.completeopt = { "menu", "menuone", "noselect" }
+      -- vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
+      print(cmp.PreselectMode.None)
 
       cmp.setup({
         snippet = {
@@ -551,8 +566,9 @@ require("lazy").setup({
             require("luasnip").lsp_expand(args.body)
           end,
         },
+        preselect = cmp.PreselectMode.None,
         completion = {
-          completeopt = "menu,menuone,noinsert",
+          completeopt = "menu,menuone,noinsert,noselect",
           -- autocomplete = {
           --   cmp.TriggerEvent.TextChanged,
           --   cmp.TriggerEvent.InsertEnter,
@@ -563,17 +579,21 @@ require("lazy").setup({
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
+        confirmation = {
+          get_commit_characters = function(commit_characters)
+            return {}
+          end,
+        },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          -- ["<CR>"] = cmp.mapping.confirm({ select = false }),
           -- ["<Tab>"] = cmp.mapping(function(fallback)
           ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
-              -- print(vim.inspect(cmp.get_active_entry()))
-              cmp.confirm({ select = false })
+              cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump()
             else
@@ -595,11 +615,11 @@ require("lazy").setup({
           end, { "i" }),
         }),
         sources = cmp.config.sources({
-          { name = "luasnip" },
+          { name = "luasnip", priority = 999999 },
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
         }, {
-          { name = "buffer" },
+          -- { name = "buffer" },
           { name = "path" },
         }),
       })
@@ -616,6 +636,13 @@ require("lazy").setup({
           { name = "cmdline" },
         }),
       })
+      cmp.event:on("menu_opened", function(window)
+        set_timeout(0, function()
+          cmp.select_next_item({
+            behavior = cmp.SelectBehavior.Select,
+          })
+        end)
+      end)
     end,
   },
   -- comments {{{
@@ -1305,3 +1332,26 @@ vim.opt.foldmethod = "indent"
 -- 		)
 -- 	end,
 -- })
+
+vim.keymap.set({ "n", "i" }, "<C-b>", function()
+  local contexts = { "block", "for_statement" }
+  local get_node_type = function()
+    local ts_utils = require("nvim-treesitter.ts_utils")
+    local node = ts_utils.get_node_at_cursor()
+
+    while node ~= nil do
+      for _, value in ipairs(contexts) do
+        if value == node:type() then
+          return value
+        end
+      end
+      node = node:parent()
+    end
+  end
+
+  -- local ts_utils = require("nvim-treesitter.ts_utils")
+  -- local node = ts_utils.get_node_at_cursor()
+  notify(get_node_type())
+end, {})
+
+vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }

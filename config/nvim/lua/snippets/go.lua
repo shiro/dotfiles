@@ -154,12 +154,47 @@ local go_return_values = function(args)
   )
 end
 
+local function contains(tab, val)
+  for index, value in ipairs(tab) do
+    if value == val then
+      return true
+    end
+  end
+
+  return false
+end
+
+local contexts = { "block", "for_statement", "expression_statement" }
+local get_node_type = function()
+  local ts_utils = require("nvim-treesitter.ts_utils")
+  local node = ts_utils.get_node_at_cursor()
+
+  while node ~= nil do
+    for _, value in ipairs(contexts) do
+      if value == node:type() then
+        return value
+      end
+    end
+    node = node:parent()
+  end
+end
+
+local cs = function(trig, contexts, snippet)
+  return s({
+    trig = trig,
+    show_condition = function(line_to_cursor)
+      return contains(contexts, get_node_type())
+    end,
+  }, snippet)
+end
+
 M.register = function()
   ls.add_snippets("go", {
     -- cl - print line
     -- {{{
-    s(
+    cs(
       "cl",
+      { "block" },
       fmta(
         [[
 fmt.Println(<finish>);
@@ -172,8 +207,9 @@ fmt.Println(<finish>);
     -- }}}
     -- let - variable
     -- {{{
-    s(
-      "cv",
+    cs(
+      "let",
+      { "block" },
       fmta(
         [[
 <name> := <finish>
@@ -187,8 +223,9 @@ fmt.Println(<finish>);
     -- }}}
     -- forlet - for loop
     -- {{{
-    s(
+    cs(
       "forlet",
+      { "block" },
       fmta(
         [[
 for <it> := 0; <it_rep> << <limit>; <it_rep>++{
@@ -206,8 +243,9 @@ for <it> := 0; <it_rep> << <limit>; <it_rep>++{
     -- }}}
     -- efi - return if error
     -- {{{
-    s(
+    cs(
       "efi",
+      { "block" },
       fmta(
         [[
 <val>, <err> := <f>(<args>)
@@ -230,7 +268,7 @@ if <err_same> != nil {
     -- }}}
     -- ie - return if error
     -- {{{
-    s("ie", fmta("if err != nil {\n\treturn <err>\n}", { err = i(1, "err") })),
+    cs("ie", { "block" }, fmta("if err != nil {\n\treturn <err>\n}", { err = i(1, "err") })),
     -- }}}
   })
 end
