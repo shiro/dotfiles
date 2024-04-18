@@ -187,10 +187,36 @@ fmt.Println(<finish>);
       )
     ),
     -- }}}
-    -- forlet - for loop
+    -- fori- for-i loop
     -- {{{
     sc(
-      "forlet",
+      "fori",
+      { "block" },
+      fmta(
+        [[
+for <iterable> := <initial>; <val> << <limit>; <change_expr> {
+  <finish>
+}
+]],
+        {
+          iterable = i(1, "i"),
+          initial = i(2, "0"),
+          val = rep(1),
+          limit = i(3),
+          change_expr = d(4, function(args)
+            return sn(nil, {
+              i(1, args[1][1] .. "++"),
+            })
+          end, { 1 }),
+          finish = i(0),
+        }
+      )
+    ),
+    -- }}}
+    -- forof- for-of loop
+    -- {{{
+    sc(
+      "forof",
       { "block" },
       fmta(
         [[
