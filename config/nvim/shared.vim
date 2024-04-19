@@ -60,6 +60,7 @@ nnoremap <silent> <leader>W :wa<cr>
 nnoremap <C-]> <C-w>s
 nnoremap <C-\> <C-w>v
 nnoremap <C-q> :qa!<CR>
+inoremap <C-q> <C-o>:qa!<CR>
 nnoremap <silent> <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
 

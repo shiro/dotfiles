@@ -392,12 +392,12 @@ require("lazy").setup({
         ensure_installed = {
           "stylua", -- lua format
           "lua-language-server", -- lua
-          "prettierd", -- JS/TS format - prettier
           "typescript-language-server", -- TS
+          "prettierd", -- JS/TS format - prettier
+          "eslint-lsp", -- JS/TS lint
           "rust-analyzer", -- rust
           "taplo", -- toml
           "tailwindcss-language-server", -- tailwind
-          "eslint-lsp", -- JS/TS lint
           "json-lsp", -- json
           "nil", -- nix
           "gopls", -- golang
@@ -453,11 +453,15 @@ require("lazy").setup({
   -- }}}
   {
     "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" },
     ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
     config = function()
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
       require("typescript-tools").setup({
+        capabilities = capabilities,
         settings = {
+          -- LSP snipets crash cmp, try out if it's fixed after a while
+          complete_function_calls = true,
           publish_diagnostic_on = "change",
           tsserver_file_preferences = { importModuleSpecifierPreference = "non-relative" },
           tsserver_plugins = {
@@ -549,6 +553,8 @@ require("lazy").setup({
   },
   {
     "hrsh7th/nvim-cmp",
+    -- TS-LSP and preselect are broken after this commit
+    commit = "b356f2c",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
@@ -564,7 +570,6 @@ require("lazy").setup({
       local cmp = require("cmp")
       local luasnip = require("luasnip")
       -- vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
-      print(cmp.PreselectMode.None)
 
       cmp.setup({
         snippet = {
@@ -574,7 +579,7 @@ require("lazy").setup({
         },
         preselect = cmp.PreselectMode.None,
         completion = {
-          completeopt = "menu,menuone,noinsert,noselect",
+          completeopt = "menu,menuone,noinsert",
           -- autocomplete = {
           --   cmp.TriggerEvent.TextChanged,
           --   cmp.TriggerEvent.InsertEnter,
@@ -597,11 +602,25 @@ require("lazy").setup({
           ["<C-e>"] = cmp.mapping.abort(),
           -- ["<CR>"] = cmp.mapping.confirm({ select = false }),
           -- ["<Tab>"] = cmp.mapping(function(fallback)
+          ["<Left>"] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+          ["<Right>"] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(1) then
+              luasnip.jump(1)
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
           ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
+            elseif luasnip.expandable() then
+              luasnip.expand()
             else
               fallback()
             end
@@ -645,16 +664,17 @@ require("lazy").setup({
       validation_token = 0
 
       cmp.event:on("menu_opened", function()
-        _validation_token = validation_token
-        set_timeout(80, function()
-          if validation_token ~= _validation_token then
-            return
-          end
-          validation_token = validation_token + 1
-          cmp.select_next_item({
-            behavior = cmp.SelectBehavior.Select,
-          })
-        end)
+        validation_token = validation_token + 1
+        local _validation_token = validation_token
+        -- set_timeout(150, function()
+        --   if validation_token ~= _validation_token then
+        --     return
+        --   end
+        --   notify(validation_token)
+        --   cmp.select_next_item({
+        --     behavior = cmp.SelectBehavior.Select,
+        --   })
+        -- end)
       end)
     end,
   },
@@ -1347,24 +1367,71 @@ vim.opt.foldmethod = "indent"
 -- })
 
 vim.keymap.set({ "n", "i" }, "<C-b>", function()
-  local contexts = { "block", "for_statement" }
-  local get_node_type = function()
-    local ts_utils = require("nvim-treesitter.ts_utils")
-    local node = ts_utils.get_node_at_cursor()
+  -- local lsp_node_type_data = ""
+  local lsp_update_node_type = function(cb)
+    local bufnr = vim.api.nvim_get_current_buf()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
 
-    while node ~= nil do
-      for _, value in ipairs(contexts) do
-        if value == node:type() then
-          return value
-        end
+    local params = {
+      textDocument = { uri = "file://" .. bufname },
+      position = { line = cursor[1] - 1, character = cursor[2] },
+    }
+
+    vim.lsp.buf_request(bufnr, "textDocument/hover", params, function(err, result, _, _)
+      if err then
+        error(tostring(err))
       end
-      node = node:parent()
-    end
+
+      if not result then
+        -- lsp_node_type_data = ""
+        return
+      end
+      -- lsp_node_type_data = result
+      cb(result)
+    end)
   end
 
-  -- local ts_utils = require("nvim-treesitter.ts_utils")
-  -- local node = ts_utils.get_node_at_cursor()
-  notify(get_node_type())
-end, {})
+  local parse_lsp_node_type = function(lsp_node_type_data)
+    local contents = lsp_node_type_data.contents
 
-vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
+    if contents == nil then
+      return nil, nil
+    end
+
+    local lsp_node_type_markdown = contents[1].value
+
+    if lsp_node_type_markdown == nil then
+      return nil, nil
+    end
+
+    local doc = string.match(lsp_node_type_markdown, "```(.*)```")
+    local first_line = string.match(doc, "%w*\n([^\n]*)")
+    -- notify(first_line)
+
+    -- TODO implement various languages
+    -- https://github.com/roobert/node-type.nvim/blob/32c30958f6f49776855cc4ee25f0c5fcf4a5ea6e/lua/node-type/init.lua
+
+    -- typescript
+    -- local node_type = string.match(first_line, "%(([^)]*)%).*")
+    local type = string.match(first_line, ": (.*)")
+    notify(type)
+
+    -- local first_line_fingerprint = string.gsub(first_line, "%([^)]*%) ", "")
+    -- local first_line_fingerprint_components = vim.split(first_line_fingerprint, " ")
+    -- local node_kind
+    --
+    -- if first_line_fingerprint_components[2] == "->" then
+    --   node_kind = first_line_fingerprint_components[3]
+    -- else
+    --   node_kind = first_line_fingerprint_components[2]
+    --   if node_kind then
+    --     node_kind = string.match(node_kind, "(%w*)")
+    --   end
+    -- end
+    --
+    -- return node_kind, node_type
+  end
+
+  lsp_update_node_type(parse_lsp_node_type)
+end, {})
