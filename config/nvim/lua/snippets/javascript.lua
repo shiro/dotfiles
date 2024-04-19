@@ -41,6 +41,21 @@ console.log(<finish>)
         )
       ),
       -- }}}
+      -- fna - anonymous function with arguments
+      -- {{{
+      s(
+        "fna",
+        fmta(
+          [[
+(<args>) =>> {<finish>}
+]],
+          {
+            args = i(1),
+            finish = i(0),
+          }
+        )
+      ),
+      -- }}}
       -- fori - for-i loop
       -- {{{
       sc(
