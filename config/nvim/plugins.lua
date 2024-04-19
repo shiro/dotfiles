@@ -62,7 +62,55 @@ require("lazy").setup({
     end,
   },
   -- }}}
-
+  -- syntax tree navigation
+  -- {{{
+  -- {
+  --   "ziontee113/syntax-tree-surfer",
+  --   config = function()
+  --     local sts = require("syntax-tree-surfer")
+  --     sts.setup({})
+  --     --.go_to_top_node_and_execute_commands(false, { "normal! O", "normal! O", "startinsert" })<cr>
+  --     vim.keymap.set({ "n", "v" }, "<Down>", function()
+  --       -- sts.move("down")
+  --       sts.select()
+  --     end, { silent = true })
+  --     vim.keymap.set({ "n" }, "<Right>", function()
+  --       sts.surf("next")
+  --       vim.api.nvim_input("o<ESC>")
+  --     end, { silent = true })
+  --     vim.keymap.set({ "v" }, "<Right>", function()
+  --       sts.surf("parent", "visual")
+  --     end, { silent = true })
+  --   end,
+  -- },
+  {
+    dir = "~/.dotfiles/config/nvim/lua/treesitter-navigation",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {},
+    ft = { "html", "typescriptreact" },
+    config = function()
+      local tn = require("treesitter-navigation")
+      tn.setup({})
+      vim.keymap.set({ "n", "v" }, "<Down>", function()
+        --
+      end, { silent = true })
+      vim.keymap.set({ "n", "v" }, "<Up>", function()
+        tn.go("parent")
+      end)
+      vim.keymap.set({ "n", "v" }, "<Right>", function()
+        tn.go("next")
+      end)
+      vim.keymap.set({ "n", "v" }, "<Left>", function()
+        tn.go("prev")
+      end)
+      vim.keymap.set({ "n" }, "<Down>", function()
+        tn.select_current_node()
+      end)
+    end,
+  },
+  -- }}}
+  -- fancy notifications
+  -- {{{
   {
     "rcarriga/nvim-notify",
     event = "VeryLazy",
@@ -74,7 +122,7 @@ require("lazy").setup({
       })
     end,
   },
-
+  -- }}}
   -- highlight symbol under cursor {{{
   {
     "RRethy/vim-illuminate",
