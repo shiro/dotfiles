@@ -117,25 +117,6 @@ if(<cond>) {
         )
       ),
       --}}}
-      -- map - array map function
-      -- {{{
-      s(
-        ".map",
-        fmta(
-          [[
-.map((<item>) =>> {
-  <finish>
-  return <item_rep>;
-})
-]],
-          {
-            item = i(1),
-            item_rep = rep(1),
-            finish = i(0),
-          }
-        )
-      ),
-      --}}}
       -- cv - constant variable
       -- {{{
       sc(
