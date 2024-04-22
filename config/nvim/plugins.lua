@@ -87,7 +87,7 @@ require("lazy").setup({
     dir = "~/.dotfiles/config/nvim/lua/treesitter-navigation",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {},
-    ft = { "html", "typescriptreact" },
+    -- ft = { "html", "typescriptreact" },
     config = function()
       local tn = require("treesitter-navigation")
       tn.setup({})
