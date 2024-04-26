@@ -405,6 +405,7 @@ require("lazy").setup({
     dependencies = {
       "williamboman/mason.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
+      "hrsh7th/nvim-cmp",
     },
     -- event = "VeryLazy",
     init = function()
@@ -454,10 +455,77 @@ require("lazy").setup({
           "golines", -- golang format
         },
       })
-      local servers = { "jsonls", "tailwindcss", "eslint", "rust_analyzer", "taplo" }
+      -- capabilities.textDocument.completion.completionItem.snippetSupport = tru
 
-      for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup({})
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local servers = {
+        {
+          "jsonls",
+          {
+            filetypes = { "json", "jsonc" },
+            capabilities = capabilities,
+            settings = {
+              json = {
+                -- Schemas https://www.schemastore.org
+                schemas = {
+                  {
+                    fileMatch = { "package.json" },
+                    url = "https://json.schemastore.org/package.json",
+                  },
+                  {
+                    fileMatch = { "tsconfig*.json" },
+                    url = "https://json.schemastore.org/tsconfig.json",
+                  },
+                  {
+                    fileMatch = {
+                      ".prettierrc",
+                      ".prettierrc.json",
+                      "prettier.config.json",
+                    },
+                    url = "https://json.schemastore.org/prettierrc.json",
+                  },
+                  {
+                    fileMatch = { ".eslintrc", ".eslintrc.json" },
+                    url = "https://json.schemastore.org/eslintrc.json",
+                  },
+                  {
+                    fileMatch = { ".babelrc", ".babelrc.json", "babel.config.json" },
+                    url = "https://json.schemastore.org/babelrc.json",
+                  },
+                  {
+                    fileMatch = { "lerna.json" },
+                    url = "https://json.schemastore.org/lerna.json",
+                  },
+                  {
+                    fileMatch = { "now.json", "vercel.json" },
+                    url = "https://json.schemastore.org/now.json",
+                  },
+                  {
+                    fileMatch = {
+                      ".stylelintrc",
+                      ".stylelintrc.json",
+                      "stylelint.config.json",
+                    },
+                    url = "http://json.schemastore.org/stylelintrc.json",
+                  },
+                },
+              },
+            },
+          },
+        },
+        { "tailwindcss" },
+        { "eslint" },
+        { "rust_analyzer" },
+        { "taplo" },
+      }
+
+      for _, info in ipairs(servers) do
+        local lsp = info[1]
+        local options = {}
+        if info[2] ~= nil then
+          options = info[2]
+        end
+        lspconfig[lsp].setup(options)
       end
 
       lspconfig.gopls.setup({
