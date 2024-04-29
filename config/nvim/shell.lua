@@ -41,16 +41,23 @@ vim.keymap.set("n", "<M-i>", "<CMD>wincmd w<CR>", { silent = true })
 
 -- auto indent on insert if line is empty
 vim.keymap.set("n", "i", function()
-	return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
+  return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
 end, { expr = true, noremap = true })
 
 -- save/restore undo history to a temporary file
 local data_dir = os.getenv("XDG_DATA_HOME")
 if data_dir ~= nil then
-	local undo_dir = data_dir .. "/nvim/undo"
-	if vim.fn.isdirectory(undo_dir) == 0 then
-		os.execute('mkdir -p "' .. undo_dir .. '"')
-	end
-	vim.opt.undodir = undo_dir
-	vim.opt.undofile = true
+  local undo_dir = data_dir .. "/nvim/undo"
+  if vim.fn.isdirectory(undo_dir) == 0 then
+    os.execute('mkdir -p "' .. undo_dir .. '"')
+  end
+  vim.opt.undodir = undo_dir
+  vim.opt.undofile = true
 end
+
+-- yank inner words shouldn't move the cursor
+vim.keymap.set("n", "yiw", function()
+  local pos = vim.api.nvim_win_get_cursor(0)
+  vim.cmd("normal! m'yiw")
+  vim.api.nvim_win_set_cursor(0, pos)
+end, { silent = true })
