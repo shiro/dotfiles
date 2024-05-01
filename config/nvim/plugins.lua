@@ -1242,14 +1242,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
   group = "default",
-  pattern = "rust",
-  callback = function()
-    vim.api.nvim_command("call arpeggio#map('i', '', 0, 'al', 'println!(\"\");<left><left><left>')")
-  end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = "default",
   pattern = { "javascript", "typescript", "typescriptreact" },
   callback = function()
     vim.api.nvim_command("call arpeggio#map('n', '', 0, 'al', 'aconsole.log();<left><left>')")
