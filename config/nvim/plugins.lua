@@ -189,6 +189,8 @@ require("lazy").setup({
       -- end, {})
       -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mt', '<cmd>silent ArpeggioReplaceTag<cr>')")
 
+      vim.api.nvim_command("Arpeggio nmap kl yiw")
+
       registerMapping = function(name, mapping, target)
         vim.api.nvim_create_user_command("ArpeggioLeap" .. name, function()
           vim.fn.feedkeys("cim" .. target)

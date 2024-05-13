@@ -14,6 +14,23 @@ local M = {}
 
 M.register = function()
   ls.add_snippets("rust", {
+    -- info - print info
+    -- {{{
+    s(
+      "info",
+      fmta(
+        [[
+info!("<text> {:?}", <value>);<finish>
+]],
+        {
+          text = i(1),
+          value = i(2, "()"),
+          finish = i(0),
+        }
+      )
+    ),
+    -- }}}
+    -- cl - console log
     s(
       "cl",
       fmta(
@@ -27,6 +44,7 @@ println!("<ident>: {:?}", <ident_rep>);<finish>
         }
       )
     ),
+    -- }}}
   })
 end
 
