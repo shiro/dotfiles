@@ -12,8 +12,8 @@ fi
 #mpc repeat off
 
 for relpath in $@; do
+  mpc clear
   filepath="$(realpath $relpath)"
   mpc add "$filepath"
 done
-mpc next
-#mpc play
+mpc play

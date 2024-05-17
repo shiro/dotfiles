@@ -2,7 +2,20 @@
 
 export MPD_HOST="$HOME/.config/mpd/socket"
 
-case "$1" in
+command="$1"
+shift
+
+has-track() {
+  [[ `mpc current` != "" ]]
+}
+
+reload-library() {
+  mpc clear
+  mpc add /
+  mpc shuffle
+}
+
+case "$command" in
   play)
     mpc play
     ;;
@@ -13,16 +26,22 @@ case "$1" in
     mpc toggle
     ;;
   next)
-    mpc next
+    mpc next || (reload-library && mpc play)
     ;;
   prev)
-    mpc prev
+    mpc prev || (reload-library && mpc play)
     ;;
   forward)
     mpc seek '+00:00:05'
     ;;
   backward)
     mpc seek '-00:00:05'
+    ;;
+  volume-up)
+    mpc volume '+5'
+    ;;
+  volume-down)
+    mpc volume '-5'
     ;;
   library)
     selected=`ls ~/Music | shuf | wofi -d -i`
