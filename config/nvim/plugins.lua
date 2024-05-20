@@ -988,7 +988,7 @@ require("lazy").setup({
         "--cmd=set preview_directories false",
         "--cmd=set column_ratios 2,5,0",
         "--cmd=set preview_files false",
-        "--cmd=set preview_images truefalse",
+        "--cmd=set preview_images false",
         "--cmd=set padding_right false",
         "--cmd=set collapse_preview true",
       }
