@@ -5,10 +5,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hyprland.url = "github:hyprwm/Hyprland";
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # home-manager = {
+    #   url = "github:nix-community/home-manager";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -18,10 +18,10 @@
     in
     {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; };
+          specialArgs = {inherit inputs;};
           modules = [ 
             ./configuration.nix
-            inputs.home-manager.nixosModules.default
+            # inputs.home-manager.nixosModules.default
           ];
         };
 

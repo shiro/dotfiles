@@ -1,38 +1,15 @@
 { config, lib, pkgs, inputs, ... }:
 
-let
-  tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
-  session = "${pkgs.hyprland}/bin/Hyprland";
-  username = "shiro";
-in
 {
   imports =
     [ 
       ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.default
+      # inputs.home-manager.nixosModules.default
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-
-  virtualisation.docker.enable = true;
-  # services.getty.autologinUser = "shiro";
-  services.greetd = {
-    enable = true;
-    settings = {
-      initial_session = {
-        command = "${session}";
-        user = "${username}";
-      };
-      default_session = {
-        command = "${tuigreet} --greeting 'Welcome to NixOS!' --asterisks --remember --remember-user-session --time -cmd ${session}";
-        user = "greeter";
-      };
-    };
-  };
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -47,11 +24,12 @@ in
   time.timeZone = "Asia/Tokyo";
 
   # Select internationalisation properties.
-  console = {
-    # font = "Lat2-Terminus16";
-    # keyMap = "us";
-    useXkbConfig = true; # use xkb.options in tty.
-  };
+  # i18n.defaultLocale = "en_US.UTF-8";
+  # console = {
+  #   font = "Lat2-Terminus16";
+  #   keyMap = "us";
+  #   useXkbConfig = true; # use xkb.options in tty.
+  # };
 
   
 
@@ -73,8 +51,6 @@ in
     vimAlias = true;
   };
   programs.git.enable = true;
-
-  # programs.xwayland.enable = true;
   programs.hyprland = {
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     enable = true;
@@ -84,133 +60,47 @@ in
     enable = true;
   };
 
-  # make electron use wayland
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
-
-  services.xserver.enable = true;
-  services.xserver.exportConfiguration = true;
-  # services.xserver.xkb = {
-  #   layout = "rabbit";
-  #   # xkbVariant = "workman,";
-  #   # xkbOptions = "grp:win_space_toggle";
-  # };
-  # 
-  # services.xserver.xkb.extraLayouts.rabbit = {
-  #   description = "US layout (rabbit)";
-  #   languages   = [ "eng" ];
-  #   symbolsFile = /home/shiro/.xkb/symbols/rabbit;
-  # };
-
-  # i18n.inputMethod = {
-  #   enabled = "fcitx5";
-  #
-  #   fcitx5.waylandFrontend = true;
-  #
-  #   fcitx5.addons = with pkgs; [
-  #       fcitx5-mozc
-  #       # fcitx5-lua
-  #       fcitx5-gtk
-  #
-  #       fcitx5-configtool
-  #       fcitx5-with-addons
-  #   ];
-  # };
-  i18n.defaultLocale = "en_US.UTF-8";
-  # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
-
-
   users.defaultUserShell = pkgs.zsh;
 
   users.users.shiro = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" ];
     packages = with pkgs; [
-      ashuffle
-      # bandwitch
-      betterdiscordctl
-      borgbackup
-      darktable
-      discord
-      # fcitx5-config-qt
-      # fcitx5-configtool
-      # fcitx5
-      # fcitx5-lua
-      # fcitx5-mozc
-      # figma-linux
       firefox
-      irssi
-      keepassxc
-      mpc-cli
-      mpv
-      nsxiv
-      xwaylandvideobridge
-      xdragon
-      nodejs_21
-      rustup
-      cargo
-      yarn
-      jq
-      bottles
-      # yuzu-mainline
-      xournalpp
-
-      xorg.xeyes
+      darktable
+      figma-linux
+      borgbackup
+      discord
+      betterdiscordctl
     ];
   };
 
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      "shiro" = import ./home.nix;
-    };
-  };
+  # home-manager = {
+  #   extraSpecialArgs = {inherit inputs;};
+  #   users = {
+  #     "shiro" = import ./home.nix;
+  #   };
+  # };
 
   environment.systemPackages = with pkgs; [
+    alacritty
+    cliphist
     fzf
     gcc
     htop-vim
     ranger
     silver-searcher
-    ripgrep
+    # spice-vdagent
+    python3
+    mako
     tmux
     wget
-    rsync
-    xclip
-    diff-so-fancy
-    highlight
-    # spice-vdagent
-    (let map2 = python311.pkgs.buildPythonPackage rec {
-      version = "2.0.13";
-      pname = "map2";
-      format = "wheel";
-      src = fetchPypi {
-        inherit pname version format;
-        sha256 = "51b048efdb8810e812ee5c62b9cc5414d1eb6dbf9bb835b1a0ca2b9fe8e0c22f";
-        dist = "cp311";
-        python = "cp311";
-        abi = "cp311";
-        platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-      };
-    };
-    in python311.withPackages (python-pkgs: [
-      map2
-      # python-pkgs.pandas
-      python-pkgs.requests
-    ]))
-
-    cliphist
-    alacritty
-    hyprpaper
     zathura
+    hyprpaper
+    rsync
     ueberzugpp
     wl-clipboard
-    mako
-
-    xorg.xkbcomp
-    xorg.xkbutils
-    libxkbcommon
-    xorg.setxkbmap
+    xclip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
