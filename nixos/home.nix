@@ -1,28 +1,31 @@
 { config, pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
   home.username = "shiro";
   home.homeDirectory = "/home/shiro";
 
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
-  #
-  # You should not change this value, even if you update Home Manager. If you do
-  # want to update the value, then make sure to first check the Home Manager
-  # release notes.
   home.stateVersion = "23.11";
 
-  home.packages = [
-    (pkgs.python311.withPackages (ppkgs: [
-      # ppkgs.map2
-    ]))
 
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+
+    # fcitx5.waylandFrontend = true;
+
+    fcitx5.addons = with pkgs; [
+        fcitx5-mozc
+        # fcitx5-lua
+        fcitx5-gtk
+
+        fcitx5-configtool
+        # fcitx5-with-addons
+    ];
+  };
+
+  home.packages = [
+    # (pkgs.python311.withPackages (ppkgs: [
+      # ppkgs.map2
+    # ]))
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the

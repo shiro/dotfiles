@@ -1,16 +1,39 @@
 { config, lib, pkgs, inputs, ... }:
 
+let
+  tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
+  hyprland_pkg = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  hyprland_cmd = "${hyprland_pkg}/bin/Hyprland";
+  username = "shiro";
+in
 {
   imports =
     [ 
       ./hardware-configuration.nix
-      # ./map2.nix
-      # inputs.home-manager.nixosModules.default
+      inputs.home-manager.nixosModules.default
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+
+  virtualisation.docker.enable = true;
+  # services.getty.autologinUser = "shiro";
+  services.greetd = {
+    enable = true;
+    settings = {
+      initial_session = {
+        command = "${hyprland_cmd}";
+        user = "${username}";
+      };
+      default_session = {
+        command = "${tuigreet} --greeting 'Welcome to NixOS!' --asterisks --remember --remember-user-session --time -cmd ${hyprland_cmd}";
+        user = "greeter";
+      };
+    };
+  };
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -25,12 +48,11 @@
   time.timeZone = "Asia/Tokyo";
 
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
+  console = {
+    # font = "Lat2-Terminus16";
+    # keyMap = "us";
+    useXkbConfig = true; # use xkb.options in tty.
+  };
 
   
 
@@ -52,8 +74,10 @@
     vimAlias = true;
   };
   programs.git.enable = true;
+
+  # programs.xwayland.enable = true;
   programs.hyprland = {
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = hyprland_pkg;
     enable = true;
     xwayland.enable = true;
   };
@@ -61,27 +85,89 @@
     enable = true;
   };
 
+  # make electron use wayland
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+
+  services.xserver.enable = true;
+  services.xserver.exportConfiguration = true;
+  # services.xserver.xkb = {
+  #   layout = "rabbit";
+  #   # xkbVariant = "workman,";
+  #   # xkbOptions = "grp:win_space_toggle";
+  # };
+  # 
+  # services.xserver.xkb.extraLayouts.rabbit = {
+  #   description = "US layout (rabbit)";
+  #   languages   = [ "eng" ];
+  #   symbolsFile = /home/shiro/.xkb/symbols/rabbit;
+  # };
+
+  # i18n.inputMethod = {
+  #   enabled = "fcitx5";
+  #
+  #   fcitx5.waylandFrontend = true;
+  #
+  #   fcitx5.addons = with pkgs; [
+  #       fcitx5-mozc
+  #       # fcitx5-lua
+  #       fcitx5-gtk
+  #
+  #       fcitx5-configtool
+  #       fcitx5-with-addons
+  #   ];
+  # };
+  i18n.defaultLocale = "en_US.UTF-8";
+  # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
+
+
   users.defaultUserShell = pkgs.zsh;
 
   users.users.shiro = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "docker" ];
     packages = with pkgs; [
-      firefox
-      darktable
-      figma-linux
-      borgbackup
-      discord
+      ashuffle
+      # bandwitch
       betterdiscordctl
+      borgbackup
+      darktable
+      discord
+      # fcitx5-config-qt
+      # fcitx5-configtool
+      # fcitx5
+      # fcitx5-lua
+      # fcitx5-mozc
+      # figma-linux
+      firefox
+      irssi
+      keepassxc
+      mpc-cli
+      mpv
+      nsxiv
+      xwaylandvideobridge
+      xdragon
+      nodejs_22
+      go
+      rustup
+      cargo
+      yarn
+      jq
+      bottles
+      unzip
+      # yuzu-mainline
+      xournalpp
+
+      xorg.xeyes
     ];
   };
 
-  # home-manager = {
-  #   extraSpecialArgs = {inherit inputs;};
-  #   users = {
-  #     "shiro" = import ./home.nix;
-  #   };
-  # };
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      "shiro" = import ./home.nix;
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     alacritty
@@ -121,6 +207,13 @@
     wl-clipboard
     xclip
     diff-so-fancy
+    highlight
+
+    xorg.xkbcomp
+    xorg.xkbutils
+    libxkbcommon
+    xorg.setxkbmap
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
