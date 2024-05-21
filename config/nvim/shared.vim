@@ -64,6 +64,10 @@ inoremap <C-q> <C-o>:qa!<CR>
 nnoremap <silent> <C-o> :only<cr>
 nnoremap <leader>= <C-w>=
 
+" tab navigation
+nnoremap <leader>i :tabp<CR>
+nnoremap <leader>o :tabn<CR>
+
 " copy path to current buffer
 nmap <silent> <leader>yy :let @+ = expand("%")<cr>
 
