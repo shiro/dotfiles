@@ -244,7 +244,7 @@ require("lazy").setup({
     init = function()
       vim.opt.diffopt = vim.opt.diffopt + "vertical"
 
-      -- vim.keymap.set("n", "<leader>gd", ":Gdiff<CR>", {})
+      vim.keymap.set("n", "<leader>gd", ":Gdiff<CR>", {})
       -- nnoremap <leader>ga :Git add %:p<CR><CR>
       -- nnoremap <leader>gs :Gstatus<CR>
       -- nnoremap <leader>gc :Gcommit -v -q<CR>
@@ -800,15 +800,15 @@ require("lazy").setup({
   {
     "numToStr/Comment.nvim",
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    lazy = true,
+    -- lazy = true,
     init = function()
       -- avoid comment plugin warning
       vim.g.skip_ts_context_commentstring_module = true
     end,
-    keys = {
-      { "<C-_>", "", mode = "n" },
-      { "<C-_>", "", mode = "x" },
-    },
+    -- keys = {
+    --   { "<C-_>", "", mode = "n" },
+    --   { "<C-_>", "", mode = "x" },
+    -- },
     config = function()
       require("ts_context_commentstring").setup({ enable_autocmd = false })
       require("Comment").setup({
@@ -966,7 +966,7 @@ require("lazy").setup({
   -- file manager {{{
   {
     "kevinhwang91/rnvimr",
-    keys = { { "<leader>l", "" } },
+    -- keys = { { "<leader>l", "" } },
     init = function()
       vim.g.rnvimr_enable_ex = 1
       vim.g.rnvimr_enable_picker = 1
@@ -1085,6 +1085,22 @@ require("lazy").setup({
     end,
   },
   -- }}}
+
+  {
+    "pwntester/octo.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("octo").setup({
+        suppress_missing_scope = {
+          projects_v2 = true,
+        },
+      })
+    end,
+  },
 })
 
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
@@ -1290,6 +1306,7 @@ vim.api.nvim_create_autocmd("FileType", {
       end
       vim.api.nvim_win_set_cursor(winid, { new_idx, 0 })
     end, { silent = true, noremap = true, buffer = 0 })
+    vim.keymap.set("n", "<CR>", "<CR>:cclose<CR>", { silent = true, noremap = true, buffer = 0 })
   end,
 })
 
