@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 export MPD_HOST="$HOME/.config/mpd/socket"
 

@@ -453,7 +453,7 @@ require("lazy").setup({
           "nil", -- nix
           "gopls", -- golang
           "gofumpt", -- golang format
-          "goimports-reviser", -- golang format
+          -- "goimports-reviser", -- golang format
           "golines", -- golang format
         },
       })

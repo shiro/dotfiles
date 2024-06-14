@@ -4,5 +4,6 @@ __pycache__/
 .vim/
 
 config/zsh/*.zwc
+config/zsh/.zcompdump
 
 idea/colors/_@user_*
