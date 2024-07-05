@@ -239,11 +239,12 @@ in
       xwaylandvideobridge
       xdragon
       nodejs_22
+      nodejs_22.pkgs.pnpm
+      yarn
       go
       goimports-reviser
       rustup
       cargo
-      yarn
       jq
       unzip
       dex

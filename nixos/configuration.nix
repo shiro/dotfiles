@@ -152,6 +152,7 @@ in
       rustup
       cargo
       yarn
+      pnpm
       jq
       bottles
       unzip
