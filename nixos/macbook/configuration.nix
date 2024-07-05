@@ -320,6 +320,7 @@ in
     wofi
     rclone
     libnotify
+    hyprcursor
 
     xorg.xkbcomp
     xorg.xkbutils
