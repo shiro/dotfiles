@@ -123,10 +123,7 @@ in
 
   sound.enable = true;
   hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-    };
+    graphics.enable = true;
     asahi = {
       peripheralFirmwareDirectory = /etc/nixos/firmware;
       useExperimentalGPUDriver = true;
