@@ -67,6 +67,8 @@ in
   # to enable docker emulation on m1, use:
   # $ docker run --privileged --rm tonistiigi/binfmt --install all
 
+  virtualisation.docker.liveRestore = false;
+
   #boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
 
   virtualisation.docker.enable = true;
@@ -274,6 +276,7 @@ in
     htop-vim
     ranger
     silver-searcher
+    brightnessctl
 
     libinput
     evtest
@@ -338,6 +341,10 @@ in
 
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
+  services.openssh.settings.X11Forwarding = true;
+  services.openssh.forwardX11 = true;
+  programs.ssh.forwardX11 = true;
+  programs.ssh.setXAuthLocation = true;
 
   security.rtkit.enable = true;
 
@@ -392,24 +399,29 @@ in
   # hardware.pulseaudio.extraConfig = "load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1";
   # systemd.services.mpd.serviceConfig.SupplementaryGroups = [ "pipewire" ];
 
+  systemd.user.services.waypipe = {
+    enable = true;
+    after = [ "network.target" "sound.target" ];
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      Environment = "PATH=/home/shiro/bin";
+      ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
+      Type = "notify";
+# ExecStartPre = ''
+# ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
+    };
+  };
+
   systemd.user.services.mpd = {
     enable = true;
-    # Unit = {
-      after = [ "network.target" "sound.target" ];
-      # Description = "Music Player Daemon";
-    # };
-
-    # Install = {
-      wantedBy = [ "default.target" ];
-    # };
-
-    # Service = {
-      serviceConfig = {
-        Environment = "PATH=/home/shiro/bin";
-        ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
-        Type = "notify";
+    after = [ "network.target" "sound.target" ];
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      Environment = "PATH=/home/shiro/bin";
+      ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
+      Type = "notify";
       # ExecStartPre = ''
-        # ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
+      # ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
     };
   };
 
