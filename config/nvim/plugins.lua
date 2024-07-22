@@ -234,9 +234,9 @@ require("lazy").setup({
   },
   -- }}}
   -- diff {{{
-  {
-    "sindrets/diffview.nvim",
-  },
+  -- {
+  --   "sindrets/diffview.nvim",
+  -- },
   -- }}}
   -- git {{{
   {
