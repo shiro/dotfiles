@@ -233,7 +233,11 @@ require("lazy").setup({
     end,
   },
   -- }}}
-
+  -- diff {{{
+  {
+    "sindrets/diffview.nvim",
+  },
+  -- }}}
   -- git {{{
   {
     "tpope/vim-fugitive",
