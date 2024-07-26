@@ -123,7 +123,6 @@ in
   nixpkgs.config.allowUnfree = true;
 
 
-  sound.enable = true;
   hardware = {
     graphics.enable = true;
     asahi = {
