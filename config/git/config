@@ -19,6 +19,7 @@
 	tool = fugitive
 [push]
 	default = current
+	autoSetupRemote = true
 [rerere]
 	enabled = true
 	autoupdate = true
