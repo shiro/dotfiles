@@ -25,6 +25,8 @@ export WINEESYNC=1
 [ -f "$LOCAL_CONFIG_DIR/zsh/zshenv" ] && source "$LOCAL_CONFIG_DIR/zsh/zshenv"
 
 
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
 # OPTIONAL settings
 # enable these in the local zshenv file
 
