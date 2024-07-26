@@ -1105,7 +1105,7 @@ require("lazy").setup({
       })
     end,
   },
-})
+}, { rocks = { enabled = false } })
 
 local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
 
