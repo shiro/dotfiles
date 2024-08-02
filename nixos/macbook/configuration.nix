@@ -123,6 +123,7 @@ in
   nixpkgs.config.allowUnfree = true;
 
 
+  # sound.enable = true;
   hardware = {
     graphics.enable = true;
     asahi = {
@@ -255,6 +256,11 @@ in
       gh
       awscli2
       libreoffice-qt6-fresh
+
+      # screenshot
+      grim
+      slurp
+      hyprpicker
 
       qemu
     ];
@@ -454,6 +460,8 @@ in
     enable = true;
     settings.General.EnableNetworkConfiguration = true;
   };
+
+  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
   networking.extraHosts =
     ''
