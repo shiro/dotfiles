@@ -25,3 +25,5 @@
 	autoupdate = true
 [init]
 	defaultBranch = master
+[safe]
+	directory = *
