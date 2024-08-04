@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     nixpkgs-rofi-blocks.url = "github:edenkras/nixpkgs";
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     apple-silicon = {
       url = "github:tpwrules/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";

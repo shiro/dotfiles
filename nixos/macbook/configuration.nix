@@ -325,7 +325,11 @@ in
     wofi
     rclone
     libnotify
+
+    # cursor
     hyprcursor
+    inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
+    nwg-look
 
     xorg.xkbcomp
     xorg.xkbutils
