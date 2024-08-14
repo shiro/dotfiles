@@ -226,8 +226,7 @@ exe "hi StatusLineNC gui=None guifg=".ore.' guibg=None'
 
 hi link LeapBackdrop Comment
 exe "hi LeapMatch gui=bold guifg=".white
-exe "hi LeapLabelPrimary gui=bold guifg=".darkGreen
-exe "hi LeapLabelSecondary gui=bold guifg=".orange
+exe "hi LeapLabel gui=bold guifg=".orange
 
 " JSON
 

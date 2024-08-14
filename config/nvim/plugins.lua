@@ -343,6 +343,7 @@ require("lazy").setup({
       -- leap.opts.case_sensitive = true
       leap.opts.safe_labels = "sfnut"
       leap.opts.labels = "abcdefghijklmnopqrstuvwxyz"
+      -- leap.opts.highlight_unlabeled_phase_one_targets = true
 
       vim.keymap.set("n", "s", "<Plug>(leap-forward-to)")
       vim.keymap.set("n", "S", "<Plug>(leap-backward-to)")
@@ -450,7 +451,7 @@ require("lazy").setup({
           "typescript-language-server", -- TS
           "prettierd", -- JS/TS format - prettier
           "eslint-lsp", -- JS/TS lint
-          "rust-analyzer", -- rust
+          -- "rust-analyzer", -- rust
           "taplo", -- toml
           "tailwindcss-language-server", -- tailwind
           "json-lsp", -- json
@@ -1078,14 +1079,6 @@ require("lazy").setup({
     event = "VeryLazy",
     config = function()
       require("colorizer").setup({ user_default_options = { mode = "virtualtext", names = false } })
-      -- require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
-      --
-      -- vim.api.nvim_create_autocmd("BufEnter", {
-      -- 	group = "default",
-      -- 	callback = function()
-      -- 		require("colorizer").attach_to_buffer(0, { mode = "virtualtext", names = false })
-      -- 	end,
-      -- })
     end,
   },
   -- }}}
