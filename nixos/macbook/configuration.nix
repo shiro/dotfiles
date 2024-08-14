@@ -12,12 +12,12 @@ let
   rofi_custom = pkgs.rofi-wayland.override { plugins = [ rofi-blocks ]; };
 
   python_custom = let map2 = pkgs.python312.pkgs.buildPythonPackage rec {
-    version = "2.0.19";
+    version = "2.1.1";
     pname = "map2";
     format = "wheel";
     src = pkgs.fetchPypi {
       inherit pname version format;
-      sha256 = "662a9dcb53a89c0db2c7aa82a3ea0c7a7fc30470c18159edaad632c7f8b89994";
+      sha256 = "sha256-mIIkaltbZtJ3fEIukVAqAGi7Tc/Wb6bkCq0HetW3xNQ=";
       dist = "cp312";
       python = "cp312";
       abi = "cp312";
@@ -123,7 +123,7 @@ in
   nixpkgs.config.allowUnfree = true;
 
 
-  # sound.enable = true;
+  sound.enable = true;
   hardware = {
     graphics.enable = true;
     asahi = {
@@ -157,7 +157,12 @@ in
     trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
 
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    # initExtra = ''
+      # export NIX_LD=$(nix eval --impure --raw --expr 'let pkgs = import <nixpkgs> {}; NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"; in NIX_LD')
+    # '';
+  };
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -243,6 +248,7 @@ in
       go
       goimports-reviser
       rustup
+      rust-analyzer
       cargo
       jq
       unzip
@@ -325,6 +331,7 @@ in
     wofi
     rclone
     libnotify
+    direnv
 
     # cursor
     hyprcursor
@@ -347,6 +354,8 @@ in
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  services.lorri.enable = true;
 
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
