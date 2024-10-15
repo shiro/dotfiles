@@ -1259,7 +1259,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = "default",
   pattern = { "javascript", "typescript", "typescriptreact" },
   callback = function()
-    vim.api.nvim_command("call arpeggio#map('n', '', 0, 'al', 'aconsole.log();<left><left>')")
+    -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'al', 'aconsole.log();<left><left>')")
     -- make import lazy
     vim.keymap.set(
       "n",

@@ -111,7 +111,7 @@ in
     partOf = [ "graphical-session.target" ];
     path = [ pkgs.zsh hyprland_pkg pkgs.evtest pkgs.procps pkgs.killall ];
     serviceConfig = {
-      ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/mappings/main/main.py'';
+      ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/mappings/main/macbook.py'';
       Restart = "always";
       RestartSec = "5s";
      };
@@ -262,6 +262,7 @@ in
       gh
       awscli2
       libreoffice-qt6-fresh
+      xorg.xev
 
       # screenshot
       grim
@@ -332,6 +333,7 @@ in
     rclone
     libnotify
     direnv
+    wf-recorder
 
     # cursor
     hyprcursor
