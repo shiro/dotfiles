@@ -181,8 +181,17 @@ in
 
 
   # services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;
-  programs.direnv.enable = true;
+  # services.spice-vdagentd.enable = true;
+
+  services.ollama = {
+    enable = true;
+    # acceleration = "cuda";
+  };
+
+  # programs.direnv = {
+  #   enable = true;
+  #   silent = true;
+  # };
 
   nix.settings = {
     substituters = ["https://hyprland.cachix.org"];
@@ -309,6 +318,7 @@ in
       slurp
       hyprpicker
       chromium
+      cached-nix-shell
 
       qemu
     ];
@@ -379,7 +389,6 @@ in
     wofi
     rclone
     libnotify
-    direnv
     wf-recorder
 
     # cursor
@@ -393,7 +402,7 @@ in
     libxkbcommon
     xorg.setxkbmap
 
-    pkg-config
+    sox # needed for gp.nvim (AI)
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

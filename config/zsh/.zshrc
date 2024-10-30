@@ -55,6 +55,21 @@ autoload -U zranger
 [ -z $ZSH_NO_COMPILE ] && zit-lo "zit" "extras/compile-zsh-files.zsh"
 
 
+if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
+  typeset -A locations
+  while IFS= read -r line; do
+    locations["$line"]=1
+  done < "$HOME/.local/config/nix/nix-shell-locations"
+
+  autoload -U add-zsh-hook
+  __auto_nix_shell() {
+    if [ -n "$locations["`pwd`"]" ]; then
+      cached-nix-shell --command zsh
+    fi
+  }
+  add-zsh-hook chpwd __auto_nix_shell
+fi
+
 
 if [[ $1 == eval ]]
 then
