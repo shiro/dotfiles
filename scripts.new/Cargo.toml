@@ -1,0 +1,24 @@
+[package]
+name = "scripts"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+indoc = "2"
+clap = { version = "4.5", features = ["cargo"] }
+subprocess = "0.2.9"
+chrono = "0.4.38"
+tap = "1.0"
+walkdir = "2.5"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[[bin]]
+path = "./src/nix/s.rs"
+name = "s"

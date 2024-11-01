@@ -9,10 +9,10 @@ SOURCES=(
 
 linkFiles(){
   if [ -d "$1" ]; then
-	  echo "# from: $1"
+    echo "# from: $1"
   else
-	  echo "# skip $1: not found"
-	  return
+    echo "# skip $1: not found"
+    return
   fi
 
   local files=(`find "$1" -type f`)

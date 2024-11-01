@@ -7,3 +7,9 @@ config/zsh/*.zwc
 config/zsh/.zcompdump
 
 idea/colors/_@user_*
+
+
+# Added by cargo
+
+/target
+scripts.new/target

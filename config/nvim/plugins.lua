@@ -612,6 +612,49 @@ require("lazy").setup({
       icons = { enable = false },
     },
   },
+  {
+    "robitx/gp.nvim",
+    config = function()
+      local conf = {
+        providers = {
+          openai = {
+            disable = true,
+            endpoint = "https://api.openai.com/v1/chat/completions",
+            -- secret = os.getenv("OPENAI_API_KEY"),
+          },
+          ollama = {
+            endpoint = "http://localhost:11434/v1/chat/completions",
+            -- secret = "dummy_secret",
+          },
+        },
+        agents = {
+          {
+            provider = "ollama",
+            -- name = "ChatOllamaLlama3.1-8B",
+            name = "ChatOllamaLlama3",
+            chat = true,
+            -- command = false,
+            command = true,
+            -- string with model name or table with model name and parameters
+            model = {
+              -- model = "llama3.1",
+              model = "llama3",
+              temperature = 0.6,
+              top_p = 1,
+              min_p = 0.05,
+            },
+            -- system prompt (use this to specify the persona/role of the AI)
+            -- system_prompt = "You are a general AI assistant.",
+            system_prompt = "You are a code generator. Output only code.",
+          },
+        },
+        -- default_command_agent = "ollama",
+        -- default_chat_agent = "ollama",
+      }
+      require("gp").setup(conf)
+      -- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
+    end,
+  },
   -- formatting
   {
     "stevearc/conform.nvim",

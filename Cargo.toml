@@ -1,0 +1,10 @@
+[package]
+name = "dotfiles"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+indoc = "2"
+scripts = { path = "./scripts.new" }
+current_platform = "0.2"
