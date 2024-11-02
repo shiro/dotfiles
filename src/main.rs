@@ -23,7 +23,7 @@ fn main() -> Result<()> {
     // link scripts
     let cwd = std::env::current_dir()?;
 
-    std::env::set_current_dir(cwd.join("scripts.new"))?;
+    std::env::set_current_dir(cwd.join("scripts"))?;
 
     // use Zfmt-debug=shallow for minimal gains
     std::env::set_var("RUSTFLAGS", "-Zlocation-detail=none");
@@ -44,11 +44,11 @@ fn main() -> Result<()> {
 
     use walkdir::WalkDir;
     let dst_root = cwd
-        .join("scripts.new/target/")
+        .join("scripts/target/")
         .join(current_platform::CURRENT_PLATFORM)
         .join("release");
 
-    for f in WalkDir::new(cwd.join("scripts.new/src"))
+    for f in WalkDir::new(cwd.join("scripts/src"))
         .into_iter()
         .filter_map(|p| p.ok())
     {
@@ -64,7 +64,7 @@ fn main() -> Result<()> {
 
             let _ = symlink(&p, &target);
 
-            let relpath = p.strip_prefix(&cwd.join("scripts.new/src"))?;
+            let relpath = p.strip_prefix(&cwd.join("scripts/src"))?;
             println!("[link]  {}", relpath.to_string_lossy());
             continue;
         }
@@ -72,17 +72,22 @@ fn main() -> Result<()> {
         if p.is_dir() {
             continue;
         }
-        let p = p.strip_prefix(&cwd.join("scripts.new/src"))?;
+        let p = p.strip_prefix(&cwd.join("scripts/src"))?;
         if p.starts_with("shared/") || p.file_name().unwrap() == "lib.rs" {
             continue;
         }
         let name = p.file_stem().unwrap();
 
+        let binary_path = cwd.join(&dst_root).join(name);
+        let target_path = Path::new(&home).join("bin").join(name);
+
+        // reduce size further
+        let _ = Exec::cmd("upx")
+            .args(&["--best", "--lzma", &binary_path.to_string_lossy()])
+            .success_output();
+
         println!("[build] {}", p.to_string_lossy());
-        std::fs::copy(
-            cwd.join(&dst_root).join(name),
-            Path::new(&home).join("bin").join(name),
-        )?;
+        std::fs::copy(&binary_path, &target_path)?;
     }
 
     println!("Done. Reload your terminal.");

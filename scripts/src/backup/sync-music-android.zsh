@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 adbfs ~/tmp/mnt > /dev/null 2>&1
 

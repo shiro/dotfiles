@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 anyhow = "1"
 indoc = "2"
-scripts = { path = "./scripts.new" }
+scripts = { path = "./scripts" }
 current_platform = "0.2"

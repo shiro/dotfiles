@@ -11,5 +11,6 @@ idea/colors/_@user_*
 
 # Added by cargo
 
-/target
-scripts.new/target
+# rust build
+target
+scripts/target

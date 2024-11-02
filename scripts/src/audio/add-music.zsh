@@ -1,6 +1,4 @@
-#!/bin/zsh
-
-MUSIC_LIB_DIR="$HOME/Music"
+#!/usr/bin/env zsh
 
 if [ $# -lt 1 ]; then
   echo "expected at least one file"
