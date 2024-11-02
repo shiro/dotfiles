@@ -293,6 +293,7 @@ in
       xdragon
       nodejs_22
       nodejs_22.pkgs.pnpm
+      hub
       yarn
       go
       goimports-reviser
@@ -494,6 +495,9 @@ in
       options = "--delete-older-than 10d";
     };
   };
+
+  # laptop battery optimizations
+  services.tlp.enable = true;
 
   systemd.user.services.mpd = {
     enable = true;

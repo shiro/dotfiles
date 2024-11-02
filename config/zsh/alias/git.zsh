@@ -1,5 +1,5 @@
 # use hub instead of git, as it can do everything git can do, and more!
-if command_exists 'hub'; then
+if command -v hub; then
   alias git='hub'
 fi
 
