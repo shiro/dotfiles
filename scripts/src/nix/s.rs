@@ -73,7 +73,6 @@ fn main() -> Result<()> {
             if msg.is_empty() {
                 Err(anyhow!("message is required"))?;
             }
-            println!("NIXOS_LABEL {}", format!("{now} {msg}").replace(" ", "_"));
             std::env::set_var("NIXOS_LABEL", format!("{now} {msg}").replace(" ", "_"));
             run_cmd_interactive("sudo -E nixos-rebuild switch --flake path:.#default --impure")?;
             let _ = fs::remove_file(tmp);

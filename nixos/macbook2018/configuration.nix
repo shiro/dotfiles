@@ -486,6 +486,15 @@ in
     };
   };
 
+
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 10d";
+    };
+  };
+
   systemd.user.services.mpd = {
     enable = true;
     after = [ "network.target" "sound.target" ];
