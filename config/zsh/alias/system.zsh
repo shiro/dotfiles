@@ -29,3 +29,7 @@ function ms(){
   rsync -a --progress --remove-source-files "$1" "$2" && \
   find "$1" -depth -type d -empty -exec rmdir "{}" \;
 }
+
+function ifzsh(){
+  BIND_INTERFACE="$1" LD_PRELOAD=/usr/lib/bindtointerface.so zsh
+}
