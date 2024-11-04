@@ -61,3 +61,11 @@ vim.keymap.set("n", "yiw", function()
   vim.cmd("normal! m'yiw")
   vim.api.nvim_win_set_cursor(0, pos)
 end, { silent = true })
+
+vim.filetype.add({
+  pattern = {
+    [".*%.(%a+)%.stub"] = function(path, bufnr, ext)
+      return vim.filetype.match({ filename = "." .. ext })
+    end,
+  },
+})
