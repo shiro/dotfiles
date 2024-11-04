@@ -665,6 +665,13 @@ require("lazy").setup({
       local conform = require("conform")
 
       conform.setup({
+        -- formatters = {
+        -- # Example of using dprint only when a dprint.json file is present
+        -- dprint = {
+        --   condition = function(ctx)
+        --     return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
+        --   end,
+        -- },
         formatters_by_ft = {
           lua = { "stylua" },
           svelte = { "prettierd" },
