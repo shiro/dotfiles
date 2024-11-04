@@ -232,6 +232,9 @@ exe "hi LeapLabel gui=bold guifg=".orange
 
 exe "hi @label.json guifg=".lightGreen
 
+" yaml
+exe "hi @property.yaml guifg=".lightGreen
+
 " TypeScript
 
 exe "hi typescriptExport guifg=".lightGreen
