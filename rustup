@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+rustup default nightly
+rustup update
