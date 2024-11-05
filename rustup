@@ -2,3 +2,5 @@
 
 rustup default nightly
 rustup update
+rustup component add rust-analyzer
+rustup component add rust-src
