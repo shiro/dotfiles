@@ -61,15 +61,22 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
 
   autoload -U add-zsh-hook
   __auto_nix_shell() {
+    if [[ "$AUTO_INIT_NIX_SHELL" == 1 ]]; then
+      return
+    fi
+
     if [ -n "$locations["`pwd`"]" ]; then
       if command -v cached-nix-shell > /dev/null; then
-        cached-nix-shell --command zsh
+        AUTO_INIT_NIX_SHELL=1 cached-nix-shell --command zsh
       else
-        nix-shell --command zsh
+        AUTO_INIT_NIX_SHELL=1 nix-shell --command zsh
       fi
     fi
   }
   add-zsh-hook chpwd __auto_nix_shell
+
+  # call it initially as well
+  __auto_nix_shell
 fi
 
 
