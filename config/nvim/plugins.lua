@@ -83,31 +83,31 @@ require("lazy").setup({
   --     end, { silent = true })
   --   end,
   -- },
-  {
-    dir = "~/.dotfiles/config/nvim/lua/treesitter-navigation",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    opts = {},
-    -- ft = { "html", "typescriptreact" },
-    config = function()
-      local tn = require("treesitter-navigation")
-      tn.setup({})
-      vim.keymap.set({ "n", "v" }, "<Down>", function()
-        --
-      end, { silent = true })
-      vim.keymap.set({ "n", "v" }, "<Up>", function()
-        tn.go("parent")
-      end)
-      vim.keymap.set({ "n", "v" }, "<Right>", function()
-        tn.go("next")
-      end)
-      vim.keymap.set({ "n", "v" }, "<Left>", function()
-        tn.go("prev")
-      end)
-      vim.keymap.set({ "n" }, "<Down>", function()
-        tn.select_current_node()
-      end)
-    end,
-  },
+  -- {
+  --   dir = "~/.dotfiles/config/nvim/lua/treesitter-navigation",
+  --   dependencies = { "nvim-treesitter/nvim-treesitter" },
+  --   opts = {},
+  --   -- ft = { "html", "typescriptreact" },
+  --   config = function()
+  --     local tn = require("treesitter-navigation")
+  --     tn.setup({})
+  --     vim.keymap.set({ "n", "v" }, "<Down>", function()
+  --       --
+  --     end, { silent = true })
+  --     vim.keymap.set({ "n", "v" }, "<Up>", function()
+  --       tn.go("parent")
+  --     end)
+  --     vim.keymap.set({ "n", "v" }, "<Right>", function()
+  --       tn.go("next")
+  --     end)
+  --     vim.keymap.set({ "n", "v" }, "<Left>", function()
+  --       tn.go("prev")
+  --     end)
+  --     vim.keymap.set({ "n" }, "<Down>", function()
+  --       tn.select_current_node()
+  --     end)
+  --   end,
+  -- },
   -- }}}
   -- fancy notifications
   -- {{{

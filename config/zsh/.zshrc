@@ -52,6 +52,7 @@ autoload -U zranger
 # compile everything so it loads faster
 [ -z $ZSH_NO_COMPILE ] && zit-lo "zit" "extras/compile-zsh-files.zsh"
 
+nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tput ed; }
 
 if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
   typeset -A locations
@@ -61,11 +62,14 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
 
   autoload -U add-zsh-hook
   __auto_nix_shell() {
-    if [[ "$AUTO_INIT_NIX_SHELL" == 1 ]]; then
-      return
-    fi
-
     if [ -n "$locations["`pwd`"]" ]; then
+      if [[ "$AUTO_INIT_NIX_SHELL" == 1 ]]; then
+        [[ "$1" == 1 ]] && nclr
+        return
+      fi
+      echo initializing nix shell...
+      echo
+
       if command -v cached-nix-shell > /dev/null; then
         AUTO_INIT_NIX_SHELL=1 cached-nix-shell --command zsh
       else
@@ -76,7 +80,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
   add-zsh-hook chpwd __auto_nix_shell
 
   # call it initially as well
-  __auto_nix_shell
+  __auto_nix_shell 1
 fi
 
 
