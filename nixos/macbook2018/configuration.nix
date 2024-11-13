@@ -60,10 +60,9 @@ in
                                    src = /etc/nixos/firmware/brcm;
                                    installPhase = ''
                                    mkdir -p $out/lib/firmware/brcm
-                                   cp ${final.src}/* "$out/lib/firmware/brcm"
-                                                     '';
-                                                     }))
-                                                     ];
+                                   cp ${final.src}/* "$out/lib/firmware/brcm" '';
+    }))
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
