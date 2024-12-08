@@ -23,11 +23,6 @@
       pkgs = nixpkgs.legacyPackages.${system};
       overlay-rofi-blocks = final: prev: {
         rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.system};
-        # use this variant if unfree packages are needed:
-        # unstable = import nixpkgs-unstable {
-        #   inherit system;
-        #   config.allowUnfree = true;
-        # };
       };
     in
     {

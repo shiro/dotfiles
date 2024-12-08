@@ -11,23 +11,23 @@ let
   });
   rofi_custom = pkgs.rofi-wayland.override { plugins = [ rofi-blocks ]; };
 
-  python_custom = let map2 = pkgs.python312.pkgs.buildPythonPackage rec {
-    version = "2.0.19";
-    pname = "map2";
-    format = "wheel";
-    src = pkgs.fetchPypi {
-        inherit pname version format;
-        sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
-        dist = "cp312";
-        python = "cp312";
-        abi = "cp312";
-        platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-    };
-  };
-  in pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-    pip
-    map2
-  ]);
+  # python_custom = let map2 = pkgs.python312.pkgs.buildPythonPackage rec {
+  #   version = "2.0.19";
+  #   pname = "map2";
+  #   format = "wheel";
+  #   src = pkgs.fetchPypi {
+  #       inherit pname version format;
+  #       sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
+  #       dist = "cp312";
+  #       python = "cp312";
+  #       abi = "cp312";
+  #       platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+  #   };
+  # };
+  # in pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
+  #   pip
+  #   map2
+  # ]);
 
   mpdConf = pkgs.writeText "mpd.conf" ''
     audio_output {
@@ -132,20 +132,20 @@ in
   };
   # programs.ssh.startAgent = true;
 
-  systemd.user.services.map2 = {
-    enable = true;
-    wantedBy = [ "xsession.target" ];
-    partOf = [ "graphical-session.target" ];
-    path = [ pkgs.zsh hyprland_pkg pkgs.evtest pkgs.procps pkgs.killall ];
-    serviceConfig = {
-      # Environment = [
-        # ''VIRTUAL_ENV=/home/shiro/project/map2/venv'' ];
-      # ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-      ExecStart = ''/run/wrappers/bin/sudo -E /home/shiro/project/map2/venv/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-      Restart = "always";
-      RestartSec = "5s";
-     };
-  };
+  # systemd.user.services.map2 = {
+  #   enable = true;
+  #   wantedBy = [ "xsession.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  #   path = [ pkgs.zsh hyprland_pkg pkgs.evtest pkgs.procps pkgs.killall ];
+  #   serviceConfig = {
+  #     # Environment = [
+  #       # ''VIRTUAL_ENV=/home/shiro/project/map2/venv'' ];
+  #     # ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
+  #     ExecStart = ''/run/wrappers/bin/sudo -E /home/shiro/project/map2/venv/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
+  #     Restart = "always";
+  #     RestartSec = "5s";
+  #    };
+  # };
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -320,7 +320,7 @@ in
       chromium
       cached-nix-shell
 
-      qemu
+      # branchctl
     ];
   };
 
@@ -333,7 +333,9 @@ in
 
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
-    (nerdfonts.override { fonts = [ "Hack" "Noto" ]; })
+    nerd-fonts.hack
+    nerd-fonts.noto
+    # (nerdfonts.override { fonts = [ "Hack" "Noto" ]; })
   ];
 
   environment.systemPackages = with pkgs; [
@@ -350,24 +352,22 @@ in
     libinput
     evtest
     # spice-vdagent
-    (let map2 = python312.pkgs.buildPythonPackage rec {
-      version = "2.0.19";
-      pname = "map2";
-      format = "wheel";
-      src = fetchPypi {
-        inherit pname version format;
-        sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
-        dist = "cp312";
-        python = "cp312";
-        abi = "cp312";
-        platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-      };
-    };
-    in python312.withPackages (python-pkgs: [
-      map2
-      # python-pkgs.pandas
-      python-pkgs.requests
-    ]))
+    # (let map2 = python312.pkgs.buildPythonPackage rec {
+    #   version = "2.0.19";
+    #   pname = "map2";
+    #   format = "wheel";
+    #   src = fetchPypi {
+    #     inherit pname version format;
+    #     sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
+    #     dist = "cp312";
+    #     python = "cp312";
+    #     abi = "cp312";
+    #     platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+    #   };
+    # };
+    # python312.withPackages (python-pkgs: [
+    #   python-pkgs.requests
+    # ])
     # python_custom
     ripgrep
     mako
@@ -489,9 +489,9 @@ in
 
   nix = {
     gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 10d";
+      # automatic = true;
+      # dates = "weekly";
+      # options = "--delete-older-than 10d";
     };
   };
 
