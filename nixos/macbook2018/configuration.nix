@@ -96,9 +96,27 @@ in
   # virtualisation.docker.liveRestore = false;
 
   #boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+  # boot.kernelPatches = [
+  #   {
+  #         name = "bt";
+  #         patch = ./bt.patch;
+  #
+  #   }
+  # ];
+  # boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_6_10.override {
+  #         argsOverride = rec {
+  #                 src = pkgs.fetchurl {
+  #                 url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
+  #                 sha256 = "900d567ff01824708ce24c3b37faaef03e6f6145411dd447a6ff2edc8c5db3a9";
+  #         };
+  #         version = "6.10.7";
+  #         modDirVersion = "6.10.7";
+  #         };
+  # });
 
   virtualisation.docker.enable = true;
   # services.getty.autologinUser = "shiro";
+
   services.greetd = {
     enable = true;
     restart = true;
@@ -321,6 +339,8 @@ in
       cached-nix-shell
 
       # branchctl
+      # suyu.packages.x86_64-linux.suyu
+      suyu
     ];
   };
 

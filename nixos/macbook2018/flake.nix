@@ -6,10 +6,11 @@
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     nixpkgs-rofi-blocks.url = "github:edenkras/nixpkgs";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
-    apple-silicon = {
-      url = "github:tpwrules/nixos-apple-silicon";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
+    # suyu.url = "git+https://git.suyu.dev/suyu/nix-flake";
+    # suyu.url = "github:suyu-emu/nix-flake";
+    suyu.url = "github:Noodlez1232/suyu-flake";
+    suyu.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -17,19 +18,27 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-rofi-blocks, ... }@inputs:
+  nixConfig = {
+    extra-substituters = ["https://cache.soopy.moe"];
+    extra-trusted-public-keys = ["cache.soopy.moe-1:0RZVsQeR+GOh0VQI9rvnHz55nVXkFardDqfm4+afjPo="];
+  };
+
+  outputs = { self, nixpkgs, nixpkgs-rofi-blocks, suyu, ... }@inputs:
     let
-      system = "aarch64-linux";
+      system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       overlay-rofi-blocks = final: prev: {
         rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.system};
+      };
+      overlay-suyu = final: prev: {
+        suyu = suyu.packages.${prev.system}.suyu;
       };
     in
     {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs; };
           modules = [ 
-            ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-rofi-blocks ]; })
+            ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-rofi-blocks overlay-suyu ]; })
             ./configuration.nix
             inputs.home-manager.nixosModules.default
           ];
