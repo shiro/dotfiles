@@ -159,7 +159,9 @@ bind l select-pane -R
 
 bind -n M-w kill-window
 bind -n Ö kill-window -a # kill all but current
-bind -n M-r new-window -c "#{pane_current_path}"
+# create new tab after current
+bind -n M-r new-window -a -c "#{pane_current_path}"
+
 
 bind -n M-/ command-prompt -I "" "rename-window '%%'" # rename window
 
