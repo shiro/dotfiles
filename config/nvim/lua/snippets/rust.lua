@@ -35,11 +35,11 @@ info!("<text> {:?}", <value>);<finish>
       "cl",
       fmta(
         [[
-println!("<ident>: {:?}", <ident_rep>);<finish>
+println!("<message>{:?}", (<value>));<finish>
 ]],
         {
-          ident = i(1),
-          ident_rep = rep(1),
+          value = i(1),
+          message = i(2),
           finish = i(0),
         }
       )

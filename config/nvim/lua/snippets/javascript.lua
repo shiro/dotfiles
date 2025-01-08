@@ -4,10 +4,12 @@ local sc = require("luasnip-more").context_snippet({ ft = "javascript" })
 local sn = ls.snippet_node
 local t = ls.text_node
 local i = ls.insert_node
+local l = require("luasnip.extras").lambda
 local f = ls.function_node
 local c = ls.choice_node
 local d = ls.dynamic_node
 local r = ls.restore_node
+local events = require("luasnip.util.events")
 local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
@@ -84,8 +86,9 @@ for(let <iterable> = <initial>; <val> << <limit>; <change_expr>){
       -- }}}
       -- forof - for-of loop
       -- {{{
-      s(
+      sc(
         "forof",
+        { "statement_block" },
         fmta(
           [[
 for(const <val> of <iterable>){
@@ -102,8 +105,9 @@ for(const <val> of <iterable>){
       -- }}}
       -- if - if block statement
       -- {{{
-      s(
+      sc(
         "if",
+        { "statement_block" },
         fmta(
           [[
 if(<cond>) {
@@ -137,6 +141,38 @@ const <name> = <finish>;
   end
 
   ls.add_snippets("typescriptreact", {
+    -- uses - react use state
+    -- {{{
+    sc(
+      "uses",
+      { "statement_block" },
+      fmta(
+        [[
+const [<getter>, set<setter>] = useState(<initial>);<finish>
+]],
+        {
+          getter = i(1),
+          initial = i(2),
+          setter = l(l._1:sub(1, 1):upper() .. l._1:sub(2, -1), 1),
+          finish = i(0),
+        }
+      ),
+      {
+        callbacks = {
+          [-1] = {
+            [events.enter] = function()
+              require("ts-manual-import").import({
+                { modules = { "useState" }, source = "react" },
+              })
+            end,
+            [events.leave] = function()
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "s", false)
+            end,
+          },
+        },
+      }
+    ),
+    -- }}}
     -- comp - component
     -- {{{
     sc(

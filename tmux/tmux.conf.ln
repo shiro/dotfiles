@@ -39,6 +39,9 @@ set -g focus-events on
 # use xsel for copy
 set -s copy-command 'xsel -i'
 
+# change window title
+set -g set-titles on
+
 # use vi keys in copy mode
 setw -g mode-keys vi
 bind -T copy-mode-vi y send -X copy-pipe 'xsel'

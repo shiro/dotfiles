@@ -191,23 +191,50 @@ require("lazy").setup({
 
       vim.api.nvim_command("Arpeggio nmap kl yiw")
 
-      registerMapping = function(name, mapping, target)
-        vim.api.nvim_create_user_command("ArpeggioLeap" .. name, function()
-          vim.fn.feedkeys("cim" .. target)
+      local id = 0
+      registerMapping = function(mapping, target)
+        id = id + 1
+        vim.api.nvim_create_user_command("ArpeggioLeap" .. id, function()
+          -- require("leap").leap({ target_windows = { vim.fn.win_getid() } })
+          -- vim.fn.feedkeys(target)
+          -- vim.api.nvim_feedkeys("\\<C-n>", "m", true)
+
+          -- local key = vim.api.nvim_replace_termcodes("<C-n>", true, false, true)
+          vim.api.nvim_feedkeys("\\<C-d>", "m", true)
         end, {})
         vim.api.nvim_command(
-          "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>silent ArpeggioLeap" .. name .. "<cr>')"
+          "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>silent ArpeggioLeap" .. id .. "<cr>')"
         )
       end
 
-      registerMapping("Word", "mw", "w")
-      registerMapping("Tag", "mt", "t")
-      registerMapping("DQuote", "mq", '"')
-      registerMapping("SQuote", "ma", "'")
-      registerMapping("Backtick", "md", "`")
-      registerMapping("Brace", "mb", "{")
-      registerMapping("Bracket", "mv", "[")
-      registerMapping("Parenthesis", "mf", "(")
+      registerMapping("mq", "viq")
+      registerMapping("nq", "vaq")
+      registerMapping("mw", "viw")
+      registerMapping("nw", "viW")
+      registerMapping("mb", "vib")
+      registerMapping("mv", "V")
+
+      -- local registerYankMapping = function(mapping, target)
+      --   vim.api.nvim_create_user_command("ArpeggioLeap" .. target, function()
+      --     -- require("leap").leap({ target_windows = { vim.fn.win_getid() } })
+      --     -- vim.fn.feedkeys(target)
+      --     require("leap").leap({
+      --       target_windows = { vim.fn.win_getid() },
+      --       action = require("leap-spooky").spooky_action(function()
+      --         return "yiw"
+      --       end, {
+      --         -- keeppos = true,
+      --         -- on_exit = (vim.v.operator == 'y') and 'p',
+      --       }),
+      --     })
+      --   end, {})
+      --   vim.api.nvim_command(
+      --     "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>silent ArpeggioLeap" .. target .. "<cr>')"
+      --   )
+      -- end
+
+      registerMapping("yw", "yiw\\<C-n>")
+      -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'yw', 'yirm')")
     end,
   },
   -- }}}
@@ -347,6 +374,8 @@ require("lazy").setup({
 
       vim.keymap.set("n", "s", "<Plug>(leap-forward-to)")
       vim.keymap.set("n", "S", "<Plug>(leap-backward-to)")
+
+      require("leapLineJump")
     end,
   },
   {
@@ -521,7 +550,7 @@ require("lazy").setup({
           },
         },
         { "tailwindcss" },
-        { "eslint" },
+        -- { "eslint" },
         { "rust_analyzer" },
         { "taplo" },
       }
@@ -718,6 +747,7 @@ require("lazy").setup({
       require("snippets.go").register()
     end,
   },
+  { "dorage/ts-manual-import.nvim", dependencies = { "L3MON4D3/LuaSnip" } },
 
   {
     dir = "~/.dotfiles/config/nvim/lua/luasnip-more",
@@ -901,6 +931,35 @@ require("lazy").setup({
     },
     config = function()
       local telescope_actions = require("telescope.actions")
+
+      local ts_select_dir_for_grep = function(prompt_bufnr)
+        local action_state = require("telescope.actions.state")
+        local fb = require("telescope").extensions.file_browser
+        local live_grep = require("telescope.builtin").live_grep
+        local current_line = action_state.get_current_line()
+
+        fb.file_browser({
+          files = false,
+          depth = false,
+          attach_mappings = function(prompt_bufnr)
+            require("telescope.actions").select_default:replace(function()
+              local entry_path = action_state.get_selected_entry().Path
+              local dir = entry_path:is_dir() and entry_path or entry_path:parent()
+              local relative = dir:make_relative(vim.fn.getcwd())
+              local absolute = dir:absolute()
+
+              live_grep({
+                results_title = relative .. "/",
+                cwd = absolute,
+                default_text = current_line,
+              })
+            end)
+
+            return true
+          end,
+        })
+      end
+
       require("telescope").setup({
         defaults = {
           mappings = { i = { ["<esc>"] = telescope_actions.close } },
@@ -916,9 +975,18 @@ require("lazy").setup({
           "node%_modules/.*",
           "./target/.*",
         },
+        pickers = {
+          live_grep = {
+            mappings = {
+              i = { ["<C-f>"] = ts_select_dir_for_grep },
+              n = { ["<C-f>"] = ts_select_dir_for_grep },
+            },
+          },
+        },
       })
 
       require("telescope").load_extension("zf-native")
+      require("telescope").load_extension("file_browser")
 
       local sorter = require("top-results-sorter").sorter()
       local tele_builtin = require("telescope.builtin")
@@ -1015,6 +1083,10 @@ require("lazy").setup({
 
       vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
     end,
+  },
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
   },
   -- }}}
 
@@ -1415,7 +1487,8 @@ function organize_imports()
     or vim.bo.filetype == "javascriptreact"
   then
     require("typescript-tools.api").add_missing_imports(true)
-    require("typescript-tools.api").organize_imports(true)
+    -- requireTSToolsRemoveUnusedImports("typescript-tools.api").organize_imports(true)
+    require("typescript-tools.api").remove_unused_imports(true)
   end
 end
 

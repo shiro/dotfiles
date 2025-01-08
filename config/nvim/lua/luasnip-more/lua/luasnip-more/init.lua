@@ -39,13 +39,14 @@ function M.context_snippet(opts)
     end
   end
 
-  return function(trig, contexts, snippet)
+  return function(trig, contexts, snippet, extra)
     return s({
       trig = trig,
+      -- desc = desc,
       show_condition = function(line_to_cursor)
         return contains(contexts, get_node_type())
       end,
-    }, snippet)
+    }, snippet, extra)
   end
 end
 
