@@ -204,6 +204,7 @@ in
     enable = true;
     # acceleration = "cuda";
   };
+  services.logind.lidSwitchExternalPower = "ignore";
 
   # programs.direnv = {
   #   enable = true;
@@ -410,6 +411,8 @@ in
     rclone
     libnotify
     wf-recorder
+    pulseaudio # pulse CLI
+    bottles # wine emulation organization
 
     # cursor
     hyprcursor
