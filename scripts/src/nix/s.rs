@@ -1,4 +1,5 @@
 use scripts::*;
+use serde::{Deserialize, Serialize};
 use std::fs::{self};
 
 fn run_cmd_interactive(cmd: &str) -> Result<()> {
@@ -19,6 +20,23 @@ fn run_cmd_interactive(cmd: &str) -> Result<()> {
         ))?;
     };
     Ok(())
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Generation {
+    generation: u32,
+    current: bool,
+    #[serde(rename = "nixosVersion")]
+    nixos_version: String,
+}
+
+fn list_generations() -> Result<Vec<Generation>> {
+    let raw = Exec::cmd("nixos-rebuild")
+        .args(&["list-generations", "--json"])
+        .success_output()?
+        .stdout_str();
+    let deserialized = serde_json::from_str(&raw).unwrap();
+    Ok(deserialized)
 }
 
 fn select_generation() -> Result<u32> {
@@ -83,6 +101,7 @@ fn main() -> Result<()> {
     use clap::Command;
     let cmd = clap::command!()
         .subcommand_required(true)
+        .subcommand(Command::new("list").about("lists all generations"))
         .subcommand(
             Command::new("new").about("builds a new generations"),
             // .arg(arg!(-l --list "lists test values").action(ArgAction::SetTrue)),
@@ -100,6 +119,27 @@ fn main() -> Result<()> {
     let matches = &cmd.get_matches();
 
     match matches.subcommand() {
+        Some(("list", _)) => {
+            let generations = list_generations().unwrap();
+
+            let w1 = generations
+                .iter()
+                .map(|g| g.generation.to_string().len())
+                .reduce(|l, r| l.max(r))
+                .unwrap_or_default()
+                .max("generation".len());
+
+            let w2 = "current".len();
+
+            println!("{: <w1$} current name", "generation");
+            for generation in generations {
+                let current = if generation.current { "*" } else { " " };
+                println!(
+                    "{: <w1$} {: <w2$} {}",
+                    generation.generation, current, generation.nixos_version
+                )
+            }
+        }
         Some(("new", _)) => {
             let tmp = "/tmp/nixos-label";
             run_cmd_interactive(&format!("vim {tmp}"))?;
