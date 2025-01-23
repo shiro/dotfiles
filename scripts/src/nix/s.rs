@@ -44,6 +44,39 @@ fn select_generation() -> Result<u32> {
     Ok(generation)
 }
 
+fn select_generations() -> Result<Vec<u32>> {
+    let ret = Exec::cmd("nixos-rebuild")
+        .arg("list-generations")
+        .success_output()?
+        .stdout_str();
+
+    let (header, ret) = ret.split_once("\n").unwrap_or_else(|| unreachable!());
+
+    let ret = Exec::cmd("fzf")
+        .args(&["-m"])
+        .args(&["--header", &header])
+        .args(&["--bind", "enter:accept-non-empty"])
+        .args(&[
+            "--bind",
+            "ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all",
+        ])
+        .stdin(ret)
+        .success_output()?
+        .stdout_str();
+
+    if ret.is_empty() {
+        Err(anyhow!("no revision selected"))?;
+    }
+
+    let generations = ret
+        .split("\n")
+        .filter(|line| !line.is_empty())
+        .map(|line| line.split_once(" ").unwrap().0.parse::<u32>().unwrap())
+        .collect();
+
+    Ok(generations)
+}
+
 fn main() -> Result<()> {
     // Err(anyhow!("no revision selected"))?;
 
@@ -61,7 +94,9 @@ fn main() -> Result<()> {
         )
         .subcommand(
             Command::new("default").about("select a generation and set it as the boot default"),
-        );
+        )
+        .subcommand(Command::new("delete").about("delete generations"))
+        .subcommand(Command::new("gc").about("garbage collect"));
     let matches = &cmd.get_matches();
 
     match matches.subcommand() {
@@ -105,6 +140,28 @@ fn main() -> Result<()> {
                     &format!("/nix/var/nix/profiles/system-{generation}-link/bin/switch-to-configuration"),
                     "boot",
                 ])
+                .success_output()?;
+        }
+        Some(("delete", _)) => {
+            let generations = select_generations()?;
+            Exec::cmd("sudo")
+                .args(&["-E", "rm"])
+                .args(
+                    &generations
+                        .into_iter()
+                        .map(|generation| {
+                            format!("/nix/var/nix/profiles/system-{}-link", generation)
+                        })
+                        .collect::<Vec<_>>(),
+                )
+                .success_output()?;
+            Exec::cmd("sudo")
+                .args(&["-E", "nix-collect-garbage"])
+                .success_output()?;
+        }
+        Some(("gc", _)) => {
+            Exec::cmd("sudo")
+                .args(&["-E", "nix-collect-garbage"])
                 .success_output()?;
         }
         _ => unreachable!(),
