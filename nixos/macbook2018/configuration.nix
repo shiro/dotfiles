@@ -521,6 +521,9 @@ in
   # laptop battery optimizations
   services.tlp.enable = true;
 
+  # timezone sync
+  # services.automatic-timezoned.enable = true;
+
   systemd.user.services.mpd = {
     enable = true;
     after = [ "network.target" "sound.target" ];
