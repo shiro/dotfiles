@@ -183,11 +183,11 @@ in
 
   networking.hostName = "shiro-macbook2018";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true;
 
 
   # Set your time zone.
-  time.timeZone = "Asia/Tokyo";
+  # time.timeZone = "Asia/Tokyo";
 
   # Select internationalisation properties.
   console = {
@@ -341,7 +341,7 @@ in
 
       # branchctl
       # suyu.packages.x86_64-linux.suyu
-      suyu
+      # suyu
     ];
   };
 
@@ -522,7 +522,7 @@ in
   services.tlp.enable = true;
 
   # timezone sync
-  # services.automatic-timezoned.enable = true;
+  services.automatic-timezoned.enable = true;
 
   systemd.user.services.mpd = {
     enable = true;
@@ -568,8 +568,9 @@ in
   #   settings.General.EnableNetworkConfiguration = true;
   # };
 
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+  # networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
+  networking.firewall.enable = false;
   networking.extraHosts =
     ''
     127.0.0.1 mac
