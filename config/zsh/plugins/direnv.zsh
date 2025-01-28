@@ -12,7 +12,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
   __auto_nix_shell() {
     [[ "$AUTO_INIT_NIX_SHELL" == 1 ]] && return 0
 
-    local ignored_commands=(cd proj)
+    local ignored_commands=(cd proj rm dot ls la g)
     local command=("${1// */}")
 
     # don't do anyting if command should be ignored
@@ -28,7 +28,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
       else
 	shell_cmd="nix-shell"
       fi
-      AUTO_INIT_NIX_SHELL=1 $shell_cmd --command "zsh -is eval nclr && \"$1\""
+      AUTO_INIT_NIX_SHELL=1 $shell_cmd --command "zsh -is eval 'nclr && \"$1\"'"
     fi
     return 0
   }
