@@ -22,7 +22,7 @@ fn run_cmd_interactive(cmd: &str) -> Result<()> {
     Ok(())
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 struct Generation {
     generation: u32,
     current: bool,
@@ -39,60 +39,79 @@ fn list_generations() -> Result<Vec<Generation>> {
     Ok(deserialized)
 }
 
-fn select_generation() -> Result<u32> {
-    let ret = Exec::cmd("nixos-rebuild")
-        .arg("list-generations")
-        .success_output()?
-        .stdout_str();
+fn format_column(header_columns: &[&str], data_rows: Vec<Vec<String>>) -> (String, Vec<String>) {
+    let mut header = "".to_string();
+    let mut rows = vec!["".to_string(); data_rows.len()];
 
-    let (header, ret) = ret.split_once("\n").unwrap_or_else(|| unreachable!());
+    for col_idx in 0..header_columns.len() {
+        if col_idx != 0 {
+            header.push_str(" ");
+            rows.iter_mut().for_each(|v| v.push_str(" "));
+        }
 
-    let ret = Exec::cmd("fzf")
-        .args(&["--header", &header])
-        .args(&["--bind", "enter:accept-non-empty"])
-        .stdin(ret)
-        .success_output()?
-        .stdout_str();
-
-    if ret.is_empty() {
-        Err(anyhow!("no revision selected"))?;
+        let w = data_rows
+            .iter()
+            .map(|v| v[col_idx].len())
+            .reduce(|l, r| l.max(r))
+            .unwrap_or_default()
+            .max(header_columns[col_idx].len());
+        header.push_str(&format!("{: <w$}", header_columns[col_idx]));
+        rows.iter_mut()
+            .enumerate()
+            .for_each(|(row_idx, v)| v.push_str(&format!("{: <w$}", data_rows[row_idx][col_idx])));
     }
 
-    let generation = ret.split_once(" ").unwrap().0.parse::<u32>().unwrap();
-    Ok(generation)
+    (header, rows)
 }
 
-fn select_generations() -> Result<Vec<u32>> {
-    let ret = Exec::cmd("nixos-rebuild")
-        .arg("list-generations")
-        .success_output()?
-        .stdout_str();
+fn select_generations() -> Result<Vec<Generation>> {
+    let generations = list_generations()?;
 
-    let (header, ret) = ret.split_once("\n").unwrap_or_else(|| unreachable!());
+    let (header, rows) = format_column(
+        &["", "generation", "name"],
+        generations
+            .iter()
+            .enumerate()
+            .map(|(idx, v)| {
+                vec![
+                    idx.to_string(),
+                    v.generation.to_string(),
+                    v.nixos_version.to_string(),
+                ]
+            })
+            .collect(),
+    );
 
     let ret = Exec::cmd("fzf")
         .args(&["-m"])
-        .args(&["--header", &header])
+        .args(&["--header", &header.trim_start()])
         .args(&["--bind", "enter:accept-non-empty"])
+        .args(&["--with-nth", "2.."])
         .args(&[
             "--bind",
             "ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all",
         ])
-        .stdin(ret)
+        .stdin(rows.join("\n").as_ref())
         .success_output()?
         .stdout_str();
 
-    if ret.is_empty() {
-        Err(anyhow!("no revision selected"))?;
-    }
-
-    let generations = ret
+    let selected = ret
         .split("\n")
         .filter(|line| !line.is_empty())
         .map(|line| line.split_once(" ").unwrap().0.parse::<u32>().unwrap())
-        .collect();
+        .map(|idx| &generations[idx as usize])
+        .cloned()
+        .collect::<Vec<_>>();
 
-    Ok(generations)
+    if selected.is_empty() {
+        Err(anyhow!("no generation selected"))?;
+    }
+
+    Ok(selected)
+}
+
+fn select_generation() -> Result<Generation> {
+    Ok(select_generations()?.into_iter().next().unwrap())
 }
 
 fn main() -> Result<()> {
@@ -122,23 +141,22 @@ fn main() -> Result<()> {
         Some(("list", _)) => {
             let generations = list_generations().unwrap();
 
-            let w1 = generations
-                .iter()
-                .map(|g| g.generation.to_string().len())
-                .reduce(|l, r| l.max(r))
-                .unwrap_or_default()
-                .max("generation".len());
+            let (header, rows) = format_column(
+                &["generation", "current", "name"],
+                generations
+                    .iter()
+                    .map(|v| {
+                        let current = if v.current { "yes" } else { " " };
+                        vec![
+                            v.generation.to_string(),
+                            current.to_string(),
+                            v.nixos_version.to_string(),
+                        ]
+                    })
+                    .collect(),
+            );
 
-            let w2 = "current".len();
-
-            println!("{: <w1$} current name", "generation");
-            for generation in generations {
-                let current = if generation.current { "*" } else { " " };
-                println!(
-                    "{: <w1$} {: <w2$} {}",
-                    generation.generation, current, generation.nixos_version
-                )
-            }
+            println!("{}\n{}", header, rows.join("\n"));
         }
         Some(("new", _)) => {
             let tmp = "/tmp/nixos-label";
@@ -153,7 +171,7 @@ fn main() -> Result<()> {
             let _ = fs::remove_file(tmp);
         }
         Some(("test", _)) => {
-            let generation = select_generation()?;
+            let generation = select_generation()?.generation;
             Exec::cmd("sudo")
                 .args(&[
                     "-E",
@@ -163,7 +181,7 @@ fn main() -> Result<()> {
                 .success_output()?;
         }
         Some(("use", _)) => {
-            let generation = select_generation()?;
+            let generation = select_generation()?.generation;
             Exec::cmd("sudo")
                 .args(&[
                     "-E",
@@ -173,7 +191,7 @@ fn main() -> Result<()> {
                 .success_output()?;
         }
         Some(("default", _)) => {
-            let generation = select_generation()?;
+            let generation = select_generation()?.generation;
             Exec::cmd("sudo")
                 .args(&[
                     "-E",
@@ -190,7 +208,10 @@ fn main() -> Result<()> {
                     &generations
                         .into_iter()
                         .map(|generation| {
-                            format!("/nix/var/nix/profiles/system-{}-link", generation)
+                            format!(
+                                "/nix/var/nix/profiles/system-{}-link",
+                                generation.generation
+                            )
                         })
                         .collect::<Vec<_>>(),
                 )
