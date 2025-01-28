@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 
 [ -d ~/bin ] && export PATH=~/bin:$PATH
@@ -27,7 +27,6 @@ for config in "${configs[@]}"; do
   source $config;
 done
 
-
 # additional plugins
 zit-in "https://github.com/knu/zsh-manydots-magic" "zsh-manydots-magic"
 zit-lo "zsh-manydots-magic" "manydots-magic"
@@ -51,38 +50,6 @@ autoload -U zranger
 
 # compile everything so it loads faster
 [ -z $ZSH_NO_COMPILE ] && zit-lo "zit" "extras/compile-zsh-files.zsh"
-
-nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tput ed; }
-
-if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
-  typeset -A locations
-  while IFS= read -r line; do
-    locations["$line"]=1
-  done < "$HOME/.local/config/nix/nix-shell-locations"
-
-  autoload -U add-zsh-hook
-  __auto_nix_shell() {
-    if [ -n "$locations["`pwd`"]" ]; then
-      if [[ "$AUTO_INIT_NIX_SHELL" == 1 ]]; then
-        [[ "$1" == 1 ]] && nclr
-        return
-      fi
-      echo initializing nix shell...
-      echo
-
-      if command -v cached-nix-shell > /dev/null; then
-        AUTO_INIT_NIX_SHELL=1 cached-nix-shell --command zsh
-      else
-        AUTO_INIT_NIX_SHELL=1 nix-shell --command zsh
-      fi
-    fi
-  }
-  add-zsh-hook chpwd __auto_nix_shell
-
-  # call it initially as well
-  __auto_nix_shell 1
-fi
-
 
 if [[ $1 == eval ]]
 then
