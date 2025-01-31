@@ -228,6 +228,9 @@ hi link LeapBackdrop Comment
 exe "hi LeapMatch gui=bold guifg=".white
 exe "hi LeapLabel gui=bold guifg=".orange
 
+exe "hi FlashMatch gui=bold guifg=".white
+exe "hi FlashLabel gui=bold guifg=".orange
+
 " JSON
 
 exe "hi @label.json guifg=".lightGreen

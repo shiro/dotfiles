@@ -162,8 +162,6 @@ require("lazy").setup({
       vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wr', ':wqa<cr>')")
       -- write-quit
       vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
-      -- insert mode
-      vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'fun', 'function')")
       -- save
       vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'jk', '<ESC>')")
       -- close buffer
@@ -195,24 +193,27 @@ require("lazy").setup({
       registerMapping = function(mapping, target)
         id = id + 1
         vim.api.nvim_create_user_command("ArpeggioLeap" .. id, function()
+          -- print(99)
           -- require("leap").leap({ target_windows = { vim.fn.win_getid() } })
-          -- vim.fn.feedkeys(target)
+          vim.fn.feedkeys(target)
           -- vim.api.nvim_feedkeys("\\<C-n>", "m", true)
 
           -- local key = vim.api.nvim_replace_termcodes("<C-n>", true, false, true)
-          vim.api.nvim_feedkeys("\\<C-d>", "m", true)
+          -- vim.api.nvim_feedkeys("\\<C-d>", "m", true)
         end, {})
         vim.api.nvim_command(
-          "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>silent ArpeggioLeap" .. id .. "<cr>')"
+          "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>ArpeggioLeap" .. id .. "<cr>')"
         )
       end
 
-      registerMapping("mq", "viq")
-      registerMapping("nq", "vaq")
-      registerMapping("mw", "viw")
-      registerMapping("nw", "viW")
-      registerMapping("mb", "vib")
-      registerMapping("mv", "V")
+      registerMapping("mq", "cmiq")
+      registerMapping("mw", "cmiw")
+      registerMapping("mb", "cmib")
+      -- registerMapping("nq", "vaq")
+      -- registerMapping("mw", "viw")
+      -- registerMapping("nw", "viW")
+      -- registerMapping("mb", "vib")
+      -- -- registerMapping("mv", "V")
 
       -- local registerYankMapping = function(mapping, target)
       --   vim.api.nvim_create_user_command("ArpeggioLeap" .. target, function()
@@ -362,34 +363,196 @@ require("lazy").setup({
   },
   -- }}}
   -- movement {{{
+  -- {
+  --   "ggandor/leap.nvim",
+  --   init = function() end,
+  --   config = function()
+  --     local leap = require("leap")
+  --     -- leap.opts.case_sensitive = true
+  --     leap.opts.safe_labels = "sfnut"
+  --     leap.opts.labels = "abcdefghijklmnopqrstuvwxyz"
+  --     -- leap.opts.highlight_unlabeled_phase_one_targets = true
+  --
+  --     vim.keymap.set("n", "s", "<Plug>(leap-forward-to)")
+  --     vim.keymap.set("n", "S", "<Plug>(leap-backward-to)")
+  --
+  --     require("leapLineJump")
+  --   end,
+  -- },
+  -- {
+  --   "ggandor/leap-spooky.nvim",
+  --   dependencies = { "https://github.com/wellle/targets.vim" },
+  --   config = function()
+  --     local spooky = require("leap-spooky")
+  --     spooky.setup({
+  --       extra_text_objects = { 'iq', 'aq', 'ib', 'ab' },
+  --     })
+  --
+  --     -- the plugin is broken with custom objects, fix that
+  --     local broken_text_objects = { 'i\'', 'iq', 'aq', 'ib', 'ab' }
+  --     for _, tobj in ipairs(broken_text_objects) do
+  --       vim.keymap.set({'x', 'o'}, tobj:sub(1,1)..'r'..tobj:sub(2), function ()
+  --         require('leap.remote').action { input = tobj }
+  --       end)
+  --     end
+  --
+  --     -- vim.keymap.set({'n'}, 'crs', function ()
+  --     --     require('leap.remote').action { input = "cs", count = 1 }
+  --     -- end)
+  --
+  --
+  --     -- remove all insert mode binds we don't like
+  --     -- for _, value in ipairs(vim.api.nvim_get_keymap("x")) do
+  --     --   if value.lhs:sub(1, 1) == "i" or value.lhs:sub(1, 1) == "x" then
+  --     --     vim.keymap.del("x", value.lhs, {})
+  --     --   end
+  --     -- end
+  --   end,
+  -- },
   {
-    "ggandor/leap.nvim",
-    init = function() end,
+    "folke/flash.nvim",
+    event = "VeryLazy",
     config = function()
-      local leap = require("leap")
-      -- leap.opts.case_sensitive = true
-      leap.opts.safe_labels = "sfnut"
-      leap.opts.labels = "abcdefghijklmnopqrstuvwxyz"
-      -- leap.opts.highlight_unlabeled_phase_one_targets = true
+      local flash = require("flash")
+      flash.setup({
+        search = {     
+          mode = function(input)
+            input = input:gsub("\\", "\\\\")
 
-      vim.keymap.set("n", "s", "<Plug>(leap-forward-to)")
-      vim.keymap.set("n", "S", "<Plug>(leap-backward-to)")
+            local sep = "\\[^\\ ]\\{-}"
+            -- local sep = "\\.\\{-}"
 
-      require("leapLineJump")
-    end,
-  },
-  {
-    "ggandor/leap-spooky.nvim",
-    config = function()
-      require("leap-spooky").setup({})
+            local pattern = input:gsub(" ", sep)
 
-      -- remove all insert mode binds we don't like
-      for _, value in ipairs(vim.api.nvim_get_keymap("x")) do
-        if value.lhs:sub(1, 1) == "i" or value.lhs:sub(1, 1) == "x" then
-          vim.keymap.del("x", value.lhs, {})
+            local ignore_case_flag = "\\c"
+            local magick_matching_flag = "\\V"
+
+            local ret = magick_matching_flag .. ignore_case_flag .. pattern
+            return ret
+          end,
+        },
+        label = { uppercase = false },
+        modes = {
+          char = {
+            highlight = { backdrop = false },
+            multi_line = false,
+          },
+        }
+      })
+
+      local text_objects = { 
+        "c", "C", "y",
+        "iw", "iq", "aq", "it", "at",
+        "ib", "ab", "i{", "a{", "i}", "i(", "i)", "a(", "a)",
+        "a}", "w", "W", "iW", "aa", "ia", "t.", "f.",
+        "if", "af"
+      }
+
+
+      local remote_action = function(action, opts)
+        local count = vim.v.count
+        local view_info = vim.fn.winsaveview()
+
+        require("flash").jump()
+
+        local after_view_info = vim.fn.winsaveview()
+
+        -- quit if aborted (position didn't change)
+        if after_view_info.col == view_info.col and after_view_info.lnum == view_info.lnum then
+          return
+        end
+
+        if count > 0 then vim.fn.feedkeys(count) end
+        vim.fn.feedkeys(action)
+
+        if mode == 'm' then return end
+
+        -- if prefix == "y" or prefix == "d" then
+        --   vim.schedule(function() vim.fn.winrestview(view_info) end)
+        --   return
+        -- end
+
+        vim.schedule(function()
+        vim.api.nvim_create_autocmd({'TextChanged', 'ModeChanged'}, {
+          callback = function()
+            local m1 = vim.v.event.old_mode
+            local m2 = vim.v.event.new_mode
+
+            if (m2 == "i") then return end
+            if (m1 == "i" and m2 == "niI") then return end
+
+            vim.fn.winrestview(view_info)
+            return true
+          end
+        })
+        end)
+      end
+
+      for _, tobj in ipairs(text_objects) do
+        for _, prefix in ipairs({ "y", "c", "d", "v" }) do
+          for _, mode in ipairs({ 'r', 'm' }) do
+            local tobj_with_r = prefix..mode..tobj:gsub("%.", "")
+            vim.keymap.set({"n"}, tobj_with_r, function ()
+              local suffix = ""
+              if tobj:sub(2,2) == "." then
+                char = vim.fn.getchar()
+                if char == 27 then return end
+                suffix = vim.fn.nr2char(char)
+              end
+
+              local tobj = tobj:gsub("%.", "")
+              local count = vim.v.count
+              local view_info = vim.fn.winsaveview()
+
+              require("flash").jump()
+
+              local after_view_info = vim.fn.winsaveview()
+
+              -- quit if aborted (position didn't change)
+              if after_view_info.col == view_info.col and after_view_info.lnum == view_info.lnum then
+                return
+              end
+
+              if count > 0 then vim.fn.feedkeys(count) end
+              vim.fn.feedkeys(prefix..tobj..suffix)
+
+              if mode == 'm' then return end
+
+              if prefix == "y" or prefix == "d" then
+                vim.schedule(function() vim.fn.winrestview(view_info) end)
+                return
+              end
+
+              vim.schedule(function()
+              vim.api.nvim_create_autocmd({'TextChanged', 'ModeChanged'}, {
+                callback = function()
+                  local m1 = vim.v.event.old_mode
+                  local m2 = vim.v.event.new_mode
+
+                  if (m2 == "i") then return end
+                  if (m1 == "i" and m2 == "niI") then return end
+
+                  vim.fn.winrestview(view_info)
+                  return true
+                end
+              })
+              end)
+            end)
+          end
         end
       end
+
+      vim.keymap.set({"n"}, "grC", function ()
+        remote_action("C")
+      end)
     end,
+    keys = {
+      { "s", mode = { "n", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      -- { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      -- { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      -- { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
   },
   {
     "haya14busa/incsearch.vim",
@@ -578,21 +741,6 @@ require("lazy").setup({
     end,
   },
   -- }}}
-  -- refactoring {{{
-  {
-    "ThePrimeagen/refactoring.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-telescope/telescope.nvim",
-    },
-    lazy = true,
-    config = function()
-      require("telescope").load_extension("refactoring")
-      require("refactoring").setup()
-    end,
-  },
-  -- }}}
   -- autoamtically close/rename JSX tags {{{
   {
     "windwp/nvim-ts-autotag",
@@ -694,13 +842,6 @@ require("lazy").setup({
       local conform = require("conform")
 
       conform.setup({
-        -- formatters = {
-        -- # Example of using dprint only when a dprint.json file is present
-        -- dprint = {
-        --   condition = function(ctx)
-        --     return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
-        --   end,
-        -- },
         formatters_by_ft = {
           lua = { "stylua" },
           svelte = { "prettierd" },
@@ -725,14 +866,6 @@ require("lazy").setup({
           scss = { "prettierd" },
         },
       })
-
-      -- vim.keymap.set({ "n", "v" }, "gl", function()
-      -- 	conform.format({
-      -- 		lsp_fallback = true,
-      -- 		async = false,
-      -- 		timeout_ms = 500,
-      -- 	})
-      -- end, { desc = "Format file or range (in visual mode)" })
     end,
   },
   {
@@ -803,8 +936,6 @@ require("lazy").setup({
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          -- ["<CR>"] = cmp.mapping.confirm({ select = false }),
-          -- ["<Tab>"] = cmp.mapping(function(fallback)
           ["<Left>"] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then
               luasnip.jump(-1)
@@ -1383,19 +1514,19 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'al', 'aconsole.log();<left><left>')")
     -- make import lazy
-    vim.keymap.set(
-      "n",
-      ";1",
-      '0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
-      { silent = true, noremap = true }
-    )
+    -- vim.keymap.set(
+    --   "n",
+    --   ";1",
+    --   '0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
+    --   { silent = true, noremap = true }
+    -- )
     -- create component
-    vim.keymap.set(
-      "n",
-      ";1",
-      '0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
-      { silent = true, noremap = true }
-    )
+    -- vim.keymap.set(
+    --   "n",
+    --   ";1",
+    --   '0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
+    --   { silent = true, noremap = true }
+    -- )
   end,
 })
 
@@ -1612,6 +1743,28 @@ vim.opt.foldmethod = "indent"
 -- 		)
 -- 	end,
 -- })
+
+
+-- change outer function
+vim.keymap.set({ "n" }, "caf", function()
+  local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+  vim.api.nvim_feedkeys("/("..cr..esc.."va(obs", "m", true)
+end)
+
+-- delete inner function
+vim.keymap.set({ "n" }, "dif", function()
+  local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+  vim.api.nvim_feedkeys("/("..cr..esc.."ds(db", "m", true)
+end)
+
+-- delete outer function
+vim.keymap.set({ "n" }, "daf", function()
+  local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+  vim.api.nvim_feedkeys("/("..cr..esc.."da(db", "m", true)
+end)
 
 vim.keymap.set({ "n", "i" }, "<C-b>", function()
   -- local lsp_node_type_data = ""
