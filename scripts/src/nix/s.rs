@@ -133,6 +133,11 @@ fn main() -> Result<()> {
         .subcommand(
             Command::new("default").about("select a generation and set it as the boot default"),
         )
+        .subcommand(
+            Command::new("run")
+                .about("spinns up a temporary shell with requested applications provided")
+                .arg(clap::arg!(...<application> "applications to provide")),
+        )
         .subcommand(Command::new("delete").about("delete generations"))
         .subcommand(Command::new("gc").about("garbage collect"));
     let matches = &cmd.get_matches();
@@ -219,6 +224,18 @@ fn main() -> Result<()> {
             Exec::cmd("sudo")
                 .args(&["-E", "nix-collect-garbage"])
                 .success_output()?;
+        }
+        Some(("run", m)) => {
+            let applications = m
+                .get_many::<String>("application")
+                .unwrap()
+                .cloned()
+                .collect::<Vec<_>>();
+
+            run_cmd_interactive(&format!(
+                "nix-shell --command zsh -p {}",
+                applications.join(" ")
+            ))?;
         }
         Some(("gc", _)) => {
             Exec::cmd("sudo")
