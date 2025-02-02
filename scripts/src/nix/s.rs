@@ -35,8 +35,7 @@ fn list_generations() -> Result<Vec<Generation>> {
         .args(&["list-generations", "--json"])
         .success_output()?
         .stdout_str();
-    let deserialized = serde_json::from_str(&raw).unwrap();
-    Ok(deserialized)
+    Ok(serde_json::from_str(&raw)?)
 }
 
 fn format_column(header_columns: &[&str], data_rows: Vec<Vec<String>>) -> (String, Vec<String>) {
@@ -144,7 +143,7 @@ fn main() -> Result<()> {
 
     match matches.subcommand() {
         Some(("list", _)) => {
-            let generations = list_generations().unwrap();
+            let generations = list_generations()?;
 
             let (header, rows) = format_column(
                 &["generation", "current", "name"],
