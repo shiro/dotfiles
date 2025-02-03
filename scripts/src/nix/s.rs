@@ -114,8 +114,6 @@ fn select_generation() -> Result<Generation> {
 }
 
 fn main() -> Result<()> {
-    // Err(anyhow!("no revision selected"))?;
-
     use clap::Command;
     let cmd = clap::command!()
         .subcommand_required(true)
