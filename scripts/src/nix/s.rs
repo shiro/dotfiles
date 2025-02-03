@@ -146,15 +146,17 @@ fn main() -> Result<()> {
             let generations = list_generations()?;
 
             let (header, rows) = format_column(
-                &["generation", "current", "name"],
+                &["generation", "current", "created at", "name"],
                 generations
                     .iter()
                     .map(|v| {
                         let current = if v.current { "yes" } else { " " };
+                        let (date, name) = v.nixos_version.split_once("_").unwrap();
                         vec![
                             v.generation.to_string(),
                             current.to_string(),
-                            v.nixos_version.to_string(),
+                            date.to_string(),
+                            name.to_string(),
                         ]
                     })
                     .collect(),

@@ -202,7 +202,7 @@ require("lazy").setup({
     end,
     config = function()
       -- write
-      vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'we', ':FormatAndSave<cr>')")
+      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'we', ':FormatAndSave<cr>')")
       -- write-quit
       vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
       -- write-quit-all
@@ -210,7 +210,7 @@ require("lazy").setup({
       -- write-quit
       vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
       -- save
-      vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'jk', '<ESC>')")
+      vim.api.nvim_command("silent call arpeggio#map('i', 's', 0, 'jk', '<ESC>')")
       -- close buffer
       vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'ap', '<ESC>:q<CR>')")
       -- only buffer
