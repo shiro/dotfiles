@@ -160,11 +160,11 @@ require("lazy").setup({
       -- write
       vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'we', ':FormatAndSave<cr>')")
       -- write-quit
-      vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wq', ':wq<cr>')")
+      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'wq', ':wq<cr>')")
       -- write-quit-all
-      vim.api.nvim_command("silent call arpeggio#map('n', '', 0, 'wr', ':wqa<cr>')")
+      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'wr', ':wqa<cr>')")
       -- write-quit
-      vim.api.nvim_command("silent call arpeggio#map('i', '', 0, 'wq', '<ESC>:wq<CR>')")
+      vim.api.nvim_command("silent call arpeggio#map('i', 's', 0, 'wq', '<ESC>:wq<CR>')")
       -- save
       vim.api.nvim_command("silent call arpeggio#map('i', 's', 0, 'jk', '<ESC>')")
       -- close buffer
@@ -196,7 +196,6 @@ require("lazy").setup({
       registerMapping = function(mapping, target)
         id = id + 1
         vim.api.nvim_create_user_command("ArpeggioLeap" .. id, function()
-          -- print(99)
           -- require("leap").leap({ target_windows = { vim.fn.win_getid() } })
           vim.fn.feedkeys(target)
           -- vim.api.nvim_feedkeys("\\<C-n>", "m", true)
@@ -218,27 +217,7 @@ require("lazy").setup({
       -- registerMapping("mb", "vib")
       -- -- registerMapping("mv", "V")
 
-      -- local registerYankMapping = function(mapping, target)
-      --   vim.api.nvim_create_user_command("ArpeggioLeap" .. target, function()
-      --     -- require("leap").leap({ target_windows = { vim.fn.win_getid() } })
-      --     -- vim.fn.feedkeys(target)
-      --     require("leap").leap({
-      --       target_windows = { vim.fn.win_getid() },
-      --       action = require("leap-spooky").spooky_action(function()
-      --         return "yiw"
-      --       end, {
-      --         -- keeppos = true,
-      --         -- on_exit = (vim.v.operator == 'y') and 'p',
-      --       }),
-      --     })
-      --   end, {})
-      --   vim.api.nvim_command(
-      --     "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>silent ArpeggioLeap" .. target .. "<cr>')"
-      --   )
-      -- end
-
       registerMapping("yw", "yiw\\<C-n>")
-      -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'yw', 'yirm')")
     end,
   },
   -- }}}
@@ -418,7 +397,7 @@ require("lazy").setup({
     config = function()
       local flash = require("flash")
       flash.setup({
-        search = {     
+        search = {
           mode = function(input)
             input = input:gsub("\\", "\\\\")
 
@@ -440,17 +419,38 @@ require("lazy").setup({
             highlight = { backdrop = false },
             multi_line = false,
           },
-        }
+        },
       })
 
-      local text_objects = { 
-        "c", "C", "y",
-        "iw", "iq", "aq", "it", "at",
-        "ib", "ab", "i{", "a{", "i}", "i(", "i)", "a(", "a)",
-        "a}", "w", "W", "iW", "aa", "ia", "t.", "f.",
-        "if", "af"
+      local text_objects = {
+        "c",
+        "C",
+        "y",
+        "iw",
+        "iq",
+        "aq",
+        "it",
+        "at",
+        "ib",
+        "ab",
+        "i{",
+        "a{",
+        "i}",
+        "i(",
+        "i)",
+        "a(",
+        "a)",
+        "a}",
+        "w",
+        "W",
+        "iW",
+        "aa",
+        "ia",
+        "t.",
+        "f.",
+        "if",
+        "af",
       }
-
 
       local remote_action = function(action, opts)
         local count = vim.v.count
@@ -465,10 +465,14 @@ require("lazy").setup({
           return
         end
 
-        if count > 0 then vim.fn.feedkeys(count) end
+        if count > 0 then
+          vim.fn.feedkeys(count)
+        end
         vim.fn.feedkeys(action)
 
-        if mode == 'm' then return end
+        if mode == "m" then
+          return
+        end
 
         -- if prefix == "y" or prefix == "d" then
         --   vim.schedule(function() vim.fn.winrestview(view_info) end)
@@ -476,30 +480,36 @@ require("lazy").setup({
         -- end
 
         vim.schedule(function()
-        vim.api.nvim_create_autocmd({'TextChanged', 'ModeChanged'}, {
-          callback = function()
-            local m1 = vim.v.event.old_mode
-            local m2 = vim.v.event.new_mode
+          vim.api.nvim_create_autocmd({ "TextChanged", "ModeChanged" }, {
+            callback = function()
+              local m1 = vim.v.event.old_mode
+              local m2 = vim.v.event.new_mode
 
-            if (m2 == "i") then return end
-            if (m1 == "i" and m2 == "niI") then return end
+              if m2 == "i" then
+                return
+              end
+              if m1 == "i" and m2 == "niI" then
+                return
+              end
 
-            vim.fn.winrestview(view_info)
-            return true
-          end
-        })
+              vim.fn.winrestview(view_info)
+              return true
+            end,
+          })
         end)
       end
 
       for _, tobj in ipairs(text_objects) do
         for _, prefix in ipairs({ "y", "c", "d", "v" }) do
-          for _, mode in ipairs({ 'r', 'm' }) do
-            local tobj_with_r = prefix..mode..tobj:gsub("%.", "")
-            vim.keymap.set({"n"}, tobj_with_r, function ()
+          for _, mode in ipairs({ "r", "m" }) do
+            local tobj_with_r = prefix .. mode .. tobj:gsub("%.", "")
+            vim.keymap.set({ "n" }, tobj_with_r, function()
               local suffix = ""
-              if tobj:sub(2,2) == "." then
+              if tobj:sub(2, 2) == "." then
                 char = vim.fn.getchar()
-                if char == 27 then return end
+                if char == 27 then
+                  return
+                end
                 suffix = vim.fn.nr2char(char)
               end
 
@@ -516,41 +526,58 @@ require("lazy").setup({
                 return
               end
 
-              if count > 0 then vim.fn.feedkeys(count) end
-              vim.fn.feedkeys(prefix..tobj..suffix)
+              if count > 0 then
+                vim.fn.feedkeys(count)
+              end
+              vim.fn.feedkeys(prefix .. tobj .. suffix)
 
-              if mode == 'm' then return end
+              if mode == "m" then
+                return
+              end
 
               if prefix == "y" or prefix == "d" then
-                vim.schedule(function() vim.fn.winrestview(view_info) end)
+                vim.schedule(function()
+                  vim.fn.winrestview(view_info)
+                end)
                 return
               end
 
               vim.schedule(function()
-              vim.api.nvim_create_autocmd({'TextChanged', 'ModeChanged'}, {
-                callback = function()
-                  local m1 = vim.v.event.old_mode
-                  local m2 = vim.v.event.new_mode
+                vim.api.nvim_create_autocmd({ "TextChanged", "ModeChanged" }, {
+                  callback = function()
+                    local m1 = vim.v.event.old_mode
+                    local m2 = vim.v.event.new_mode
 
-                  if (m2 == "i") then return end
-                  if (m1 == "i" and m2 == "niI") then return end
+                    if m2 == "i" then
+                      return
+                    end
+                    if m1 == "i" and m2 == "niI" then
+                      return
+                    end
 
-                  vim.fn.winrestview(view_info)
-                  return true
-                end
-              })
+                    vim.fn.winrestview(view_info)
+                    return true
+                  end,
+                })
               end)
             end)
           end
         end
       end
 
-      vim.keymap.set({"n"}, "grC", function ()
+      vim.keymap.set({ "n" }, "grC", function()
         remote_action("C")
       end)
     end,
     keys = {
-      { "s", mode = { "n", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      {
+        "s",
+        mode = { "n", "o" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
       -- { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
       -- { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
@@ -570,218 +597,17 @@ require("lazy").setup({
   },
   -- }}}
   -- LSP server, auto-complete {{{
-  {
-    "nvimtools/none-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" },
-    event = "VeryLazy",
-    config = function()
-      local null_ls = require("null-ls")
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.formatting.stylua,
-          require("none-ls.code_actions.eslint"),
-          -- null_ls.builtins.completion.spell,
-
-          -- golang
-          null_ls.builtins.formatting.gofmt,
-          null_ls.builtins.formatting.gofumpt,
-          null_ls.builtins.formatting.goimports_reviser,
-          null_ls.builtins.formatting.golines,
-        },
-      })
-    end,
-  },
-  -- lua VIM documentation
-  {
-    "folke/neodev.nvim",
-    ft = "lua",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      require("neodev").setup({})
-      local lspconfig = require("lspconfig")
-      lspconfig["lua_ls"].setup({})
-    end,
-  },
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    -- event = "VeryLazy",
-    init = function()
-      local signs = {
-        Error = "☢️",
-        Warn = "⚠",
-        Hint = "❓",
-        Info = "ℹ",
-      }
-
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl })
-      end
-
-      vim.diagnostic.config({
-        virtual_text = false,
-        update_in_insert = true,
-        float = { border = "rounded" },
-        signs = { priority = 200 },
-      })
-      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = "rounded",
-        close_events = { "BufHidden", "InsertLeave" },
-      })
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-    end,
-    config = function()
-      local lspconfig = require("lspconfig")
-      local util = require("lspconfig/util")
-      require("mason").setup()
-      require("mason-tool-installer").setup({
-        ensure_installed = {
-          "stylua", -- lua format
-          "lua-language-server", -- lua
-          "typescript-language-server", -- TS
-          "prettierd", -- JS/TS format - prettier
-          "eslint-lsp", -- JS/TS lint
-          -- "rust-analyzer", -- rust
-          "taplo", -- toml
-          "tailwindcss-language-server", -- tailwind
-          "json-lsp", -- json
-          "nil", -- nix
-          "gopls", -- golang
-          "gofumpt", -- golang format
-          -- "goimports-reviser", -- golang format
-          "golines", -- golang format
-        },
-      })
-      -- capabilities.textDocument.completion.completionItem.snippetSupport = tru
-
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local servers = {
-        {
-          "jsonls",
-          {
-            filetypes = { "json", "jsonc" },
-            capabilities = capabilities,
-            settings = {
-              json = {
-                -- Schemas https://www.schemastore.org
-                schemas = {
-                  {
-                    fileMatch = { "package.json" },
-                    url = "https://json.schemastore.org/package.json",
-                  },
-                  {
-                    fileMatch = { "tsconfig*.json" },
-                    url = "https://json.schemastore.org/tsconfig.json",
-                  },
-                  {
-                    fileMatch = {
-                      ".prettierrc",
-                      ".prettierrc.json",
-                      "prettier.config.json",
-                    },
-                    url = "https://json.schemastore.org/prettierrc.json",
-                  },
-                  {
-                    fileMatch = { ".eslintrc", ".eslintrc.json" },
-                    url = "https://json.schemastore.org/eslintrc.json",
-                  },
-                  {
-                    fileMatch = { ".babelrc", ".babelrc.json", "babel.config.json" },
-                    url = "https://json.schemastore.org/babelrc.json",
-                  },
-                  {
-                    fileMatch = { "lerna.json" },
-                    url = "https://json.schemastore.org/lerna.json",
-                  },
-                  {
-                    fileMatch = { "now.json", "vercel.json" },
-                    url = "https://json.schemastore.org/now.json",
-                  },
-                  {
-                    fileMatch = {
-                      ".stylelintrc",
-                      ".stylelintrc.json",
-                      "stylelint.config.json",
-                    },
-                    url = "http://json.schemastore.org/stylelintrc.json",
-                  },
-                },
-              },
-            },
-          },
-        },
-        { "tailwindcss" },
-        -- { "eslint" },
-        { "rust_analyzer" },
-        { "taplo" },
-      }
-
-      for _, info in ipairs(servers) do
-        local lsp = info[1]
-        local options = {}
-        if info[2] ~= nil then
-          options = info[2]
-        end
-        lspconfig[lsp].setup(options)
-      end
-
-      lspconfig.gopls.setup({
-        settings = {
-          gopls = {
-            completeUnimported = true,
-            usePlaceholders = true,
-            analyses = {
-              unusedparams = true,
-            },
-          },
-        },
-      })
-    end,
-  },
-  -- }}}
-  -- autoamtically close/rename JSX tags {{{
+  require("plugins.lsp"),
+  require("plugins.completion"),
+  -- autoamtically rename JSX tags {{{
   {
     "windwp/nvim-ts-autotag",
     event = "VeryLazy",
-    opts = {
-      enable_close = false,
-    },
+    opts = { enable_close = false },
     ft = { "typescriptreact", "javascriptreact" },
   },
   -- }}}
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp" },
-    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-    config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      require("typescript-tools").setup({
-        capabilities = capabilities,
-        settings = {
-          -- LSP snipets crash cmp, try out if it's fixed after a while
-          complete_function_calls = true,
-          publish_diagnostic_on = "change",
-          tsserver_file_preferences = { importModuleSpecifierPreference = "non-relative" },
-          tsserver_plugins = {
-            "@styled/typescript-styled-plugin",
-            -- "typescript-styled-plugin",
-          },
-        },
-      })
-    end,
-  },
-  -- hide tailwind strings when not in focus
-  {
-    dir = "~/.dotfiles/config/nvim/lua/tw-conceal",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    opts = {},
-    ft = { "html", "typescriptreact" },
-  },
+  require("plugins.language-typescript"),
   -- NPM package versions
   {
     "vuki656/package-info.nvim",
@@ -835,42 +661,7 @@ require("lazy").setup({
       -- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
     end,
   },
-  -- formatting
-  {
-    "stevearc/conform.nvim",
-    -- event = { "BufReadPre", "BufNewFile" },
-    event = "VeryLazy",
-    cmd = { "ConformInfo" },
-    config = function()
-      local conform = require("conform")
-
-      conform.setup({
-        formatters_by_ft = {
-          lua = { "stylua" },
-          svelte = { "prettierd" },
-          javascript = { "dprint" },
-          typescript = { "dprint" },
-          javascriptreact = { "dprint" },
-          typescriptreact = { "dprint" },
-          json = { "prettierd" },
-          graphql = { "prettierd" },
-          java = { "google-java-format" },
-          kotlin = { "ktlint" },
-          ruby = { "standardrb" },
-          markdown = { "prettierd" },
-          erb = { "htmlbeautifier" },
-          html = { "htmlbeautifier" },
-          bash = { "beautysh" },
-          proto = { "buf" },
-          rust = { "rustfmt" },
-          yaml = { "yamlfix" },
-          toml = { "taplo" },
-          css = { "prettierd" },
-          scss = { "prettierd" },
-        },
-      })
-    end,
-  },
+  require("plugins.formatting"),
   {
     "L3MON4D3/LuaSnip",
     config = function()
@@ -1356,17 +1147,6 @@ require("lazy").setup({
   },
 }, { rocks = { enabled = false } })
 
-local opts = { silent = true, noremap = true, expr = true, replace_keycodes = false }
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-    local opts = { buffer = ev.buf }
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-  end,
-})
 -- vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
 -- vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true })
 vim.keymap.set("n", "<leader>[e", vim.diagnostic.goto_prev)
@@ -1747,26 +1527,25 @@ vim.opt.foldmethod = "indent"
 -- 	end,
 -- })
 
-
 -- change outer function
 vim.keymap.set({ "n" }, "caf", function()
   local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
   local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
-  vim.api.nvim_feedkeys("/("..cr..esc.."va(obs", "m", true)
+  vim.api.nvim_feedkeys("/(" .. cr .. esc .. "va(obs", "m", true)
 end)
 
 -- delete inner function
 vim.keymap.set({ "n" }, "dif", function()
   local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
   local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
-  vim.api.nvim_feedkeys("/("..cr..esc.."ds(db", "m", true)
+  vim.api.nvim_feedkeys("/(" .. cr .. esc .. "ds(db", "m", true)
 end)
 
 -- delete outer function
 vim.keymap.set({ "n" }, "daf", function()
   local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
   local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
-  vim.api.nvim_feedkeys("/("..cr..esc.."da(db", "m", true)
+  vim.api.nvim_feedkeys("/(" .. cr .. esc .. "da(db", "m", true)
 end)
 
 vim.keymap.set({ "n", "i" }, "<C-b>", function()

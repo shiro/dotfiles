@@ -331,6 +331,8 @@ in
       awscli2
       libreoffice-qt6-fresh
       xorg.xev
+      stylua
+      lua-language-server
 
       # screenshot
       grim
