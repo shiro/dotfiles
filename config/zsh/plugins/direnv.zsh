@@ -28,7 +28,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
       else
 	shell_cmd="nix-shell"
       fi
-      AUTO_INIT_NIX_SHELL=1 $shell_cmd --command "zsh -is eval 'nclr && \"$1\"'"
+      AUTO_INIT_NIX_SHELL=1 $shell_cmd --command "zsh -is eval 'nclr && $1'"
     fi
     return 0
   }
