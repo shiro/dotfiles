@@ -58,25 +58,25 @@ local M = {
       local lspconfig = require("lspconfig")
       lspconfig["rust_analyzer"].setup({})
 
-      --     require("mason").setup()
-      --     require("mason-tool-installer").setup({
-      --       ensure_installed = {
-      --         -- "stylua", -- lua format
-      --         -- "lua-language-server", -- lua
-      --         "typescript-language-server", -- TS
-      --         "prettierd", -- JS/TS format - prettier
-      --         "eslint-lsp", -- JS/TS lint
-      --         -- "rust-analyzer", -- rust
-      --         "taplo", -- toml
-      --         "tailwindcss-language-server", -- tailwind
-      --         "json-lsp", -- json
-      --         "nil", -- nix
-      --         "gopls", -- golang
-      --         "gofumpt", -- golang format
-      --         -- "goimports-reviser", -- golang format
-      --         "golines", -- golang format
-      --       },
-      --     })
+      require("mason").setup()
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          --         -- "stylua", -- lua format
+          --         -- "lua-language-server", -- lua
+          --         "typescript-language-server", -- TS
+          "prettierd", -- JS/TS format - prettier
+          --         "eslint-lsp", -- JS/TS lint
+          --         -- "rust-analyzer", -- rust
+          --         "taplo", -- toml
+          --         "tailwindcss-language-server", -- tailwind
+          --         "json-lsp", -- json
+          --         "nil", -- nix
+          --         "gopls", -- golang
+          --         "gofumpt", -- golang format
+          --         -- "goimports-reviser", -- golang format
+          --         "golines", -- golang format
+        },
+      })
       --     -- capabilities.textDocument.completion.completionItem.snippetSupport = tru
 
       --
