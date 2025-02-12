@@ -27,9 +27,7 @@ function set_timeout(timeout, callback)
   local function ontimeout()
     uv.timer_stop(timer)
     uv.close(timer)
-    vim.schedule(function()
-      callback(timer)
-    end)
+    vim.schedule(function() callback(timer) end)
   end
   uv.timer_start(timer, timeout, 0, ontimeout)
   return timer
@@ -52,9 +50,7 @@ require("lazy").setup({
           right = {
             " ",
             "number_of_folded_lines",
-            function(config)
-              return config.fill_char:rep(3)
-            end,
+            function(config) return config.fill_char:rep(3) end,
           },
         },
         process_comment_signs = false,
@@ -142,9 +138,7 @@ require("lazy").setup({
   {
     "kevinhwang91/nvim-bqf",
     ft = "qf",
-    config = function()
-      require("bqf").setup({ preview = { winblend = 0 } })
-    end,
+    config = function() require("bqf").setup({ preview = { winblend = 0 } }) end,
   },
   -- }}}
   -- floating command line {{{
@@ -190,7 +184,7 @@ require("lazy").setup({
       -- end, {})
       -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mt', '<cmd>silent ArpeggioReplaceTag<cr>')")
 
-      vim.api.nvim_command("Arpeggio nmap kl yiw")
+      -- vim.api.nvim_command("Arpeggio nmap kl yiw")
 
       local id = 0
       registerMapping = function(mapping, target)
@@ -499,9 +493,7 @@ require("lazy").setup({
 
       cmp.setup({
         snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
+          expand = function(args) require("luasnip").lsp_expand(args.body) end,
         },
         preselect = cmp.PreselectMode.None,
         completion = {
@@ -517,9 +509,7 @@ require("lazy").setup({
           documentation = cmp.config.window.bordered(),
         },
         confirmation = {
-          get_commit_characters = function(commit_characters)
-            return {}
-          end,
+          get_commit_characters = function(commit_characters) return {} end,
         },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -638,179 +628,7 @@ require("lazy").setup({
     },
   },
   -- }}}
-  -- find files, changes and more {{{
-  {
-    "nvim-telescope/telescope.nvim",
-    -- tag = "0.1.5",
-    branch = "master",
-    event = "VeryLazy",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      -- "fannheyward/telescope-coc.nvim",
-      "natecraddock/telescope-zf-native.nvim",
-    },
-    config = function()
-      local telescope_actions = require("telescope.actions")
-
-      local ts_select_dir_for_grep = function(prompt_bufnr)
-        local action_state = require("telescope.actions.state")
-        local fb = require("telescope").extensions.file_browser
-        local live_grep = require("telescope.builtin").live_grep
-        local current_line = action_state.get_current_line()
-
-        fb.file_browser({
-          files = false,
-          depth = false,
-          attach_mappings = function(prompt_bufnr)
-            require("telescope.actions").select_default:replace(function()
-              local entry_path = action_state.get_selected_entry().Path
-              local dir = entry_path:is_dir() and entry_path or entry_path:parent()
-              local relative = dir:make_relative(vim.fn.getcwd())
-              local absolute = dir:absolute()
-
-              live_grep({
-                results_title = relative .. "/",
-                cwd = absolute,
-                default_text = current_line,
-              })
-            end)
-
-            return true
-          end,
-        })
-      end
-
-      require("telescope").setup({
-        defaults = {
-          mappings = { i = { ["<esc>"] = telescope_actions.close } },
-          layout_config = {
-            vertical = {
-              height = 0.6,
-              -- mirror = true,
-            },
-          },
-          layout_strategy = "flex",
-        },
-        file_ignore_patterns = {
-          "node%_modules/.*",
-          "./target/.*",
-        },
-        pickers = {
-          live_grep = {
-            mappings = {
-              i = { ["<C-f>"] = ts_select_dir_for_grep },
-              n = { ["<C-f>"] = ts_select_dir_for_grep },
-            },
-          },
-        },
-      })
-
-      require("telescope").load_extension("zf-native")
-      require("telescope").load_extension("file_browser")
-
-      local sorter = require("top-results-sorter").sorter()
-      local tele_builtin = require("telescope.builtin")
-      local actions = require("telescope.actions")
-      function layout()
-        local width = vim.fn.winwidth(0)
-        local height = vim.fn.winheight(0)
-
-        if (width / 2) > height then
-          return "horizontal"
-        end
-        return "vertical"
-      end
-
-      function files(show_hidden)
-        -- local find_command = nil
-        -- if show_hidden then
-        -- find_command = { "rg", "--files", "--hidden", "-g", "!.git" }
-        -- end
-
-        require("telescopePickers").prettyFilesPicker({
-          picker = "find_files",
-
-          options = {
-            sorter = sorter,
-            previewer = false,
-            layout_strategy = layout(),
-            find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
-            -- attach_mappings = function(_, map)
-            --   map("n", "zh", function(prompt_bufnr)
-            --   	actions.close(prompt_bufnr)
-            --   	files(not show_hidden)
-            --   end)
-            --   return true
-            -- end,
-          },
-        })
-      end
-
-      vim.api.nvim_create_user_command("Files", function()
-        files()
-      end, {})
-      vim.keymap.set("n", "<leader>f", function()
-        tele_builtin.resume()
-      end, {})
-
-      vim.keymap.set("n", "<leader>F", function()
-        require("telescopePickers").prettyGrepPicker({
-          picker = "live_grep",
-          options = { layout_strategy = layout() },
-        })
-      end, {})
-      vim.keymap.set("n", "<leader>s", function()
-        require("telescopePickers").prettyWorkspaceSymbolsPicker({
-          sorter = sorter,
-          prompt_title = "Workspace symbols",
-          layout_strategy = layout(),
-        })
-      end, {})
-      vim.keymap.set("n", "<leader>d", function()
-        require("telescopePickers").prettyGitPicker({
-          sorter = sorter,
-          layout_strategy = layout(),
-        })
-      end, {})
-      vim.keymap.set("n", "<leader>h", function()
-        tele_builtin.git_bcommits({
-          layout_strategy = layout(),
-        })
-      end, {})
-
-      vim.keymap.set("x", "<leader>h", function()
-        tele_builtin.git_bcommits_range({
-          layout_strategy = layout(),
-        })
-      end, {})
-
-      vim.keymap.set("n", "gr", function()
-        vim.api.nvim_command("m'")
-        require("telescope.builtin").lsp_references({
-          layout_strategy = layout(),
-          -- on_complete = {
-          --     function(picker)
-          --         -- remove this on_complete callback
-          --         picker:clear_completion_callbacks()
-          --         -- if we have exactly one match, select it
-          --         if picker.manager.linked_states.size == 1 then
-          --             require("telescope.actions").select_default(picker.prompt_bufnr)
-          --         end
-          --     end,
-          -- }
-        })
-      end)
-
-      vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
-    end,
-  },
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-  },
-  -- }}}
-
+  require("plugins.telescope"),
   -- file manager {{{
   {
     "kevinhwang91/rnvimr",
@@ -842,9 +660,7 @@ require("lazy").setup({
       }
     end,
     config = function()
-      vim.keymap.set("n", "<leader>l", function()
-        vim.api.nvim_command("RnvimrToggle")
-      end, {})
+      vim.keymap.set("n", "<leader>l", function() vim.api.nvim_command("RnvimrToggle") end, {})
     end,
   },
   --- }}}
@@ -863,9 +679,7 @@ require("lazy").setup({
     "saecki/crates.nvim",
     ft = "toml",
     tag = "stable",
-    config = function()
-      require("crates").setup()
-    end,
+    config = function() require("crates").setup() end,
   },
   -- }}}
 
@@ -878,12 +692,8 @@ require("lazy").setup({
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
-    config = function()
-      require("gopher").setup({})
-    end,
-    build = function()
-      vim.cmd([[silent! GoInstallDeps]])
-    end,
+    config = function() require("gopher").setup({}) end,
+    build = function() vim.cmd([[silent! GoInstallDeps]]) end,
   },
   -- }}}
 
@@ -897,9 +707,7 @@ require("lazy").setup({
   {
     "kylechui/nvim-surround",
     event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup({})
-    end,
+    config = function() require("nvim-surround").setup({}) end,
   },
   -- }}}
 
@@ -920,9 +728,7 @@ require("lazy").setup({
   {
     "NvChad/nvim-colorizer.lua",
     event = "VeryLazy",
-    config = function()
-      require("colorizer").setup({ user_default_options = { mode = "virtualtext", names = false } })
-    end,
+    config = function() require("colorizer").setup({ user_default_options = { mode = "virtualtext", names = false } }) end,
   },
   -- }}}
 
@@ -947,12 +753,8 @@ require("lazy").setup({
 -- vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true })
 vim.keymap.set("n", "<leader>[e", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "<leader>]e", vim.diagnostic.goto_next)
-vim.keymap.set("n", "[e", function()
-  vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
-end)
-vim.keymap.set("n", "]e", function()
-  vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
-end)
+vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end)
+vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end)
 
 -- vim.keymap.set("n", "<A-S-e>", vim.lsp.buf.rename, {})
 vim.keymap.set("n", "<leader>e", vim.lsp.buf.rename, {})
@@ -1050,17 +852,24 @@ end
 
 -- code actions
 vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
+vim.keymap.set(
+  { "n", "v" },
+  "<space>k",
+  function() require("telescope").extensions.omnibar.omnibar() end,
+  { silent = true }
+)
 -- refactor
-vim.keymap.set({ "n", "x" }, "<leader>r", function()
-  require("telescope").extensions.refactoring.refactors()
-end, { silent = true })
+vim.keymap.set(
+  { "n", "x" },
+  "<leader>r",
+  function() require("telescope").extensions.refactoring.refactors() end,
+  { silent = true }
+)
 vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
 
 local function quickfix()
   vim.lsp.buf.code_action({
-    filter = function(a)
-      return a.isPreferred
-    end,
+    filter = function(a) return a.isPreferred end,
     apply = true,
   })
 end
@@ -1117,12 +926,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "dd", function()
       local curqfidx = vim.fn.line(".")
       local entries = vim.fn.getqflist()
-      if entries == nil then
-        return
-      end
-      if #entries == 0 then
-        return
-      end
+      if entries == nil then return end
+      if #entries == 0 then return end
       -- remove the item from the quickfix list
       table.remove(entries, curqfidx)
       vim.fn.setqflist(entries, "r")
@@ -1130,9 +935,7 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.cmd("copen")
       local new_idx = curqfidx < #entries and curqfidx or math.max(curqfidx - 1, 1)
       local winid = vim.fn.win_getid()
-      if winid == nil then
-        return
-      end
+      if winid == nil then return end
       vim.api.nvim_win_set_cursor(winid, { new_idx, 0 })
     end, { silent = true, noremap = true, buffer = 0 })
     vim.keymap.set("n", "<CR>", "<CR>:cclose<CR>", { silent = true, noremap = true, buffer = 0 })
@@ -1142,24 +945,14 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.keymap.set("n", "<leader>n", function()
   local qf_exists = false
   local info = vim.fn.getwininfo()
-  if info == nil then
-    return
-  end
+  if info == nil then return end
   for _, win in pairs(info) do
-    if win["quickfix"] == 1 then
-      qf_exists = true
-    end
+    if win["quickfix"] == 1 then qf_exists = true end
   end
-  if qf_exists == true then
-    return vim.cmd("cclose")
-  end
+  if qf_exists == true then return vim.cmd("cclose") end
   local info = vim.fn.getwininfo()
-  if info == nil then
-    return
-  end
-  if not vim.tbl_isempty(info) then
-    return vim.cmd("copen")
-  end
+  if info == nil then return end
+  if not vim.tbl_isempty(info) then return vim.cmd("copen") end
 end, {})
 
 -- }}}
@@ -1167,9 +960,7 @@ end, {})
 function format(opts)
   opts = opts or {}
   -- only for files
-  if vim.bo.buftype ~= "" then
-    return
-  end
+  if vim.bo.buftype ~= "" then return end
 
   -- pcall(function()
   require("conform").format({
@@ -1179,13 +970,12 @@ function format(opts)
   }, opts.callback)
   -- end)
 end
+vim.g.format = format
 
 vim.api.nvim_create_user_command("Format", format, {})
 vim.api.nvim_create_user_command("FormatAndSave", function()
   format({
-    callback = function()
-      save()
-    end,
+    callback = function() save() end,
   })
 end, {})
 
@@ -1196,27 +986,21 @@ function organize_imports()
     or vim.bo.filetype == "javascript"
     or vim.bo.filetype == "javascriptreact"
   then
-    require("typescript-tools.api").add_missing_imports(true)
-    -- requireTSToolsRemoveUnusedImports("typescript-tools.api").organize_imports(true)
-    require("typescript-tools.api").remove_unused_imports(true)
+    pcall(function()
+      require("typescript-tools.api").add_missing_imports(true)
+      -- requireTSToolsRemoveUnusedImports("typescript-tools.api").organize_imports(true)
+      require("typescript-tools.api").remove_unused_imports(true)
+    end)
   end
 end
 
 function save()
   -- only for files
-  if vim.bo.buftype ~= "" then
-    return
-  end
+  if vim.bo.buftype ~= "" then return end
   local filename = vim.api.nvim_buf_get_name(0)
-  if filename == "" then
-    return
-  end
-  if not vim.opt.modified:get() then
-    return
-  end
-  if vim.fn.filereadable(filename) ~= 1 then
-    return
-  end
+  if filename == "" then return end
+  if not vim.opt.modified:get() then return end
+  if vim.fn.filereadable(filename) ~= 1 then return end
   vim.cmd.write({ mods = { silent = true } })
 end
 
@@ -1237,9 +1021,7 @@ vim.api.nvim_create_autocmd("RecordingLeave", { group = "default", command = "se
 -- move cursor and scroll by a fixed distance, with center support
 function Jump(distance, center)
   local view_info = vim.fn.winsaveview()
-  if view_info == nil then
-    return
-  end
+  if view_info == nil then return end
 
   local height = vim.fn.winheight(0)
   local cursor_row = view_info.lnum
@@ -1260,25 +1042,13 @@ function Jump(distance, center)
   vim.fn.winrestview(view_info)
 end
 
-vim.keymap.set("n", "<C-u>", function()
-  Jump(math.max(vim.v.count, 1) * -18, true)
-end, {})
-vim.keymap.set("n", "<C-d>", function()
-  Jump(math.max(vim.v.count, 1) * 18, true)
-end, {})
-vim.keymap.set("n", "<C-b>", function()
-  Jump(math.max(vim.v.count, 1) * -32, true)
-end, {})
-vim.keymap.set("n", "<C-f>", function()
-  Jump(math.max(vim.v.count, 1) * 32, true)
-end, {})
+vim.keymap.set("n", "<C-u>", function() Jump(math.max(vim.v.count, 1) * -18, true) end, {})
+vim.keymap.set("n", "<C-d>", function() Jump(math.max(vim.v.count, 1) * 18, true) end, {})
+vim.keymap.set("n", "<C-b>", function() Jump(math.max(vim.v.count, 1) * -32, true) end, {})
+vim.keymap.set("n", "<C-f>", function() Jump(math.max(vim.v.count, 1) * 32, true) end, {})
 
-vim.keymap.set("n", "<C-y>", function()
-  Jump(math.max(vim.v.count, 1) * -3)
-end, {})
-vim.keymap.set("n", "<C-e>", function()
-  Jump(math.max(vim.v.count, 1) * 3)
-end, {})
+vim.keymap.set("n", "<C-y>", function() Jump(math.max(vim.v.count, 1) * -3) end, {})
+vim.keymap.set("n", "<C-e>", function() Jump(math.max(vim.v.count, 1) * 3) end, {})
 
 -- paste with indent by default, this needs to be after plugins
 vim.keymap.set("n", "p", "]p=`]", { silent = true, noremap = true })
@@ -1357,9 +1127,7 @@ vim.keymap.set({ "n", "i" }, "<C-b>", function()
     }
 
     vim.lsp.buf_request(bufnr, "textDocument/hover", params, function(err, result, _, _)
-      if err then
-        error(tostring(err))
-      end
+      if err then error(tostring(err)) end
 
       if not result then
         -- lsp_node_type_data = ""
@@ -1373,15 +1141,11 @@ vim.keymap.set({ "n", "i" }, "<C-b>", function()
   local parse_lsp_node_type = function(lsp_node_type_data)
     local contents = lsp_node_type_data.contents
 
-    if contents == nil then
-      return nil, nil
-    end
+    if contents == nil then return nil, nil end
 
     local lsp_node_type_markdown = contents[1].value
 
-    if lsp_node_type_markdown == nil then
-      return nil, nil
-    end
+    if lsp_node_type_markdown == nil then return nil, nil end
 
     local doc = string.match(lsp_node_type_markdown, "```(.*)```")
     local first_line = string.match(doc, "%w*\n([^\n]*)")

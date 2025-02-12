@@ -11,10 +11,10 @@ local M = {
         formatters_by_ft = {
           lua = { "stylua" },
           svelte = { "prettierd" },
-          javascript = { "prettierd", "dprint" },
-          typescript = { "prettierd", "dprint" },
-          javascriptreact = { "prettierd", "dprint" },
-          typescriptreact = { "prettierd", "dprint" },
+          javascript = { "dprint", "prettierd", stop_after_first = true },
+          typescript = { "dprint", "prettierd", stop_after_first = true },
+          javascriptreact = { "dprint", "prettierd", stop_after_first = true },
+          typescriptreact = { "dprint", "prettierd", stop_after_first = true },
           json = { "prettierd" },
           graphql = { "prettierd" },
           java = { "google-java-format" },
@@ -31,6 +31,17 @@ local M = {
           css = { "prettierd" },
           scss = { "prettierd" },
         },
+      })
+    end,
+  },
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    cmd = {}, -- don't load until called by lua
+    config = function()
+      require("treesj").setup({
+        use_default_keymaps = false,
+        max_join_length = 200,
       })
     end,
   },

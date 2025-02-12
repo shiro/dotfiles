@@ -34,9 +34,7 @@ local M = {
 
       local remote_action = function(action, opts)
         opts = opts or {}
-        if opts.restore == nil then
-          opts.restore = true
-        end
+        if opts.restore == nil then opts.restore = true end
 
         local count = vim.v.count
         local restore = opts.restore
@@ -48,23 +46,15 @@ local M = {
 
         -- quit if aborted (position didn't change)
         local after_view_info = vim.fn.winsaveview()
-        if after_view_info.col == view_info.col and after_view_info.lnum == view_info.lnum then
-          return
-        end
+        if after_view_info.col == view_info.col and after_view_info.lnum == view_info.lnum then return end
 
-        if count > 0 then
-          vim.fn.feedkeys(count)
-        end
+        if count > 0 then vim.fn.feedkeys(count) end
         vim.fn.feedkeys(action)
 
-        if not restore then
-          return
-        end
+        if not restore then return end
 
         if immediate then
-          vim.schedule(function()
-            vim.fn.winrestview(view_info)
-          end)
+          vim.schedule(function() vim.fn.winrestview(view_info) end)
           return
         end
 
@@ -74,12 +64,8 @@ local M = {
               local m1 = vim.v.event.old_mode
               local m2 = vim.v.event.new_mode
 
-              if m2 == "i" then
-                return
-              end
-              if m1 == "i" and m2 == "niI" then
-                return
-              end
+              if m2 == "i" then return end
+              if m1 == "i" and m2 == "niI" then return end
 
               vim.fn.winrestview(view_info)
               return true
@@ -129,9 +115,7 @@ local M = {
               local suffix = ""
               if tobj:sub(2, 2) == "." then
                 char = vim.fn.getchar()
-                if char == 27 then
-                  return
-                end
+                if char == 27 then return end
                 suffix = vim.fn.nr2char(char)
               end
 
@@ -144,12 +128,9 @@ local M = {
         end
       end
 
-      vim.keymap.set({ "n" }, "grC", function()
-        remote_action("C")
-      end)
-      vim.keymap.set({ "n" }, "grd", function()
-        remote_action("gd")
-      end)
+      vim.keymap.set({ "n" }, "grC", function() remote_action("C") end)
+      vim.keymap.set({ "n" }, "grD", function() remote_action("D") end)
+      vim.keymap.set({ "n" }, "grd", function() remote_action("gd") end)
       -- vim.keymap.set({ "n" }, "drD", function()
       --   remote_action("D", { immediate = true })
       -- end)
@@ -161,9 +142,7 @@ local M = {
       {
         "s",
         mode = { "n", "o" },
-        function()
-          require("flash").jump()
-        end,
+        function() require("flash").jump() end,
         desc = "Flash",
       },
       -- { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
@@ -179,9 +158,7 @@ local M = {
       { "<leader>/", "<Plug>(incsearch-fuzzy-/)" },
       { "<leader>?", "<Plug>(incsearch-fuzzy-?)" },
     },
-    init = function()
-      vim.g["incsearch#auto_nohlsearch"] = 1
-    end,
+    init = function() vim.g["incsearch#auto_nohlsearch"] = 1 end,
   },
 }
 
