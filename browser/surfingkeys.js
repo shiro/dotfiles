@@ -33,6 +33,8 @@ mapkey("p", "Open the clipboard's URL in the current tab", function () {
   });
 });
 
+aceVimMap("<Esc>", ":wq", "normal");
+
 map("B", "b");
 mapkey("b", "Open a Bookmark in current tab", function () {
   Front.openOmnibar({ type: "Bookmarks", tabbed: false });
