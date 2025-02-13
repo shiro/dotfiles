@@ -51,7 +51,6 @@ y = -1
 
 [keyboard]
 bindings = [
-  { key = "V", mods = "Control", action = "Paste" },
   { chars = "\u001B[27;5;9~", key = "Tab", mods = "Control" },
   { chars = "\u001B[27;6;9~", key = "Tab", mods = "Control|Shift" },
   { chars = "\u001B[70;5u", key = "F", mods = "Control|Shift" },

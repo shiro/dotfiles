@@ -183,8 +183,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
     -- Enable completion triggered by <c-x><c-o>
     -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-    local opts = { buffer = ev.buf }
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+
+    vim.keymap.set("n", "gd", function()
+      if vim.bo.filetype == "markdown" and require("obsidian").util.cursor_on_markdown_link() then
+        vim.cmd("ObsidianFollowLink")
+        return
+      end
+
+      vim.lsp.buf.definition()
+    end, { buffer = ev.buf })
   end,
 })
 

@@ -386,6 +386,9 @@ require("lazy").setup({
   --   end,
   -- },
   -- }}}
+
+  require("plugins.obsidian"),
+
   require("plugins.jumping"),
   require("plugins.lsp"),
   require("plugins.completion"),

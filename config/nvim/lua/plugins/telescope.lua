@@ -62,11 +62,17 @@ local M = {
         },
         extensions = {
           omnibar = {
+            ["Jump to Obsidian tag"] = { ft = { "markdown" }, command = function() vim.cmd("ObsidianTags") end },
+            ["New Obsidian note"] = { ft = { "markdown" }, command = function() vim.cmd("ObsidianNew") end },
             ["Format buffer"] = { command = function() vim.g.format() end },
             ["Toggle block split"] = { command = function() require("treesj").toggle() end },
             ["Remove unused imports"] = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").remove_unused_imports() end,
+            },
+            ["Rename file"] = {
+              ft = { "typescriptreact", "typescript" },
+              command = function() require("typescript-tools.api").rename_file(true) end,
             },
             ["Open file explorer"] = {
               -- ft = { "typescriptreact" },
