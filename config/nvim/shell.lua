@@ -2,8 +2,8 @@
 vim.opt.wrap = true
 
 -- enable line numbers
-vim.opt.number = true
-vim.opt.relativenumber = true
+-- vim.opt.number = true
+-- vim.opt.relativenumber = true
 
 -- draw command bar over status bar when used
 vim.opt.cmdheight = 0
@@ -16,7 +16,7 @@ vim.opt.diffopt:append({ "algorithm:patience" })
 vim.opt.diffopt:append({ "followwrap" })
 
 -- disable status line
-vim.opt.laststatus = 3
+vim.opt.laststatus = 0
 
 -- don't show diff fill chars
 vim.opt.fillchars = { diff = " " }
@@ -40,17 +40,18 @@ vim.keymap.set("n", "<right>", "<CMD>wincmd l<CR>", { silent = true })
 vim.keymap.set("n", "<M-i>", "<CMD>wincmd w<CR>", { silent = true })
 
 -- auto indent on insert if line is empty
-vim.keymap.set("n", "i", function()
-  return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
-end, { expr = true, noremap = true })
+vim.keymap.set(
+  "n",
+  "i",
+  function() return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i" end,
+  { expr = true, noremap = true }
+)
 
 -- save/restore undo history to a temporary file
 local data_dir = os.getenv("XDG_DATA_HOME")
 if data_dir ~= nil then
   local undo_dir = data_dir .. "/nvim/undo"
-  if vim.fn.isdirectory(undo_dir) == 0 then
-    os.execute('mkdir -p "' .. undo_dir .. '"')
-  end
+  if vim.fn.isdirectory(undo_dir) == 0 then os.execute('mkdir -p "' .. undo_dir .. '"') end
   vim.opt.undodir = undo_dir
   vim.opt.undofile = true
 end
@@ -64,8 +65,6 @@ end, { silent = true })
 
 vim.filetype.add({
   pattern = {
-    [".*%.(%a+)%.stub"] = function(path, bufnr, ext)
-      return vim.filetype.match({ filename = "." .. ext })
-    end,
+    [".*%.(%a+)%.stub"] = function(path, bufnr, ext) return vim.filetype.match({ filename = "." .. ext }) end,
   },
 })

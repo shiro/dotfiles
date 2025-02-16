@@ -131,6 +131,8 @@ local M = {
       vim.keymap.set({ "n" }, "grC", function() remote_action("C") end)
       vim.keymap.set({ "n" }, "grD", function() remote_action("D") end)
       vim.keymap.set({ "n" }, "grd", function() remote_action("gd") end)
+      vim.keymap.set({ "n" }, "grcc", function() remote_action("gcc", { immediate = true }) end)
+      vim.keymap.set({ "n" }, "gmcc", function() remote_action("gcc", { restore = false }) end)
       -- vim.keymap.set({ "n" }, "drD", function()
       --   remote_action("D", { immediate = true })
       -- end)

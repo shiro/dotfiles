@@ -172,10 +172,13 @@ exe "hi @lsp guifg=None guibg=None gui=None"
 exe "hi Identifier guifg=None guibg=None gui=None"
 exe "hi Conceal guifg=".gray." guibg=None gui=None"
 exe "hi DiagnosticUnderlineError guifg=".error." guibg=None gui=None"
+hi link QuickFixLine Normal
+
 
 " plugins
-exe "hi PackageInfoOutdatedVersion guifg=".gray
+hi link PackageInfoOutdatedVersion Comment
 exe "hi NotifyBackground guibg=".bg
+exe "hi AerialLine guifg=".yellow." guibg=None"
 
 " quickfix
 

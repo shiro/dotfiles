@@ -102,6 +102,7 @@ vnoremap . :normal .<cr>
 set mat=2                   " how many tenths of a second to blink
 
 set nonumber                " disable line numbers by default
+set norelativenumber        " disable relative line numbers by default
 
 set wrap                    " turn on line wrapping
 set wrapmargin=8            " wrap lines when coming within n characters from side

@@ -62,6 +62,17 @@ local M = {
         },
         extensions = {
           omnibar = {
+            ["Inspect treesitter nodes"] = { command = function() vim.cmd("InspectTree") end },
+            ["Toggle outline"] = { command = function() require("aerial").toggle() end },
+            ["Toggle statusline"] = {
+              command = function()
+                if vim.opt.laststatus:get() == 0 then
+                  vim.opt.laststatus = 3
+                else
+                  vim.opt.laststatus = 0
+                end
+              end,
+            },
             ["Jump to Obsidian tag"] = { ft = { "markdown" }, command = function() vim.cmd("ObsidianTags") end },
             ["New Obsidian note"] = { ft = { "markdown" }, command = function() vim.cmd("ObsidianNew") end },
             ["Format buffer"] = { command = function() vim.g.format() end },
@@ -219,6 +230,15 @@ local M = {
       end)
 
       vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
+
+      -- open last file if none was specified
+      if vim.fn.argv(0) == "" then
+        vim.schedule(function()
+          require("top-results-sorter").load_history()
+          local path = require("top-results-sorter").Recent.latest
+          if path ~= nil and vim.uv.fs_stat(path) then vim.schedule(function() vim.cmd("e " .. path) end) end
+        end)
+      end
     end,
   },
   {
