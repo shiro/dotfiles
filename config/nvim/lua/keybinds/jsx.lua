@@ -34,7 +34,7 @@ function get_jsx_node_at_cursor()
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  -- group = vim.api.nvim_create_augroup("UserLspConfig", {}),
   pattern = { "*.tsx", "*.jsx" },
   callback = function(ev)
     local buf = ev.buf
