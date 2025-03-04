@@ -973,11 +973,7 @@ end
 vim.g.format = format
 
 vim.api.nvim_create_user_command("Format", format, {})
-vim.api.nvim_create_user_command("FormatAndSave", function()
-  format({
-    callback = function() save() end,
-  })
-end, {})
+vim.api.nvim_create_user_command("FormatAndSave", function() format({ callback = save }) end, {})
 
 function organize_imports()
   if

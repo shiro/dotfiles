@@ -113,9 +113,10 @@ local M = {
       require("telescope").load_extension("file_browser")
       require("telescope").load_extension("omnibar")
 
-      local sorter = require("top-results-sorter").sorter()
       local tele_builtin = require("telescope.builtin")
       local actions = require("telescope.actions")
+      local make_entry = require("telescope.make_entry")
+
       function layout()
         local width = vim.fn.winwidth(0)
         local height = vim.fn.winheight(0)
@@ -134,7 +135,7 @@ local M = {
           picker = "find_files",
 
           options = {
-            sorter = sorter,
+            sorter = require("top-results-sorter").sorter(),
             previewer = false,
             layout_strategy = layout(),
             find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
