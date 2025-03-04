@@ -1,3 +1,15 @@
+---@param bufnr integer
+---@param ... string
+---@return string
+local function first(bufnr, ...)
+  local conform = require("conform")
+  for i = 1, select("#", ...) do
+    local formatter = select(i, ...)
+    if conform.get_formatter_info(formatter, bufnr).available then return formatter end
+  end
+  return select(1, ...)
+end
+
 local M = {
   {
     "stevearc/conform.nvim",
@@ -14,7 +26,8 @@ local M = {
           javascript = { "dprint", "prettierd", stop_after_first = true },
           typescript = { "dprint", "prettierd", stop_after_first = true },
           javascriptreact = { "dprint", "prettierd", stop_after_first = true },
-          typescriptreact = { "dprint", "prettierd", stop_after_first = true },
+          -- typescriptreact = { "dprint", "prettierd", stop_after_first = true },
+          typescriptreact = function(bufnr) return { first(bufnr, "dprint", "prettierd"), "eslint_d" } end,
           json = { "prettierd" },
           graphql = { "prettierd" },
           java = { "google-java-format" },
