@@ -29,9 +29,7 @@ end
 
 local get_node_before_cursor = function()
   local node = get_node_at_cursor()
-  if node == nil then
-    return nil
-  end
+  if node == nil then return nil end
   local cursor_pos = get_cursor_pos()
 
   local done = false
@@ -60,15 +58,11 @@ end
 
 local get_node_after_cursor = function()
   local node = get_node_at_cursor()
-  if node == nil then
-    return nil
-  end
+  if node == nil then return nil end
   local cursor_pos = get_cursor_pos()
   cursor_pos[1] = cursor_pos[1] - 1
 
-  if pos_cmp({ node:start() }, cursor_pos) == 0 then
-    return node
-  end
+  if pos_cmp({ node:start() }, cursor_pos) == 0 then return node end
 
   local done = false
   while not done do
@@ -94,9 +88,7 @@ end
 
 -- get the row,col position before the input position
 local function get_prev_pos(pos)
-  if pos[1] ~= 0 then
-    return { pos[1], pos[2] - 1 }
-  end
+  if pos[1] ~= 0 then return { pos[1], pos[2] - 1 } end
   if pos[1] ~= 0 then
     local prev_line = vim.api.nvim_buf_get_lines(0, pos[1], pos[2] + 1, true)[1]
     return { pos[1] - 1, string.len(prev_line) }
@@ -134,9 +126,7 @@ M.move = function(mode, up)
     target = node:next_named_sibling()
   end
 
-  if target == nil then
-    return
-  end
+  if target == nil then return end
 
   while target:type() == "comment" do
     if up == true then
@@ -173,17 +163,13 @@ M.filtered_jump = go_to_next_instance
 M.targeted_jump = print_types --}}}
 
 local nodes_start_at_same_pos = function(node1, node2)
-  if node1 == nil or node2 == nil then
-    return false
-  end
+  if node1 == nil or node2 == nil then return false end
   local x1, y1 = node1:start()
   local x2, y2 = node2:start()
   return x1 == x2 and y1 == y2
 end
 
-local get_mode = function()
-  return vim.api.nvim_get_mode().mode
-end
+local get_mode = function() return vim.api.nvim_get_mode().mode end
 
 local get_closest_supported_parent_node = function()
   --
@@ -289,9 +275,7 @@ M.go = function(direction)
     cursor_pos[1] = cursor_pos[1] - 1
 
     local query = supported_queries[ft]
-    if query == nil then
-      return
-    end
+    if query == nil then return end
     local ts_query = vim.treesitter.query.parse(ft, query)
 
     if direction == "parent" then
@@ -299,9 +283,7 @@ M.go = function(direction)
       for _, match in ts_query:iter_matches(root, 0, root:start(), root:end_(), { all = true }) do
         local n = match[1][1]
         table.insert(matches, match[1][1])
-        if pos_cmp({ n:start() }, cursor_pos) >= 0 then
-          break
-        end
+        if pos_cmp({ n:start() }, cursor_pos) >= 0 then break end
       end
       local matches_len = #matches
       for k, _ in ipairs(matches) do
@@ -324,9 +306,7 @@ M.go = function(direction)
       for k, _ in ipairs(matches) do
         local n = matches[matches_len + 1 - k]
         local n_pos = { n:start() }
-        if pos_cmp(n_pos, cursor_pos) <= 0 then
-          break
-        end
+        if pos_cmp(n_pos, cursor_pos) <= 0 then break end
         if target_pos == nil or pos_cmp(n_pos, target_pos) < 0 then
           target = n
           target_pos = n_pos
@@ -336,9 +316,7 @@ M.go = function(direction)
       for _, match in ts_query:iter_matches(root, 0, root:start(), root:end_(), { all = true }) do
         local n = match[1][1]
         local n_pos = { n:start() }
-        if pos_cmp(n_pos, cursor_pos) >= 0 then
-          break
-        end
+        if pos_cmp(n_pos, cursor_pos) >= 0 then break end
         if target_pos == nil or pos_cmp(n_pos, target_pos) > 0 then
           target = n
           target_pos = n_pos

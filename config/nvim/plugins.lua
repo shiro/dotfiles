@@ -403,6 +403,7 @@ require("lazy").setup({
   },
   -- }}}
   require("plugins.language-typescript"),
+  require("plugins.copy-imports"),
   -- NPM package versions
   {
     "vuki656/package-info.nvim",

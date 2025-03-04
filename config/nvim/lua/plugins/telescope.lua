@@ -63,6 +63,12 @@ local M = {
         extensions = {
           omnibar = {
             ["Inspect treesitter nodes"] = { command = function() vim.cmd("InspectTree") end },
+            ["Run treesitter query"] = {
+              command = function()
+                vim.cmd("InspectTree")
+                vim.cmd("EditQuery")
+              end,
+            },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
             ["Toggle statusline"] = {
               command = function()
