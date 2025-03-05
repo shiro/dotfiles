@@ -187,7 +187,6 @@ in
 
 
   # Set your time zone.
-  # time.timeZone = "Asia/Tokyo";
 
   # Select internationalisation properties.
   console = {
@@ -307,7 +306,6 @@ in
       mpc-cli
       mpv
       nsxiv
-      xwaylandvideobridge
       xdragon
       nodejs_22
       nodejs_22.pkgs.pnpm
@@ -524,7 +522,9 @@ in
   services.tlp.enable = true;
 
   # timezone sync
+  services.geoclue2.enable = true;
   services.automatic-timezoned.enable = true;
+  # time.timeZone = "Asia/Tokyo";
 
   systemd.user.services.mpd = {
     enable = true;

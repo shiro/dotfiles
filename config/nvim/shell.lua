@@ -16,7 +16,7 @@ vim.opt.diffopt:append({ "algorithm:patience" })
 vim.opt.diffopt:append({ "followwrap" })
 
 -- disable status line
-vim.opt.laststatus = 0
+vim.opt.laststatus = 3
 
 -- don't show diff fill chars
 vim.opt.fillchars = { diff = " " }
