@@ -522,9 +522,9 @@ in
   services.tlp.enable = true;
 
   # timezone sync
-  services.geoclue2.enable = true;
-  services.automatic-timezoned.enable = true;
-  # time.timeZone = "Asia/Tokyo";
+  # services.geoclue2.enable = true;
+  # services.automatic-timezoned.enable = true;
+  time.timeZone = "Asia/Tokyo";
 
   systemd.user.services.mpd = {
     enable = true;
