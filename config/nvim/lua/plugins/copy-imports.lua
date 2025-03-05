@@ -1,3 +1,5 @@
+function string:startswith(start) return self:sub(1, #start) == start end
+
 local M = {
   --
 }
@@ -63,6 +65,10 @@ local function GetImportNodes(buf)
       for n in node:child(1):iter_children() do
         if n:type() == "identifier" then
           local ident = vim.treesitter.get_node_text(n, buf)
+          -- if vim.treesitter.get_node_text(node, buf):startswith("import type") then
+          --   --
+          --   print(text)
+          -- end
           imports[ident] = { name = ident, source = source, default = true }
         end
 
