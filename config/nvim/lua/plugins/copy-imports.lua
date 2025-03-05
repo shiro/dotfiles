@@ -70,13 +70,21 @@ local function GetImportNodes(buf)
           for n in n:iter_children() do
             if n:type() == "import_specifier" then
               local ident = vim.treesitter.get_node_text(n:named_child(0), buf)
-              imports[ident] = { name = ident, source = source }
+              local entry = { name = ident, source = source }
               if n:named_child(1) ~= nil then
-                local alias = vim.treesitter.get_node_text(n:named_child(1), buf)
-                imports[ident].alias = alias
+                entry.alias = vim.treesitter.get_node_text(n:named_child(1), buf)
+                imports[entry.alias] = entry
+              else
+                imports[ident] = entry
               end
             end
           end
+        end
+
+        if n:type() == "namespace_import" then
+          local text = vim.treesitter.get_node_text(n, buf)
+          local ident = text:sub(6)
+          imports[ident] = { name = ident, source = source, namespace = true }
         end
       end
     end
@@ -103,6 +111,8 @@ local function add_import(buf, import)
       line = "import " .. import.name .. ' from "' .. import.source .. '";'
     elseif import.alias ~= nil then
       line = "import { " .. import.name .. " as " .. import.alias .. ' } from "' .. import.source .. '";'
+    elseif import.namespace ~= nil then
+      line = "import * as " .. import.name .. ' from "' .. import.source .. '";'
     else
       line = "import { " .. import.name .. ' } from "' .. import.source .. '";'
     end
@@ -119,10 +129,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.cmd("normal! p")
       if Stash == nil or Stash.clipboard ~= GetClipboard() then return end
 
-      local imports = GetImportNodes(ev.buf)
+      local local_imports = GetImportNodes(ev.buf)
 
       for _, import in pairs(Stash.imports) do
-        if imports[import.name] == nil then add_import(ev.buf, import) end
+        if import.alias ~= nil then
+          if local_imports[import.alias] == nil then add_import(ev.buf, import) end
+        else
+          if local_imports[import.name] == nil then add_import(ev.buf, import) end
+        end
       end
     end, { silent = true, buffer = ev.buf })
 
