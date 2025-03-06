@@ -87,6 +87,10 @@ local M = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").remove_unused_imports() end,
             },
+            ["Organize imports"] = {
+              ft = { "typescriptreact", "typescript" },
+              command = function() require("typescript-tools.api").organize_imports() end,
+            },
             ["Rename file"] = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").rename_file(true) end,

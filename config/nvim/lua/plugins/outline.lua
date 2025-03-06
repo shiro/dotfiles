@@ -4,6 +4,7 @@ local M = {
     opts = {
       highlight_on_hover = true,
       autojump = true,
+      close_on_select = true,
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",

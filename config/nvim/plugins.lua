@@ -522,14 +522,14 @@ require("lazy").setup({
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          ["<Left>"] = cmp.mapping(function(fallback)
+          ["["] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then
               luasnip.jump(-1)
             else
               fallback()
             end
           end, { "i", "s" }),
-          ["<Right>"] = cmp.mapping(function(fallback)
+          ["]"] = cmp.mapping(function(fallback)
             if luasnip.jumpable(1) then
               luasnip.jump(1)
             else
@@ -1175,6 +1175,7 @@ vim.keymap.set({ "n", "i" }, "<C-b>", function()
   lsp_update_node_type(parse_lsp_node_type)
 end, {})
 
+require("keybinds.general")
 require("keybinds.jsx")
 
 -- local function lineinfo()
