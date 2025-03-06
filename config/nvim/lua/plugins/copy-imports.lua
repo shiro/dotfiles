@@ -1,3 +1,5 @@
+local ts_util = require("utils.treesitter")
+
 function string:startswith(start) return self:sub(1, #start) == start end
 
 local M = {
@@ -61,15 +63,21 @@ local function GetImportNodes(buf)
 
     for _, node in query:iter_captures(root, buf) do
       local source = vim.treesitter.get_node_text(node:named_child(1):child(1), buf)
+      local type_import = false
 
-      for n in node:child(1):iter_children() do
+      local children = ts_util.children(node)
+
+      -- if there's a "type" token, skip it and set a flag
+      local n = table.remove(children, 2)
+      if n:type() == "type" then
+        type_import = true
+        n = table.remove(children, 2)
+      end
+
+      for n in n:iter_children() do
         if n:type() == "identifier" then
           local ident = vim.treesitter.get_node_text(n, buf)
-          -- if vim.treesitter.get_node_text(node, buf):startswith("import type") then
-          --   --
-          --   print(text)
-          -- end
-          imports[ident] = { name = ident, source = source, default = true }
+          imports[ident] = { name = ident, source = source, default = true, type_import = type_import }
         end
 
         if n:type() == "named_imports" then
@@ -77,6 +85,9 @@ local function GetImportNodes(buf)
             if n:type() == "import_specifier" then
               local ident = vim.treesitter.get_node_text(n:named_child(0), buf)
               local entry = { name = ident, source = source }
+
+              if type_import or n:child(0):type() == "type" then entry.type_import = true end
+
               if n:named_child(1) ~= nil then
                 entry.alias = vim.treesitter.get_node_text(n:named_child(1), buf)
                 imports[entry.alias] = entry
@@ -114,13 +125,25 @@ local function add_import(buf, import)
 
     local line
     if import.default then
-      line = "import " .. import.name .. ' from "' .. import.source .. '";'
+      if import.type_import then
+        line = "import type " .. import.name .. ' from "' .. import.source .. '";'
+      else
+        line = "import " .. import.name .. ' from "' .. import.source .. '";'
+      end
     elseif import.alias ~= nil then
-      line = "import { " .. import.name .. " as " .. import.alias .. ' } from "' .. import.source .. '";'
+      if import.type_import then
+        line = "import { type " .. import.name .. " as " .. import.alias .. ' } from "' .. import.source .. '";'
+      else
+        line = "import { " .. import.name .. " as " .. import.alias .. ' } from "' .. import.source .. '";'
+      end
     elseif import.namespace ~= nil then
       line = "import * as " .. import.name .. ' from "' .. import.source .. '";'
     else
-      line = "import { " .. import.name .. ' } from "' .. import.source .. '";'
+      if import.type_import then
+        line = "import { type " .. import.name .. ' } from "' .. import.source .. '";'
+      else
+        line = "import { " .. import.name .. ' } from "' .. import.source .. '";'
+      end
     end
     vim.api.nvim_buf_set_lines(buf, row + 1, row + 1, true, { line })
   end)
