@@ -23,89 +23,86 @@ function GetIdentsInSelection(buf, sel)
   local idents = {}
 
   local language_tree = vim.treesitter.get_parser(buf)
-  language_tree:for_each_tree(function(tree, lt)
-    local ft = lt:lang()
-    local root = tree:root()
-    local query = vim.treesitter.query.parse(ft, ident_query)
-    if query == nil then return end
-    for _, node in query:iter_captures(root, buf) do
-      local node_start = { node:start() }
-      local node_end = { node:end_() }
+  local root = language_tree:trees()[1]:root()
 
-      if
-        (sel[1][1] - 1) > node_start[1]
-        or sel[1][2] > node_start[2]
-        or (sel[2][1] - 1) < node_end[1]
-        -- the node end position is 1 past the last node
-        or sel[2][2] < (node_end[2] - 1)
-      then
-        goto continue
-      end
+  local query = vim.treesitter.query.parse(language_tree:lang(), ident_query)
+  if query == nil then return end
 
-      local text = vim.treesitter.get_node_text(node, buf)
-      table.insert(idents, text)
-      ::continue::
+  for _, node in query:iter_captures(root, buf) do
+    local node_start = { node:start() }
+    local node_end = { node:end_() }
+
+    if
+      (sel[1][1] - 1) > node_start[1]
+      or sel[1][2] > node_start[2]
+      or (sel[2][1] - 1) < node_end[1]
+      -- the node end position is 1 past the last node
+      or sel[2][2] < (node_end[2] - 1)
+    then
+      goto continue
     end
-  end)
+
+    local ident = vim.treesitter.get_node_text(node, buf)
+    table.insert(idents, ident)
+    ::continue::
+  end
 
   return idents
 end
 
 local function GetImportNodes(buf)
-  local language_tree = vim.treesitter.get_parser(buf)
   local imports = {}
 
-  language_tree:for_each_tree(function(tree, lt)
-    local ft = lt:lang()
-    local root = tree:root()
-    local query = vim.treesitter.query.parse(ft, import_query)
-    if query == nil then return end
+  local language_tree = vim.treesitter.get_parser(buf)
+  local root = language_tree:trees()[1]:root()
 
-    for _, node in query:iter_captures(root, buf) do
-      local source = vim.treesitter.get_node_text(node:named_child(1):child(1), buf)
-      local type_import = false
+  local query = vim.treesitter.query.parse(language_tree:lang(), import_query)
+  if query == nil then return end
 
-      local children = ts_util.children(node)
+  for _, node in query:iter_captures(root, buf) do
+    local source = vim.treesitter.get_node_text(node:named_child(1):child(1), buf)
+    local type_import = false
 
-      -- if there's a "type" token, skip it and set a flag
-      local n = table.remove(children, 2)
-      if n:type() == "type" then
-        type_import = true
-        n = table.remove(children, 2)
+    local children = ts_util.children(node)
+
+    -- if there's a "type" token, skip it and set a flag
+    local n = table.remove(children, 2)
+    if n:type() == "type" then
+      type_import = true
+      n = table.remove(children, 2)
+    end
+
+    for n in n:iter_children() do
+      if n:type() == "identifier" then
+        local ident = vim.treesitter.get_node_text(n, buf)
+        imports[ident] = { name = ident, source = source, default = true, type_import = type_import }
       end
 
-      for n in n:iter_children() do
-        if n:type() == "identifier" then
-          local ident = vim.treesitter.get_node_text(n, buf)
-          imports[ident] = { name = ident, source = source, default = true, type_import = type_import }
-        end
+      if n:type() == "named_imports" then
+        for n in n:iter_children() do
+          if n:type() == "import_specifier" then
+            local ident = vim.treesitter.get_node_text(n:named_child(0), buf)
+            local entry = { name = ident, source = source }
 
-        if n:type() == "named_imports" then
-          for n in n:iter_children() do
-            if n:type() == "import_specifier" then
-              local ident = vim.treesitter.get_node_text(n:named_child(0), buf)
-              local entry = { name = ident, source = source }
+            if type_import or n:child(0):type() == "type" then entry.type_import = true end
 
-              if type_import or n:child(0):type() == "type" then entry.type_import = true end
-
-              if n:named_child(1) ~= nil then
-                entry.alias = vim.treesitter.get_node_text(n:named_child(1), buf)
-                imports[entry.alias] = entry
-              else
-                imports[ident] = entry
-              end
+            if n:named_child(1) ~= nil then
+              entry.alias = vim.treesitter.get_node_text(n:named_child(1), buf)
+              imports[entry.alias] = entry
+            else
+              imports[ident] = entry
             end
           end
         end
+      end
 
-        if n:type() == "namespace_import" then
-          local text = vim.treesitter.get_node_text(n, buf)
-          local ident = text:sub(6)
-          imports[ident] = { name = ident, source = source, namespace = true }
-        end
+      if n:type() == "namespace_import" then
+        local text = vim.treesitter.get_node_text(n, buf)
+        local ident = text:sub(6)
+        imports[ident] = { name = ident, source = source, namespace = true }
       end
     end
-  end)
+  end
   return imports
 end
 
