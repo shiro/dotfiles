@@ -60,6 +60,9 @@ local function GetImportNodes(buf)
   if query == nil then return end
 
   for _, node in query:iter_captures(root, buf) do
+    -- skip over ambient imports
+    if node:named_child(1) == nil then goto continue end
+
     local source = vim.treesitter.get_node_text(node:named_child(1):child(1), buf)
     local type_import = false
 
@@ -102,6 +105,7 @@ local function GetImportNodes(buf)
         imports[ident] = { name = ident, source = source, namespace = true }
       end
     end
+    ::continue::
   end
   return imports
 end
