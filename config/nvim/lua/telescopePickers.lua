@@ -137,7 +137,7 @@ function M.prettyGitPicker(opts)
   local originalEntryMaker = telescopeMakeEntryModule.gen_from_git_status(options)
 
   options.entry_maker = function(line)
-    local originalEntryTable = originalEntryMaker(line)
+    local originalEntryTable = originalEntryMaker(line) or {}
 
     local displayer = telescopeEntryDisplayModule.create({
       separator = " ",
@@ -154,6 +154,7 @@ function M.prettyGitPicker(opts)
     originalEntryTable.ordinal = filepath
 
     originalEntryTable.display = function(entry)
+      if entry.status == nil then entry.status = "" end
       local status = entry.status
       if status:sub(2, 2) == " " then status = status:sub(1, 1) .. "⠀" end
 
