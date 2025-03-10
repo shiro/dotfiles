@@ -149,7 +149,10 @@ fn main() -> Result<()> {
                     .iter()
                     .map(|v| {
                         let current = if v.current { "yes" } else { " " };
-                        let (date, name) = v.nixos_version.split_once("_").unwrap();
+                        let (date, name) = v
+                            .nixos_version
+                            .split_once("_")
+                            .unwrap_or(("unknown", &v.nixos_version));
                         vec![
                             v.generation.to_string(),
                             current.to_string(),
