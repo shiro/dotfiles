@@ -403,6 +403,7 @@ require("lazy").setup({
   },
   -- }}}
   require("plugins.language-typescript"),
+  require("plugins.language-markdown"),
   require("plugins.copy-imports"),
   -- NPM package versions
   {
@@ -1110,70 +1111,6 @@ vim.keymap.set({ "n" }, "daf", function()
   local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
   vim.api.nvim_feedkeys("/(" .. cr .. esc .. "da(db", "m", true)
 end)
-
-vim.keymap.set({ "n", "i" }, "<C-b>", function()
-  -- local lsp_node_type_data = ""
-  local lsp_update_node_type = function(cb)
-    local bufnr = vim.api.nvim_get_current_buf()
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local bufname = vim.api.nvim_buf_get_name(bufnr)
-
-    local params = {
-      textDocument = { uri = "file://" .. bufname },
-      position = { line = cursor[1] - 1, character = cursor[2] },
-    }
-
-    vim.lsp.buf_request(bufnr, "textDocument/hover", params, function(err, result, _, _)
-      if err then error(tostring(err)) end
-
-      if not result then
-        -- lsp_node_type_data = ""
-        return
-      end
-      -- lsp_node_type_data = result
-      cb(result)
-    end)
-  end
-
-  local parse_lsp_node_type = function(lsp_node_type_data)
-    local contents = lsp_node_type_data.contents
-
-    if contents == nil then return nil, nil end
-
-    local lsp_node_type_markdown = contents[1].value
-
-    if lsp_node_type_markdown == nil then return nil, nil end
-
-    local doc = string.match(lsp_node_type_markdown, "```(.*)```")
-    local first_line = string.match(doc, "%w*\n([^\n]*)")
-    -- notify(first_line)
-
-    -- TODO implement various languages
-    -- https://github.com/roobert/node-type.nvim/blob/32c30958f6f49776855cc4ee25f0c5fcf4a5ea6e/lua/node-type/init.lua
-
-    -- typescript
-    -- local node_type = string.match(first_line, "%(([^)]*)%).*")
-    local type = string.match(first_line, ": (.*)")
-    notify(type)
-
-    -- local first_line_fingerprint = string.gsub(first_line, "%([^)]*%) ", "")
-    -- local first_line_fingerprint_components = vim.split(first_line_fingerprint, " ")
-    -- local node_kind
-    --
-    -- if first_line_fingerprint_components[2] == "->" then
-    --   node_kind = first_line_fingerprint_components[3]
-    -- else
-    --   node_kind = first_line_fingerprint_components[2]
-    --   if node_kind then
-    --     node_kind = string.match(node_kind, "(%w*)")
-    --   end
-    -- end
-    --
-    -- return node_kind, node_type
-  end
-
-  lsp_update_node_type(parse_lsp_node_type)
-end, {})
 
 require("keybinds.general")
 require("keybinds.jsx")

@@ -30,7 +30,7 @@ fn main() -> Result<()> {
     Exec::cmd("cargo")
         .args(&[
             // "build", "--release"
-            "+nightly",
+            // "+nightly",
             "build",
             "-Z",
             "build-std=std,panic_abort",
