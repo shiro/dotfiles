@@ -31,6 +31,25 @@ console.log(<finish>)
         )
       ),
       -- }}}
+      -- forof - for-of loop
+      -- {{{
+      sc(
+        "forof",
+        { "program", "statement_block" },
+        fmta(
+          [[
+          for (const <item> of <items>) {
+              <finish>
+          }
+          ]],
+          {
+            item = i(2, "item"),
+            items = i(1, "items"),
+            finish = i(0),
+          }
+        )
+      ),
+      -- }}}
       -- fn - anonymous function
       -- {{{
       s(
@@ -74,11 +93,15 @@ for(let <iterable> = <initial>; <val> << <limit>; <change_expr>){
             initial = i(2, "0"),
             val = rep(1),
             limit = i(3),
-            change_expr = d(4, function(args)
-              return sn(nil, {
-                i(1, args[1][1] .. "++"),
-              })
-            end, { 1 }),
+            change_expr = d(
+              4,
+              function(args)
+                return sn(nil, {
+                  i(1, args[1][1] .. "++"),
+                })
+              end,
+              { 1 }
+            ),
             finish = i(0),
           }
         )
@@ -146,17 +169,12 @@ const <name> = <finish>;
     sc(
       "uses",
       { "statement_block" },
-      fmta(
-        [[
-const [<getter>, set<setter>] = useState(<initial>);<finish>
-]],
-        {
-          getter = i(1),
-          initial = i(2),
-          setter = l(l._1:sub(1, 1):upper() .. l._1:sub(2, -1), 1),
-          finish = i(0),
-        }
-      ),
+      fmta([[const [<getter>, set<setter>] = useState(<initial>);<finish>]], {
+        getter = i(1),
+        initial = i(2),
+        setter = l(l._1:sub(1, 1):upper() .. l._1:sub(2, -1), 1),
+        finish = i(0),
+      }),
       {
         callbacks = {
           [-1] = {

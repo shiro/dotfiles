@@ -5,9 +5,7 @@ local M = {}
 
 local function contains(tab, val)
   for _, value in ipairs(tab) do
-    if value == val then
-      return true
-    end
+    if value == val then return true end
   end
   return false
 end
@@ -18,9 +16,7 @@ local all_supported_contexts = {
 }
 
 function M.context_snippet(opts)
-  if opts.ft == nil then
-    error("option 'ft' is required but was not provided")
-  end
+  if opts.ft == nil then error("option 'ft' is required but was not provided") end
   if all_supported_contexts[opts.ft] == nil then
     error("filetype '" .. opts.ft .. "' is not supported, consider opening a pull request")
   end
@@ -31,9 +27,7 @@ function M.context_snippet(opts)
 
     while node ~= nil do
       for _, value in ipairs(all_supported_contexts[opts.ft]) do
-        if value == node:type() then
-          return value
-        end
+        if value == node:type() then return value end
       end
       node = node:parent()
     end
@@ -42,10 +36,7 @@ function M.context_snippet(opts)
   return function(trig, contexts, snippet, extra)
     return s({
       trig = trig,
-      -- desc = desc,
-      show_condition = function(line_to_cursor)
-        return contains(contexts, get_node_type())
-      end,
+      show_condition = function(line_to_cursor) return contains(contexts, get_node_type()) end,
     }, snippet, extra)
   end
 end

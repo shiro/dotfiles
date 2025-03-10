@@ -522,14 +522,14 @@ require("lazy").setup({
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-e>"] = cmp.mapping.abort(),
-          ["["] = cmp.mapping(function(fallback)
+          ["<C-[>"] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then
               luasnip.jump(-1)
             else
               fallback()
             end
           end, { "i", "s" }),
-          ["]"] = cmp.mapping(function(fallback)
+          ["<C-]>"] = cmp.mapping(function(fallback)
             if luasnip.jumpable(1) then
               luasnip.jump(1)
             else
@@ -560,9 +560,9 @@ require("lazy").setup({
           end, { "i" }),
         }),
         sources = cmp.config.sources({
-          { name = "luasnip", priority = 999999 },
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
+          { name = "luasnip" },
         }, {
           -- { name = "buffer" },
           { name = "path" },
