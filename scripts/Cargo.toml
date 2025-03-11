@@ -25,3 +25,7 @@ panic = "abort"
 [[bin]]
 path = "./src/nix/s.rs"
 name = "s"
+
+[[bin]]
+path = "./src/nix/web.rs"
+name = "web"

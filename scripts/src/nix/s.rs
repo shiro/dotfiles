@@ -2,26 +2,6 @@ use scripts::*;
 use serde::{Deserialize, Serialize};
 use std::fs::{self};
 
-fn run_cmd_interactive(cmd: &str) -> Result<()> {
-    use subprocess::*;
-    let mut args = cmd
-        .split_whitespace()
-        .map(str::to_string)
-        .collect::<Vec<String>>();
-    let cmd = args.remove(0);
-    let ret = Exec::cmd(&cmd)
-        .args(&args)
-        .stdout(Redirection::Merge)
-        .capture()?;
-    if !ret.exit_status.success() {
-        let args = args.join(" ");
-        Err(anyhow!(
-            "process '{cmd} {args}' exited a non-zero exit status"
-        ))?;
-    };
-    Ok(())
-}
-
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Generation {
     generation: u32,
