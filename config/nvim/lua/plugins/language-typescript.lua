@@ -14,19 +14,18 @@ local M = {
           tsserver_file_preferences = { importModuleSpecifierPreference = "non-relative" },
           tsserver_plugins = {
             "@styled/typescript-styled-plugin",
-            -- "typescript-styled-plugin",
           },
         },
       })
     end,
   },
   -- hide tailwind strings when not in focus
-  {
-    dir = "~/.dotfiles/config/nvim/lua/tw-conceal",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    opts = {},
-    ft = { "html", "typescriptreact" },
-  },
+  -- {
+  --   dir = "~/.dotfiles/config/nvim/lua/tw-conceal",
+  --   dependencies = { "nvim-treesitter/nvim-treesitter" },
+  --   opts = {},
+  --   ft = { "html", "typescriptreact" },
+  -- },
 }
 
 return M

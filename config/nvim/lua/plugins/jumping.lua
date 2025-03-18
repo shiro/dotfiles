@@ -105,6 +105,7 @@ local M = {
         "t.",
         "w",
         "y",
+        "$",
       }
 
       for _, tobj in ipairs(text_objects) do

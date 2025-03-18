@@ -91,7 +91,8 @@ fn main() -> Result<()> {
                 ))?,
             };
         }
-        Some((cmd, _)) => {
+        Some((cmd, args)) => {
+            // let f = args.get;
             run_cmd_interactive(&format!("{} {cmd}", package_manager))?;
         }
         _ => unreachable!(),

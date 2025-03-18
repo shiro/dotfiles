@@ -12,6 +12,9 @@ export ZIT_MODULES_PATH="${HOME}/.local/share/zit-modules"
 # enable 256 color terminal
 [ -z "$TMUX" ] && export TERM=xterm-256color
 
+# let tmux know our cursor color
+printf '\e]12;#e7e7f1\007'
+
 # we need advanced globbing for this
 configs=(
   ${ZDOTDIR}/*.zsh
