@@ -1,12 +1,7 @@
 local M = {}
 local Sorter = require("telescope.sorters").Sorter
 
-function basename(str)
-  local name = string.gsub(str, "(.*/)(.*)", "%2")
-  return name
-end
-
-function dirname(str) return str:match("(.*/)") end
+local dirname = function(str) return str:match("(.*/)") end
 
 HistMap = {}
 function HistMap:new(from)
@@ -49,7 +44,7 @@ end
 
 M.Recent = HistMap:new()
 
-function push_current_path()
+local push_current_path = function()
   -- use relative path to save disc space
   local path = vim.fn.expand("%:.")
   -- local path = vim.api.nvim_buf_get_name(0)
@@ -57,7 +52,7 @@ function push_current_path()
   if path ~= "" then M.Recent:push(path) end
 end
 
-function get_cwd_hash()
+local get_cwd_hash = function()
   local cwd = vim.fn.getcwd()
   if cwd == nil then return nil end
   local hash = cwd:gsub("^/", ""):gsub("/", "--")
@@ -67,7 +62,7 @@ function get_cwd_hash()
   return data_dir .. "/" .. hash
 end
 
-function save_history()
+function M.save_history()
   local hash = get_cwd_hash()
   if hash == nil then return end
 
@@ -82,7 +77,7 @@ function save_history()
   fd:close()
 end
 
-function load_history()
+function M.load_history()
   local hash = get_cwd_hash()
   if hash == nil then return end
   local fd = io.open(hash, "r")
@@ -93,89 +88,6 @@ function load_history()
   fd:close()
 end
 
-M.load_history = load_history
-
-vim.api.nvim_create_autocmd({ "FocusGained" }, {
-  callback = function()
-    load_history()
-    push_current_path()
-  end,
-})
-
-vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
-  callback = save_history,
-})
-
-M.first_run = true
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = vim.schedule_wrap(function()
-    if M.first_run then
-      M.first_run = false
-      load_history()
-      push_current_path()
-      return
-    end
-    push_current_path()
-  end),
-})
-
--- M.sorter = function(opts)
---     opts = opts or {}
---
---     local fzy = opts.fzy_mod or require("telescope.algos.fzy")
---     local OFFSET = -fzy.get_score_floor()
---     local RECENCY_RATIO = 0.5
---
---     return Sorter:new {
---         discard = true,
---         scoring_function = function(_, prompt, line)
---             -- Check for actual matches before running the scoring alogrithm.
---             if prompt ~= "" and not fzy.has_match(prompt, line) then
---                 return -1
---             end
---
---             local recency = M.Recent:get_recency(line)
---             if recency ~= nil then
---                 -- remove currently open buffer
---                 if recency == 0 then return 10 end
---                 -- make sure worst recency is still better than none
---                 recency = recency * 0.99
---             else
---                 -- fallback to "worst case"
---                 recency = 1
---             end
---
---             local fzy_score = 1
---             local fzy_filename_score = 1
---             if prompt ~= "" then
---                 fzy_score = fzy.score(prompt, line)
---                 fzy_filename_score = fzy.score(prompt, basename(line))
---
---                 if fzy_score == fzy.get_score_min() then
---                     -- return "worst case"
---                     fzy_score = 1
---                 else
---                     -- map to [0..1] (lower is better)
---                     fzy_score = (1 / (fzy_score + OFFSET))
---                 end
---
---                 if fzy_filename_score == fzy.get_score_min() then
---                     -- return "worst case"
---                     fzy_filename_score = 1
---                 else
---                     -- map to [0..1] (lower is better)
---                     fzy_filename_score = (1 / (fzy_filename_score + OFFSET))
---                 end
---             end
---
---             return (fzy_score * 0.7 + fzy_filename_score * 0.3) * (1 - RECENCY_RATIO)
---                 + recency * RECENCY_RATIO
---         end,
---         highlighter = fzy_sorter.highlighter
---     }
--- end
-
 M.sorter = function(opts)
   opts = opts or {}
 
@@ -185,7 +97,6 @@ M.sorter = function(opts)
   return Sorter:new({
     discard = true,
     scoring_function = function(self, prompt, line)
-      -- line = vim.fn.getcwd() .. "/" .. line
       local recency = M.Recent:get_recency(line)
       if recency ~= nil then
         -- make the currently open buffer the last result

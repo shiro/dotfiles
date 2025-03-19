@@ -261,4 +261,37 @@ local M = {
   },
 }
 
+local push_current_path = function()
+  -- use relative path to save disc space
+  local path = vim.fn.expand("%:.")
+  -- local path = vim.api.nvim_buf_get_name(0)
+  -- print("push " .. path)
+  if path ~= "" then require("top-results-sorter").Recent:push(path) end
+end
+
+vim.api.nvim_create_autocmd({ "FocusGained" }, {
+  callback = function()
+    require("top-results-sorter").load_history()
+    push_current_path()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
+  callback = function() require("top-results-sorter").save_history() end,
+})
+
+local first_run = true
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = vim.schedule_wrap(function()
+    if first_run then
+      first_run = false
+      require("top-results-sorter").load_history()
+      push_current_path()
+      return
+    end
+    push_current_path()
+  end),
+})
+
 return M
