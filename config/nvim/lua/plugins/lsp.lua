@@ -190,7 +190,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         return
       end
 
-      vim.lsp.buf.definition()
+      -- vim.lsp.buf.definition()
+      require("telescope.builtin").lsp_definitions()
     end, { buffer = ev.buf })
   end,
 })

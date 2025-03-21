@@ -15,11 +15,12 @@ local M = {
       "natecraddock/telescope-zf-native.nvim",
     },
     config = function()
+      local telescope = require("telescope")
       local telescope_actions = require("telescope.actions")
 
       local ts_select_dir_for_grep = function(prompt_bufnr)
         local action_state = require("telescope.actions.state")
-        local fb = require("telescope").extensions.file_browser
+        local fb = telescope.extensions.file_browser
         local live_grep = require("telescope.builtin").live_grep
         local current_line = action_state.get_current_line()
 
@@ -45,7 +46,7 @@ local M = {
         })
       end
 
-      require("telescope").setup({
+      telescope.setup({
         defaults = {
           mappings = { i = { ["<esc>"] = telescope_actions.close } },
           layout_config = {
@@ -122,13 +123,11 @@ local M = {
         },
       })
 
-      require("telescope").load_extension("zf-native")
-      require("telescope").load_extension("file_browser")
-      require("telescope").load_extension("omnibar")
+      telescope.load_extension("zf-native")
+      telescope.load_extension("file_browser")
+      telescope.load_extension("omnibar")
 
-      local tele_builtin = require("telescope.builtin")
-      local actions = require("telescope.actions")
-      local make_entry = require("telescope.make_entry")
+      local builtin = require("telescope.builtin")
 
       function layout()
         local width = vim.fn.winwidth(0)
@@ -166,9 +165,9 @@ local M = {
       vim.api.nvim_create_user_command("Files", function() files() end, {})
       vim.api.nvim_create_user_command("Omnibar", function()
         -- require("telescope.Omnibar").load_command()
-        require("telescope").extensions.omnibar.omnibar()
+        telescope.extensions.omnibar.omnibar()
       end, {})
-      vim.keymap.set("n", "<leader>f", function() tele_builtin.resume() end, {})
+      vim.keymap.set("n", "<leader>f", function() builtin.resume() end, {})
 
       vim.keymap.set(
         "n",
@@ -208,7 +207,7 @@ local M = {
         "n",
         "<leader>h",
         function()
-          tele_builtin.git_bcommits({
+          builtin.git_bcommits({
             layout_strategy = layout(),
           })
         end,
@@ -219,7 +218,7 @@ local M = {
         "x",
         "<leader>h",
         function()
-          tele_builtin.git_bcommits_range({
+          builtin.git_bcommits_range({
             layout_strategy = layout(),
           })
         end,
@@ -228,7 +227,7 @@ local M = {
 
       vim.keymap.set("n", "gr", function()
         vim.api.nvim_command("m'")
-        require("telescope.builtin").lsp_references({
+        builtin.lsp_references({
           layout_strategy = layout(),
           -- on_complete = {
           --     function(picker)
