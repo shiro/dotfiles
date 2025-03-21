@@ -42,15 +42,7 @@ function HistMap:get_recency(path)
   return self.map[path] / (self.len - 1)
 end
 
-M.Recent = HistMap:new()
-
-local push_current_path = function()
-  -- use relative path to save disc space
-  local path = vim.fn.expand("%:.")
-  -- local path = vim.api.nvim_buf_get_name(0)
-  -- print("push " .. path)
-  if path ~= "" then M.Recent:push(path) end
-end
+M.Recent = {}
 
 local get_cwd_hash = function()
   local cwd = vim.fn.getcwd()
@@ -62,7 +54,9 @@ local get_cwd_hash = function()
   return data_dir .. "/" .. hash
 end
 
-function M.save_history()
+function M.save_history(name)
+  if M.Recent[name] == nil then return end
+
   local hash = get_cwd_hash()
   if hash == nil then return end
 
@@ -70,26 +64,35 @@ function M.save_history()
   local data_dir = dirname(hash)
   os.execute('mkdir -p "' .. data_dir .. '"')
 
-  local fd = io.open(hash, "w")
+  local fd = io.open(hash .. "__" .. name, "w")
   if fd == nil then return end
-  raw = vim.json.encode(M.Recent)
+  local raw = vim.json.encode(M.Recent[name])
   fd:write(raw)
   fd:close()
 end
 
-function M.load_history()
-  local hash = get_cwd_hash()
-  if hash == nil then return end
-  local fd = io.open(hash, "r")
+function M.PushRecent(name, value)
+  if M.Recent[name] == nil then M.Recent[name] = HistMap:new() end
+  M.Recent[name]:push(value)
+end
+
+function M.load_history(name)
+  local cwd_hash = get_cwd_hash()
+  if cwd_hash == nil then return end
+  local fd = io.open(cwd_hash .. "__" .. name, "r")
   if fd == nil then return end
   local raw = fd:read("*a")
   if raw == nil then return end
-  M.Recent = HistMap:new(vim.json.decode(raw, {}))
   fd:close()
+
+  local json = HistMap:new(vim.json.decode(raw, { luanil = { object = true } }))
+  if json == nil then return end
+  M.Recent[name] = json
 end
 
 M.sorter = function(opts)
-  opts = opts or {}
+  if opts.name == nil then error("'name' option is required") end
+  opts = vim.tbl_extend("keep", opts, { most_recent_is_last = false })
 
   local RECENCY_RATIO = 0.2
   local sorter = require("telescope._extensions").manager["zf-native"].native_zf_scorer()
@@ -97,10 +100,12 @@ M.sorter = function(opts)
   return Sorter:new({
     discard = true,
     scoring_function = function(self, prompt, line)
-      local recency = M.Recent:get_recency(line)
+      if M.Recent[opts.name] == nil then M.load_history(opts.name) end
+
+      local recency = M.Recent[opts.name]:get_recency(line)
       if recency ~= nil then
         -- make the currently open buffer the last result
-        if recency == 0 then return 10 end
+        if recency == 0 and opts.most_recent_is_last then return 10 end
         -- make sure worst recency is still better than none
         recency = recency * 0.99
       else

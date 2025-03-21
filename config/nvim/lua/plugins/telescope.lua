@@ -138,7 +138,7 @@ local M = {
         return "vertical"
       end
 
-      function files(show_hidden)
+      function files()
         -- local find_command = nil
         -- if show_hidden then
         -- find_command = { "rg", "--files", "--hidden", "-g", "!.git" }
@@ -148,7 +148,7 @@ local M = {
           picker = "find_files",
 
           options = {
-            sorter = require("top-results-sorter").sorter(),
+            sorter = require("top-results-sorter").sorter({ name = "file", most_recent_is_last = true }),
             previewer = false,
             layout_strategy = layout(),
             find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
@@ -248,8 +248,8 @@ local M = {
       -- open last file if none was specified
       if vim.fn.argv(0) == "" then
         vim.schedule(function()
-          require("top-results-sorter").load_history()
-          local path = require("top-results-sorter").Recent.latest
+          require("top-results-sorter").load_history("file")
+          local path = require("top-results-sorter").Recent["file"].latest
           if path ~= nil and vim.uv.fs_stat(path) then vim.schedule(function() vim.cmd("e " .. path) end) end
         end)
       end
@@ -266,18 +266,18 @@ local push_current_path = function()
   local path = vim.fn.expand("%:.")
   -- local path = vim.api.nvim_buf_get_name(0)
   -- print("push " .. path)
-  if path ~= "" then require("top-results-sorter").Recent:push(path) end
+  if path ~= "" then require("top-results-sorter").PushRecent("file", path) end
 end
 
 vim.api.nvim_create_autocmd({ "FocusGained" }, {
   callback = function()
-    require("top-results-sorter").load_history()
+    require("top-results-sorter").load_history("file")
     push_current_path()
   end,
 })
 
 vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
-  callback = function() require("top-results-sorter").save_history() end,
+  callback = function() require("top-results-sorter").save_history("file") end,
 })
 
 local first_run = true
@@ -286,7 +286,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
   callback = vim.schedule_wrap(function()
     if first_run then
       first_run = false
-      require("top-results-sorter").load_history()
+      require("top-results-sorter").load_history("file")
       push_current_path()
       return
     end
