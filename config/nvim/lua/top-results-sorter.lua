@@ -77,6 +77,8 @@ function M.PushRecent(name, value)
 end
 
 function M.load_history(name)
+  M.Recent[name] = HistMap:new()
+
   local cwd_hash = get_cwd_hash()
   if cwd_hash == nil then return end
   local fd = io.open(cwd_hash .. "__" .. name, "r")
