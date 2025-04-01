@@ -85,6 +85,7 @@ local M = {
             ["Close tab"] = { command = function() vim.cmd("tabclose") end },
             ["Go to next tab"] = { command = function() vim.cmd("tabnext") end },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
+            ["Open PR"] = { command = function() vim.cmd("Octo pr") end },
             ["Format buffer"] = { command = function() vim.g.format() end },
             ["Toggle block split"] = { command = function() require("treesj").toggle() end },
             ["Remove unused imports"] = {

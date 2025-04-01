@@ -31,6 +31,19 @@ console.log(<finish>)
         )
       ),
       -- }}}
+      -- asyncdelayfn - async delay function
+      -- {{{
+      sc(
+        "asyncdelayfn",
+        { "program" },
+        fmta(
+          [[
+          const delay = (ms: number) =>> new Promise((resolve) =>> setTimeout(resolve, ms));
+]],
+          {}
+        )
+      ),
+      -- }}}
       -- forof - for-of loop
       -- {{{
       sc(
