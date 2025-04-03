@@ -509,6 +509,28 @@ in
     };
   };
 
+  services.syncthing = {
+    enable = true;
+    user = "shiro";
+    group = "users";
+    openDefaultPorts = true;
+    dataDir = "/home/shiro";
+    configDir = "/home/shiro/.config/syncthing";
+    # guiAddress = "0.0.0.0:8384";
+    settings = {
+      devices = {
+        "homebox" = { id = "HDV7UR5-FLO23CH-WA2X7XR-CGD5KD6-QCTVNB7-BUPV2WM-LGWFTOH-UIPAMQ4"; };
+      };
+      folders = {
+        "wiki" = {
+          path = "/home/shiro/wiki";
+          devices = [ "homebox" ];
+        };
+      };
+    };
+  };
+ systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
+
 
   nix = {
     gc = {
