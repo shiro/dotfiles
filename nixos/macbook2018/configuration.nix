@@ -264,7 +264,7 @@ in
       # fcitx5-lua
       # fcitx5-mozc
       # figma-linux
-      irssi
+      # irssi
       keepassxc
       mpc-cli
       mpv
@@ -276,21 +276,18 @@ in
       yarn
       go
       goimports-reviser
-      rustup
-      rust-analyzer
       cargo
       jq
       unzip
       dex
       mpd
       xournalpp
-      slack-term
       killall
       ncmpcpp
       mixxc
       gh
       awscli2
-      libreoffice-qt6-fresh
+      # libreoffice-qt6-fresh
       xorg.xev
       stylua
       lua-language-server
@@ -366,7 +363,7 @@ in
     xclip
     diff-so-fancy
     highlight
-    carla
+    # carla
     pavucontrol
     rofi_custom
     pmutils
@@ -375,7 +372,7 @@ in
     libnotify
     wf-recorder
     pulseaudio # pulse CLI
-    bottles # wine emulation organization
+    # bottles # wine emulation organization
 
     # cursor
     hyprcursor
