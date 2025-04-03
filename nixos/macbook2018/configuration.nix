@@ -1,6 +1,5 @@
 { config, lib, pkgs, inputs, ... }:
 let
-  tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
   hyprland_pkg = inputs.hyprland.packages.${pkgs.system}.hyprland;
   hyprland_cmd = "${hyprland_pkg}/bin/Hyprland";
   username = "shiro";
@@ -92,30 +91,7 @@ in
 
   # to enable docker emulation on m1, use:
   # $ docker run --privileged --rm tonistiigi/binfmt --install all
-
-  # virtualisation.docker.liveRestore = false;
-
-  #boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
-  # boot.kernelPatches = [
-  #   {
-  #         name = "bt";
-  #         patch = ./bt.patch;
-  #
-  #   }
-  # ];
-  # boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_6_10.override {
-  #         argsOverride = rec {
-  #                 src = pkgs.fetchurl {
-  #                 url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-  #                 sha256 = "900d567ff01824708ce24c3b37faaef03e6f6145411dd447a6ff2edc8c5db3a9";
-  #         };
-  #         version = "6.10.7";
-  #         modDirVersion = "6.10.7";
-  #         };
-  # });
-
   virtualisation.docker.enable = true;
-  # services.getty.autologinUser = "shiro";
 
   services.greetd = {
     enable = true;
@@ -126,8 +102,6 @@ in
         user = "${username}";
       };
       default_session = {
-        # command = "${tuigreet} --greeting 'Welcome to NixOS!' --asterisks --remember --remember-user-session --time -cmd ${hyprland_cmd}";
-        # user = "greeter";
         command = "${hyprland_cmd}";
         user = "${username}";
       };
@@ -169,17 +143,6 @@ in
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-
-
-  # sound.enable = true;
-  # hardware = {
-  #   graphics.enable = true;
-  #   asahi = {
-  #     peripheralFirmwareDirectory = /etc/nixos/firmware;
-  #     useExperimentalGPUDriver = true;
-  #     withRust = true;
-  #   };
-  # };
 
   networking.hostName = "shiro-macbook2018";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
