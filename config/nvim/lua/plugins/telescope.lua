@@ -87,6 +87,7 @@ local M = {
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
             ["Open PR"] = { command = function() vim.cmd("Octo pr") end },
             ["Format buffer"] = { command = function() vim.g.format() end },
+            ["Buffers"] = { command = function() require("telescope.builtin").buffers() end },
             ["Toggle block split"] = { command = function() require("treesj").toggle() end },
             ["Remove unused imports"] = {
               ft = { "typescriptreact", "typescript" },
@@ -96,22 +97,19 @@ local M = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").organize_imports() end,
             },
+            ["Rename directory"] = {
+              command = function() require("utils.typescript").rename_directory() end,
+            },
             ["Rename file"] = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").rename_file(true) end,
             },
             ["Open file explorer"] = {
-              -- ft = { "typescriptreact" },
               -- condition = function()
               --   return true
               -- end,
               command = function() vim.api.nvim_command("RnvimrToggle") end,
             },
-            -- ["Open file explorer2"] = {
-            --   command = function()
-            --     print(88)
-            --   end,
-            -- },
           },
         },
         pickers = {

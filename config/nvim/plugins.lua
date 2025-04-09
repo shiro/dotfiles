@@ -469,6 +469,7 @@ require("lazy").setup({
       require("snippets.javascript").register()
       require("snippets.rust").register()
       require("snippets.go").register()
+      -- require("snippets.lua").register()
     end,
   },
   { "dorage/ts-manual-import.nvim", dependencies = { "L3MON4D3/LuaSnip" } },
