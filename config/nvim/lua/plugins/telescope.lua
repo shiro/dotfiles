@@ -138,11 +138,9 @@ local M = {
         return "vertical"
       end
 
-      function files()
-        -- local find_command = nil
-        -- if show_hidden then
-        -- find_command = { "rg", "--files", "--hidden", "-g", "!.git" }
-        -- end
+      function files(show_hidden)
+        local find_command = { "rg", "--files", "-g", "!.git" }
+        if show_hidden then table.insert(find_command, "--hidden") end
 
         require("telescopePickers").prettyFilesPicker({
           picker = "find_files",
@@ -151,14 +149,14 @@ local M = {
             sorter = require("top-results-sorter").sorter({ name = "file", most_recent_is_last = true }),
             previewer = false,
             layout_strategy = layout(),
-            find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
-            -- attach_mappings = function(_, map)
-            --   map("n", "zh", function(prompt_bufnr)
-            --   	actions.close(prompt_bufnr)
-            --   	files(not show_hidden)
-            --   end)
-            --   return true
-            -- end,
+            find_command = find_command,
+            attach_mappings = function(_, map)
+              map("n", "zh", function(prompt_bufnr)
+                require("telescope.actions").close(prompt_bufnr)
+                files(not show_hidden)
+              end)
+              return true
+            end,
           },
         })
       end
