@@ -44,7 +44,8 @@ fn main() -> Result<()> {
             Command::new("remove")
                 .about("remove a dependency")
                 .arg(arg!(<dependency> ... "list of dependencies")),
-        );
+        )
+        .subcommand(Command::new("upgrade").about("upgrade dependencies"));
     let matches = &cmd.get_matches();
 
     let package_manager = match get_package_manager() {
@@ -91,9 +92,21 @@ fn main() -> Result<()> {
                 ))?,
             };
         }
+        Some(("upgrade", _args)) => {
+            run_cmd_interactive("npx --yes npm-check-updates -i --format group --install always")?;
+        }
         Some((cmd, args)) => {
-            // let f = args.get;
-            run_cmd_interactive(&format!("{} {cmd}", package_manager))?;
+            let args: Vec<String> = args
+                .get_many("")
+                .unwrap()
+                .map(|v: &std::ffi::OsString| v.to_str().unwrap().to_string())
+                .collect();
+            let args_str = if !args.is_empty() {
+                &format!(" {}", args.join(" "))
+            } else {
+                ""
+            };
+            run_cmd_interactive(&format!("{package_manager} {cmd}{args_str}"))?;
         }
         _ => unreachable!(),
     };
