@@ -23,6 +23,7 @@ local M = {
           rust = {
             -- "rust_analyzer"
           },
+          kotlin = {},
         },
       })
 
@@ -57,6 +58,11 @@ local M = {
       -- TODO rewrite the lazy plugin to use system rust_analyzer without wrapping it (fails proc macros)
       local lspconfig = require("lspconfig")
       lspconfig["rust_analyzer"].setup({})
+      lspconfig.kotlin_language_server.setup({
+        init_options = {
+          storagePath = vim.env.XDG_DATA_HOME .. "/" .. "nvim-data",
+        },
+      })
 
       require("mason").setup()
       require("mason-tool-installer").setup({
@@ -65,6 +71,7 @@ local M = {
           --         -- "lua-language-server", -- lua
           --         "typescript-language-server", -- TS
           "prettierd", -- JS/TS format - prettier
+          "kotlin-language-server",
           --         "eslint-lsp", -- JS/TS lint
           --         -- "rust-analyzer", -- rust
           --         "taplo", -- toml
