@@ -843,7 +843,12 @@ vim.keymap.set("n", "<leader>e", vim.lsp.buf.rename, {})
 -- 	end
 -- end
 
-vim.keymap.set("n", "<C-P>", vim.lsp.buf.hover, { noremap = true, silent = true })
+vim.keymap.set(
+  "n",
+  "<C-P>",
+  function() vim.lsp.buf.hover({ border = "rounded" }) end,
+  { noremap = true, silent = true }
+)
 -- vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 -- vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
 -- vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
