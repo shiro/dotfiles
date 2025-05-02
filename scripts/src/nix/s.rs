@@ -115,6 +115,15 @@ fn main() -> Result<()> {
                 .about("spinns up a temporary shell with requested applications provided")
                 .arg(clap::arg!(...<application> "applications to provide")),
         )
+        .subcommand(
+            Command::new("pin").about(
+                "pins the dependencies of a shell.nix file, preventing them from being GCed",
+            ),
+        )
+        .subcommand(
+            Command::new("pins")
+                .about("lists all pinned shell.nix files, whose dependencies will not get GCed"),
+        )
         .subcommand(Command::new("delete").about("delete generations"))
         .subcommand(Command::new("gc").about("garbage collect"));
     let matches = &cmd.get_matches();
@@ -206,6 +215,34 @@ fn main() -> Result<()> {
             Exec::cmd("sudo")
                 .args(&["-E", "nix-collect-garbage"])
                 .success_output()?;
+        }
+        Some(("pin", _)) => {
+            Exec::cmd("nix-build")
+                .args(&[
+                    "shell.nix",
+                    "-A",
+                    "inputDerivation",
+                    "-o",
+                    ".nix-shell-inputs",
+                ])
+                .success_output()?;
+        }
+        Some(("pins", _)) => {
+            let mut paths = fs::read_dir("/nix/var/nix/gcroots/auto")
+                .unwrap()
+                .into_iter()
+                .map(|path| path.unwrap().path())
+                .filter(|path| path.is_symlink())
+                .map(|path| fs::read_link(path).unwrap())
+                .filter(|path| path.ends_with(".nix-shell-inputs"))
+                .map(|path| path.parent().unwrap().to_path_buf())
+                .collect::<Vec<_>>();
+
+            paths.sort();
+
+            for path in paths {
+                println!("{}", path.display());
+            }
         }
         Some(("run", m)) => {
             let applications = m
