@@ -7,6 +7,7 @@
 	editor = vim
 	pager = diff-so-fancy | less --tabs=4 -RFX
 	safecrlf = false
+	excludesFile = ~/.config/git/gitignore
 [rebase]
 	autosquash = true
 [pull]
