@@ -1,4 +1,7 @@
 #!/usr/bin/env zsh
 
-
-cargo run --release
+if type "nix-shell" > /dev/null; then
+    nix-shell --command 'cargo run --release'
+else
+    cargo run --release
+fi

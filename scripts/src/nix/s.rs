@@ -116,6 +116,7 @@ fn main() -> Result<()> {
                 .about("spinns up a temporary shell with requested applications provided")
                 .arg(clap::arg!(...<application> "applications to provide")),
         )
+        .subcommand(Command::new("dev").about("run a dev shell"))
         .subcommand(
             Command::new("pin").about(
                 "pins the dependencies of a shell.nix file, preventing them from being GCed",
@@ -126,7 +127,11 @@ fn main() -> Result<()> {
                 .about("lists all pinned shell.nix files, whose dependencies will not get GCed"),
         )
         .subcommand(Command::new("delete").about("delete generations"))
-        .subcommand(Command::new("gc").about("garbage collect"));
+        .subcommand(
+            Command::new("gc")
+                .about("garbage collect")
+                .arg(clap::arg!(-l --list "list dead derivations instead of deleting them")),
+        );
     let matches = &cmd.get_matches();
 
     match matches.subcommand() {
@@ -274,7 +279,29 @@ fn main() -> Result<()> {
                 applications.join(" ")
             ))?;
         }
-        Some(("gc", _)) => {
+        Some(("dev", _)) => {
+            run_cmd_interactive("nix-shell --command zsh")?;
+        }
+        Some(("gc", args)) => {
+            let list = args.get_one("list").cloned().unwrap_or(false);
+
+            if list {
+                let raw = Exec::cmd("nix-store")
+                    .args(&["--gc", "--print-dead"])
+                    .stdout(subprocess::Redirection::Pipe)
+                    .stderr(subprocess::NullFile)
+                    .success_output()?
+                    .stdout_str();
+
+                raw.trim_end()
+                    .split("\n")
+                    .filter(|line| line.contains("-"))
+                    .map(|line| line.split_once("-").unwrap().1)
+                    .for_each(|name| println!("{name}"));
+
+                return Ok(());
+            }
+
             Exec::cmd("sudo")
                 .args(&["-E", "nix-collect-garbage"])
                 .success_output()?;
