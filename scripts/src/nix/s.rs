@@ -1,6 +1,7 @@
 use scripts::*;
 use serde::{Deserialize, Serialize};
 use std::fs::{self};
+use std::path::Path;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Generation {
@@ -217,15 +218,32 @@ fn main() -> Result<()> {
                 .success_output()?;
         }
         Some(("pin", _)) => {
-            Exec::cmd("nix-build")
-                .args(&[
-                    "shell.nix",
-                    "-A",
-                    "inputDerivation",
-                    "-o",
-                    ".nix-shell-inputs",
-                ])
-                .success_output()?;
+            if Path::new("shell.nix").exists() {
+                Exec::cmd("nix-build")
+                    .args(&[
+                        "shell.nix",
+                        "-A",
+                        "inputDerivation",
+                        "-o",
+                        ".nix-shell-inputs",
+                    ])
+                    .success_output()?;
+                return Ok(());
+            }
+            if Path::new("flake.nix").exists() {
+                Exec::cmd("nix")
+                    .args(&[
+                        "build",
+                        "path:.#devShells.x86_64-linux.default.inputDerivation",
+                        "-o",
+                        ".nix-shell-inputs",
+                    ])
+                    .success_output()?;
+                return Ok(());
+            }
+            Err(anyhow!(
+                "couldn't find 'shell.nix' or 'flake.nix' in current directory"
+            ))?;
         }
         Some(("pins", _)) => {
             let mut paths = fs::read_dir("/nix/var/nix/gcroots/auto")
