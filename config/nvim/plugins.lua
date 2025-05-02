@@ -753,6 +753,12 @@ require("lazy").setup({
         -- suppress_missing_scope = {
         --   projects_v2 = true,
         -- },
+        mappings = {
+          review_thread = {
+            next_comment = { lhs = "]b", desc = "go to next comment" },
+            prev_comment = { lhs = "[b", desc = "go to previous comment" },
+          },
+        },
       })
     end,
   },
