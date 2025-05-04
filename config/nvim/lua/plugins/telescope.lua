@@ -70,6 +70,9 @@ local M = {
                 vim.cmd("EditQuery")
               end,
             },
+            ["Diff with branch"] = {
+              command = function() require("plugins.commands.diff-branch")() end,
+            },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
             ["Toggle statusline"] = {
               command = function()

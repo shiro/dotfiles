@@ -739,29 +739,8 @@ require("lazy").setup({
     config = function() require("colorizer").setup({ user_default_options = { mode = "virtualtext", names = false } }) end,
   },
   -- }}}
-
-  {
-    "pwntester/octo.nvim",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("octo").setup({
-        use_local_fs = true,
-        -- suppress_missing_scope = {
-        --   projects_v2 = true,
-        -- },
-        mappings = {
-          review_thread = {
-            next_comment = { lhs = "]b", desc = "go to next comment" },
-            prev_comment = { lhs = "[b", desc = "go to previous comment" },
-          },
-        },
-      })
-    end,
-  },
+  require("plugins.diff"),
+  require("plugins.github"),
 }, { rocks = { enabled = false } })
 
 -- vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
