@@ -19,6 +19,14 @@ local M = {
       })
     end,
   },
+  -- autoamtically rename JSX tags {{{
+  {
+    "windwp/nvim-ts-autotag",
+    event = "VeryLazy",
+    opts = { enable_close = false },
+    ft = { "typescriptreact", "javascriptreact" },
+  },
+  -- }}}
   -- hide tailwind strings when not in focus
   -- {
   --   dir = "~/.dotfiles/config/nvim/lua/tw-conceal",
