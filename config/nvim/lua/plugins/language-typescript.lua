@@ -34,6 +34,18 @@ local M = {
   --   opts = {},
   --   ft = { "html", "typescriptreact" },
   -- },
+  { "dorage/ts-manual-import.nvim", dependencies = { "L3MON4D3/LuaSnip" } },
+
+  -- NPM package versions
+  {
+    "vuki656/package-info.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    ft = { "json" },
+    opts = {
+      hide_up_to_date = true,
+      icons = { enable = false },
+    },
+  },
 }
 
 return M

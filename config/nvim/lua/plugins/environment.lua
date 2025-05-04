@@ -19,5 +19,7 @@ local M = {
       -- set autochdir
     end,
   },
+  -- detect file shiftwidth, tab mode
+  "tpope/vim-sleuth",
 }
 return M

@@ -35,215 +35,35 @@ end
 
 require("lazy").setup({
   require("plugins.targets"),
-  require("plugins.folds"),
-  require("plugins.quickfix"),
   require("plugins.notifications"),
-  -- chord keybinds {{{
-  {
-    "kana/vim-arpeggio",
-    init = function()
-      -- vim.g.arpeggio_timeoutlen = 40
-    end,
-    config = function()
-      -- write
-      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'we', ':FormatAndSave<cr>')")
-      -- write-quit
-      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'wq', ':wq<cr>')")
-      -- write-quit-all
-      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'wr', ':wqa<cr>')")
-      -- write-quit
-      vim.api.nvim_command("silent call arpeggio#map('i', 's', 0, 'wq', '<ESC>:wq<CR>')")
-      -- save
-      vim.api.nvim_command("silent call arpeggio#map('i', 's', 0, 'jk', '<ESC>')")
-      -- close buffer
-      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'ap', '<ESC>:q<CR>')")
-      -- only buffer
-      vim.api.nvim_command("call arpeggio#map('n', 's', 0, 'ao', '<C-w>o')")
-      -- Ag
-      -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'ag', ':Ag<CR>')")
-
-      -- files, surpress false warning about jk being mapped already
-      vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'jk', ':Files<cr>')")
-      -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'di', '<CMD>wincmd w<CR>')")
-
-      -- common movement shortcuts
-
-      -- vim.api.nvim_create_user_command("ArpeggioReplaceWord", function()
-      -- 	vim.fn.feedkeys("cimw")
-      -- end, {})
-      -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mw', '<cmd>silent ArpeggioReplaceWord<cr>')")
-      --
-      -- vim.api.nvim_create_user_command("ArpeggioReplaceTag", function()
-      -- 	vim.fn.feedkeys("cimt")
-      -- end, {})
-      -- vim.api.nvim_command("silent call arpeggio#map('n', 's', 0, 'mt', '<cmd>silent ArpeggioReplaceTag<cr>')")
-
-      -- vim.api.nvim_command("Arpeggio nmap kl yiw")
-
-      local id = 0
-      registerMapping = function(mapping, target)
-        id = id + 1
-        vim.api.nvim_create_user_command("ArpeggioLeap" .. id, function()
-          -- require("leap").leap({ target_windows = { vim.fn.win_getid() } })
-          vim.fn.feedkeys(target)
-          -- vim.api.nvim_feedkeys("\\<C-n>", "m", true)
-
-          -- local key = vim.api.nvim_replace_termcodes("<C-n>", true, false, true)
-          -- vim.api.nvim_feedkeys("\\<C-d>", "m", true)
-        end, {})
-        vim.api.nvim_command(
-          "silent call arpeggio#map('n', 's', 0, '" .. mapping .. "', '<cmd>ArpeggioLeap" .. id .. "<cr>')"
-        )
-      end
-
-      registerMapping("mq", "cmiq")
-      registerMapping("mw", "cmiw")
-      registerMapping("mb", "cmib")
-      -- registerMapping("nq", "vaq")
-      -- registerMapping("mw", "viw")
-      -- registerMapping("nw", "viW")
-      -- registerMapping("mb", "vib")
-      -- -- registerMapping("mv", "V")
-
-      registerMapping("yw", "yiw\\<C-n>")
-    end,
-  },
-  require("plugins.workdir"),
+  require("plugins.chords"),
   require("plugins.git"),
-  require("plugins.highlight"),
+
   require("plugins.outline"),
-  require("plugins.obsidian"),
   require("plugins.jumping"),
+
+  require("plugins.quickfix"),
+  require("plugins.environment"),
+  require("plugins.folds"),
+  require("plugins.highlight"),
   require("plugins.lsp"),
   require("plugins.completion"),
+
   require("plugins.language-typescript"),
   require("plugins.language-markdown"),
+  require("plugins.language-go"),
+
   require("plugins.copy-imports"),
-  -- NPM package versions
-  {
-    "vuki656/package-info.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
-    ft = { "json" },
-    opts = {
-      hide_up_to_date = true,
-      icons = { enable = false },
-    },
-  },
   require("plugins.formatting"),
-  {
-    "L3MON4D3/LuaSnip",
-    config = function()
-      local luasnip = require("luasnip")
-      luasnip.setup({
-        load_ft_func = require("luasnip.extras.filetype_functions").from_cursor_pos,
-      })
-      require("snippets.javascript").register()
-      require("snippets.rust").register()
-      require("snippets.go").register()
-      -- require("snippets.lua").register()
-    end,
-  },
-  { "dorage/ts-manual-import.nvim", dependencies = { "L3MON4D3/LuaSnip" } },
-
-  {
-    dir = "~/.dotfiles/config/nvim/lua/luasnip-more",
-    dependencies = { "L3MON4D3/LuaSnip" },
-    opts = {},
-  },
-  -- comments {{{
-  {
-    "numToStr/Comment.nvim",
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    -- lazy = true,
-    init = function()
-      -- avoid comment plugin warning
-      vim.g.skip_ts_context_commentstring_module = true
-    end,
-    -- keys = {
-    --   { "<C-_>", "", mode = "n" },
-    --   { "<C-_>", "", mode = "x" },
-    -- },
-    config = function()
-      require("ts_context_commentstring").setup({ enable_autocmd = false })
-      require("Comment").setup({
-        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-      })
-
-      vim.api.nvim_command("xmap <C-_> gc")
-      vim.api.nvim_command("nmap <C-_> gccj")
-    end,
-  },
-  -- }}}
-
-  -- find and replace {{{
-  {
-    "nvim-pack/nvim-spectre",
-    lazy = true,
-    dependencies = { "nvim-lua/plenary.nvim" },
-    keys = {
-      { "<C-S-R>", "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
-      { "<Leader>R", "<cmd>lua require('spectre').toggle()<CR>", mode = "n", silent = true },
-    },
-  },
-  -- }}}
+  require("plugins.comments"),
+  require("plugins.refactor"),
   require("plugins.telescope"),
   require("plugins.file-manager"),
-
-  -- language-specific stuff {{{
-  -- rust
-  { "rust-lang/rust.vim", ft = "rust" },
-  { "arzg/vim-rust-syntax-ext", ft = "rust" },
-  {
-    "saecki/crates.nvim",
-    ft = "toml",
-    tag = "stable",
-    config = function() require("crates").setup() end,
-  },
-  -- }}}
-
-  -- go
-  -- {{{
-  {
-    "olexsmir/gopher.nvim",
-    ft = "go",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    config = function() require("gopher").setup({}) end,
-    build = function() vim.cmd([[silent! GoInstallDeps]]) end,
-  },
-  -- }}}
-
-  -- misc {{{
-
-  -- detect file shiftwidth, tab mode
-  "tpope/vim-sleuth",
-
-  -- }}}
-
-  -- convinient pair mappings
-  --Plug "tpope/vim-unimpaired"
-
-  -- enables repeating other supported plugins with the . command
-  "tpope/vim-repeat",
-  -- }}}
-  -- pretty UI {{{
-  {
-    "stevearc/dressing.nvim",
-    opts = {},
-    event = "VeryLazy",
-  },
-  -- }}}
-  -- show color hex codes {{{
-  {
-    "NvChad/nvim-colorizer.lua",
-    event = "VeryLazy",
-    config = function() require("colorizer").setup({ user_default_options = { mode = "virtualtext", names = false } }) end,
-  },
-  -- }}}
+  require("plugins.fancy"),
   require("plugins.diff"),
+
   require("plugins.github"),
+  require("plugins.obsidian"),
 }, { rocks = { enabled = false } })
 
 -- vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
@@ -415,30 +235,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- quickfix
-vim.api.nvim_create_autocmd("FileType", {
-  group = "default",
-  pattern = "qf",
-  callback = function()
-    vim.keymap.set("n", "dd", function()
-      local curqfidx = vim.fn.line(".")
-      local entries = vim.fn.getqflist()
-      if entries == nil then return end
-      if #entries == 0 then return end
-      -- remove the item from the quickfix list
-      table.remove(entries, curqfidx)
-      vim.fn.setqflist(entries, "r")
-      -- reopen quickfix window to refresh the list
-      vim.cmd("copen")
-      local new_idx = curqfidx < #entries and curqfidx or math.max(curqfidx - 1, 1)
-      local winid = vim.fn.win_getid()
-      if winid == nil then return end
-      vim.api.nvim_win_set_cursor(winid, { new_idx, 0 })
-    end, { silent = true, noremap = true, buffer = 0 })
-    vim.keymap.set("n", "<CR>", "<CR>:cclose<CR>", { silent = true, noremap = true, buffer = 0 })
-  end,
-})
-
 vim.keymap.set("n", "<leader>n", function()
   local qf_exists = false
   local info = vim.fn.getwininfo()
@@ -586,60 +382,5 @@ vim.opt.foldmethod = "indent"
 -- 	end,
 -- })
 
--- change outer function
-vim.keymap.set({ "n" }, "caf", function()
-  local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
-  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
-  vim.api.nvim_feedkeys("/(" .. cr .. esc .. "va(obs", "m", true)
-end)
-
--- delete inner function
-vim.keymap.set({ "n" }, "dif", function()
-  local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
-  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
-  vim.api.nvim_feedkeys("/(" .. cr .. esc .. "ds(db", "m", true)
-end)
-
--- delete outer function
-vim.keymap.set({ "n" }, "daf", function()
-  local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
-  local esc = vim.api.nvim_replace_termcodes("<esc>", true, false, true)
-  vim.api.nvim_feedkeys("/(" .. cr .. esc .. "da(db", "m", true)
-end)
-
 require("keybinds.general")
 require("keybinds.jsx")
-
--- local function lineinfo()
---   if vim.bo.filetype == "alpha" then return "" end
---   return " %P %l:%c "
--- end
--- Statusline = {}
--- Statusline.active = function()
---   return table.concat({
---     "%#Statusline#",
---     -- update_mode_colors(),
---     -- mode(),
---     "%#Normal# ",
---     -- filepath(),
---     -- filename(),
---     "%#Normal#",
---     -- lsp(),
---     "%=%#StatusLineExtra#",
---     -- filetype(),
---     lineinfo(),
---   })
--- end
--- function Statusline.inactive() return " %F" end
--- function Statusline.short() return "%#StatusLineNC#   NvimTree" end
--- vim.api.nvim_exec(
---   [[
--- augroup Statusline
--- au!
--- au WinEnter,BufEnter * setlocal statusline=%!v:lua.Statusline.active()
--- au WinLeave,BufLeave * setlocal statusline=%!v:lua.Statusline.inactive()
--- au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.short()
--- augroup END
--- ]],
---   false
--- )

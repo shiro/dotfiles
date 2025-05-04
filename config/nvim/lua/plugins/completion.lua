@@ -2,7 +2,7 @@ local M = {
   {
     "hrsh7th/nvim-cmp",
     -- TS-LSP and preselect are broken after this commit
-    commit = "b356f2c",
+    -- commit = "b356f2c",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",
@@ -140,6 +140,24 @@ local M = {
         },
       })
     end,
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    config = function()
+      local luasnip = require("luasnip")
+      luasnip.setup({
+        load_ft_func = require("luasnip.extras.filetype_functions").from_cursor_pos,
+      })
+      require("snippets.javascript").register()
+      require("snippets.rust").register()
+      require("snippets.go").register()
+      -- require("snippets.lua").register()
+    end,
+  },
+  {
+    dir = "~/.dotfiles/config/nvim/lua/luasnip-more",
+    dependencies = { "L3MON4D3/LuaSnip" },
+    opts = {},
   },
 }
 
