@@ -21,18 +21,6 @@ local notify = function(message)
   end
 end
 
-function set_timeout(timeout, callback)
-  local uv = vim.loop
-  local timer = uv.new_timer()
-  local function ontimeout()
-    uv.timer_stop(timer)
-    uv.close(timer)
-    vim.schedule(function() callback(timer) end)
-  end
-  uv.timer_start(timer, timeout, 0, ontimeout)
-  return timer
-end
-
 require("lazy").setup({
   require("plugins.targets"),
   require("plugins.notifications"),
@@ -66,123 +54,12 @@ require("lazy").setup({
   require("plugins.obsidian"),
 }, { rocks = { enabled = false } })
 
--- vim.api.nvim_set_keymap("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
--- vim.api.nvim_set_keymap("n", "gi", "<Plug>(coc-implementation)", { silent = true })
-vim.keymap.set("n", "<leader>[e", vim.diagnostic.goto_prev)
-vim.keymap.set("n", "<leader>]e", vim.diagnostic.goto_next)
-vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end)
-vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end)
-
--- vim.keymap.set("n", "<A-S-e>", vim.lsp.buf.rename, {})
-vim.keymap.set("n", "<leader>e", vim.lsp.buf.rename, {})
--- vim.api.nvim_set_keymap("n", "<A-S-r>", "<Plug>(coc-refactor)", { silent = true })
--- vim.api.nvim_set_keymap("v", "<A-S-r>", "<Plug>(coc-refactor-selected)", { silent = true })
--- show outline (hierarchy)
-
--- function set_timeout(timeout, callback)
--- 	local uv = vim.loop
--- 	local timer = uv.new_timer()
--- 	local function ontimeout()
--- 		uv.timer_stop(timer)
--- 		uv.close(timer)
--- 		callback(timer)
--- 	end
--- 	uv.timer_start(timer, timeout, 0, ontimeout)
--- 	return timer
--- end
-
--- function toggleOutline()
--- 	local win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
--- 	if win_id == -1 then
--- 		vim.fn.CocAction("showOutline", 1)
---
--- 		-- local foo = vim.api.nvim_eval("coc#float#get_float_by_kind('outline-preview')")
--- 		-- print(foo)
---
--- 		set_timeout(300, function()
--- 			vim.schedule(function()
--- 				win_id = vim.api.nvim_eval("coc#window#find('cocViewId', 'OUTLINE')")
--- 				if win_id == -1 then
--- 					return
--- 				end
--- 				vim.api.nvim_set_current_win(win_id)
--- 			end)
--- 		end)
--- 	else
--- 		vim.api.nvim_command("call coc#window#close(" .. win_id .. ")")
--- 	end
--- end
---
--- vim.keymap.set("n", "go", toggleOutline, { silent = true })
--- list warnings/errors in telescope
--- TODO
-
--- vim.keymap.set("i", "<C-Space>", "coc#refresh()", { expr = true, silent = true })
-
--- highlight the symbol under cursor
--- vim.api.nvim_create_autocmd("CursorHold", {
---     group = "CocGroup",
---     command = "silent call CocActionAsync('highlight')",
---     desc = "Highlight symbol under cursor on CursorHold"
--- })
---
--- _G.CloseAllFloatingWindows = function()
---     local closed_windows = {}
---     for _, win in ipairs(vim.api.nvim_list_wins()) do
---         local config = vim.api.nvim_win_get_config(win)
---         if config.relative ~= "" then          -- is_floating_window?
---             vim.api.nvim_win_close(win, false) -- do not force
---             table.insert(closed_windows, win)
---         end
---     end
---     print(string.format('Closed %d windows: %s', #closed_windows, vim.inspect(closed_windows)))
--- end
--- vim.keymap.set('i', '<ESC>', "coc#util#has_float() ? <CMD>lua _G.show_docs()<CR> : <ESC>", { expr = true });
-
--- show docs
--- function _G.show_docs()
--- 	local cw = vim.fn.expand("<cword>")
--- 	--if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
--- 	--    vim.api.nvim_command('h ' .. cw)
--- 	if vim.api.nvim_eval("coc#rpc#ready()") then
--- 		-- vim.fn.CocActionAsync("doHover")
--- 	else
--- 		vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
--- 	end
--- end
-
-vim.keymap.set(
-  "n",
-  "<C-P>",
-  function() vim.lsp.buf.hover({ border = "rounded" }) end,
-  { noremap = true, silent = true }
-)
--- vim.keymap.set("n", "<C-S-p>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
--- vim.keymap.set("n", "<F12>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
--- vim.keymap.set("i", "<C-P>", "<CMD>lua _G.show_docs()<CR>", { noremap = true, silent = true })
-
--- tab/S-tab completion menu
-function _G.check_back_space()
-  local col = vim.fn.col(".") - 1
-  return col == 0 or vim.fn.getline("."):sub(col, col):match("%s") ~= nil
-end
-
--- code actions
-vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
 vim.keymap.set(
   { "n", "v" },
   "<space>k",
   function() require("telescope").extensions.omnibar.omnibar() end,
   { silent = true }
 )
--- refactor
-vim.keymap.set(
-  { "n", "x" },
-  "<leader>r",
-  function() require("telescope").extensions.refactoring.refactors() end,
-  { silent = true }
-)
-vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
 
 local function quickfix()
   vim.lsp.buf.code_action({
@@ -209,30 +86,6 @@ vim.api.nvim_create_autocmd("FileType", {
   group = "default",
   pattern = "lua",
   command = "setl formatexpr=CocAction('formatSelected')",
-})
-
--- language specific {{{
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = "default",
-  pattern = { "javascript", "typescript", "typescriptreact" },
-  callback = function()
-    -- vim.api.nvim_command("call arpeggio#map('n', '', 0, 'al', 'aconsole.log();<left><left>')")
-    -- make import lazy
-    -- vim.keymap.set(
-    --   "n",
-    --   ";1",
-    --   '0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
-    --   { silent = true, noremap = true }
-    -- )
-    -- create component
-    -- vim.keymap.set(
-    --   "n",
-    --   ";1",
-    --   '0ciwconst<esc>/from<cr>ciw= lazy(() => import(<esc>lxf"a))<esc>0',
-    --   { silent = true, noremap = true }
-    -- )
-  end,
 })
 
 vim.keymap.set("n", "<leader>n", function()

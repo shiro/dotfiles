@@ -1,4 +1,5 @@
-local M = { -- find and replace
+local M = {
+  -- find and replace
   {
     "nvim-pack/nvim-spectre",
     lazy = true,
@@ -9,4 +10,17 @@ local M = { -- find and replace
     },
   },
 }
+
+-- rename symbol
+vim.keymap.set("n", "<leader>e", vim.lsp.buf.rename, {})
+-- refactor actions
+vim.keymap.set(
+  { "n", "x" },
+  "<leader>r",
+  function() require("telescope").extensions.refactoring.refactors() end,
+  { silent = true }
+)
+-- rename file
+vim.api.nvim_create_user_command("RenameFile", "silent CocCommand workspace.renameCurrentFile", {})
+
 return M

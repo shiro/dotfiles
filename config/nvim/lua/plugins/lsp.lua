@@ -195,5 +195,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end, { buffer = ev.buf })
   end,
 })
+-- code actions
+vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { silent = true })
+-- symbol info
+vim.keymap.set(
+  "n",
+  "<C-P>",
+  function() vim.lsp.buf.hover({ border = "rounded" }) end,
+  { noremap = true, silent = true }
+)
+-- move to next/prev diagnostics
+vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end)
+vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end)
 
 return M
