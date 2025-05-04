@@ -170,6 +170,7 @@ fn main() -> Result<()> {
             }
             std::env::set_var("NIXOS_LABEL", format!("{now} {msg}").replace(" ", "_"));
             run_cmd_interactive("sudo -E nixos-rebuild switch --flake path:.#default --impure")?;
+            // run_cmd_interactive("sudo -E nixos-rebuild switch --flake .#default --impure")?;
             let _ = fs::remove_file(tmp);
         }
         Some(("test", _)) => {

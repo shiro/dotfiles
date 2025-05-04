@@ -305,13 +305,6 @@ in
     ];
   };
 
-  # home-manager = {
-  #   extraSpecialArgs = { inherit inputs; };
-  #   users = {
-  #     "shiro" = import ./home.nix;
-  #   };
-  # };
-
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
     nerd-fonts.hack
@@ -371,6 +364,7 @@ in
     rclone
     libnotify
     wf-recorder
+    nix-tree
     pulseaudio # pulse CLI
     # bottles # wine emulation organization
 

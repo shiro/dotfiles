@@ -20,8 +20,6 @@
 
   outputs = { self, nixpkgs, nixpkgs-rofi-blocks, ... }@inputs:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
       overlay-rofi-blocks = final: prev: {
         rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.system};
       };
@@ -30,7 +28,7 @@
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs; };
           modules = [ 
-            ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-rofi-blocks ]; })
+            ({ ... }: { nixpkgs.overlays = [ overlay-rofi-blocks ]; })
             ./configuration.nix
             inputs.home-manager.nixosModules.default
           ];
