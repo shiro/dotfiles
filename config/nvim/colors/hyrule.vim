@@ -173,6 +173,7 @@ exe "hi Identifier guifg=None guibg=None gui=None"
 exe "hi Conceal guifg=".gray." guibg=None gui=None"
 exe "hi DiagnosticUnderlineError guifg=".error." guibg=None gui=None"
 hi link QuickFixLine Normal
+hi link RenderMarkdownCode Normal
 
 
 " plugins

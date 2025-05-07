@@ -23,7 +23,16 @@ local M = {
           rust = {
             -- "rust_analyzer"
           },
-          kotlin = {},
+          -- kotlin = {
+          --   "kotlin-language-server",
+          -- },
+        },
+        configs = {
+          kotlin_language_server = {
+            init_options = {
+              storagePath = vim.env.XDG_DATA_HOME .. "/" .. "nvim-data",
+            },
+          },
         },
       })
 
@@ -182,6 +191,12 @@ local M = {
       local lspconfig = require("lspconfig")
       lspconfig["lua_ls"].setup({})
     end,
+  },
+  -- rust
+  {
+    "mrcjkb/rustaceanvim",
+    version = "6",
+    lazy = false, -- this plugin is already lazy
   },
 }
 
