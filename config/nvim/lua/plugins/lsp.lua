@@ -66,7 +66,7 @@ local M = {
     config = function()
       -- TODO rewrite the lazy plugin to use system rust_analyzer without wrapping it (fails proc macros)
       local lspconfig = require("lspconfig")
-      lspconfig["rust_analyzer"].setup({})
+      -- lspconfig["rust_analyzer"].setup({})
       lspconfig.kotlin_language_server.setup({
         init_options = {
           storagePath = vim.env.XDG_DATA_HOME .. "/" .. "nvim-data",

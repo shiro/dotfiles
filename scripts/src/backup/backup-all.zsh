@@ -31,8 +31,8 @@ if [ -z "$BORG_PASSPHRASE" ]; then
   echo
 fi
 
-backup --compression zlib -l system "$BACKUP_LOCATION/main" \
-  --daily 3 --weekly 2 --monthly 1
+# backup --compression zlib -l system "$BACKUP_LOCATION/main" \
+  # --daily 3 --weekly 2 --monthly 1
 
 local externalPhotographyPath='/mnt/hdd1/pictures/photography'
 if [ -e "$externalPhotographyPath" ]; then
@@ -42,8 +42,8 @@ else
   echo "skipping 'photography' since '$externalPhotographyPath' does not exist"
 fi
 
-backup --compression zlib -l games "$BACKUP_LOCATION/main" \
-  --daily 3 --weekly 2 --monthly 1
-
-backup --compression zlib -l music "$BACKUP_LOCATION/main" \
-  --daily 3 --weekly 2 --monthly 1
+# backup --compression zlib -l games "$BACKUP_LOCATION/main" \
+#   --daily 3 --weekly 2 --monthly 1
+#
+# backup --compression zlib -l music "$BACKUP_LOCATION/main" \
+#   --daily 3 --weekly 2 --monthly 1
