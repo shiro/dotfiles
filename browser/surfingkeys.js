@@ -73,7 +73,6 @@ map("z", "H");
 map("e", "af");
 
 map("F", "C");
-map("o", "go");
 map("O", "t");
 map("ö", "gx$");
 map("u", "e");
@@ -88,6 +87,8 @@ map("gt", "R");
 map("gT", "E");
 map("yf", "ya");
 map("`", "'");
+// focus overflowable element
+map("o", ";fs");
 
 unmap(".");
 unmap("gr");
@@ -150,5 +151,3 @@ settings.theme = `
 
 */
 `;
-// colemak
-// https://gist.github.com/Stvad/02d3d40b08e9505c548e00bba05ccea0
