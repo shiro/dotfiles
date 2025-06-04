@@ -159,15 +159,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.cmd("normal! p")
       if Stash == nil or Stash.clipboard ~= GetClipboard() then return end
 
-      local local_imports = GetImportNodes(ev.buf)
+      vim.schedule(function()
+        local local_imports = GetImportNodes(ev.buf)
 
-      for _, import in pairs(Stash.imports) do
-        if import.alias ~= nil then
-          if local_imports[import.alias] == nil then add_import(ev.buf, import) end
-        else
-          if local_imports[import.name] == nil then add_import(ev.buf, import) end
+        for _, import in pairs(Stash.imports) do
+          if import.alias ~= nil then
+            if local_imports[import.alias] == nil then add_import(ev.buf, import) end
+          else
+            if local_imports[import.name] == nil then add_import(ev.buf, import) end
+          end
         end
-      end
+      end)
     end, { silent = true, buffer = ev.buf })
 
     vim.api.nvim_create_autocmd("TextYankPost", {
