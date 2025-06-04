@@ -6,8 +6,13 @@ local function get_node_at_cursor()
   return vim.treesitter.get_node({ ignore_injections = false })
 end
 
-function set_selection_to_node(buf, node, selection_mode)
+function get_node_range(buf, node)
   local start_row, start_col, end_row, end_col = ts_utils.get_vim_range({ vim.treesitter.get_node_range(node) }, buf)
+  return start_row, start_col, end_row, end_col
+end
+
+function set_selection_to_node(buf, node, selection_mode)
+  local start_row, start_col, end_row, end_col = get_node_range(buf, node)
   set_sel(buf, { start_row, start_col }, { end_row, end_col }, selection_mode)
 end
 
@@ -71,21 +76,31 @@ vim.api.nvim_create_autocmd("LspAttach", {
       set_sel(buf, { from_row, from_col }, { to_row, to_col })
     end, {})
 
-    vim.keymap.set("n", "vat", function()
+    local get_hovered_jsx_node = function()
       local node = get_node_at_cursor()
       if node == nil then return nil end
 
       while node ~= nil do
         if node:type() == "jsx_self_closing_element" or node:type() == "jsx_element" then
-          set_selection_to_node(buf, node)
-          return
+          -- set_selection_to_node(buf, node)
+          return node
         end
         if node:type() == "jsx_opening_element" or node:type() == "jsx_closing_element" then
-          set_selection_to_node(buf, node:parent())
-          return
+          -- set_selection_to_node(buf, node:parent())
+          return node:parent()
         end
         node = node:parent()
       end
+    end
+
+    vim.keymap.set("n", "vat", function() set_selection_to_node(buf, get_hovered_jsx_node()) end, {})
+    vim.keymap.set("n", "cat", function()
+      set_selection_to_node(buf, get_hovered_jsx_node())
+      vim.fn.feedkeys("s")
+    end, {})
+    vim.keymap.set("n", "dat", function()
+      local start_row, start_col, end_row, end_col = get_node_range(buf, get_hovered_jsx_node())
+      vim.api.nvim_buf_set_text(buf, start_row - 1, start_col - 1, end_row - 1, end_col, {})
     end, {})
   end,
 })
