@@ -67,7 +67,7 @@ local M = {
               if m2 == "i" then return end
               if m1 == "i" and m2 == "niI" then return end
 
-              vim.fn.winrestview(view_info)
+              vim.schedule(function() vim.fn.winrestview(view_info) end)
               return true
             end,
           })
@@ -78,11 +78,13 @@ local M = {
         "C",
         "D",
         "W",
+        "E",
         "a(",
         "a)",
         "aa",
         "ab",
         "e",
+        "s.",
         "af",
         "aq",
         "at",
