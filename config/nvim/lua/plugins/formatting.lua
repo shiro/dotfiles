@@ -43,6 +43,7 @@ local M = {
           toml = { "taplo" },
           css = { "prettierd" },
           scss = { "prettierd" },
+          nix = { "nixfmt" },
         },
       })
     end,

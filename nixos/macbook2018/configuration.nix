@@ -44,29 +44,30 @@ let
 
     bind_to_address      "/home/shiro/.config/mpd/socket"
   '';
-in
-{
-  imports =
-    [
-      /etc/nixos/hardware-configuration.nix
-      inputs.home-manager.nixosModules.default
-      "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/apple/t2"
-    ];
+in {
+  imports = [
+    /etc/nixos/hardware-configuration.nix
+    inputs.home-manager.nixosModules.default
+    "${
+      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
+    }/apple/t2"
+  ];
 
   hardware.firmware = [
     (pkgs.stdenvNoCC.mkDerivation (final: {
-                                   name = "brcm-firmware";
-                                   src = /etc/nixos/firmware/brcm;
-                                   installPhase = ''
-                                   mkdir -p $out/lib/firmware/brcm
-                                   cp ${final.src}/* "$out/lib/firmware/brcm" '';
+      name = "brcm-firmware";
+      src = /etc/nixos/firmware/brcm;
+      installPhase = ''
+        mkdir -p $out/lib/firmware/brcm
+        cp ${final.src}/* "$out/lib/firmware/brcm" '';
     }))
   ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.loader.efi.efiSysMountPoint = "/boot"; # make sure to change this to your EFI partition!
+  boot.loader.efi.efiSysMountPoint =
+    "/boot"; # make sure to change this to your EFI partition!
 
   # boot.loader = {
   #   grub = {
@@ -84,9 +85,7 @@ in
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useUserPackages = true;
-    users = {
-      "shiro" = import ./home.nix;
-    };
+    users = { "shiro" = import ./home.nix; };
   };
 
   # to enable docker emulation on m1, use:
@@ -108,18 +107,14 @@ in
     };
   };
 
-
   systemd.user.services.ssh-agent = {
     enable = true;
     wantedBy = [ "default.target" ];
     path = [ pkgs.openssh ];
     serviceConfig = {
       Type = "simple";
-      Environment = [
-        ''SSH_AUTH_SOCK=%t/ssh-agent.socket''
-        ''DISPLAY=:0''
-      ];
-      ExecStart = ''${pkgs.openssh}/bin/ssh-agent -D -a $SSH_AUTH_SOCK'';
+      Environment = [ "SSH_AUTH_SOCK=%t/ssh-agent.socket" "DISPLAY=:0" ];
+      ExecStart = "${pkgs.openssh}/bin/ssh-agent -D -a $SSH_AUTH_SOCK";
     };
   };
   # programs.ssh.startAgent = true;
@@ -148,7 +143,6 @@ in
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
 
-
   # Set your time zone.
 
   # Select internationalisation properties.
@@ -157,7 +151,6 @@ in
     # keyMap = "us";
     useXkbConfig = true; # use xkb.options in tty.
   };
-
 
   # services.qemuGuest.enable = true;
   # services.spice-vdagentd.enable = true;
@@ -174,14 +167,15 @@ in
   # };
 
   nix.settings = {
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    substituters = [ "https://hyprland.cachix.org" ];
+    trusted-public-keys =
+      [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   };
 
   programs.zsh = {
     enable = true;
     # initExtra = ''
-      # export NIX_LD=$(nix eval --impure --raw --expr 'let pkgs = import <nixpkgs> {}; NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"; in NIX_LD')
+    # export NIX_LD=$(nix eval --impure --raw --expr 'let pkgs = import <nixpkgs> {}; NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"; in NIX_LD')
     # '';
   };
   programs.neovim = {
@@ -196,9 +190,7 @@ in
     enable = true;
     xwayland.enable = true;
   };
-  programs.waybar = {
-   enable = true;
-  };
+  programs.waybar = { enable = true; };
 
   environment.sessionVariables = {
     # make electron use wayland
@@ -206,7 +198,6 @@ in
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";
     XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
   };
-
 
   services.xserver.enable = true;
   services.xserver.exportConfiguration = true;
@@ -228,10 +219,10 @@ in
     fcitx5.waylandFrontend = true;
 
     fcitx5.addons = with pkgs; [
-        fcitx5-mozc
-        fcitx5-gtk
-        fcitx5-configtool
-        fcitx5-with-addons
+      fcitx5-mozc
+      fcitx5-gtk
+      fcitx5-configtool
+      fcitx5-with-addons
     ];
   };
   i18n.defaultLocale = "en_US.UTF-8";
@@ -276,7 +267,6 @@ in
       yarn
       go
       goimports-reviser
-      cargo
       jq
       unzip
       dex
@@ -458,8 +448,8 @@ in
       Environment = "PATH=/home/shiro/bin";
       ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
       Type = "notify";
-# ExecStartPre = ''
-# ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
+      # ExecStartPre = ''
+      # ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
     };
   };
 
@@ -473,7 +463,10 @@ in
     # guiAddress = "0.0.0.0:8384";
     settings = {
       devices = {
-        "homebox" = { id = "HDV7UR5-FLO23CH-WA2X7XR-CGD5KD6-QCTVNB7-BUPV2WM-LGWFTOH-UIPAMQ4"; };
+        "homebox" = {
+          id =
+            "HDV7UR5-FLO23CH-WA2X7XR-CGD5KD6-QCTVNB7-BUPV2WM-LGWFTOH-UIPAMQ4";
+        };
       };
       folders = {
         "wiki" = {
@@ -483,8 +476,8 @@ in
       };
     };
   };
- systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
-
+  systemd.services.syncthing.environment.STNODEFAULTFOLDER =
+    "true"; # Don't create default ~/Sync folder
 
   nix = {
     gc = {
@@ -538,7 +531,7 @@ in
   #     KeepAlive = true;
   #   };
 
-    # Install = { WantedBy = [ "sockets.target" ]; };
+  # Install = { WantedBy = [ "sockets.target" ]; };
   # };
 
   # networking.wireless.iwd = {
@@ -549,10 +542,9 @@ in
   # networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
 
   networking.firewall.enable = false;
-  networking.extraHosts =
-    ''
+  networking.extraHosts = ''
     127.0.0.1 mac
-    '';
+  '';
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }

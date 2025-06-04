@@ -18,6 +18,9 @@ vim.opt.diffopt:append({ "followwrap" })
 -- disable status line
 vim.opt.laststatus = 3
 
+-- conceal level
+vim.opt_local.conceallevel = 2
+
 -- don't show diff fill chars
 vim.opt.fillchars = { diff = " " }
 

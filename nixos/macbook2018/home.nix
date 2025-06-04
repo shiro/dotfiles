@@ -21,7 +21,7 @@
 
   home.packages = [
     # (pkgs.python311.withPackages (ppkgs: [
-      # ppkgs.map2
+    # ppkgs.map2
     # ]))
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
@@ -77,5 +77,35 @@
   programs.home-manager.enable = true;
 
   home.stateVersion = "24.05";
+
+  # services.kanshi = {
+  #   enable = true;
+  #   systemdTarget = "xdg-desktop-portal-hyprland.service";
+  #   profiles = {
+  #     laptop = {
+  #       outputs = [{
+  #         criteria = "eDP-1";
+  #         scale = 2.0;
+  #       }];
+  #       exec = "notify-send laptop";
+  #     };
+  #     work = {
+  #       outputs = [
+  #         {
+  #           criteria = "eDP-1";
+  #           position = "auto-down";
+  #           scale = 2.0;
+  #         }
+  #         {
+  #           criteria = "DP-4";
+  #           position = "auto-up";
+  #           scale = 1.6;
+  #         }
+  #       ];
+  #       exec = "notify-send work";
+  #     };
+  #   };
+  # };
+
 }
 

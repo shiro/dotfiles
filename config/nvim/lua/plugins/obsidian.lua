@@ -7,7 +7,7 @@ vim.keymap.set("n", "gd", function()
 end, { noremap = false, expr = true })
 
 return {
-  "epwalsh/obsidian.nvim",
+  "obsidian-nvim/obsidian.nvim",
   version = "*",
   lazy = true,
   ft = "markdown",
