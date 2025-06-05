@@ -19,7 +19,7 @@
 " nnoremap ; p
 " nnoremap j y
 
-noremap <Leader>' :set relativenumber!<CR>
+noremap <Leader>' :set relativenumber!<CR> :set number!<CR>
 noremap <Leader>" :set number!<CR>
 
 " scroll faster

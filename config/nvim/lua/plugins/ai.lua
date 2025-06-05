@@ -3,19 +3,24 @@ local M = {
     "yetone/avante.nvim",
     event = "VeryLazy",
     version = false,
+    branch = "main",
     opts = {
       provider = "openai",
-      cursor_applying_provider = 'openai',
-      behaviour = { enable_cursor_planning_mode = true },
-      openai = {
-        endpoint = "https://api.openai.com/v1",
-        model = "gpt-4o",
-        timeout = 30000,
-        temperature = 0,
-        max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-        --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      cursor_applying_provider = "openai",
+      providers = {
+        openai = {
+          endpoint = "https://api.openai.com/v1",
+          model = "gpt-4o",
+          extra_request_body = {
+            -- timeout = 30000,
+            temperature = 0.75,
+            max_completion_tokens = 16384, -- Increase this to include reasoning tokens (for reasoning models)
+            reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+          },
+        },
       },
-      hints = { enabled = false }
+      behaviour = { enable_cursor_planning_mode = true },
+      -- hints = { enabled = false },
     },
     build = "make",
     dependencies = {
@@ -45,7 +50,7 @@ local M = {
       },
       {
         "MeanderingProgrammer/render-markdown.nvim",
-        opts = { file_types = { "markdown", "Avante" }, },
+        opts = { file_types = { "markdown", "Avante" } },
         ft = { "markdown", "Avante" },
       },
     },
