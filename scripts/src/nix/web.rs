@@ -7,6 +7,7 @@ use scripts::*;
 enum PackageManager {
     Yarn,
     Pnpm,
+    Npm,
 }
 
 impl Display for PackageManager {
@@ -14,6 +15,7 @@ impl Display for PackageManager {
         f.write_str(match self {
             PackageManager::Yarn => "yarn",
             PackageManager::Pnpm => "pnpm",
+            PackageManager::Npm => "npm",
         })
     }
 }
@@ -21,6 +23,9 @@ impl Display for PackageManager {
 fn get_package_manager() -> Option<PackageManager> {
     if Path::new("pnpm-lock.yaml").is_file() {
         return Some(PackageManager::Pnpm);
+    }
+    if Path::new("package-lock.json").is_file() {
+        return Some(PackageManager::Npm);
     }
     if Path::new("yarn.lock").is_file() {
         return Some(PackageManager::Yarn);
@@ -44,6 +49,11 @@ fn main() -> Result<()> {
             Command::new("remove")
                 .about("remove a dependency")
                 .arg(arg!(<dependency> ... "list of dependencies")),
+        )
+        .subcommand(
+            Command::new("install")
+                .alias("i")
+                .about("install dependencies"),
         )
         .subcommand(Command::new("upgrade").about("upgrade dependencies"));
     let matches = &cmd.get_matches();
@@ -70,7 +80,7 @@ fn main() -> Result<()> {
                     if optional { "--optional" } else { "" },
                     dependencies.join(" ")
                 ))?,
-                PackageManager::Pnpm => run_cmd_interactive(&format!(
+                PackageManager::Pnpm | PackageManager::Npm => run_cmd_interactive(&format!(
                     "{package_manager} add {} {} {}",
                     if dev { "--save-dev" } else { "" },
                     if optional { "--save-optional" } else { "" },
@@ -86,11 +96,16 @@ fn main() -> Result<()> {
                 .cloned()
                 .collect();
             match package_manager {
-                PackageManager::Yarn | PackageManager::Pnpm => run_cmd_interactive(&format!(
-                    "{package_manager} remove {}",
-                    dependencies.join(" ")
-                ))?,
+                PackageManager::Yarn | PackageManager::Pnpm | PackageManager::Npm => {
+                    run_cmd_interactive(&format!(
+                        "{package_manager} remove {}",
+                        dependencies.join(" ")
+                    ))?
+                }
             };
+        }
+        Some(("install", _args)) => {
+            run_cmd_interactive(&format!("{package_manager} install"))?;
         }
         Some(("upgrade", _args)) => {
             run_cmd_interactive("npx --yes npm-check-updates -i --format group --install always")?;
@@ -106,7 +121,12 @@ fn main() -> Result<()> {
             } else {
                 ""
             };
-            run_cmd_interactive(&format!("{package_manager} {cmd}{args_str}"))?;
+            run_cmd_interactive(&match package_manager {
+                PackageManager::Yarn | PackageManager::Pnpm => {
+                    format!("{package_manager} {cmd}{args_str}")
+                }
+                PackageManager::Npm => format!("{package_manager} run {cmd}{args_str}"),
+            })?;
         }
         _ => unreachable!(),
     };
