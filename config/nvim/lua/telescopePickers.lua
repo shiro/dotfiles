@@ -73,11 +73,17 @@ function M.prettyFilesPicker(pickerAndOptions)
       -- Get the Tail and the Path to display
       local tail, pathToDisplay = M.getPathAndTail(entry.value)
 
-      -- Add an extra space to the tail so that it looks nicely separated from the path
-      local tailForDisplay = tail .. " "
-
       -- Get the Icon with its corresponding Highlight information
       local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
+
+      -- if the filename is non-descriptive, use directory name instead
+      if tail == "index.ts" or tail == "index.tsx" or tail == "mod.rs" then
+        local foo = telescopeUtilities.path_tail(pathToDisplay)
+        tail = foo .. " (" .. tail .. ")"
+      end
+
+      -- Add an extra space to the tail so that it looks nicely separated from the path
+      local tailForDisplay = tail .. " "
 
       local status = ""
       local highlight = ""
