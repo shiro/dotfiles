@@ -42,7 +42,7 @@ require("lazy").setup({
   require("plugins.fancy"),
   require("plugins.diff"),
 
-  -- require("plugins.ai"),
+  require("plugins.ai"),
 
   require("plugins.github"),
   require("plugins.obsidian"),
