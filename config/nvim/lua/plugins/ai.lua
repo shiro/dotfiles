@@ -6,7 +6,7 @@ local M = {
     branch = "main",
     opts = {
       provider = "openai",
-      cursor_applying_provider = "openai",
+      -- cursor_applying_provider = "openai",
       providers = {
         openai = {
           endpoint = "https://api.openai.com/v1",
@@ -21,6 +21,12 @@ local M = {
       },
       behaviour = { enable_cursor_planning_mode = true },
       -- hints = { enabled = false },
+      mappings = {
+        sidebar = {
+          close_from_input = { normal = "<esc>" },
+        },
+        focus = "<leader>aa",
+      },
     },
     build = "make",
     dependencies = {
