@@ -14,13 +14,13 @@ local M = {
           extra_request_body = {
             -- timeout = 30000,
             temperature = 0.75,
-            max_completion_tokens = 16384, -- Increase this to include reasoning tokens (for reasoning models)
+            max_completion_tokens = 16384, -- increase this to include reasoning tokens (for reasoning models)
             reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
           },
         },
       },
       behaviour = { enable_cursor_planning_mode = true },
-      -- hints = { enabled = false },
+      hints = { enabled = false }, -- disable ghost text
       mappings = {
         sidebar = {
           close_from_input = { normal = "<esc>" },
@@ -62,5 +62,9 @@ local M = {
     },
   },
 }
+
+-- TODO add recents integration
+-- local filepath = node.absolute_path
+-- Api.add_selected_file(filepath)
 
 return M
