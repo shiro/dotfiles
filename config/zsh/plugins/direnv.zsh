@@ -12,7 +12,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
   __auto_nix_shell() {
     [[ "$AUTO_INIT_NIX_SHELL" == 1 ]] && return 0
 
-    local ignored_commands=(cd proj r rm dot ls la g ga gac gam gf gpl gr gre gl ggo)
+    local ignored_commands=(cd proj r rm dot ls la g ga gac gam gf gp gcp gpl gr gre gl ggo)
     local command=("${1// */}")
 
     # don't do anyting if command should be ignored
