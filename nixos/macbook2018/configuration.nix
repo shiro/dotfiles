@@ -48,9 +48,9 @@ in {
   imports = [
     /etc/nixos/hardware-configuration.nix
     inputs.home-manager.nixosModules.default
-    "${
-      builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
-    }/apple/t2"
+    # "${
+    #   builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
+    # }/apple/t2"
   ];
 
   hardware.firmware = [
@@ -275,6 +275,7 @@ in {
       killall
       ncmpcpp
       mixxc
+      aichat
       gh
       awscli2
       # libreoffice-qt6-fresh
