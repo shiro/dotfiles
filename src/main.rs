@@ -65,7 +65,7 @@ fn main() -> Result<()> {
             let _ = symlink(&p, &target);
 
             let relpath = p.strip_prefix(&cwd.join("scripts/src"))?;
-            println!("[link]  {}", relpath.to_string_lossy());
+            println!("[link]  ~/bin/{}", relpath.to_string_lossy());
             continue;
         }
 
@@ -86,8 +86,58 @@ fn main() -> Result<()> {
             .args(&["--best", "--lzma", &binary_path.to_string_lossy()])
             .success_output();
 
-        println!("[build] {}", p.to_string_lossy());
+        println!("[build] ~/{}", p.to_string_lossy());
         std::fs::copy(&binary_path, &target_path)?;
+    }
+
+    // Link config directories
+    let src_config_dir = cwd.join("config");
+    let dst_config_dir = Path::new(&home).join(".config");
+
+    for entry in std::fs::read_dir(src_config_dir.clone())? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_dir() {
+            let target = dst_config_dir.join(path.file_name().unwrap());
+            if !target.exists() {
+                symlink(&path, &target)?;
+                println!(
+                    "[link]  ~/{}",
+                    target.file_name().unwrap().to_string_lossy()
+                );
+            } else {
+                println!(
+                    "[skip]  config/{}",
+                    target.file_name().unwrap().to_string_lossy()
+                );
+            }
+        }
+    }
+    for entry in WalkDir::new(&cwd).into_iter().filter_map(|p| p.ok()) {
+        let path = entry.path();
+        if path.is_file() && path.extension().is_some_and(|ext| ext == "ln") {
+            let mut target = Path::new(&home)
+                .join(path.file_name().unwrap())
+                .with_extension("");
+
+            target.set_file_name(format!(
+                ".{}",
+                target.clone().file_name().unwrap().to_string_lossy()
+            ));
+
+            if !target.exists() {
+                symlink(&path, &target)?;
+                println!(
+                    "[link]  ~/{}",
+                    target.file_name().unwrap().to_string_lossy()
+                );
+            } else {
+                println!(
+                    "[skip]  ~/{}",
+                    target.file_name().unwrap().to_string_lossy()
+                );
+            }
+        }
     }
 
     println!("Done. Reload your terminal.");
