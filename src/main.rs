@@ -94,6 +94,8 @@ fn main() -> Result<()> {
     let src_config_dir = cwd.join("config");
     let dst_config_dir = Path::new(&home).join(".config");
 
+    create_dir_all(&dst_config_dir)?;
+
     for entry in std::fs::read_dir(src_config_dir.clone())? {
         let entry = entry?;
         let path = entry.path();
