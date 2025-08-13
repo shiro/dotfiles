@@ -35,6 +35,8 @@ command_picker = function(opts)
   opts = opts or {}
   opts.sorter = require("top-results-sorter").sorter({ name = "omnibar" })
 
+  local selection_start, selection_end = vim.api.nvim_buf_get_mark(0, "<"), vim.api.nvim_buf_get_mark(0, ">")
+
   pickers
     .new(opts, {
       prompt_title = "commands",
@@ -49,7 +51,18 @@ command_picker = function(opts)
           local entry = RegisteredCommands[selection[1]]
           require("top-results-sorter").PushRecent("omnibar", selection[1])
           require("top-results-sorter").save_history("omnibar")
-          vim.schedule(function() entry.command() end)
+
+          -- vim.cmd("normal! gv")
+
+          vim.schedule(function()
+            -- vim.api.nvim_buf_set_mark(0, "<", selection_start[1], selection_start[2], {})
+            -- vim.api.nvim_buf_set_mark(0, ">", selection_end[1], selection_end[2], {})
+            -- vim.cmd("normal! gv")
+            -- print(vim.inspect(selection_start))
+            -- print(vim.inspect(selection_end))
+
+            entry.command()
+          end)
         end)
         return true
       end,

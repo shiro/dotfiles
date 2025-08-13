@@ -1,3 +1,13 @@
+local get_selection = function()
+  local from = vim.fn.getpos("v")
+  local to = vim.fn.getpos(".")
+
+  local mode = vim.api.nvim_get_mode().mode
+  -- \22 is an escaped version of <c-v>
+  if mode == "v" or mode == "V" or mode == "\22" then return vim.fn.getregion(from, to, { type = mode }) end
+  return vim.fn.getregion(from, to)
+end
+
 local M = {
   {
     name = "omnibar",
@@ -74,6 +84,43 @@ local M = {
               command = function() require("plugins.commands.diff-branch")() end,
             },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
+            ["Convert selection color to rgb"] = {
+              condition = function()
+                local sel = get_selection()
+                return #sel == 1 and (sel[1]:match("^#%x%x%x%x%x%x$") ~= nil or sel[1]:match("^#%x%x%x$") ~= nil)
+              end,
+              command = function()
+                local sel = get_selection()
+
+                -- print(vim.inspect(sel))
+
+                -- local hex = sel[1]:match("^#%x%x%x%x%x%x$")
+                -- if hex == nil then hex = sel[1]:match("^#%x%x%x$") end
+
+                -- print(hex)
+
+                -- local sel_from = vim.fn.getpos("v")
+                -- local sel_to = vim.fn.getpos(".")
+                --
+                -- local r, g, b
+                -- if #hex == 7 then
+                --   r, g, b = tonumber(hex:sub(2, 3), 16), tonumber(hex:sub(4, 5), 16), tonumber(hex:sub(6, 7), 16)
+                -- else
+                --   r, g, b =
+                --     tonumber(hex:sub(2, 2), 16) * 17, tonumber(hex:sub(3, 3), 16) * 17, tonumber(hex:sub(4, 4), 16) * 17
+                -- end
+                --
+                -- -- Set the text in RGB format
+                -- vim.api.nvim_buf_set_text(
+                --   0,
+                --   sel_from[2] - 1,
+                --   sel_from[3] - 1,
+                --   sel_to[2] - 1,
+                --   sel_to[3],
+                --   { string.format("rgb(%d, %d, %d)", r, g, b) }
+                -- )
+              end,
+            },
             ["Toggle statusline"] = {
               command = function()
                 if vim.opt.laststatus:get() == 0 then
