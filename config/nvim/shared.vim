@@ -33,6 +33,7 @@ vnoremap > >gv
 " jump to last insert position
 nnoremap g; `^
 
+" replace visual
 vmap u :s/<C-r><C-r>//g<left><left>
 
 " search / replace for word under the cursor

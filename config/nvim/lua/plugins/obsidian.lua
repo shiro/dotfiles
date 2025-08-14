@@ -8,9 +8,9 @@ end, { noremap = false, expr = true })
 
 return {
   "obsidian-nvim/obsidian.nvim",
-  version = "*",
   lazy = true,
   ft = "markdown",
+  cond = function() return vim.fn.getcwd() == vim.fn.expand("~/wiki") end,
   event = {
     "BufReadPre " .. vim.fn.expand("~") .. "/wiki/*.md",
     "BufNewFile " .. vim.fn.expand("~") .. "/wiki/*.md",
@@ -19,9 +19,12 @@ return {
     "nvim-lua/plenary.nvim",
     -- TODO cmp
   },
-  opts = {
-    workspaces = { { name = "wiki", path = "~/wiki" } },
-    ui = { enable = false },
-    note_id_func = function(title) return title end,
-  },
+  config = function()
+    require("obsidian").setup({
+      workspaces = { { name = "wiki", path = "~/wiki" } },
+      ui = { enable = false },
+      note_id_func = function(title) return title end,
+      legacy_commands = false,
+    })
+  end,
 }

@@ -30,6 +30,7 @@ local M = {
       -- autocmd BufReadPost fugitive://* set bufhidden=delete
     end,
   },
+  -- TODO try https://github.com/lewis6991/gitsigns.nvim
   {
     "airblade/vim-gitgutter",
     init = function()

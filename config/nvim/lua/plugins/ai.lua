@@ -1,11 +1,15 @@
 local M = {
+  -- TODO also try https://github.com/olimorris/codecompanion.nvim
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
     version = false,
     branch = "main",
+    ---@module 'avante'
+    ---@type avante.Config
     opts = {
       provider = "openai",
+      -- provider = "bedrock",
       -- cursor_applying_provider = "openai",
       providers = {
         openai = {
@@ -18,8 +22,21 @@ local M = {
             reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
           },
         },
+        bedrock = {
+          model = "apac.anthropic.claude-sonnet-4-20250514-v1:0",
+          -- model = "apac.anthropic.claude-3-haiku-20240307-v1:0",
+          -- model = "apac.anthropic.claude-3-5-sonnet-20241022-v2:0",
+          aws_profile = "bedrock",
+          aws_region = "ap-northeast-1",
+        },
       },
-      behaviour = { enable_cursor_planning_mode = true },
+      selector = { provider = "telescope" },
+      behaviour = {
+        enable_cursor_planning_mode = true,
+        auto_apply_diff_after_generation = true,
+        -- auto-approve specific tools only
+        auto_approve_tool_permissions = { "replace_in_file" },
+      },
       hints = { enabled = false }, -- disable ghost text
       mappings = {
         sidebar = {
@@ -53,11 +70,6 @@ local M = {
             use_absolute_path = true,
           },
         },
-      },
-      {
-        "MeanderingProgrammer/render-markdown.nvim",
-        opts = { file_types = { "markdown", "Avante" } },
-        ft = { "markdown", "Avante" },
       },
     },
   },

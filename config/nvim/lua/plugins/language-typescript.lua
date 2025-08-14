@@ -9,12 +9,12 @@ local M = {
         capabilities = capabilities,
         settings = {
           -- LSP snipets crash cmp, try out if it's fixed after a while
-          complete_function_calls = true,
-          publish_diagnostic_on = "change",
+          -- complete_function_calls = true,
+          -- publish_diagnostic_on = "change",
           tsserver_file_preferences = { importModuleSpecifierPreference = "non-relative" },
-          tsserver_plugins = {
-            "@styled/typescript-styled-plugin",
-          },
+          -- tsserver_plugins = {
+          --   "@styled/typescript-styled-plugin",
+          -- },
         },
       })
     end,

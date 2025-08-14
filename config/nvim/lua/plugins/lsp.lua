@@ -21,7 +21,7 @@ local M = {
           },
           python = { "pyright" },
           rust = {
-            -- "rust_analyzer"
+            -- "rust_analyzer",
           },
           -- kotlin = {
           --   "kotlin-language-server",
@@ -36,24 +36,28 @@ local M = {
         },
       })
 
-      local signs = { Error = "☢️", Warn = "⚠", Hint = "❓", Info = "ℹ" }
-
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl })
-      end
-
       vim.diagnostic.config({
         virtual_text = false,
         update_in_insert = true,
         float = { border = "rounded" },
-        signs = { priority = 200 },
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = "✘",
+            [vim.diagnostic.severity.WARN] = "",
+            [vim.diagnostic.severity.HINT] = "❓",
+            [vim.diagnostic.severity.INFO] = "ℹ",
+          },
+          priority = 200,
+        },
       })
-      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = "rounded",
-        close_events = { "BufHidden", "InsertLeave" },
-      })
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+
+      vim.lsp.handlers["textDocument/signatureHelp"] = function()
+        vim.lsp.buf.signature_help({
+          border = "rounded",
+          close_events = { "BufHidden", "InsertLeave" },
+        })
+      end
+      vim.lsp.handlers["textDocument/hover"] = function() vim.lsp.buf.hover({ border = "rounded" }) end
     end,
   },
   {
@@ -207,14 +211,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     vim.keymap.set("n", "gd", function()
-      if vim.bo.filetype == "markdown" and require("obsidian").util.cursor_on_markdown_link() then
-        vim.cmd("ObsidianFollowLink")
-        return
-      end
+      -- TODO check if in wiki directory
+      -- if vim.bo.filetype == "markdown" and require("obsidian").util.cursor_on_markdown_link() then
+      --   vim.cmd("ObsidianFollowLink")
+      --   return
+      -- end
 
       -- vim.lsp.buf.definition()
       require("telescope.builtin").lsp_definitions()
     end, { buffer = ev.buf })
+
+    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { buffer = ev.buf })
   end,
 })
 -- code actions

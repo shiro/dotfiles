@@ -5,6 +5,7 @@ local M = {
     "saecki/crates.nvim",
     ft = "toml",
     tag = "stable",
+    event = { "BufRead Cargo.toml" },
     config = function() require("crates").setup() end,
   },
 }

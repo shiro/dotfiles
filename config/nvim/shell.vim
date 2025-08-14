@@ -116,7 +116,8 @@ nnoremap <silent> ^ g^
 nnoremap <silent> $ g$
 
 
-" quickly paste from default buffer
+" quickly paste from default buffer in visual mode
+inoremap <C-v> <C-r>+
 inoremap <C-r><C-r> <C-r>+
 cnoremap <C-r><C-r> <C-r>+
 

@@ -56,9 +56,30 @@ local M = {
         })
       end
 
+      local select_one_or_multi = function(prompt_bufnr)
+        local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+        local multi = picker:get_multi_selection()
+        if not vim.tbl_isempty(multi) then
+          require("telescope.actions").close(prompt_bufnr)
+          for _, j in pairs(multi) do
+            if j.path ~= nil then vim.cmd(string.format("%s %s", "edit", j.path)) end
+          end
+        else
+          require("telescope.actions").select_default(prompt_bufnr)
+        end
+      end
+
       telescope.setup({
         defaults = {
-          mappings = { i = { ["<esc>"] = telescope_actions.close } },
+          mappings = {
+            i = {
+              ["<esc>"] = telescope_actions.close,
+              ["<CR>"] = select_one_or_multi,
+            },
+            n = {
+              -- ["<c-d>"] = require("telescope.actions").delete_buffer,
+            },
+          },
           layout_config = {
             vertical = {
               height = 0.6,
@@ -80,8 +101,13 @@ local M = {
                 vim.cmd("EditQuery")
               end,
             },
-            ["Diff with branch"] = {
-              command = function() require("plugins.commands.diff-branch")() end,
+            ["Diff with branch"] = { command = function() require("plugins.commands.diff-branch")() end },
+            ["Get highlight group under cursor"] = { command = function() vim.cmd("Inspect") end },
+            ["Switch AI model"] = { command = function() require("avante.api").select_model() end },
+            ["Close all buffers except current"] = { command = function() vim.cmd("%bd!|e#|bd#") end },
+            ["New AI chat"] = {
+              command = function() vim.cmd("AvanteChatNew") end,
+              keymaps = { { "n", "<leader>i" } },
             },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
             ["Convert selection color to rgb"] = {

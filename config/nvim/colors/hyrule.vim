@@ -39,7 +39,7 @@ hi Todo guifg=#359ce6 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=74 ctermbg=NONE 
 hi Special guifg=#bbddff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=153 ctermbg=NONE cterm=NONE
 " hi LineNr guifg=#aaaaaa guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=248 ctermbg=NONE cterm=NONE
 " hi StatusLine guifg=#9ba89b guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=108 ctermbg=NONE cterm=NONE
-hi Label guifg=#ffccff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=225 ctermbg=NONE cterm=NONE
+" hi Label guifg=#ffccff guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=225 ctermbg=NONE cterm=NONE
 hi CTagsImport guifg=NONE guibg=NONE guisp=#eb7373 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
 hi PMenuSel guifg=#ce840d guibg=NONE guisp=#333231 gui=NONE ctermfg=172 ctermbg=NONE cterm=NONE
 "hi Search guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NONE cterm=NONE
@@ -139,6 +139,7 @@ exe "hi NormalFloat guibg=NONE"
 exe "hi Cursor guifg=".test." guibg=".white." gui=bold,underline"
 exe "hi Visual guibg=".selection
 exe "hi LineNr guibg=None guifg=".ore
+exe "hi Label guibg=None guifg=".yellow
 exe "hi CursorLineNr guibg=None guifg=".orange
 exe "hi IlluminatedWordText guibg=NONE guifg=".yellow
 exe "hi IlluminatedWordRead guibg=NONE guifg=".yellow
@@ -304,6 +305,8 @@ exe "hi rsModule guifg=".white
 exe "hi rustAttribute guifg=".white
 "exe "hi CocFloating guifg=".white
 exe "hi DiagnosticError guifg=".error
+exe "hi DiagnosticVirtualTextInfo guifg=".gray
+exe "hi DiagnosticVirtualTextWarn guifg=".orange
 "exe "hi FloatShadow guibg=".lightGreen
 "set winblend=30
 

@@ -4,8 +4,8 @@ local M = {
     -- TS-LSP and preselect are broken after this commit
     -- also other errors on console randomly
     -- https://github.com/hrsh7th/nvim-cmp/issues/1877
-    commit = " b356f2c",
-    pin = true,
+    -- commit = " b356f2c",
+    -- pin = true,
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lsp-signature-help",

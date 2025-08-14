@@ -32,6 +32,7 @@ require("lazy").setup({
   require("plugins.language-typescript"),
   require("plugins.language-markdown"),
   require("plugins.language-go"),
+  require("plugins.language-rust"),
 
   require("plugins.copy-imports"),
   require("plugins.formatting"),

@@ -41,6 +41,20 @@ local M = {
         local immediate = opts.immediate or false
 
         local view_info = vim.fn.winsaveview()
+        local view_info_remote = nil
+        local winnr = vim.api.nvim_get_current_win()
+
+        local remote_watcher = vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave" }, {
+          callback = function() view_info_remote = vim.fn.winsaveview() end,
+        })
+
+        local restore_view = function()
+          vim.api.nvim_del_autocmd(remote_watcher)
+          if view_info_remote ~= nil then vim.fn.winrestview(view_info_remote) end
+
+          vim.api.nvim_set_current_win(winnr)
+          vim.fn.winrestview(view_info)
+        end
 
         require("flash").jump()
 
@@ -48,13 +62,17 @@ local M = {
         local after_view_info = vim.fn.winsaveview()
         if after_view_info.col == view_info.col and after_view_info.lnum == view_info.lnum then return end
 
-        if count > 0 then vim.fn.feedkeys(count) end
-        vim.fn.feedkeys(action)
+        if opts.callback ~= nil then
+          opts.callback()
+        else
+          if count > 0 then vim.fn.feedkeys(count) end
+          vim.fn.feedkeys(action)
+        end
 
         if not restore then return end
 
         if immediate then
-          vim.schedule(function() vim.fn.winrestview(view_info) end)
+          vim.schedule(restore_view)
           return
         end
 
@@ -67,7 +85,7 @@ local M = {
               if m2 == "i" then return end
               if m1 == "i" and m2 == "niI" then return end
 
-              vim.schedule(function() vim.fn.winrestview(view_info) end)
+              vim.schedule(restore_view)
               return true
             end,
           })
@@ -83,6 +101,7 @@ local M = {
         "a)",
         "aa",
         "ab",
+        "ap",
         "e",
         "s.",
         "af",
@@ -102,6 +121,7 @@ local M = {
         "iW",
         "ia",
         "ib",
+        "ip",
         "if",
         "iq",
         "it",
@@ -144,6 +164,15 @@ local M = {
       vim.keymap.set({ "n" }, "grd", function() remote_action("gd") end)
       vim.keymap.set({ "n" }, "grcc", function() remote_action("gcc", { immediate = true }) end)
       vim.keymap.set({ "n" }, "gmcc", function() remote_action("gcc", { restore = false }) end)
+
+      -- yank remote line number
+      vim.keymap.set({ "n" }, "yrl", function()
+        remote_action("C", {
+          immediate = true,
+          callback = function() vim.fn.setreg("+", vim.fn.line(".")) end,
+        })
+      end)
+
       -- vim.keymap.set({ "n" }, "drD", function()
       --   remote_action("D", { immediate = true })
       -- end)
