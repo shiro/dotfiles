@@ -7,7 +7,6 @@ local M = {
   -- embedded LSP
   {
     "jmbuhr/otter.nvim",
-    branch = "global-config",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },
