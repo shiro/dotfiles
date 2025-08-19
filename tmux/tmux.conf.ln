@@ -229,3 +229,6 @@ bind-key -n C-S-Tab send "\e[27;6;9~"
 bind-key -n C-S-F next-window #send "\e[70;5u"
 bind-key -n C-S-P send "\e[80;5u"
 bind-key -n C-S-R send "\e[82;5u"
+
+# support kitty images
+set -gq allow-passthrough on
