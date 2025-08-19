@@ -17,9 +17,6 @@ nnoremap zO :action ExpandRegionRecursively<CR>
 noremap <leader>g8 :action CollapseSelection<CR>
 noremap <leader>gi :action ExtractInterface<CR><esc>
 
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-
 " fix default expand all behaviour not working
 nnoremap zR :action ExpandAllRegions<CR>
 nnoremap <leader>p :action EditorPaste<CR>
