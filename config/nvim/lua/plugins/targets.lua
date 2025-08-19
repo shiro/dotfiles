@@ -8,7 +8,7 @@ local M = {
     config = function() require("nvim-surround").setup({}) end,
   },
   -- enables repeating other supported plugins with the . command
-  "tpope/vim-repeat",
+  -- "tpope/vim-repeat",
 }
 
 -- change outer function

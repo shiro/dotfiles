@@ -14,47 +14,66 @@ vim.opt.rtp:prepend(lazypath)
 vim.api.nvim_create_augroup("default", { clear = true })
 
 require("lazy").setup({
-  require("plugins.targets"),
-  require("plugins.notifications"),
-  require("plugins.chords"),
-  require("plugins.git"),
+  spec = {
+    require("plugins.targets"),
+    require("plugins.notifications"),
+    require("plugins.chords"),
+    require("plugins.git"),
 
-  require("plugins.outline"),
-  require("plugins.jumping"),
+    require("plugins.outline"),
+    require("plugins.jumping"),
 
-  require("plugins.quickfix"),
-  require("plugins.environment"),
-  require("plugins.folds"),
-  require("plugins.highlight"),
-  require("plugins.lsp"),
-  require("plugins.completion"),
+    require("plugins.quickfix"),
+    require("plugins.environment"),
+    require("plugins.folds"),
+    require("plugins.highlight"),
+    require("plugins.lsp"),
+    require("plugins.completion"),
 
-  require("plugins.language-typescript"),
-  require("plugins.language-markdown"),
-  require("plugins.language-go"),
-  require("plugins.language-rust"),
+    require("plugins.language-typescript"),
+    require("plugins.language-markdown"),
+    require("plugins.language-go"),
+    require("plugins.language-rust"),
 
-  require("plugins.copy-imports"),
-  require("plugins.formatting"),
-  require("plugins.comments"),
-  require("plugins.refactor"),
-  require("plugins.telescope"),
-  require("plugins.file-manager"),
-  require("plugins.fancy"),
-  require("plugins.diff"),
+    require("plugins.copy-imports"),
+    require("plugins.formatting"),
+    require("plugins.comments"),
+    require("plugins.refactor"),
+    require("plugins.telescope"),
+    require("plugins.file-manager"),
+    require("plugins.fancy"),
+    require("plugins.diff"),
 
-  require("plugins.ai"),
+    require("plugins.ai"),
 
-  require("plugins.github"),
-  require("plugins.obsidian"),
-}, { rocks = { enabled = false } })
+    require("plugins.github"),
+    require("plugins.obsidian"),
+  },
+  rocks = {
+    hererocks = true, -- recommended if you do not have global installation of Lua 5.1.
+  },
+})
 
 vim.keymap.set(
   { "n", "v" },
-  "<space>k",
+  "<leader>k",
   function() require("telescope").extensions.omnibar.omnibar() end,
   { silent = true }
 )
+
+vim.keymap.set({ "n", "v" }, "gq", function()
+  local mode = vim.fn.mode()
+  local selection_start, selection_end
+  if mode == "v" or mode == "V" or mode == "<C-v>" then
+    selection_start, selection_end = vim.fn.getpos("v"), vim.fn.getpos(".")
+  else
+    selection_start, selection_end = vim.api.nvim_buf_get_mark(0, "<"), vim.fn.getpos("'>")
+  end
+
+  selection_start, selection_end = { selection_start[2], selection_start[3] }, { selection_end[2], selection_end[3] }
+
+  print(vim.inspect({ selection_start, selection_end }))
+end, {})
 
 local function quickfix()
   vim.lsp.buf.code_action({

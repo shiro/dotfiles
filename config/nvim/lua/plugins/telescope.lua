@@ -1,11 +1,44 @@
 local get_selection = function()
-  local from = vim.fn.getpos("v")
-  local to = vim.fn.getpos(".")
+  local mode = vim.fn.mode()
+  local selection_start, selection_end
+  if mode == "v" or mode == "V" or mode == "<C-v>" then
+    selection_start, selection_end = vim.fn.getpos("v"), vim.fn.getpos(".")
+  else
+    selection_start, selection_end = vim.fn.getpos("'<"), vim.fn.getpos("'>")
+  end
+  selection_start, selection_end = { selection_start[2], selection_start[3] }, { selection_end[2], selection_end[3] }
+  return selection_start, selection_end
+end
 
-  local mode = vim.api.nvim_get_mode().mode
-  -- \22 is an escaped version of <c-v>
-  if mode == "v" or mode == "V" or mode == "\22" then return vim.fn.getregion(from, to, { type = mode }) end
-  return vim.fn.getregion(from, to)
+local foo = function()
+  local from, to = get_selection()
+
+  local text = vim.fn.getregion({ 0, from[1], from[2], 0 }, { 0, to[1], to[2], 0 })
+  if text == nil or #text ~= 1 then return end
+  text = text[1]
+
+  local hex = text:match("^#%x%x%x%x%x%x$")
+  if hex == nil then hex = text:match("^#%x%x%x$") end
+
+  local r, g, b
+  if #hex == 7 then
+    r, g, b = tonumber(hex:sub(2, 3), 16), tonumber(hex:sub(4, 5), 16), tonumber(hex:sub(6, 7), 16)
+  elseif #hex == 4 then
+    r, g, b = tonumber(hex:sub(2, 2), 16) * 17, tonumber(hex:sub(3, 3), 16) * 17, tonumber(hex:sub(4, 4), 16) * 17
+  else
+    return
+  end
+
+  vim.api.nvim_buf_set_text(
+    0,
+    from[1] - 1,
+    from[2] - 1,
+    to[1] - 1,
+    to[2],
+    { string.format("rgb(%d, %d, %d)", r, g, b) }
+  )
+
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
 end
 
 local M = {
@@ -111,41 +144,11 @@ local M = {
             },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
             ["Convert selection color to rgb"] = {
-              condition = function()
-                local sel = get_selection()
-                return #sel == 1 and (sel[1]:match("^#%x%x%x%x%x%x$") ~= nil or sel[1]:match("^#%x%x%x$") ~= nil)
-              end,
-              command = function()
-                local sel = get_selection()
-
-                -- print(vim.inspect(sel))
-
-                -- local hex = sel[1]:match("^#%x%x%x%x%x%x$")
-                -- if hex == nil then hex = sel[1]:match("^#%x%x%x$") end
-
-                -- print(hex)
-
-                -- local sel_from = vim.fn.getpos("v")
-                -- local sel_to = vim.fn.getpos(".")
-                --
-                -- local r, g, b
-                -- if #hex == 7 then
-                --   r, g, b = tonumber(hex:sub(2, 3), 16), tonumber(hex:sub(4, 5), 16), tonumber(hex:sub(6, 7), 16)
-                -- else
-                --   r, g, b =
-                --     tonumber(hex:sub(2, 2), 16) * 17, tonumber(hex:sub(3, 3), 16) * 17, tonumber(hex:sub(4, 4), 16) * 17
-                -- end
-                --
-                -- -- Set the text in RGB format
-                -- vim.api.nvim_buf_set_text(
-                --   0,
-                --   sel_from[2] - 1,
-                --   sel_from[3] - 1,
-                --   sel_to[2] - 1,
-                --   sel_to[3],
-                --   { string.format("rgb(%d, %d, %d)", r, g, b) }
-                -- )
-              end,
+              -- condition = function()
+              -- local sel = get_selection()
+              -- return #sel == 1 and (sel[1]:match("^#%x%x%x%x%x%x$") ~= nil or sel[1]:match("^#%x%x%x$") ~= nil)
+              -- end,
+              command = foo,
             },
             ["Toggle statusline"] = {
               command = function()
@@ -365,5 +368,88 @@ vim.api.nvim_create_autocmd("BufEnter", {
     push_current_path()
   end),
 })
+
+-- https://www.vikasraj.dev/blog/vim-dot-repeat
+-- vim.keymap.set({ "v" }, "gw", function() foo() end, {})
+
+-- function _G.__dot_repeat(motion)
+--   local is_visual = string.match(motion or "", "[vV]") -- 2.
+--
+--   if not is_visual and motion == nil then
+--     vim.o.operatorfunc = "v:lua.__dot_repeat"
+--     return "g@"
+--   end
+--
+--   -- if is_visual then
+--   --   print("VISUAL mode")
+--   -- else
+--   --   print("NORMAL mode")
+--   -- end
+--
+--   -- starting = vim.api.nvim_buf_get_mark(0, is_visual and "<" or "["),
+--   -- ending = vim.api.nvim_buf_get_mark(0, is_visual and ">" or "]"),
+--   local starting, ending = get_selection()
+--
+--   print(vim.inspect({ starting, ending }))
+-- end
+
+-- local counter = 0
+-- function _G.__dot_repeat(motion) -- 4.
+--   -- if motion == nil then
+--   --   vim.o.operatorfunc = "v:lua.__dot_repeat" -- 3.
+--   --   return "g@" -- 2.
+--   -- end
+--   vim.o.operatorfunc = "v:lua.__dot_repeat" -- 3.
+--
+--   -- print("counter:", counter, "motion:", motion)
+--   -- counter = counter + 1
+-- end
+
+-- vim.keymap.set("n", "gw", _G.__dot_repeat, { expr = true })
+-- vim.keymap.set("x", "gt", "<ESC><CMD>lua _G.__dot_repeat(vim.fn.visualmode())<CR>") -- 1.
+-- _G.my_count = 0
+
+local make_callback = function(callback)
+  local mode = vim.fn.mode()
+  local is_visual = mode == "v" or mode == "V" or mode == "<C-v>"
+
+  return function(motion)
+    if is_visual then
+      local starting, ending = get_selection()
+      local count = ending[2] - starting[2]
+      vim.cmd(string.format("normal! v%dl", count))
+
+      callback()
+
+      vim.schedule(function()
+        starting, ending = get_selection()
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+        vim.fn.cursor(starting[1], starting[2])
+      end)
+    else
+      callback()
+    end
+  end
+end
+
+local repeatable = function(callback)
+  return function()
+    _G.callback = make_callback(callback)
+    vim.go.operatorfunc = "v:lua.callback"
+
+    local mode = vim.fn.mode()
+    local is_visual = mode == "v" or mode == "V" or mode == "<C-v>"
+
+    if is_visual then return "g@" end
+    return "g@l"
+  end
+end
+
+vim.keymap.set("n", "gw", repeatable(foo), { expr = true })
+vim.keymap.set("x", "gw", repeatable(foo), { expr = true })
+
+-- vim.keymap.set("x", "gw", "<ESC><CMD>lua _G.main_func(vim.fn.visualmode())<CR>")
+
+-- vim.keymap.set("x", "gt", "<ESC><CMD>lua _G.__dot_repeat(vim.fn.visualmode())<CR>") -- 1.
 
 return M

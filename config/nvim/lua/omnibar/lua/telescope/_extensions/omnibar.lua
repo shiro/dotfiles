@@ -70,11 +70,31 @@ local function make_display(entry)
   })
 end
 
+local get_selection = function()
+  local mode = vim.fn.mode()
+  local selection_start, selection_end
+  if mode == "v" or mode == "V" or mode == "<C-v>" then
+    selection_start, selection_end = vim.fn.getpos("v"), vim.fn.getpos(".")
+  else
+    selection_start, selection_end = vim.fn.getpos("'<"), vim.fn.getpos("'>")
+  end
+  selection_start, selection_end = { selection_start[2], selection_start[3] }, { selection_end[2], selection_end[3] }
+  return selection_start, selection_end
+end
+
+local set_selection = function(selection_start, selection_end)
+  vim.api.nvim_buf_set_mark(0, "<", selection_start[1], selection_start[2] - 1, {})
+  vim.api.nvim_buf_set_mark(0, ">", selection_end[1], selection_end[2] - 1, {})
+end
+
 command_picker = function(opts)
   opts = opts or {}
   opts.sorter = require("top-results-sorter").sorter({ name = "omnibar" })
 
-  local selection_start, selection_end = vim.api.nvim_buf_get_mark(0, "<"), vim.api.nvim_buf_get_mark(0, ">")
+  local mode = vim.fn.mode()
+  local was_visual = mode == "v" or mode == "V" or mode == "<C-v>"
+
+  local selection_start, selection_end = get_selection()
 
   pickers
     .new(opts, {
@@ -105,9 +125,10 @@ command_picker = function(opts)
           vim.schedule(function()
             -- vim.api.nvim_buf_set_mark(0, "<", selection_start[1], selection_start[2], {})
             -- vim.api.nvim_buf_set_mark(0, ">", selection_end[1], selection_end[2], {})
-            -- vim.cmd("normal! gv")
             -- print(vim.inspect(selection_start))
             -- print(vim.inspect(selection_end))
+            set_selection(selection_start, selection_end)
+            if was_visual then vim.cmd("normal! gv") end
 
             entry.command()
           end)
