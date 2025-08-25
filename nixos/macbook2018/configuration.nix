@@ -1,32 +1,50 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 let
   hyprland_pkg = inputs.hyprland.packages.${pkgs.system}.hyprland;
   hyprland_cmd = "${hyprland_pkg}/bin/Hyprland";
   username = "shiro";
   # pkgs.rofi-blocks.rofi-blocks
 
-  rofi-blocks = (pkgs.rofi-blocks.rofi-blocks.override {
-    rofi-unwrapped = pkgs.rofi-wayland-unwrapped;
-  });
-  rofi_custom = pkgs.rofi-wayland.override { plugins = [ rofi-blocks ]; };
+  rofi_plugin_blocks = (
+    pkgs.rofi-blocks.rofi-blocks.override {
+      rofi-unwrapped = pkgs.rofi-wayland-unwrapped;
+    }
+  );
+  rofi_package = pkgs.rofi-wayland.override { plugins = [ rofi_plugin_blocks ]; };
 
-  # python_custom = let map2 = pkgs.python312.pkgs.buildPythonPackage rec {
-  #   version = "2.0.19";
-  #   pname = "map2";
-  #   format = "wheel";
-  #   src = pkgs.fetchPypi {
-  #       inherit pname version format;
-  #       sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
-  #       dist = "cp312";
-  #       python = "cp312";
-  #       abi = "cp312";
-  #       platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-  #   };
-  # };
-  # in pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-  #   pip
-  #   map2
-  # ]);
+  python_map2_package =
+    let
+      map2_wheel = pkgs.python312.pkgs.buildPythonPackage rec {
+        version = "2.0.20";
+        pname = "map2";
+        format = "wheel";
+        src = ./map2-2.1.1-cp312-cp312-manylinux_2_39_x86_64.whl;
+
+        # version = "2.0.19";
+        # pname = "
+        # format = "wheel";
+        # src = pkgs.fetchPypi {
+        #     inherit pname version format;
+        #     sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
+        #     dist = "cp312";
+        #     python = "cp312";
+        #     abi = "cp312";
+        #     platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+        # };
+      };
+    in
+    pkgs.python312.withPackages (
+      python-pkgs: with python-pkgs; [
+        pip
+        map2_wheel
+      ]
+    );
 
   mpdConf = pkgs.writeText "mpd.conf" ''
     audio_output {
@@ -44,7 +62,8 @@ let
 
     bind_to_address      "/home/shiro/.config/mpd/socket"
   '';
-in {
+in
+{
   imports = [
     /etc/nixos/hardware-configuration.nix
     inputs.home-manager.nixosModules.default
@@ -66,8 +85,7 @@ in {
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.loader.efi.efiSysMountPoint =
-    "/boot"; # make sure to change this to your EFI partition!
+  boot.loader.efi.efiSysMountPoint = "/boot"; # make sure to change this to your EFI partition!
 
   # boot.loader = {
   #   grub = {
@@ -85,12 +103,14 @@ in {
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useUserPackages = true;
-    users = { "shiro" = import ./home.nix; };
+    users = {
+      "shiro" = import ./home.nix;
+    };
   };
 
   # to enable docker emulation on m1, use:
   # $ docker run --privileged --rm tonistiigi/binfmt --install all
-  virtualisation.docker.enable = true;
+  # virtualisation.docker.enable = true;
 
   services.greetd = {
     enable = true;
@@ -113,30 +133,50 @@ in {
     path = [ pkgs.openssh ];
     serviceConfig = {
       Type = "simple";
-      Environment = [ "SSH_AUTH_SOCK=%t/ssh-agent.socket" "DISPLAY=:0" ];
+      Environment = [
+        "SSH_AUTH_SOCK=%t/ssh-agent.socket"
+        "DISPLAY=:0"
+      ];
       ExecStart = "${pkgs.openssh}/bin/ssh-agent -D -a $SSH_AUTH_SOCK";
     };
   };
   # programs.ssh.startAgent = true;
 
-  # systemd.user.services.map2 = {
-  #   enable = true;
-  #   wantedBy = [ "xsession.target" ];
-  #   partOf = [ "graphical-session.target" ];
-  #   path = [ pkgs.zsh hyprland_pkg pkgs.evtest pkgs.procps pkgs.killall ];
-  #   serviceConfig = {
-  #     # Environment = [
-  #       # ''VIRTUAL_ENV=/home/shiro/project/map2/venv'' ];
-  #     # ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-  #     ExecStart = ''/run/wrappers/bin/sudo -E /home/shiro/project/map2/venv/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-  #     Restart = "always";
-  #     RestartSec = "5s";
-  #    };
-  # };
+  systemd.user.services.map2 = {
+    enable = true;
+    wantedBy = [ "xsession.target" ];
+    partOf = [ "graphical-session.target" ];
+    path = [
+      pkgs.zsh
+      hyprland_pkg
+      pkgs.evtest
+      pkgs.procps
+      pkgs.killall
+    ];
+
+    serviceConfig = {
+      # Environment = [
+      #   ''LD_LIBRARY_PATH=${python_map2_package}/lib/python3.12/site-packages/map2.libs''
+      #   "FOO=bar"
+      # ];
+      # Environment = [
+      # ''VIRTUAL_ENV=/home/shiro/project/map2/venv'' ];
+      # ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
+      # ExecStart = ''/run/wrappers/bin/sudo -E /home/shiro/project/map2/venv/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
+      ExecStart = ''
+        ${pkgs.zsh}/bin/zsh -c 'export LD_LIBRARY_PATH=${python_map2_package}/lib/python3.12/site-packages/map2.libs; ${python_map2_package}/bin/python /home/shiro/project/mappings/next/macbook2018.py'
+      '';
+      Restart = "always";
+      RestartSec = "5s";
+    };
+  };
 
   security.sudo.wheelNeedsPassword = false;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
 
   networking.hostName = "shiro-macbook2018";
@@ -168,8 +208,7 @@ in {
 
   nix.settings = {
     substituters = [ "https://hyprland.cachix.org" ];
-    trusted-public-keys =
-      [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+    trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   };
 
   programs.zsh = {
@@ -190,41 +229,44 @@ in {
     enable = true;
     xwayland.enable = true;
   };
-  programs.waybar = { enable = true; };
+  programs.waybar = {
+    enable = true;
+  };
 
   environment.sessionVariables = {
     # make electron use wayland
     NIXOS_OZONE_WL = "1";
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";
-    XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
+    # XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
   };
 
   services.xserver.enable = true;
-  services.xserver.exportConfiguration = true;
+  # services.xserver.exportConfiguration = true;
   # services.xserver.xkb = {
   #   layout = "rabbit";
   #   # xkbVariant = "workman,";
   #   # xkbOptions = "grp:win_space_toggle";
   # };
-  # 
-  # services.xserver.xkb.extraLayouts.rabbit = {
-  #   description = "US layout (rabbit)";
-  #   languages   = [ "eng" ];
-  #   symbolsFile = /home/shiro/.xkb/symbols/rabbit;
-  # };
+  #
+  services.xserver.layout = "rabbit";
+  services.xserver.xkb.extraLayouts.rabbit = {
+    description = "US layout (rabbit)";
+    languages = [ "eng" ];
+    symbolsFile = /home/shiro/.xkb/symbols/rabbit;
+  };
 
   i18n.inputMethod = {
-    enabled = "fcitx5";
-
-    fcitx5.waylandFrontend = true;
-
+    enable = true;
+    type = "fcitx5";
     fcitx5.addons = with pkgs; [
-      fcitx5-mozc
+      # fcitx5-mozc
+      fcitx5-mozc-ut
       fcitx5-gtk
       fcitx5-configtool
-      fcitx5-with-addons
     ];
+    fcitx5.waylandFrontend = true;
   };
+
   i18n.defaultLocale = "en_US.UTF-8";
   # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
 
@@ -241,7 +283,11 @@ in {
 
   users.users.shiro = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "input" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+      "input"
+    ];
     packages = with pkgs; [
       ashuffle
       # bandwitch
@@ -334,6 +380,7 @@ in {
     #   python-pkgs.requests
     # ])
     # python_custom
+    python_map2_package
     ripgrep
     mako
     tmux
@@ -349,7 +396,7 @@ in {
     highlight
     # carla
     pavucontrol
-    rofi_custom
+    rofi_package
     pmutils
     wofi
     rclone
@@ -384,7 +431,6 @@ in {
   services.openssh.enable = true;
   services.openssh.settings.PermitRootLogin = "yes";
   services.openssh.settings.X11Forwarding = true;
-  services.openssh.forwardX11 = true;
   programs.ssh.forwardX11 = true;
   programs.ssh.setXAuthLocation = true;
 
@@ -400,6 +446,9 @@ in {
   #   # Assign specific input devices to input group
   #   # ATTRS{name}=="Gaming Keyboard", SUBSYSTEM=="input", MODE="0644", GROUP="map2"
   # '';
+  services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="input"
+  '';
 
   # services.pipewire = {
   #   enable = true;
@@ -443,7 +492,10 @@ in {
 
   systemd.user.services.waypipe = {
     enable = true;
-    after = [ "network.target" "sound.target" ];
+    after = [
+      "network.target"
+      "sound.target"
+    ];
     wantedBy = [ "default.target" ];
     serviceConfig = {
       Environment = "PATH=/home/shiro/bin";
@@ -465,8 +517,7 @@ in {
     settings = {
       devices = {
         "homebox" = {
-          id =
-            "HDV7UR5-FLO23CH-WA2X7XR-CGD5KD6-QCTVNB7-BUPV2WM-LGWFTOH-UIPAMQ4";
+          id = "HDV7UR5-FLO23CH-WA2X7XR-CGD5KD6-QCTVNB7-BUPV2WM-LGWFTOH-UIPAMQ4";
         };
       };
       folders = {
@@ -477,8 +528,7 @@ in {
       };
     };
   };
-  systemd.services.syncthing.environment.STNODEFAULTFOLDER =
-    "true"; # Don't create default ~/Sync folder
+  systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
   nix = {
     gc = {
@@ -498,7 +548,10 @@ in {
 
   systemd.user.services.mpd = {
     enable = true;
-    after = [ "network.target" "sound.target" ];
+    after = [
+      "network.target"
+      "sound.target"
+    ];
     wantedBy = [ "default.target" ];
     serviceConfig = {
       Environment = "PATH=/home/shiro/bin";

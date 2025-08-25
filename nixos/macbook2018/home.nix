@@ -19,24 +19,16 @@
   #   ];
   # };
 
-  home.packages = [
-    # (pkgs.python311.withPackages (ppkgs: [
-    # ppkgs.map2
-    # ]))
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+    style = {
+      name = "gtk2";
+      package = pkgs.libsForQt5.breeze-qt5;
+    };
+  };
 
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
+  home.packages = [];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
