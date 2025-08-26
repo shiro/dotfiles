@@ -1,12 +1,12 @@
 [colors.bright]
 black = "#11242f"
-blue = "#589de2"
-cyan = "#5db5c8"
-green = "#5ea965"
-magenta = "#92b3df"
 red = "#e56567"
-white = "#e7e7f1"
+green = "#5ea965"
 yellow = "#e5be4e"
+blue = "#589de2"
+magenta = "#92b3df"
+cyan = "#5db5c8"
+white = "#e7e7f1"
 
 [colors.cursor]
 cursor = "#e7e7f1"
@@ -14,13 +14,13 @@ text = "#11242f"
 
 [colors.normal]
 black = "#11242f"
-blue = "#4674a2"
-cyan = "#357a89"
-green = "#3f8f48"
-magenta = "#424f9e"
 red = "#954445"
-white = "#9ab4c2"
+green = "#3f8f48"
 yellow = "#aa8455"
+blue = "#4674a2"
+magenta = "#424f9e"
+cyan = "#357a89"
+white = "#9ab4c2"
 
 [colors.primary]
 background = "#11242f"
