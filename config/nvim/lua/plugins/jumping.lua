@@ -162,6 +162,7 @@ local M = {
       vim.keymap.set({ "n" }, "grV", function() remote_action("V") end)
       vim.keymap.set({ "n" }, "gmV", function() remote_action("V", { restore = false }) end)
       vim.keymap.set({ "n" }, "grd", function() remote_action("gd") end)
+      vim.keymap.set({ "n" }, "grr", function() remote_action("gr") end)
       vim.keymap.set({ "n" }, "grcc", function() remote_action("gcc", { immediate = true }) end)
       vim.keymap.set({ "n" }, "gmcc", function() remote_action("gcc", { restore = false }) end)
 
