@@ -338,7 +338,6 @@ in
 
       # branchctl
       # suyu.packages.x86_64-linux.suyu
-      ryujinx
     ];
   };
 
