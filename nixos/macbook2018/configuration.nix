@@ -446,7 +446,8 @@ in
   #   # Assign specific input devices to input group
   #   # ATTRS{name}=="Gaming Keyboard", SUBSYSTEM=="input", MODE="0644", GROUP="map2"
   # '';
-  # boot.initrd.services.udev.rules
+  # boot.initrd.services.udev.rules = ''
+  services.udev.enable = true;
   services.udev.extraRules = ''
     KERNEL=="uinput", MODE="0660", GROUP="input"
   '';
