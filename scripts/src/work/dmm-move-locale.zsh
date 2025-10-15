@@ -13,5 +13,5 @@ for locale in config/locales/*.json; do
     if [[ "$match" == "null" ]]; then
         continue
     fi
-    jq ".$to = .$from | del(.$from)" $locale | sponge $locale
+    jq ".$to += .$from | del(.$from)" $locale | sponge $locale
 done

@@ -137,7 +137,7 @@ local M = {
             ["Diff with branch"] = { command = function() require("plugins.commands.diff-branch")() end },
             ["Get highlight group under cursor"] = { command = function() vim.cmd("Inspect") end },
             ["Switch AI model"] = { command = function() require("avante.api").select_model() end },
-            ["Close all buffers except current"] = { command = function() vim.cmd("%bd!|e#|bd#") end },
+            ["Close all other buffers"] = { command = function() vim.cmd("%bd!|e#|bd#") end },
             ["New AI chat"] = {
               command = function() vim.cmd("AvanteChatNew") end,
               keymaps = { { "n", "<leader>i" } },

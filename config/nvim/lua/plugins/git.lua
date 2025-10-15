@@ -30,6 +30,24 @@ local M = {
       -- autocmd BufReadPost fugitive://* set bufhidden=delete
     end,
   },
+  -- {
+  --   "NeogitOrg/neogit",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim", -- required
+  --     "sindrets/diffview.nvim", -- optional - Diff integration
+  --
+  --     -- Only one of these is needed.
+  --     "nvim-telescope/telescope.nvim", -- optional
+  --     -- "ibhagwan/fzf-lua",              -- optional
+  --     -- "echasnovski/mini.pick",         -- optional
+  --     -- "folke/snacks.nvim",             -- optional
+  --   },
+  --
+  --   setup = function()
+  --     local neogit = require("neogit")
+  --     neogit.setup()
+  --   end,
+  -- },
   -- TODO try https://github.com/lewis6991/gitsigns.nvim
   {
     "airblade/vim-gitgutter",

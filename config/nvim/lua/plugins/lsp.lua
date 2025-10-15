@@ -62,6 +62,7 @@ local M = {
   },
   {
     "neovim/nvim-lspconfig",
+    commit = "4da7247b2b348b4f6cade30a7a7fcb299879d275",
     dependencies = {
       "williamboman/mason.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
