@@ -35,9 +35,11 @@ local M = {
         enable_cursor_planning_mode = true,
         auto_apply_diff_after_generation = true,
         -- auto-approve specific tools only
-        auto_approve_tool_permissions = { "replace_in_file" },
+        auto_approve_tool_permissions = true,
       },
-      hints = { enabled = false }, -- disable ghost text
+      selection = {
+        enabled = false,
+      },
       mappings = {
         sidebar = {
           close_from_input = { normal = "<esc>" },

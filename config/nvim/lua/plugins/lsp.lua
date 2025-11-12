@@ -239,5 +239,7 @@ vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.d
 vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end)
 vim.keymap.set("n", "[w", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN }) end)
 vim.keymap.set("n", "]w", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN }) end)
+vim.keymap.set("n", "[i", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.INFO }) end)
+vim.keymap.set("n", "]i", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.INFO }) end)
 
 return M

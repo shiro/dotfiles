@@ -47,7 +47,7 @@ require("lazy").setup({
     require("plugins.ai"),
 
     require("plugins.github"),
-    require("plugins.obsidian"),
+    -- require("plugins.obsidian"),
   },
   rocks = {
     hererocks = true, -- recommended if you do not have global installation of Lua 5.1.
