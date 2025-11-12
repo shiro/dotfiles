@@ -281,7 +281,27 @@ fn main() -> Result<()> {
             ))?;
         }
         Some(("dev", _)) => {
-            run_cmd_interactive("nix-shell --command zsh")?;
+            let ret = run_cmd_interactive("nix-shell --command zsh");
+            // if we get the annoying "error: creating directory '/tmp/nix-shell-..." error, create
+            // the dir and retry
+            if let Err(err) = ret {
+                let err_string = err.to_string();
+                let tmp_dir_path = if let Some(captures) =
+                    regex::Regex::new(r"error: creating directory '(/tmp/nix-shell-[^/]+).*")
+                        .unwrap()
+                        .captures(&err_string)
+                {
+                    captures.get(1).map(|m| m.as_str())
+                } else {
+                    None
+                };
+                if let Some(tmp_dir_path) = tmp_dir_path {
+                    std::fs::create_dir(tmp_dir_path)?;
+                    run_cmd_interactive("nix-shell --command zsh")?;
+                } else {
+                    Err(err)?;
+                }
+            }
         }
         Some(("gc", args)) => {
             let list = args.get_one("list").cloned().unwrap_or(false);

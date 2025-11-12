@@ -40,6 +40,7 @@ pub fn run_cmd_interactive(cmd: &str) -> Result<()> {
         Err(anyhow!(
             "process '{cmd} {args}' exited a non-zero exit status"
         ))?;
+        // Err(anyhow!(ret.stderr_str()))?;
     };
     Ok(())
 }
