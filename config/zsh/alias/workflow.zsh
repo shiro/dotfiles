@@ -6,7 +6,7 @@ compdef '_files -W ~/project/work/ -g "~/project/work/*"' work
 
 alias dt='cd ~/Desktop'
 alias dot="cd $DOTFILES"
-
+alias v='OPEN_LAST=1 nvim'
 
 codi() {
   local syntax="${1:-python}"

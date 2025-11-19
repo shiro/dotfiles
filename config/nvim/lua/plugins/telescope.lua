@@ -320,8 +320,8 @@ local M = {
 
       vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
 
-      -- open last file if none was specified
-      if vim.fn.argv(0) == "" then
+      -- open last file if called using `v` and no arguments were passed
+      if vim.env.OPEN_LAST == "1" and vim.fn.argv(0) == "" then
         vim.schedule(function()
           require("top-results-sorter").load_history("file")
           local path = require("top-results-sorter").Recent["file"].latest
