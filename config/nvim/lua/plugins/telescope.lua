@@ -139,8 +139,17 @@ local M = {
             ["Switch AI model"] = { command = function() require("avante.api").select_model() end },
             ["Close all other buffers"] = { command = function() vim.cmd("%bd!|e#|bd#") end },
             ["New AI chat"] = {
-              command = function() vim.cmd("AvanteChatNew") end,
+              command = function() require("avante.api").ask({ new_chat = true }) end,
               keymaps = { { "n", "<leader>i" } },
+            },
+            ["Open AI chat"] = {
+              command = function() require("avante.api").ask() end,
+              keymaps = { { "n", "<leader>aa" } },
+            },
+            ["AI chat history"] = { command = function() require("avante.api").select_history() end },
+            ["Edit with AI"] = {
+              command = function() require("avante.api").edit() end,
+              keymaps = { { "v", "<leader>ae" } },
             },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
             ["Convert selection color to rgb"] = {

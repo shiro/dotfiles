@@ -2,7 +2,8 @@ local M = {
   -- TODO also try https://github.com/olimorris/codecompanion.nvim
   {
     "yetone/avante.nvim",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    lazy = true,
     version = false,
     branch = "main",
     ---@module 'avante'
