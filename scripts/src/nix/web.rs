@@ -1,4 +1,4 @@
-use std::{fmt::Display, path::Path};
+use std::{fmt::Display};
 
 use clap::arg;
 use scripts::*;
@@ -21,14 +21,20 @@ impl Display for PackageManager {
 }
 
 fn get_package_manager() -> Option<PackageManager> {
-    if Path::new("pnpm-lock.yaml").is_file() {
-        return Some(PackageManager::Pnpm);
-    }
-    if Path::new("package-lock.json").is_file() {
-        return Some(PackageManager::Npm);
-    }
-    if Path::new("yarn.lock").is_file() {
-        return Some(PackageManager::Yarn);
+    let mut current_path = std::env::current_dir().ok()?;
+    loop {
+        if current_path.join("pnpm-lock.yaml").exists() {
+            return Some(PackageManager::Pnpm);
+        }
+        if current_path.join("package-lock.json").exists() {
+            return Some(PackageManager::Npm);
+        }
+        if current_path.join("yarn.lock").exists() {
+            return Some(PackageManager::Yarn);
+        }
+        if !current_path.pop() {
+            break;
+        }
     }
     None
 }
