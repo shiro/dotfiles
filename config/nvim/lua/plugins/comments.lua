@@ -12,7 +12,12 @@ local M = {
     --   { "<C-_>", "", mode = "x" },
     -- },
     config = function()
-      require("ts_context_commentstring").setup({ enable_autocmd = false })
+      require("ts_context_commentstring").setup({
+        enable_autocmd = false,
+        languages = {
+          styled = "/* %s */",
+        },
+      })
       require("Comment").setup({
         pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
       })
