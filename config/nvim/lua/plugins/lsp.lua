@@ -1,12 +1,13 @@
 local M = {
   {
     "dundalek/lazy-lsp.nvim",
-    dependencies = { "neovim/nvim-lspconfig" },
+    -- dependencies = { "neovim/nvim-lspconfig" },
     config = function()
       require("lazy-lsp").setup({
+        use_vim_lsp_config = true,
         preferred_servers = {
           typescriptreact = {
-            "typescript-language-server",
+            "tailwindcss",
             "prettierd",
             "eslint",
             "tailwindcss",
@@ -89,7 +90,7 @@ local M = {
           --         "eslint-lsp", -- JS/TS lint
           --         -- "rust-analyzer", -- rust
           --         "taplo", -- toml
-          --         "tailwindcss-language-server", -- tailwind
+          -- "tailwindcss-language-server", -- tailwind
           --         "json-lsp", -- json
           --         "nil", -- nix
           --         "gopls", -- golang
