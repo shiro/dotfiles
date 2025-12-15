@@ -50,7 +50,7 @@ require("lazy").setup({
     -- require("plugins.obsidian"),
   },
   rocks = {
-    hererocks = true, -- recommended if you do not have global installation of Lua 5.1.
+    hererocks = false, -- recommended if you do not have global installation of Lua 5.1.
   },
 })
 

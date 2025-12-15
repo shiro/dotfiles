@@ -338,6 +338,11 @@ in
 
       # branchctl
       # suyu.packages.x86_64-linux.suyu
+
+
+      # vim deps
+      lua51Packages.rocks-nvim
+      lua51Packages.lua
     ];
   };
 
