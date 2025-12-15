@@ -7,16 +7,16 @@
 }:
 let
   hyprland_pkg = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  hyprland_cmd = "${hyprland_pkg}/bin/Hyprland";
+  hyprland_cmd = "${hyprland_pkg}/bin/start-hyprland";
   username = "shiro";
   # pkgs.rofi-blocks.rofi-blocks
 
   rofi_plugin_blocks = (
     pkgs.rofi-blocks.rofi-blocks.override {
-      rofi-unwrapped = pkgs.rofi-wayland-unwrapped;
+      rofi-unwrapped = pkgs.rofi-unwrapped;
     }
   );
-  rofi_package = pkgs.rofi-wayland.override { plugins = [ rofi_plugin_blocks ]; };
+  rofi_package = pkgs.rofi.override { plugins = [ rofi_plugin_blocks ]; };
 
   python_map2_package =
     let
@@ -199,7 +199,7 @@ in
     enable = true;
     # acceleration = "cuda";
   };
-  services.logind.lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
 
   # programs.direnv = {
   #   enable = true;
@@ -248,7 +248,7 @@ in
   #   # xkbOptions = "grp:win_space_toggle";
   # };
   #
-  services.xserver.layout = "rabbit";
+  services.xserver.xkb.layout = "rabbit";
   services.xserver.xkb.extraLayouts.rabbit = {
     description = "US layout (rabbit)";
     languages = [ "eng" ];
@@ -262,7 +262,7 @@ in
       # fcitx5-mozc
       fcitx5-mozc-ut
       fcitx5-gtk
-      fcitx5-configtool
+      qt6Packages.fcitx5-configtool
     ];
     fcitx5.waylandFrontend = true;
   };
@@ -303,10 +303,10 @@ in
       # figma-linux
       # irssi
       keepassxc
-      mpc-cli
+      mpc
       mpv
       nsxiv
-      xdragon
+      dragon-drop
       nodejs_22
       nodejs_22.pkgs.pnpm
       hub
@@ -408,7 +408,7 @@ in
     wf-recorder
     nix-tree
     pulseaudio # pulse CLI
-    # bottles # wine emulation organization
+    bottles # wine emulation organization
 
     # cursor
     hyprcursor
