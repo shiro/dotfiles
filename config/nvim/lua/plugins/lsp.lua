@@ -21,6 +21,7 @@ local M = {
             "eslint",
           },
           python = { "pyright" },
+          nix = { "nil_ls" },
           rust = {
             -- "rust_analyzer",
           },

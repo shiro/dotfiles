@@ -219,9 +219,9 @@ in
       "cache.soopy.moe-1:0RZVsQeR+GOh0VQI9rvnHz55nVXkFardDqfm4+afjPo="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=" 
-      "nyx.chaotic.cx-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8=" 
-      "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8=" 
+      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+      "nyx.chaotic.cx-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
+      "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
       "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
     ];
   };
@@ -354,7 +354,6 @@ in
       # branchctl
       # suyu.packages.x86_64-linux.suyu
 
-
       # vim deps
       lua51Packages.rocks-nvim
       lua51Packages.lua
@@ -369,11 +368,13 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    nil # nix language server (nvim can't install it)
     alacritty
     cliphist
     fzf
     gcc
     htop-vim
+    bottom
     ranger
     silver-searcher
     brightnessctl
@@ -424,6 +425,7 @@ in
     nix-tree
     pulseaudio # pulse CLI
     bottles # wine emulation organization
+    cloudflared # cloudflare tunnels
 
     # cursor
     hyprcursor
@@ -469,6 +471,8 @@ in
   services.udev.enable = true;
   services.udev.extraRules = ''
     KERNEL=="uinput", MODE="0660", GROUP="input"
+
+    ACTION=="add", SUBSYSTEM=="backlight", MODE="0666", RUN+="${pkgs.brightnessctl}/bin/brightnessctl set 50000"
   '';
 
   # services.pipewire = {
