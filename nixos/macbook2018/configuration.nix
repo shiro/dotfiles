@@ -163,9 +163,7 @@ in
       # ''VIRTUAL_ENV=/home/shiro/project/map2/venv'' ];
       # ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
       # ExecStart = ''/run/wrappers/bin/sudo -E /home/shiro/project/map2/venv/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-      ExecStart = ''
-        ${pkgs.zsh}/bin/zsh -c 'export LD_LIBRARY_PATH=${python_map2_package}/lib/python3.12/site-packages/map2.libs; ${python_map2_package}/bin/python /home/shiro/project/mappings/next/macbook2018.py'
-      '';
+      ExecStart = "${pkgs.zsh}/bin/zsh -c 'export LD_LIBRARY_PATH=${python_map2_package}/lib/python3.12/site-packages/map2.libs; ${python_map2_package}/bin/python /home/shiro/project/mappings/main/macbook2018.py'";
       Restart = "always";
       RestartSec = "5s";
     };
