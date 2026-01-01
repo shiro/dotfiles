@@ -45,6 +45,18 @@ local M = {
           scss = { "prettierd" },
           nix = { "nixfmt" },
         },
+        formatters = {
+          taplo = {
+            args = {
+              "format",
+              "--option",
+              "column_width=200",
+              "--option",
+              "inline_table_expand=false",
+              "-",
+            },
+          },
+        },
       })
     end,
   },
