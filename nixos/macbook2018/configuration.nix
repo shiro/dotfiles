@@ -376,6 +376,8 @@ in
     ranger
     silver-searcher
     brightnessctl
+    ripdrag
+    yazi
 
     xkeyboard_config
     libinput
