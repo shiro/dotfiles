@@ -131,8 +131,9 @@ bind -n M-q kill-pane
 bind -n ö kill-pane -a
 
 # swap panes
-bind -n M-[ swap-pane -U
 bind -n M-"'" swap-pane -D
+# TODO yazi doesn't like this one
+# bind -n M-[ swap-pane -U
 
 # toggle status bar
 bind b set status
@@ -230,5 +231,7 @@ bind-key -n C-S-F next-window #send "\e[70;5u"
 bind-key -n C-S-P send "\e[80;5u"
 bind-key -n C-S-R send "\e[82;5u"
 
-# support kitty images
-set -gq allow-passthrough on
+# support kitty images and yazi
+set -g allow-passthrough on
+set -ga update-environment TERM
+set -ga update-environment TERM_PROGRAM
