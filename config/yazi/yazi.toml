@@ -1,0 +1,3 @@
+[mgr]
+sort_dir_first = false
+sort_by = "extension"

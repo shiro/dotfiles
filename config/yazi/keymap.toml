@@ -1,0 +1,60 @@
+[mgr]
+prepend_keymap = [
+  { on = ["c", "c"], run = "noop" },
+  { on = ["c", "f"], run = "noop" },
+  { on = ["c"], run = "noop" },
+
+  { on = ["c", "h"], run = "cd ~", desc = "Go home" },
+  { on = ["c", "d"], run = "cd --interactive", desc = "Jump interactively" },
+
+  { on = ["y", "p"], run = "copy path", desc = "Copy the file path" },
+  { on = ["y", "d"], run = "copy dirname", desc = "Copy the directory path" },
+  { on = ["y", "f"], run = "copy filename", desc = "Copy the filename" },
+  { on = ["y", "n"], run = "copy filename", desc = "Copy the filename" },
+  { on = ["y", "N"], run = "copy name_without_ext", desc = "Copy the filename without extension" },
+
+  { on = ["y", "y"], run = "yank", desc = "Yank selected files (copy)" },
+  { on = ["m"], run = "plugin bookmarks save", desc = "Save current position as a bookmark" },
+  { on = ["`"], run = "plugin bookmarks jump", desc = "Jump to a bookmark" },
+  { on = ["b", "d"], run = "plugin bookmarks delete", desc = "Delete a bookmark" },
+  { on = ["b", "D"], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
+  { on = ["d", "d"], run = "yank --cut", desc = "Yank selected files (cut)" },
+
+  { on = "x", run = "remove", desc = "Trash selected files" },
+  { on = "X", run = "remove --permanently", desc = "Permanently delete selected files" },
+
+  { on = ["c", "w"], run = "rename --empty=all", desc = "Rename selected file(s)" },
+  { on = "a", run = "rename --cursor=before_ext", desc = "Rename selected file(s) - at dot" },
+  { on = "I", run = "rename --cursor=start", desc = "Rename selected file(s) - at start" },
+  { on = "A", run = "rename", desc = "Rename selected file(s) - at end" },
+
+  { on = ["z", "h"], run = "hidden toggle", desc = "Toggle the visibility of hidden files" },
+
+  { on = "V", run = "toggle_all --state=on", desc = "Select all files" },
+  { on = ["p", "p"], run = "paste", desc = "Paste yanked files" },
+  { on = ["p", "P"], run = "paste --force", desc = "Paste yanked files (overwrite if the destination exists)" },
+  { on = ["p", "l"], run = "link", desc = "Symlink the absolute path of yanked files" },
+  { on = ["p", "L"], run = "link --relative", desc = "Symlink the relative path of yanked files" },
+
+  { on = ["S"], run = "shell --block 'zsh'", desc = "Open zsh" },
+  { on = "l", run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
+  { on = ["e", "l"], run = "open --interactive", desc = "Open selected files" },
+  { on = ["e", "e"], run = "shell --block 'vim $*'", desc = "Edit" },
+  { on = ["e", "d"], run = "shell 'ripdrag -n $*'", desc = "Dragon drop" },
+
+  { on = ["o", "m"], run = ["sort mtime --reverse=no", "linemode mtime"], desc = "Sort by modified time" },
+  { on = ["o", "M"], run = ["sort mtime --reverse=yes", "linemode mtime"], desc = "Sort by modified time (reverse)" },
+  { on = ["o", "b"], run = ["sort btime --reverse=no", "linemode btime"], desc = "Sort by birth time" },
+  { on = ["o", "B"], run = ["sort btime --reverse=yes", "linemode btime"], desc = "Sort by birth time (reverse)" },
+  { on = ["o", "e"], run = "sort extension --reverse=no", desc = "Sort by extension" },
+  { on = ["o", "E"], run = "sort extension --reverse=yes", desc = "Sort by extension (reverse)" },
+  { on = ["o", "a"], run = "sort alphabetical --reverse=no", desc = "Sort alphabetically" },
+  { on = ["o", "A"], run = "sort alphabetical --reverse=yes", desc = "Sort alphabetically (reverse)" },
+  { on = ["o", "n"], run = "sort natural --reverse=no", desc = "Sort naturally" },
+  { on = ["o", "N"], run = "sort natural --reverse=yes", desc = "Sort naturally (reverse)" },
+  { on = ["o", "s"], run = ["sort size --reverse=no", "linemode size"], desc = "Sort by size" },
+  { on = ["o", "S"], run = ["sort size --reverse=yes", "linemode size"], desc = "Sort by size (reverse)" },
+  { on = ["o", "r"], run = "sort random --reverse=no", desc = "Sort randomly" },
+
+  { on = ["s"], run = "plugin searchjump mode", desc = "Searchjump plugin" },
+]

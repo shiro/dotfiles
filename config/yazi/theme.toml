@@ -1,0 +1,5 @@
+[mode]
+normal_main = { bg = "black", fg = "gray" }
+normal_alt = { bg = "black", fg = "gray" }
+select_main = { bg = "black", fg = "gray" }
+select_alt = { bg = "black", fg = "gray" }
