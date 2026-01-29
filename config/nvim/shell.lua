@@ -21,6 +21,12 @@ vim.opt.laststatus = 3
 -- conceal level
 vim.opt_local.conceallevel = 2
 
+-- popup border
+vim.o.winborder = "rounded"
+
+-- quickfix open in current buffer
+vim.opt.switchbuf = "useopen,usetab"
+
 -- don't show diff fill chars
 vim.opt.fillchars = { diff = " " }
 

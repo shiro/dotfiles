@@ -59,7 +59,7 @@ local M = {
           close_events = { "BufHidden", "InsertLeave" },
         })
       end
-      vim.lsp.handlers["textDocument/hover"] = function() vim.lsp.buf.hover({ border = "rounded" }) end
+      vim.lsp.handlers["textDocument/hover"] = function() vim.lsp.buf.hover() end
     end,
   },
   {
@@ -190,14 +190,15 @@ local M = {
 
   -- lua VIM documentation
   {
-    "folke/neodev.nvim",
-    ft = "lua",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      require("neodev").setup({})
-      local lspconfig = require("lspconfig")
-      lspconfig["lua_ls"].setup({})
-    end,
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
   -- rust
   {

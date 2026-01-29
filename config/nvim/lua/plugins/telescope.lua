@@ -174,6 +174,61 @@ local M = {
             ["Go to next tab"] = { command = function() vim.cmd("tabnext") end },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
             ["Open PR"] = { command = function() vim.cmd("Octo pr") end },
+            ["Browse files on branch"] = {
+              command = function()
+                local pickers = require("telescope.pickers")
+                local finders = require("telescope.finders")
+                local conf = require("telescope.config").values
+                local actions = require("telescope.actions")
+                local action_state = require("telescope.actions.state")
+
+                -- get all branches
+                local handle = io.popen("git branch -a --format='%(refname:short)'")
+                local branches = {}
+                if handle then
+                  for line in handle:lines() do
+                    if line ~= "" then table.insert(branches, line) end
+                  end
+                  handle:close()
+                end
+
+                -- pick a branch
+                pickers
+                  .new({}, {
+                    prompt_title = "Select Branch",
+                    finder = finders.new_table({
+                      results = branches,
+                    }),
+                    sorter = conf.generic_sorter({}),
+                    attach_mappings = function(prompt_bufnr, map)
+                      actions.select_default:replace(function()
+                        local selected_branch = action_state.get_selected_entry()
+                        actions.close(prompt_bufnr)
+
+                        if selected_branch then
+                          -- Open file browser for the selected branch
+                          require("telescope.builtin").find_files({
+                            prompt_title = "Files on " .. selected_branch.value,
+                            cwd = vim.fn.getcwd(),
+                            find_command = { "git", "ls-tree", "-r", "--name-only", selected_branch.value },
+                            attach_mappings = function(prompt_bufnr, map)
+                              require("telescope.actions").select_default:replace(function()
+                                local entry = require("telescope.actions.state").get_selected_entry()
+                                require("telescope.actions").close(prompt_bufnr)
+                                -- Open file using fugitive
+                                if entry then vim.cmd("Gedit " .. selected_branch.value .. ":" .. entry.value) end
+                              end)
+                              return true
+                            end,
+                          })
+                        end
+                      end)
+                      return true
+                    end,
+                  })
+                  :find()
+              end,
+            },
             ["Format buffer"] = { command = function() vim.g.format() end },
             ["Buffers"] = { command = function() require("telescope.builtin").buffers() end },
             ["Toggle block split"] = { command = function() require("treesj").toggle() end },

@@ -170,6 +170,9 @@ local M = {
       vim.keymap.set({ "n" }, "grcc", function() remote_action("gcc", { immediate = true }) end)
       vim.keymap.set({ "n" }, "gmcc", function() remote_action("gcc", { restore = false }) end)
 
+      vim.keymap.set({ "n" }, "zrc", function() remote_action("zc", { immediate = true }) end)
+      vim.keymap.set({ "n" }, "zro", function() remote_action("zo", { immediate = true }) end)
+
       -- yank remote line number
       vim.keymap.set({ "n" }, "yrl", function()
         remote_action("C", {

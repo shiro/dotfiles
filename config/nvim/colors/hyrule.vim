@@ -105,7 +105,8 @@ hi htmlh2 guifg=#c0d5c1 guibg=NONE guisp=#2d2c2b gui=NONE ctermfg=151 ctermbg=NO
 let test='#ff0000'
 
 
-let bg="#2D2C2B"
+let bg="#11242f"
+let lightShadow="#153142"
 let shadow="#383735"
 let error="#CC4542"
 let white="#C0D5C1"
@@ -166,7 +167,6 @@ exe "hi CocHintLine guibg=NONE guifg=None"
 exe "hi Search guibg=".lightGreen." guifg=".bg." gui=NONE"
 exe "hi CurSearch guibg=".yellow." guifg=".bg." gui=NONE"
 exe "hi IncSearch guibg=".yellow." guifg=".bg." gui=NONE"
-exe "hi Folded guibg=None guifg=".brown." gui=NONE"
 exe "hi Directory guifg=".lightGreen
 exe "hi qfLineNr guifg=".brown
 exe "hi @lsp guifg=None guibg=None gui=None"
@@ -181,6 +181,10 @@ hi link RenderMarkdownCode Normal
 hi link PackageInfoOutdatedVersion Comment
 exe "hi NotifyBackground guibg=".bg
 exe "hi AerialLine guifg=".yellow." guibg=None"
+" exe "hi OctoNormalFloat guibg=".yellow
+
+" folds
+exe "hi Folded guibg=None guibg=".lightShadow." gui=NONE"
 
 " quickfix
 

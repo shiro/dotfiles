@@ -85,6 +85,7 @@ local M = {
           end, { "i" }),
         }),
         sources = cmp.config.sources({
+          { name = "lazydev" },
           { name = "nvim_lsp" },
           { name = "nvim_lsp_signature_help" },
           { name = "luasnip" },
