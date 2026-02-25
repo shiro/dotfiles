@@ -1,3 +1,73 @@
+-- Gets lines on which threads start
+---@return integer[]
+local function get_thread_lines()
+  local constants = require("octo.constants")
+
+  local lines = {} ---@type integer[]
+  local marks = vim.api.nvim_buf_get_extmarks(0, constants.OCTO_THREAD_NS, 0, -1, { details = true })
+
+  for _, mark in ipairs(marks) do
+    table.insert(lines, mark[2])
+  end
+  table.sort(lines)
+
+  return lines
+end
+
+---@param current_line integer
+---@param lines integer[]
+---@param cursor integer[]
+local function prev_line(current_line, lines, cursor)
+  if not lines or not current_line then return end
+  if #lines == 0 then return end
+
+  ---@type integer?
+  local target
+  if current_line > lines[#lines] + 2 then
+    -- go to last comment
+    target = lines[#lines] + 1
+  elseif current_line <= lines[1] + 2 then
+    -- do not move
+    target = current_line - 1
+  else
+    for i = 1, #lines, 1 do
+      if current_line <= lines[i] + 2 then
+        target = lines[i - 1] + 1
+        break
+      end
+    end
+  end
+
+  vim.api.nvim_win_set_cursor(0, { target + 1, cursor[2] })
+end
+
+---@param current_line integer
+---@param lines integer[]
+---@param cursor integer[]
+local function next_line(current_line, lines, cursor)
+  if not lines or not current_line then return end
+  if #lines == 0 then return end
+
+  ---@type integer?
+  local target
+  if current_line < lines[1] + 1 then
+    -- go to first comment
+    target = lines[1] + 1
+  elseif current_line > lines[#lines] + 1 then
+    -- do not move
+    target = current_line - 1
+  else
+    for i = #lines, 1, -1 do
+      if current_line >= lines[i] + 1 then
+        target = lines[i + 1] + 1
+        break
+      end
+    end
+  end
+
+  vim.api.nvim_win_set_cursor(0, { target + 1, cursor[2] })
+end
+
 local M = {
   {
     "pwntester/octo.nvim",
@@ -18,12 +88,36 @@ local M = {
         },
       })
 
+      require("telescope").load_extension("octo")
+
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "octo",
         callback = function()
-          vim.keymap.set("n", "[t", function()
-            pcall(function() vim.cmd("normal! zc[fzO") end)
-          end)
+          local utils = require("octo.utils")
+          local buffer = utils.get_current_buffer()
+
+          -- thread navigation in PR view
+          if buffer and buffer:isPullRequest() then
+            vim.keymap.set("n", "[t", function()
+              local lines = get_thread_lines()
+              if not lines then return end
+
+              local cursor = vim.api.nvim_win_get_cursor(0)
+              local current_line = cursor[1]
+
+              prev_line(current_line, lines, cursor)
+            end)
+
+            vim.keymap.set("n", "]t", function()
+              local lines = get_thread_lines()
+              if not lines then return end
+
+              local cursor = vim.api.nvim_win_get_cursor(0)
+              local current_line = cursor[1]
+
+              next_line(current_line, lines, cursor)
+            end)
+          end
 
           vim.keymap.set("v", "<leader>qf", function()
             local start_line = vim.fn.line("'<") == 0 and vim.fn.line(".") or vim.fn.line("'<")
