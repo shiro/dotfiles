@@ -116,7 +116,9 @@ command_picker = function(opts)
         actions.select_default:replace(function()
           actions.close(prompt_bufnr)
           local selection = action_state.get_selected_entry()
+          if selection == nil then return end
           local entry = RegisteredCommands[selection.value]
+          if entry == nil then return end
           require("top-results-sorter").PushRecent("omnibar", selection.value)
           require("top-results-sorter").save_history("omnibar")
 
