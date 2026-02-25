@@ -173,7 +173,8 @@ local M = {
             ["Close tab"] = { command = function() vim.cmd("tabclose") end },
             ["Go to next tab"] = { command = function() vim.cmd("tabnext") end },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
-            ["Open PR"] = { command = function() vim.cmd("Octo pr") end },
+            ["Show PR"] = { command = function() vim.cmd("Octo pr") end },
+            ["Github notifications"] = { command = function() vim.cmd("Octo notification list") end },
             ["Browse files on branch"] = {
               command = function()
                 local pickers = require("telescope.pickers")
@@ -227,6 +228,17 @@ local M = {
                     end,
                   })
                   :find()
+              end,
+            },
+            ["Copy GitHub URL"] = {
+              command = function()
+                local file_path = vim.fn.expand("%:.")
+                local line_number = vim.fn.line(".")
+                local branch = vim.fn.systemlist("git rev-parse --abbrev-ref HEAD")[1]
+                local origin_url = vim.fn.systemlist("git config --get remote.origin.url")[1]
+                local github_url = origin_url:gsub("^git@github.com:", "https://github.com/"):gsub("%.git$", "")
+                local full_url = string.format("%s/blob/%s/%s#L%s", github_url, branch, file_path, line_number)
+                vim.fn.setreg("+", full_url)
               end,
             },
             ["Format buffer"] = { command = function() vim.g.format() end },
@@ -343,27 +355,8 @@ local M = {
         end,
         {}
       )
-      vim.keymap.set(
-        "n",
-        "<leader>h",
-        function()
-          builtin.git_bcommits({
-            layout_strategy = layout(),
-          })
-        end,
-        {}
-      )
-
-      vim.keymap.set(
-        "x",
-        "<leader>h",
-        function()
-          builtin.git_bcommits_range({
-            layout_strategy = layout(),
-          })
-        end,
-        {}
-      )
+      vim.keymap.set("n", "<leader>hh", function() builtin.git_bcommits({ layout_strategy = layout() }) end, {})
+      vim.keymap.set("x", "<leader>hh", function() builtin.git_bcommits_range({ layout_strategy = layout() }) end, {})
 
       vim.keymap.set("n", "gr", function()
         vim.api.nvim_command("m'")
