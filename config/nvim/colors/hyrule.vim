@@ -124,13 +124,15 @@ let gray="#716D6A"
 let caret="#989BA2"
 let selection="#161A1F"
 let diffAdd="#304D2E"
-let diffAddDark="#313630"
+let diffAddDark="#123030"
+" let diffAddDark="#313630"
 let diffAddFg="#50804C"
 let diffMod="#2E455D"
 let diffModFg="#446588"
 let diffModDark="#323334"
 let diffDel="#533232"
-let diffDelDark="#363030"
+let diffDelDark="#242832"
+" let diffDelDark="#363030"
 let diffDelFg="#7F4D4D"
 let ore="#5B5957"
 
@@ -211,9 +213,11 @@ exe "hi Type guifg=".darkGreen
 " diff
 exe "hi @text.diff.add.diff guibg="..diffAddDark.." guifg=".white
 exe "hi @text.diff.delete.diff guibg="..diffDelDark.." guifg=".white
-exe "hi DiffAdd guibg=".diffAdd." guifg=None"
+exe "hi DiffAdd guibg=".diffAddDark." guifg=None"
 exe "hi DiffChange gui=None guibg=".diffModDark." guifg=None"
-exe "hi DiffDelete gui=None guibg=".diffDel." guifg=None"
+exe "hi DiffDelete gui=None guibg=".diffDelDark." guifg=None"
+exe "hi GitSignsDeletePreview guifg=".diffDelFg." guibg=NONE"
+exe "hi GitSignsAddPreview guifg=".diffAddFg." guibg=NONE"
 exe "hi DiffText gui=None guibg=".diffMod." guifg=None"
 exe "hi GitGutterAdd guifg=".diffAdd." guibg=".diffAdd
 exe "hi GitGutterAddLineNr guifg=".diffAddFg." guibg=".diffAdd
