@@ -91,21 +91,6 @@ endif
 "
 " mappings {{{
 
-" vimdiff
-
-" if &diff
-" 	nnoremap <C-[> :diffget<cr>
-" 	vnoremap <C-[> :diffget<cr>:diffu<cr>
-
-" 	nnoremap u u:diffu<cr>
-" endif
-" nnoremap <C-p> :diffput<cr>
-" vnoremap <C-p> :diffput<cr>:diffu<cr>
-
-" standaed diff commands made nicer
-xnoremap dp :diffput<cr>:diffu<cr>
-xnoremap do :diffget<cr>:diffu<cr>
-
 " rotate clipboard
 nnoremap <silent> g[ :silent exec "!~/bin/clipboard-rotate"<CR>
 
