@@ -1,3 +1,5 @@
+local function close_tab() vim.cmd("tabclose") end
+
 local M = {
   {
     "sindrets/diffview.nvim",
@@ -14,6 +16,10 @@ local M = {
         default = {
           -- layout = "diff2_vertical",
         },
+      },
+      keymaps = {
+        view = { ["<C-c>"] = close_tab },
+        file_panel = { ["<C-c>"] = close_tab },
       },
     },
   },
