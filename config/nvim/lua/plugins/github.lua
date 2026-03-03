@@ -93,6 +93,9 @@ local M = {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "octo",
         callback = function()
+          -- don't wrap text
+          vim.opt_local.textwidth = 0
+
           local utils = require("octo.utils")
           local buffer = utils.get_current_buffer()
 
