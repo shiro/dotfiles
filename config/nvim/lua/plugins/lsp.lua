@@ -28,8 +28,19 @@ local M = {
           -- kotlin = {
           --   "kotlin-language-server",
           -- },
+          ruby = {
+            "ruby_lsp",
+            "rubocop",
+          },
         },
         configs = {
+          ruby_lsp = {
+            init_options = {
+              -- formatter = "rubocop",
+              formatter = "none",
+              linters = {},
+            },
+          },
           kotlin_language_server = {
             init_options = {
               storagePath = vim.env.XDG_DATA_HOME .. "/" .. "nvim-data",
