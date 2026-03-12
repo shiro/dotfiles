@@ -54,10 +54,16 @@ return function()
     else
       return
     end
-    local index = 1
-    if entry.head ~= "*" then index = #results + 1 end
-
     entry.name = string.sub(entry.refname, string.len(prefix) + 1)
+
+    -- default to master if available
+    local index = 1
+    if entry.head ~= "*" and entry.name ~= "master" then
+      index = #results + 1
+    elseif entry.name == "master" then
+      index = 1
+    end
+
     for key, value in pairs(widths) do
       widths[key] = math.max(value, strings.strdisplaywidth(entry[key] or ""))
     end
