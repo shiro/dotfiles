@@ -17,7 +17,15 @@ alias gd='git diff'
 alias gdt='git difftool'
 alias gf='git fetch'
 alias gfp='git fetch && git pull'
-alias ggo='git checkout'
+ggo() {
+  if [ $# -eq 1 ]; then
+    local flag=$(git show-ref --verify --quiet refs/heads/"$1" && echo '' || echo '-b')
+    git checkout $flag "$1"
+  else
+    git checkout "$@"
+  fi
+}
+alias gbd='git branch -D'
 alias gl='git log --oneline --decorate --graph'
 alias gm='git merge'
 alias gmt='git mergetool'
