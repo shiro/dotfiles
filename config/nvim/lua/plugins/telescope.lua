@@ -395,10 +395,13 @@ local M = {
 
 local push_current_path = function()
   -- use relative path to save disc space
-  local path = vim.fn.expand("%:.")
-  -- local path = vim.api.nvim_buf_get_name(0)
-  -- print("push " .. path)
-  if path ~= "" then require("top-results-sorter").PushRecent("file", path) end
+  local relative_path = vim.fn.expand("%:.")
+  if relative_path == "" then return end
+
+  -- don't add files not under current working directory
+  if not vim.startswith(vim.fn.fnamemodify(relative_path, ":p"), vim.fn.getcwd()) then return end
+
+  require("top-results-sorter").PushRecent("file", relative_path)
 end
 
 vim.api.nvim_create_autocmd({ "FocusGained" }, {
