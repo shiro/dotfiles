@@ -43,6 +43,34 @@ alias gsi='git submodule init'
 alias gsd='git submodule deinit'
 alias gsu='git submodule update'
 
+# Append git index to a past commit
+gapp() {
+  if [ -z "$(git diff --cached --name-only)" ]; then
+    echo "Git index is empty. Exiting."
+    return
+  fi
+
+  # Get the commit hash to fix up using fzf
+  local commit_hash=$(git log --oneline --no-merges $(git merge-base HEAD master)..HEAD | fzf | awk '{print $1}')
+  
+  if [ -z "$commit_hash" ]; then
+    echo "No commit selected. Exiting."
+    return
+  fi
+
+  # Create a fixup commit for the chosen commit hash
+  git commit --fixup "$commit_hash"
+
+  # Stash unstaged changes
+  git stash
+
+  # Rebase interactively and autosquash to apply the fixup
+  git rebase --interactive --autosquash $(git merge-base HEAD master)
+
+  # Restore unstaged changes
+  git stash pop
+}
+
 # doge git
 alias such=git
 alias very=git
