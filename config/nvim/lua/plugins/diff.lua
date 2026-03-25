@@ -28,7 +28,11 @@ local M = {
             local bufnr = vim.api.nvim_get_current_buf()
             vim.api.nvim_create_autocmd("CursorMoved", {
               buffer = bufnr,
-              callback = function() actions.select_entry() end,
+              callback = function()
+                if vim.fn.getline("."):match("") then return end
+
+                actions.select_entry()
+              end,
             })
           end,
         },
