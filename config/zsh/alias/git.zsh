@@ -42,6 +42,8 @@ alias gsa='git submodule add'
 alias gsi='git submodule init'
 alias gsd='git submodule deinit'
 alias gsu='git submodule update'
+# Rebase branch interactive
+alias grb='git rebase -i $(git merge-base HEAD $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@"))'
 
 # Append git index to a past commit
 gapp() {
@@ -69,6 +71,40 @@ gapp() {
 
   # Restore unstaged changes
   git stash pop
+}
+
+# Edit commit
+ge() {
+  export COMMIT_HASH="${1:-$(git log --oneline --decorate | fzf --ansi --preview 'git show --color=always --decorate=short {1}' --color=fg:-1,hl:red:italic | awk '{print $1}')}"
+
+  if [ -z "$COMMIT_HASH" ]; then
+    echo "No commit hash specified. Exiting."
+    return
+  fi
+
+  # Start a non-interactive rebase and edit the specified commit
+  GIT_SEQUENCE_EDITOR="sed -i 's/^pick $COMMIT_HASH/edit $COMMIT_HASH/'" git rebase --interactive --autostash "$COMMIT_HASH^"
+  git reset "HEAD^"
+
+  export COMMIT_MESSAGE=$(git log -1 --pretty=%B $COMMIT_HASH)
+}
+
+# Commit edit
+gec() {
+  if [ -n "$(git status --porcelain)" ]; then
+    git add .
+    git commit -m "$COMMIT_MESSAGE"
+  fi
+  git rebase --continue
+}
+
+# Split commit
+ges() {
+  git add .
+  git commit -m "$COMMIT_MESSAGE"
+  git checkout "$COMMIT_HASH" .
+  git reset
+  export COMMIT_MESSAGE="[split]: $COMMIT_MESSAGE"
 }
 
 # doge git
