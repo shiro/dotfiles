@@ -30,6 +30,21 @@ function ms(){
   find "$1" -depth -type d -empty -exec rmdir "{}" \;
 }
 
+# reset permissions and groups
+function rmchmod() {
+  for target in "$@"; do
+    if [ -d "$target" ]; then
+      { chown -R $USER "$target" || sudo chown -R $USER "$target"; } 2>/dev/null
+      { chgrp -R $USER "$target" || chgrp -R users "$target" || sudo chgrp -R $USER "$target" || sudo chgrp -R users "$target"; } 2>/dev/null
+      { chmod -R u=rwX,go=rX "$target" || sudo chmod -R u=rwX,go=rX "$target"; } 2>/dev/null
+    else
+      { chown $USER "$target" || sudo chown $USER "$target"; } 2>/dev/null
+      { chgrp $USER "$target" || chgrp users "$target" || sudo chgrp $USER "$target" || sudo chgrp users "$target"; } 2>/dev/null
+      { chmod u=rw,go=r "$target" || sudo chmod u=rw,go=r "$target"; } 2>/dev/null
+    fi
+  done
+}
+
 function ifzsh(){
   BIND_INTERFACE="$1" LD_PRELOAD=/usr/lib/bindtointerface.so zsh
 }
