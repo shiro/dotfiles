@@ -1,7 +1,9 @@
 use scripts::*;
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 use std::fs::{self};
 use std::path::Path;
+use tap::Tap;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Generation {
@@ -100,7 +102,10 @@ fn main() -> Result<()> {
         .subcommand_required(true)
         .subcommand(Command::new("list").about("lists all generations"))
         .subcommand(
-            Command::new("new").about("builds a new generations"),
+            Command::new("new").about("builds a new generation").arg(
+                clap::arg!(-m --message <MESSAGE> "Sets the message for the new generation")
+                    .required(false),
+            ),
             // .arg(arg!(-l --list "lists test values").action(ArgAction::SetTrue)),
         )
         .subcommand(Command::new("test").about("select a generation and use it"))
@@ -160,18 +165,24 @@ fn main() -> Result<()> {
 
             println!("{}\n{}", header, rows.join("\n"));
         }
-        Some(("new", _)) => {
-            let tmp = "/tmp/nixos-label";
-            run_cmd_interactive(&format!("vim {tmp}"))?;
+        Some(("new", matches)) => {
+            let msg = if let Some(msg) = matches.get_one::<String>("message") {
+                msg.clone()
+            } else {
+                let tmp = "/tmp/nixos-label";
+                run_cmd_interactive(&format!("vim {tmp}"))?;
+                let content = fs::read_to_string(tmp)?.trim().to_string();
+                let _ = fs::remove_file(tmp);
+                if content.is_empty() {
+                    Err(anyhow!("message is required"))?
+                }
+                content
+            };
+
             let now = Utc::now().format("%Y.%m.%d-%H:%M");
-            let msg = fs::read_to_string(tmp)?.trim().to_string();
-            if msg.is_empty() {
-                Err(anyhow!("message is required"))?;
-            }
             std::env::set_var("NIXOS_LABEL", format!("{now} {msg}").replace(" ", "_"));
-            run_cmd_interactive("sudo -E nixos-rebuild switch --flake path:.#default --impure")?;
-            // run_cmd_interactive("sudo -E nixos-rebuild switch --flake .#default --impure")?;
-            let _ = fs::remove_file(tmp);
+
+            run_cmd_interactive("sudo -EH nixos-rebuild switch --flake path:.#default --impure")?;
         }
         Some(("test", _)) => {
             let generation = select_generation()?.generation;
@@ -223,8 +234,8 @@ fn main() -> Result<()> {
                 })
                 .collect::<Result<Vec<String>>>()?;
 
-            let generation_derivations = generation_store_paths
-                .iter()
+            let referenced_derivations = generation_store_paths
+                .into_iter()
                 .flat_map(|generation_store_path| {
                     Exec::cmd("nix-store")
                         .args(&["-qR", &generation_store_path])
@@ -234,9 +245,13 @@ fn main() -> Result<()> {
                         .trim()
                         .split("\n")
                         .map(|s| s.to_string())
-                        .collect::<Vec<String>>()
+                        .collect::<HashSet<String>>()
+                        // also insert the derivation itself
+                        .tap_mut(|v| {
+                            v.insert(generation_store_path);
+                        })
                 })
-                .collect::<Vec<String>>();
+                .collect::<HashSet<String>>();
 
             Exec::cmd("sudo")
                 .args(&["-E", "rm"])
@@ -262,17 +277,25 @@ fn main() -> Result<()> {
                 .map(|s| s.to_string())
                 .collect::<Vec<_>>();
 
-            let generation_dangling_derivations = generation_derivations
+            let dangling_derivations = referenced_derivations
                 .into_iter()
-                .filter(|dep| all_dangling_derivations.iter().any(|x| x == dep))
+                // ensure it's actually not referenced by anything live anymore
+                .filter(|derivation| all_dangling_derivations.contains(derivation))
                 .collect::<Vec<_>>();
 
-            if !generation_dangling_derivations.is_empty() {
-                let _ = Exec::cmd("nix-store")
-                    .args(&["--delete"])
-                    .args(&generation_dangling_derivations)
-                    .capture()
-                    .is_ok_and(|ret| ret.exit_status.success());
+            if !dangling_derivations.is_empty() {
+                for derivation in dangling_derivations {
+                    let result = Exec::cmd("nix-store")
+                        .args(&["--delete", &derivation])
+                        .stdout(subprocess::NullFile)
+                        .stderr(subprocess::NullFile)
+                        .capture()
+                        .ok();
+
+                    if result.is_some() {
+                        println!("{}", &derivation);
+                    }
+                }
             }
         }
         Some(("pin", _)) => {
