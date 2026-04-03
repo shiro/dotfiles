@@ -7,6 +7,8 @@ fi
 
 ga(){ [[ $# -eq 0 ]] && git add -A || git add "$@" } # git add
 gac(){ ga "$@" && git commit } # git add commit
+gaca(){ ga "$@" && git commit --amend } # git add commit amend
+gacan(){ ga "$@" && git commit --amend --no-edit } # git add commit amend no edit
 gam(){ ga "$@" && git commit --amend --no-edit } # git add amend
 gacp(){ gac "$@" && git push } # git add commit push
 alias gb='git branch'
