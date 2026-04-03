@@ -205,6 +205,39 @@ fn main() -> Result<()> {
         }
         Some(("delete", _)) => {
             let generations = select_generations()?;
+            let generation_store_paths = generations
+                .iter()
+                .map(|generation| {
+                    fs::read_link(format!(
+                        "/nix/var/nix/profiles/system-{}-link",
+                        generation.generation
+                    ))
+                    .map(|path| path.to_string_lossy().into_owned())
+                    .map_err(|e| {
+                        anyhow!(
+                            "Failed to read link for generation {}: {}",
+                            generation.generation,
+                            e
+                        )
+                    })
+                })
+                .collect::<Result<Vec<String>>>()?;
+
+            let generation_derivations = generation_store_paths
+                .iter()
+                .flat_map(|generation_store_path| {
+                    Exec::cmd("nix-store")
+                        .args(&["-qR", &generation_store_path])
+                        .success_output()
+                        .unwrap()
+                        .stdout_str()
+                        .trim()
+                        .split("\n")
+                        .map(|s| s.to_string())
+                        .collect::<Vec<String>>()
+                })
+                .collect::<Vec<String>>();
+
             Exec::cmd("sudo")
                 .args(&["-E", "rm"])
                 .args(
@@ -219,9 +252,28 @@ fn main() -> Result<()> {
                         .collect::<Vec<_>>(),
                 )
                 .success_output()?;
-            Exec::cmd("sudo")
-                .args(&["-E", "nix-collect-garbage"])
-                .success_output()?;
+
+            let all_dangling_derivations = Exec::cmd("nix-store")
+                .args(&["--gc", "--print-dead"])
+                .success_output()?
+                .stdout_str()
+                .lines()
+                .filter(|line| line.starts_with("/nix/store"))
+                .map(|s| s.to_string())
+                .collect::<Vec<_>>();
+
+            let generation_dangling_derivations = generation_derivations
+                .into_iter()
+                .filter(|dep| all_dangling_derivations.iter().any(|x| x == dep))
+                .collect::<Vec<_>>();
+
+            if !generation_dangling_derivations.is_empty() {
+                let _ = Exec::cmd("nix-store")
+                    .args(&["--delete"])
+                    .args(&generation_dangling_derivations)
+                    .capture()
+                    .is_ok_and(|ret| ret.exit_status.success());
+            }
         }
         Some(("pin", _)) => {
             if Path::new("shell.nix").exists() {

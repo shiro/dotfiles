@@ -87,6 +87,9 @@ fn main() -> Result<()> {
             .success_output();
 
         println!("[build] ~/{}", p.to_string_lossy());
+        if target_path.exists() {
+            std::fs::remove_file(&target_path)?;
+        }
         std::fs::copy(&binary_path, &target_path)?;
     }
 
