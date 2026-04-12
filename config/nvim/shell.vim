@@ -1,6 +1,6 @@
 " Section General {{{
 
-colorscheme hyrule
+" colorscheme hyrule
 
 " custom trailing whitespace color
 " hi ExtraWhitespace guibg=#ce840d ctermbg=red
@@ -203,11 +203,11 @@ augroup configgroup
 "     autocmd! BufWritePost * Neomake
 augroup END
 
-augroup AutoSaveFolds
-    autocmd!
-    autocmd BufWinLeave * silent! mkview
-    autocmd BufWinEnter *.* silent! loadview
-augroup END
+" augroup AutoSaveFolds
+"     autocmd!
+"     autocmd BufWinLeave * silent! mkview
+"     autocmd BufWinEnter *.* silent! loadview
+" augroup END
 
 " }}}
 

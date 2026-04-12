@@ -77,3 +77,16 @@ vim.filetype.add({
     [".*%.(%a+)%.stub"] = function(path, bufnr, ext) return vim.filetype.match({ filename = "." .. ext }) end,
   },
 })
+
+-- restore folds
+-- local view_group = vim.api.nvim_create_augroup("auto_view", { clear = true })
+-- vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
+--   group = view_group,
+--   pattern = "*.*",
+--   command = "mkview",
+-- })
+-- vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+--   group = view_group,
+--   pattern = "*.*",
+--   command = "silent! loadview",
+-- })

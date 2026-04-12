@@ -15,53 +15,53 @@ vim.api.nvim_create_augroup("default", { clear = true })
 
 require("lazy").setup({
   spec = {
-    require("plugins.targets"),
-    require("plugins.notifications"),
-    require("plugins.chords"),
-    require("plugins.git"),
+    { import = "plugins.theme" },
 
-    require("plugins.outline"),
-    require("plugins.jumping"),
+    { import = "plugins.targets" },
+    { import = "plugins.notifications" },
+    { import = "plugins.chords" },
+    { import = "plugins.git" },
 
-    require("plugins.quickfix"),
-    require("plugins.environment"),
-    require("plugins.folds"),
-    require("plugins.highlight"),
-    require("plugins.lsp"),
-    require("plugins.completion"),
+    { import = "plugins.outline" },
+    { import = "plugins.jumping" },
 
-    require("plugins.language-typescript"),
-    require("plugins.language-markdown"),
-    require("plugins.language-go"),
-    require("plugins.language-rust"),
+    { import = "plugins.quickfix" },
+    { import = "plugins.environment" },
+    { import = "plugins.folds" },
+    { import = "plugins.highlight" },
+    { import = "plugins.lsp" },
+    { import = "plugins.completion" },
 
-    require("plugins.copy-imports"),
-    require("plugins.formatting"),
-    require("plugins.comments"),
-    require("plugins.refactor"),
-    require("plugins.telescope"),
-    require("plugins.file-manager"),
-    require("plugins.fancy"),
-    require("plugins.diff"),
+    { import = "plugins.language-typescript" },
+    { import = "plugins.language-markdown" },
+    { import = "plugins.language-go" },
+    { import = "plugins.language-rust" },
 
-    require("plugins.ai"),
+    { import = "plugins.copy-imports" },
+    { import = "plugins.formatting" },
+    { import = "plugins.comments" },
+    { import = "plugins.refactor" },
+    { import = "plugins.telescope" },
+    { import = "plugins.file-manager" },
+    { import = "plugins.fancy" },
+    { import = "plugins.diff" },
 
-    require("plugins.github"),
-    -- require("plugins.obsidian"),
+    { import = "plugins.ai" },
 
-    require("plugins.experimental.react-graph"),
+    { import = "plugins.github" },
+    -- { import = "plugins.obsidian"},
+
+    { import = "plugins.experimental.react-graph" },
   },
-  rocks = {
-    hererocks = false, -- recommended if you do not have global installation of Lua 5.1.
+  rocks = { hererocks = false }, -- recommended if you do not have global installation of Lua 5.1.
+  change_detection = {
+    enabled = true,
+    notify = false,
+    reload = true,
   },
 })
 
-vim.keymap.set(
-  { "n", "v" },
-  "<leader>k",
-  function() require("telescope").extensions.omnibar.omnibar() end,
-  { silent = true }
-)
+vim.cmd.colorscheme("catppuccin-nvim")
 
 vim.keymap.set({ "n", "v" }, "gq", function()
   local mode = vim.fn.mode()

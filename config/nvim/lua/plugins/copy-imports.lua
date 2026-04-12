@@ -23,10 +23,13 @@ function GetIdentsInSelection(buf, sel)
   local idents = {}
 
   local language_tree = vim.treesitter.get_parser(buf)
+  if not language_tree then return {} end
+
   local root = language_tree:trees()[1]:root()
+  if not root then return {} end
 
   local query = vim.treesitter.query.parse(language_tree:lang(), ident_query)
-  if query == nil then return end
+  if query == nil then return {} end
 
   for _, node in query:iter_captures(root, buf) do
     local node_start = { node:start() }
@@ -54,7 +57,10 @@ local function GetImportNodes(buf)
   local imports = {}
 
   local language_tree = vim.treesitter.get_parser(buf)
+  if not language_tree then return {} end
+
   local root = language_tree:trees()[1]:root()
+  if not root then return {} end
 
   local query = vim.treesitter.query.parse(language_tree:lang(), import_query)
   if query == nil then return end

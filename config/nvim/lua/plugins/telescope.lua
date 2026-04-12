@@ -1,51 +1,7 @@
-local get_selection = function()
-  local mode = vim.fn.mode()
-  local selection_start, selection_end
-  if mode == "v" or mode == "V" or mode == "<C-v>" then
-    selection_start, selection_end = vim.fn.getpos("v"), vim.fn.getpos(".")
-  else
-    selection_start, selection_end = vim.fn.getpos("'<"), vim.fn.getpos("'>")
-  end
-  selection_start, selection_end = { selection_start[2], selection_start[3] }, { selection_end[2], selection_end[3] }
-  return selection_start, selection_end
-end
-
-local foo = function()
-  local from, to = get_selection()
-
-  local text = vim.fn.getregion({ 0, from[1], from[2], 0 }, { 0, to[1], to[2], 0 })
-  if text == nil or #text ~= 1 then return end
-  text = text[1]
-
-  local hex = text:match("^#%x%x%x%x%x%x$")
-  if hex == nil then hex = text:match("^#%x%x%x$") end
-
-  local r, g, b
-  if #hex == 7 then
-    r, g, b = tonumber(hex:sub(2, 3), 16), tonumber(hex:sub(4, 5), 16), tonumber(hex:sub(6, 7), 16)
-  elseif #hex == 4 then
-    r, g, b = tonumber(hex:sub(2, 2), 16) * 17, tonumber(hex:sub(3, 3), 16) * 17, tonumber(hex:sub(4, 4), 16) * 17
-  else
-    return
-  end
-
-  vim.api.nvim_buf_set_text(
-    0,
-    from[1] - 1,
-    from[2] - 1,
-    to[1] - 1,
-    to[2],
-    { string.format("rgb(%d, %d, %d)", r, g, b) }
-  )
-
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
-end
-
 local M = {
   {
     name = "omnibar",
     dir = "~/.dotfiles/config/nvim/lua/omnibar",
-    -- dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {},
   },
   {
@@ -152,13 +108,7 @@ local M = {
               keymaps = { { "v", "<leader>ae" } },
             },
             ["Toggle outline"] = { command = function() require("aerial").toggle() end },
-            ["Convert selection color to rgb"] = {
-              -- condition = function()
-              -- local sel = get_selection()
-              -- return #sel == 1 and (sel[1]:match("^#%x%x%x%x%x%x$") ~= nil or sel[1]:match("^#%x%x%x$") ~= nil)
-              -- end,
-              command = foo,
-            },
+            ["Show git blame"] = { command = function() vim.cmd("Git blame") end },
             ["Toggle statusline"] = {
               command = function()
                 if vim.opt.laststatus:get() == 0 then
@@ -260,9 +210,6 @@ local M = {
               command = function() require("typescript-tools.api").rename_file(true) end,
             },
             ["Open file explorer"] = {
-              -- condition = function()
-              --   return true
-              -- end,
               command = function() vim.api.nvim_command("RnvimrToggle") end,
             },
           },
@@ -315,10 +262,7 @@ local M = {
       end
 
       vim.api.nvim_create_user_command("Files", function() files() end, {})
-      vim.api.nvim_create_user_command("Omnibar", function()
-        -- require("telescope.Omnibar").load_command()
-        telescope.extensions.omnibar.omnibar()
-      end, {})
+      vim.api.nvim_create_user_command("Omnibar", function() telescope.extensions.omnibar.omnibar() end, {})
       vim.keymap.set("n", "<leader>f", function() builtin.resume() end, {})
 
       vim.keymap.set(
@@ -327,7 +271,13 @@ local M = {
         function()
           require("telescopePickers").prettyGrepPicker({
             picker = "live_grep",
-            options = { layout_strategy = layout() },
+            options = {
+              layout_strategy = layout(),
+              layout_config = {
+                width = 0.95,
+                height = 0.95,
+              },
+            },
           })
         end,
         {}
@@ -375,15 +325,26 @@ local M = {
         })
       end)
 
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>k",
+        function() require("telescope").extensions.omnibar.omnibar() end,
+        { silent = true }
+      )
+
       vim.api.nvim_create_user_command("Highlights", "lua require('telescope.builtin').highlights()", {})
 
       -- open last file if called using `v` and no arguments were passed
-      if vim.env.OPEN_LAST == "1" and vim.fn.argv(0) == "" then
-        vim.schedule(function()
-          require("top-results-sorter").load_history("file")
-          local path = require("top-results-sorter").Recent["file"].latest
-          if path ~= nil and vim.uv.fs_stat(path) then vim.schedule(function() vim.cmd("e " .. path) end) end
-        end)
+      if not _G.opened_last_file then
+        _G.opened_last_file = true
+
+        if vim.env.OPEN_LAST == "1" and vim.fn.argv(0) == "" then
+          vim.schedule(function()
+            require("top-results-sorter").load_history("file")
+            local path = require("top-results-sorter").Recent["file"].latest
+            if path ~= nil and vim.uv.fs_stat(path) then vim.schedule(function() vim.cmd("e " .. path) end) end
+          end)
+        end
       end
     end,
   },
@@ -415,12 +376,10 @@ vim.api.nvim_create_autocmd({ "VimLeave", "FocusLost" }, {
   callback = function() require("top-results-sorter").save_history("file") end,
 })
 
-local first_run = true
-
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = vim.schedule_wrap(function()
-    if first_run then
-      first_run = false
+    if not _G.last_file_list_loaded then
+      _G.last_file_list_loaded = true
       require("top-results-sorter").load_history("file")
       push_current_path()
       return
@@ -469,47 +428,50 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- vim.keymap.set("x", "gt", "<ESC><CMD>lua _G.__dot_repeat(vim.fn.visualmode())<CR>") -- 1.
 -- _G.my_count = 0
 
-local make_callback = function(callback)
-  local mode = vim.fn.mode()
-  local is_visual = mode == "v" or mode == "V" or mode == "<C-v>"
+-- local make_callback = function(callback)
+--   local mode = vim.fn.mode()
+--   local is_visual = mode == "v" or mode == "V" or mode == "<C-v>"
+--
+--   return function(motion)
+--     if is_visual then
+--       local starting, ending = get_selection()
+--       local count = ending[2] - starting[2]
+--       vim.cmd(string.format("normal! v%dl", count))
+--
+--       callback()
+--
+--       vim.schedule(function()
+--         starting, ending = get_selection()
+--         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+--         vim.fn.cursor(starting[1], starting[2])
+--       end)
+--     else
+--       callback()
+--     end
+--   end
+-- end
 
-  return function(motion)
-    if is_visual then
-      local starting, ending = get_selection()
-      local count = ending[2] - starting[2]
-      vim.cmd(string.format("normal! v%dl", count))
+-- local repeatable = function(callback)
+--   return function()
+--     _G.callback = make_callback(callback)
+--     vim.go.operatorfunc = "v:lua.callback"
+--
+--     local mode = vim.fn.mode()
+--     local is_visual = mode == "v" or mode == "V" or mode == "<C-v>"
+--
+--     if is_visual then return "g@" end
+--     return "g@l"
+--   end
+-- end
 
-      callback()
-
-      vim.schedule(function()
-        starting, ending = get_selection()
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
-        vim.fn.cursor(starting[1], starting[2])
-      end)
-    else
-      callback()
-    end
-  end
-end
-
-local repeatable = function(callback)
-  return function()
-    _G.callback = make_callback(callback)
-    vim.go.operatorfunc = "v:lua.callback"
-
-    local mode = vim.fn.mode()
-    local is_visual = mode == "v" or mode == "V" or mode == "<C-v>"
-
-    if is_visual then return "g@" end
-    return "g@l"
-  end
-end
-
-vim.keymap.set("n", "gw", repeatable(foo), { expr = true })
-vim.keymap.set("x", "gw", repeatable(foo), { expr = true })
+-- vim.keymap.set("n", "gw", repeatable(foo), { expr = true })
+-- vim.keymap.set("x", "gw", repeatable(foo), { expr = true })
 
 -- vim.keymap.set("x", "gw", "<ESC><CMD>lua _G.main_func(vim.fn.visualmode())<CR>")
 
 -- vim.keymap.set("x", "gt", "<ESC><CMD>lua _G.__dot_repeat(vim.fn.visualmode())<CR>") -- 1.
+
+require("../utils").hot_reload_listen("telescope.nvim")
+require("../utils").hot_reload_listen("omnibar")
 
 return M

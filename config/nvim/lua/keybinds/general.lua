@@ -15,4 +15,9 @@ vim.keymap.set({ "n", "x" }, "do", ":diffget | diffu<cr>", { silent = true })
 vim.keymap.set({ "n", "x" }, "doh", ":diffget //2 | diffu<cr>", { silent = true })
 vim.keymap.set({ "n", "x" }, "dol", ":diffget //3 | diffu<cr>", { silent = true })
 
+-- ctrl+backspace backward delete
+vim.keymap.set("i", "<C-h>", "<C-w>", { noremap = true, silent = true })
+-- ctrl+delete forward delete
+vim.keymap.set("i", "<C-Del>", "<C-o>dw", { noremap = true, silent = true })
+
 return M

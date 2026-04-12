@@ -136,7 +136,8 @@ fn main() -> Result<()> {
             Command::new("gc")
                 .about("garbage collect")
                 .arg(clap::arg!(-l --list "list dead derivations instead of deleting them")),
-        );
+        )
+        .subcommand(Command::new("update").about("update the flake to the latest version"));
     let matches = &cmd.get_matches();
 
     match matches.subcommand() {
@@ -166,13 +167,12 @@ fn main() -> Result<()> {
             println!("{}\n{}", header, rows.join("\n"));
         }
         Some(("new", matches)) => {
+            let tmp = "/tmp/nixos-label";
             let msg = if let Some(msg) = matches.get_one::<String>("message") {
                 msg.clone()
             } else {
-                let tmp = "/tmp/nixos-label";
                 run_cmd_interactive(&format!("vim {tmp}"))?;
                 let content = fs::read_to_string(tmp)?.trim().to_string();
-                let _ = fs::remove_file(tmp);
                 if content.is_empty() {
                     Err(anyhow!("message is required"))?
                 }
@@ -183,6 +183,8 @@ fn main() -> Result<()> {
             std::env::set_var("NIXOS_LABEL", format!("{now} {msg}").replace(" ", "_"));
 
             run_cmd_interactive("sudo -EH nixos-rebuild switch --flake path:.#default --impure")?;
+
+            let _ = fs::remove_file(tmp);
         }
         Some(("test", _)) => {
             let generation = select_generation()?.generation;
@@ -356,27 +358,11 @@ fn main() -> Result<()> {
             ))?;
         }
         Some(("dev", _)) => {
-            let ret = run_cmd_interactive("nix-shell --command zsh");
-            // if we get the annoying "error: creating directory '/tmp/nix-shell-..." error, create
-            // the dir and retry
-            if let Err(err) = ret {
-                let err_string = err.to_string();
-                let tmp_dir_path = if let Some(captures) =
-                    regex::Regex::new(r"error: creating directory '(/tmp/nix-shell-[^/]+).*")
-                        .unwrap()
-                        .captures(&err_string)
-                {
-                    captures.get(1).map(|m| m.as_str())
-                } else {
-                    None
-                };
-                if let Some(tmp_dir_path) = tmp_dir_path {
-                    std::fs::create_dir(tmp_dir_path)?;
-                    run_cmd_interactive("nix-shell --command zsh")?;
-                } else {
-                    Err(err)?;
-                }
+            if std::env::var("TMP").unwrap_or_default().starts_with("/tmp/nix-shell-") {
+                Err(anyhow!("Already in a dev shell, nesting is forbidden"))?;
             }
+
+            let _ = run_cmd_interactive("nix-shell --command zsh");
         }
         Some(("gc", args)) => {
             let list = args.get_one("list").cloned().unwrap_or(false);
@@ -401,6 +387,9 @@ fn main() -> Result<()> {
             Exec::cmd("sudo")
                 .args(&["-E", "nix-collect-garbage"])
                 .success_output()?;
+        }
+        Some(("update", _)) => {
+            run_cmd_interactive(&format!("nix flake update"))?;
         }
         _ => unreachable!(),
     };

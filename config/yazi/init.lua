@@ -32,5 +32,5 @@ require("searchjump"):setup({
   -- auto_exit_when_unmatch = false,
   enable_capital_label = false,
   -- mapdata = require("sjch").data,
-  -- search_patterns = { "hell[dk]d", "%d+.1080p", "第%d+集", "第%d+话", "%.E%d+", "S%d+E%d+" },
+  -- search_patterns = { "hell[dk]d", "%d+.1080p"dentifie, "第%d+集", "第%d+话", "%.E%d+", "S%d+E%d+" },
 })

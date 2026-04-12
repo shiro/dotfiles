@@ -22,8 +22,7 @@ function M.context_snippet(opts)
   end
 
   local get_node_type = function()
-    local ts_utils = require("nvim-treesitter.ts_utils")
-    local node = ts_utils.get_node_at_cursor()
+    local node = vim.treesitter.get_node()
 
     while node ~= nil do
       for _, value in ipairs(all_supported_contexts[opts.ft]) do

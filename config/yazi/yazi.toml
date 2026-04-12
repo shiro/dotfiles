@@ -3,5 +3,23 @@ sort_dir_first = false
 sort_by = "extension"
 
 [preview]
-ueberzug_scale = 1
-ueberzug_offset = [1.5, 1.5, -0.5, -0.5]
+ueberzug_scale = 1.6
+ueberzug_offset = [13, 17, -0.5, -0.5]
+
+[opener]
+folder = [
+  { run = 'alacritty -e yazi "$@"', block = false, desc = "Open in Yazi", for = "linux" }
+]
+
+[open]
+rules = [
+  { name = "*/", use = "folder" }
+]
+
+[plugin]
+prepend_previewers = [
+    { url = "*.psd", run = "psd" }
+]
+# previewers = [
+#   { url = "*.psd", run = "magick", cmd = "column -t -s," }
+# ]

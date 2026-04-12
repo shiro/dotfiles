@@ -97,8 +97,8 @@ local M = {
           --         -- "stylua", -- lua format
           --         -- "lua-language-server", -- lua
           --         "typescript-language-server", -- TS
-          "prettierd", -- JS/TS format - prettier
-          "kotlin-language-server",
+          -- "prettierd", -- JS/TS format - prettier
+          -- "kotlin-language-server",
           --         "eslint-lsp", -- JS/TS lint
           --         -- "rust-analyzer", -- rust
           --         "taplo", -- toml

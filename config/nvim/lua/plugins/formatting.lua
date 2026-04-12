@@ -44,6 +44,7 @@ local M = {
           css = { "prettierd" },
           scss = { "prettierd" },
           nix = { "nixfmt" },
+          python = { "black" },
         },
         formatters = {
           taplo = {
@@ -72,5 +73,7 @@ local M = {
     end,
   },
 }
+
+require("../utils").hot_reload_listen("conform.nvim")
 
 return M

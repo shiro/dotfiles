@@ -45,7 +45,10 @@ case "$command" in
     ;;
   library)
     selected=`ls ~/Music | shuf | wofi -d -i`
-    [ -n "$selected" ] && play ~/"Music/$selected"
+    [ -n "$selected" ] && ~/bin/play ~/"Music/$selected"
+    ;;
+  ui)
+    ncmpcpp
     ;;
 esac
 

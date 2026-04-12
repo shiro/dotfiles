@@ -1,9 +1,11 @@
 local M = {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
+      if vim.fn.executable("tree-sitter") == 1 then
+        require("nvim-treesitter").install({
           "typescript",
           "tsx",
           "javascript",
@@ -15,15 +17,24 @@ local M = {
           "lua",
           "sql",
           "go",
-        },
-        auto_install = true,
-        highlight = { enable = true },
-        incremental_selection = { enable = true },
-        indent = { enable = true },
-        context_commentstring = { enable = true },
+          "python",
+        })
+      end
+
+      vim.api.nvim_create_autocmd("BufEnter", {
+        callback = function(args)
+          local bufnr = args.buf
+          local ft = vim.bo[bufnr].filetype
+
+          if ft ~= "" and vim.treesitter.language.get_lang(ft) and not pcall(vim.treesitter.get_parser, bufnr) then
+            pcall(require("nvim-treesitter").install, ft)
+          end
+        end,
       })
-      -- vim.o.foldmethod = "expr"
-      -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+
+      vim.api.nvim_create_autocmd("BufEnter", {
+        callback = function() pcall(vim.treesitter.start) end,
+      })
     end,
   },
   -- highlight symbol under cursor {{{

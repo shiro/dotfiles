@@ -1,5 +1,3 @@
-local ts_utils = require("nvim-treesitter.ts_utils")
-
 local function get_node_at_cursor()
   local r, c = unpack(vim.api.nvim_win_get_cursor(0))
   vim.treesitter.get_parser(0):parse({ r - 1, c, r - 1, c })
@@ -7,7 +5,7 @@ local function get_node_at_cursor()
 end
 
 function get_node_range(buf, node)
-  local start_row, start_col, end_row, end_col = ts_utils.get_vim_range({ vim.treesitter.get_node_range(node) }, buf)
+  local start_row, start_col, end_row, end_col = vim.treesitter.get_vim_range({ vim.treesitter.get_node_range(node) }, buf)
   return start_row, start_col, end_row, end_col
 end
 
@@ -56,8 +54,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
       local first_child_node = node:child(1)
       local last_child_node = node:child(node:child_count() - 2)
 
-      local from_row, from_col, _, _ = ts_utils.get_vim_range({ vim.treesitter.get_node_range(first_child_node) }, 0)
-      local _, _, to_row, to_col = ts_utils.get_vim_range({ vim.treesitter.get_node_range(last_child_node) }, 0)
+      local from_row, from_col, _, _ = vim.treesitter.get_vim_range({ vim.treesitter.get_node_range(first_child_node) }, 0)
+      local _, _, to_row, to_col = vim.treesitter.get_vim_range({ vim.treesitter.get_node_range(last_child_node) }, 0)
 
       local text = vim.split(vim.treesitter.get_node_text(first_child_node, buf), "\n")
       if text[1]:len() == 0 then

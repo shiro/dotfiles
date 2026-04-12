@@ -1,0 +1,54 @@
+local M = {
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    init = function()
+      require("catppuccin").setup({
+        flavour = "macchiato",
+        transparent_background = true,
+        auto_integrations = true,
+        custom_highlights = function(colors)
+          return {
+            NormalFloat = { bg = colors.base },
+            Pmenu = { bg = colors.base },
+            Float = { bg = colors.base },
+            FloatBorder = { bg = colors.base },
+            TelescopePromptBorder = { bg = colors.base },
+            TelescopeBorder = { bg = colors.base },
+            TelescopeTitle = { bg = colors.base },
+
+            -- String = { fg = colors.peach },
+            -- ["@lsp.type.enumMember"] = { fg = colors.yellow },
+            -- ["@function.macro"] = { fg = colors.yellow },
+            -- ["@property"] = { fg = colors.pink },
+            -- ["@variable"] = { fg = colors.maroon },
+            -- ["@module"] = { fg = colors.flamingo },
+            -- Type = { fg = colors.mauve },
+            -- Function = { fg = colors.green },
+            -- Number = { fg = colors.yellow },
+            -- Keyword = { fg = colors.rosewater },
+            -- Number = { link = "String" },
+
+            -- status bar
+            WinSeparator = { fg = colors.overlay0 },
+            StatusLine = { fg = colors.overlay0 },
+            StatusLineNC = { fg = colors.overlay0 },
+
+            -- gutter
+            DiagnosticSignError = { fg = colors.overlay0 },
+            DiagnosticSignHint = { fg = colors.overlay0 },
+            DiagnosticSignWarn = { fg = colors.overlay0 },
+            DiagnosticSignInfo = { fg = colors.overlay0 },
+          }
+        end,
+      })
+
+      vim.cmd.colorscheme("catppuccin-nvim")
+    end,
+  },
+}
+
+require("../utils").hot_reload_listen("catppuccin")
+
+return M
