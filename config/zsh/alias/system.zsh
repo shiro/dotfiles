@@ -23,6 +23,8 @@ alias stahp='poweroff'
 
 alias whatismyip='curl ifconfig.me'
 
+alias journal='journalctl -e'
+
 # copy/move using rsync
 alias cs='rsync -a --progress'
 function ms(){

@@ -18,10 +18,11 @@ local M = {
             TelescopeBorder = { bg = colors.base },
             TelescopeTitle = { bg = colors.base },
 
-            -- String = { fg = colors.peach },
+            String = { fg = colors.flamingo },
             -- ["@lsp.type.enumMember"] = { fg = colors.yellow },
             -- ["@function.macro"] = { fg = colors.yellow },
             -- ["@property"] = { fg = colors.pink },
+            -- ["@variable"] = { fg = colors.maroon },
             -- ["@variable"] = { fg = colors.maroon },
             -- ["@module"] = { fg = colors.flamingo },
             -- Type = { fg = colors.mauve },
@@ -29,6 +30,13 @@ local M = {
             -- Number = { fg = colors.yellow },
             -- Keyword = { fg = colors.rosewater },
             -- Number = { link = "String" },
+            Function = { fg = colors.peach },
+
+            -- typescriptVariableDeclaration = { fg = colors.red },
+            ["@tag"] = { fg = colors.blue },
+            ["@tag.attribute"] = { fg = colors.sky },
+            ["@tag.builtin"] = { link = "@tag" },
+            ["@tag.delimiter"] = { link = "@tag" },
 
             -- status bar
             WinSeparator = { fg = colors.overlay0 },
@@ -40,6 +48,9 @@ local M = {
             DiagnosticSignHint = { fg = colors.overlay0 },
             DiagnosticSignWarn = { fg = colors.overlay0 },
             DiagnosticSignInfo = { fg = colors.overlay0 },
+
+            DiagnosticUnderlineWarn = { fg = colors.overlay2 },
+            DiagnosticUnderlineError = { fg = colors.red },
           }
         end,
       })
