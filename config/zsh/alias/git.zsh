@@ -21,8 +21,15 @@ alias gf='git fetch'
 alias gfp='git fetch && git pull'
 ggo() {
   if [ $# -eq 1 ]; then
-    local flag=$(git show-ref --verify --quiet refs/heads/"$1" && echo '' || echo '-b')
-    git checkout $flag "$1"
+    # Check if remote branch exists first
+    if git show-ref --verify --quiet refs/remotes/origin/"$1"; then
+      # Remote branch exists, check it out and track it
+      git checkout -b "$1" "origin/$1" 2>/dev/null || git checkout "$1"
+    else
+      # No remote branch, check if local branch exists
+      local flag=$(git show-ref --verify --quiet refs/heads/"$1" && echo '' || echo '-b')
+      git checkout $flag "$1"
+    fi
   else
     git checkout "$@"
   fi
