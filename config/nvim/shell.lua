@@ -33,6 +33,9 @@ vim.opt.fillchars = { diff = " " }
 vim.opt.autowrite = true
 vim.opt.autowriteall = true
 
+-- don't create temporary files when writing
+vim.opt.backupcopy = "yes"
+
 -- jump to next split
 vim.keymap.set("n", "<M-i>", "<CMD>wincmd w<CR>", { noremap = true, silent = true })
 
