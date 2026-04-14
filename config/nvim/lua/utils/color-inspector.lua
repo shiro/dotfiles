@@ -1,19 +1,18 @@
 local M = {}
 
-local LINKS_TO_LEN = 10 -- length of " links to "
+local LINKS_TO_TEXT = " links to "
+local LINKS_TO_LEN = #LINKS_TO_TEXT
+local UNUSED_TEXT = " (unused)"
 
 local state = {
-  enabled = false,
-  winid = nil,
-  bufnr = nil,
-  autocmd_id = nil,
-  ns_id = nil,
-  should_show = false, -- tracks if popup should be visible
-  original_bufnr = nil, -- tracks the buffer where inspector was enabled
-  original_winid = nil, -- tracks the window where inspector was enabled
+  splits = {},
+  autocmd_ids = {},
 }
 
--- Process extmarks and add to highlights
+--- Process extmarks and add highlight groups to the list
+--- @param extmarks table|nil List of extmarks from vim.inspect_pos
+--- @param highlights table List to store highlight group information
+--- @param seen table Set of already processed highlight groups
 local function process_extmarks(extmarks, highlights, seen)
   if not extmarks then return end
 
@@ -33,7 +32,10 @@ local function process_extmarks(extmarks, highlights, seen)
   end
 end
 
--- Process treesitter highlights and add to highlights
+--- Process treesitter highlights and add to the list
+--- @param treesitter table|nil List of treesitter highlights from vim.inspect_pos
+--- @param highlights table List to store highlight group information
+--- @param seen table Set of already processed highlight groups
 local function process_treesitter(treesitter, highlights, seen)
   if not treesitter then return end
 
@@ -53,7 +55,10 @@ local function process_treesitter(treesitter, highlights, seen)
   end
 end
 
--- Process semantic tokens and add to highlights
+--- Process semantic tokens and add highlight groups to the list
+--- @param semantic_tokens table|nil List of semantic tokens from vim.inspect_pos
+--- @param highlights table List to store highlight group information
+--- @param seen table Set of already processed highlight groups
 local function process_semantic_tokens(semantic_tokens, highlights, seen)
   if not semantic_tokens then return end
 
@@ -73,32 +78,34 @@ local function process_semantic_tokens(semantic_tokens, highlights, seen)
   end
 end
 
--- Check if a highlight group has any colors defined
+--- Check if a highlight group has color properties
+--- @param hl_group string|nil The highlight group name to check
+--- @return boolean Whether the highlight group has color properties
 local function has_colors(hl_group)
   if not hl_group then return false end
 
   local hl_def = vim.api.nvim_get_hl(0, { name = hl_group })
   if not hl_def then return false end
 
-  -- Check for any color-related properties
   return hl_def.fg ~= nil
     or hl_def.bg ~= nil
     or hl_def.sp ~= nil
     or hl_def.ctermfg ~= nil
     or hl_def.ctermbg ~= nil
-    or hl_def.bold
-    or hl_def.italic
-    or hl_def.underline
-    or hl_def.undercurl
-    or hl_def.underdouble
-    or hl_def.underdotted
-    or hl_def.underdashed
-    or hl_def.strikethrough
-    or hl_def.reverse
-    or hl_def.standout
+    or hl_def.bold == true
+    or hl_def.italic == true
+    or hl_def.underline == true
+    or hl_def.undercurl == true
+    or hl_def.underdouble == true
+    or hl_def.underdotted == true
+    or hl_def.underdashed == true
+    or hl_def.strikethrough == true
+    or hl_def.reverse == true
+    or hl_def.standout == true
 end
 
--- Get highlight groups at cursor position
+--- Get all highlight groups at the current cursor position
+--- @return table List of highlight group information
 local function get_highlights()
   if not vim.inspect_pos then return {} end
 
@@ -117,13 +124,15 @@ local function get_highlights()
     local a_priority = a.priority or 0
     local b_priority = b.priority or 0
     if a_priority ~= b_priority then return a_priority > b_priority end
-    return a.index > b.index -- reverse order when priorities are equal
+    return a.index > b.index
   end)
 
   return highlights
 end
 
--- Format highlight info for display
+--- Format highlight groups into display lines with metadata
+--- @param highlights table List of highlight group information
+--- @return table List of formatted display items
 local function format_highlights(highlights)
   if #highlights == 0 then return { "No highlight groups found" } end
 
@@ -134,10 +143,10 @@ local function format_highlights(highlights)
     local unused_pos = nil
 
     if is_linked then
-      text = hl.name .. " links to " .. hl.target
+      text = hl.name .. LINKS_TO_TEXT .. hl.target
       if not has_colors(hl.target) then
         unused_pos = string.len(text)
-        text = text .. " (unused)"
+        text = text .. UNUSED_TEXT
       end
     else
       text = hl.name
@@ -153,7 +162,9 @@ local function format_highlights(highlights)
   return lines
 end
 
--- Calculate popup dimensions and position
+--- Calculate popup dimensions and position
+--- @param content table List of content items to display in popup
+--- @return table Popup window configuration
 local function get_popup_config(content)
   local cursor_screen_row = vim.fn.screenrow()
   local cursor_screen_col = vim.fn.screencol()
@@ -198,37 +209,44 @@ local function get_popup_config(content)
   }
 end
 
--- Create or get buffer for popup
-local function get_or_create_buffer()
-  if not state.bufnr or not vim.api.nvim_buf_is_valid(state.bufnr) then
-    state.bufnr = vim.api.nvim_create_buf(false, true)
-    vim.bo[state.bufnr].bufhidden = "wipe"
-    vim.bo[state.bufnr].buftype = "nofile"
-    vim.bo[state.bufnr].swapfile = false
+--- Create or get buffer for popup for a specific split
+--- @param split_winid number The window ID for the split
+--- @return number|nil Buffer number or nil if split state not found
+local function get_or_create_buffer(split_winid)
+  local split_state = state.splits[split_winid]
+  if not split_state then return nil end
+
+  if not split_state.bufnr or not vim.api.nvim_buf_is_valid(split_state.bufnr) then
+    split_state.bufnr = vim.api.nvim_create_buf(false, true)
+    vim.bo[split_state.bufnr].bufhidden = "wipe"
+    vim.bo[split_state.bufnr].buftype = "nofile"
+    vim.bo[split_state.bufnr].swapfile = false
 
     -- Set up buffer keybindings for when focused
     local function close_popup()
-      if state.winid and vim.api.nvim_win_is_valid(state.winid) then
-        vim.api.nvim_win_close(state.winid, true)
-        state.winid = nil
+      if split_state.popup_winid and vim.api.nvim_win_is_valid(split_state.popup_winid) then
+        vim.api.nvim_win_close(split_state.popup_winid, true)
+        split_state.popup_winid = nil
       end
-      state.should_show = false
+      split_state.should_show = false
     end
 
     -- Set buffer-local keymaps
-    vim.keymap.set("n", "<Esc>", close_popup, { buffer = state.bufnr, silent = true })
-    vim.keymap.set("n", "<C-c>", close_popup, { buffer = state.bufnr, silent = true })
+    vim.keymap.set("n", "<Esc>", close_popup, { buffer = split_state.bufnr, silent = true })
+    vim.keymap.set("n", "<C-c>", close_popup, { buffer = split_state.bufnr, silent = true })
 
     -- Add autocmd to clean up state when window is closed externally
     vim.api.nvim_create_autocmd("WinClosed", {
-      buffer = state.bufnr,
-      callback = function() state.winid = nil end,
+      buffer = split_state.bufnr,
+      callback = function() split_state.popup_winid = nil end,
     })
   end
-  return state.bufnr
+  return split_state.bufnr
 end
 
--- Set buffer content
+--- Set buffer content
+--- @param bufnr number Buffer number to set content for
+--- @param content table List of content items to display
 local function set_buffer_content(bufnr, content)
   local lines = {}
   for _, item in ipairs(content) do
@@ -237,7 +255,8 @@ local function set_buffer_content(bufnr, content)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 end
 
--- Create a highlight group for unused targets (same color as Comment with strikethrough)
+--- Create a highlight group for unused targets (same color as Comment with strikethrough)
+--- @return string The name of the created highlight group
 local function create_unused_highlight()
   local unused_hl_name = "ColorInspectorUnused"
   -- Get the Comment highlight group's color
@@ -250,16 +269,16 @@ local function create_unused_highlight()
   return unused_hl_name
 end
 
--- Apply highlights to buffer
-local function apply_highlights(bufnr, content)
+--- Apply highlights to buffer
+--- @param bufnr number Buffer number to apply highlights to
+--- @param content table List of content items with highlight information
+--- @param ns_id number Namespace ID for highlights
+local function apply_highlights(bufnr, content, ns_id)
   local unused_hl = create_unused_highlight()
-
-  -- Create or reuse namespace
-  if not state.ns_id then state.ns_id = vim.api.nvim_create_namespace("color_inspector") end
 
   -- Helper function to add highlight extmark
   local function add_highlight(line_idx, start_col, end_col, hl_group)
-    pcall(vim.api.nvim_buf_set_extmark, bufnr, state.ns_id, line_idx, start_col, {
+    pcall(vim.api.nvim_buf_set_extmark, bufnr, ns_id, line_idx, start_col, {
       end_col = end_col,
       hl_group = hl_group,
     })
@@ -293,165 +312,259 @@ local function apply_highlights(bufnr, content)
   end
 end
 
-local function update_popup()
-  if not state.enabled or not state.should_show then return end
+--- Update popup for a specific split
+--- @param split_winid number The window ID for the split
+local function update_popup(split_winid)
+  local split_state = state.splits[split_winid]
+  if not split_state or not split_state.should_show then return end
 
   -- Don't update if popup is currently focused
   local current_win = vim.api.nvim_get_current_win()
-  if state.winid and current_win == state.winid then return end
+  if split_state.popup_winid and current_win == split_state.popup_winid then return end
 
   local highlights = get_highlights()
   local content = format_highlights(highlights)
 
-  -- Close existing window
-  if state.winid and vim.api.nvim_win_is_valid(state.winid) then vim.api.nvim_win_close(state.winid, true) end
+  -- Close existing popup window
+  if split_state.popup_winid and vim.api.nvim_win_is_valid(split_state.popup_winid) then
+    vim.api.nvim_win_close(split_state.popup_winid, true)
+  end
 
   -- Prepare buffer
-  local bufnr = get_or_create_buffer()
+  local bufnr = get_or_create_buffer(split_winid)
+  if not bufnr then return end
+
   set_buffer_content(bufnr, content)
-  apply_highlights(bufnr, content)
 
-  -- Create new window
+  -- Create or reuse namespace for this split
+  if not split_state.ns_id then split_state.ns_id = vim.api.nvim_create_namespace("color_inspector_" .. split_winid) end
+
+  apply_highlights(bufnr, content, split_state.ns_id)
+
+  -- Create new popup window
   local config = get_popup_config(content)
-  state.winid = vim.api.nvim_open_win(bufnr, false, config)
-  vim.wo[state.winid].winhl = "Normal:NormalFloat,Border:FloatBorder"
-  vim.wo[state.winid].wrap = false
+  split_state.popup_winid = vim.api.nvim_open_win(bufnr, false, config)
+  vim.wo[split_state.popup_winid].winhl = "Normal:NormalFloat,Border:FloatBorder"
+  vim.wo[split_state.popup_winid].wrap = false
 end
 
--- Hide popup without disabling the inspector
-local function hide_popup()
-  if state.winid and vim.api.nvim_win_is_valid(state.winid) then
-    vim.api.nvim_win_close(state.winid, true)
-    state.winid = nil
+--- Hide popup for a specific split
+--- @param split_winid number The window ID for the split
+local function hide_popup(split_winid)
+  local split_state = state.splits[split_winid]
+  if not split_state then return end
+
+  if split_state.popup_winid and vim.api.nvim_win_is_valid(split_state.popup_winid) then
+    vim.api.nvim_win_close(split_state.popup_winid, true)
+    split_state.popup_winid = nil
   end
-  state.should_show = false
+  split_state.should_show = false
 end
 
--- Show popup if inspector is enabled
-local function show_popup()
-  state.should_show = true
-  update_popup()
-end
+--- Show popup for a specific split
+--- @param split_winid number The window ID for the split
+--- @param delay boolean|nil Whether to delay showing the popup
+local function show_popup(split_winid, delay)
+  local split_state = state.splits[split_winid]
+  if not split_state then return end
 
--- Clean up popup and autocmds
-local function cleanup()
-  if state.winid and vim.api.nvim_win_is_valid(state.winid) then
-    vim.api.nvim_win_close(state.winid, true)
-    state.winid = nil
-  end
+  split_state.should_show = true
 
-  if state.autocmd_id then
-    vim.api.nvim_del_autocmd(state.autocmd_id)
-    state.autocmd_id = nil
-  end
-end
-
-local function enable()
-  state.enabled = true
-  state.should_show = true
-  state.original_bufnr = vim.api.nvim_get_current_buf()
-  state.original_winid = vim.api.nvim_get_current_win()
-
-  state.autocmd_id = vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-    callback = function()
-      -- Don't update popup if it's currently focused
-      local current_win = vim.api.nvim_get_current_win()
-      if state.winid and current_win == state.winid then return end
-
-      -- Only update popup if we're in the original window
-      if current_win ~= state.original_winid then return end
-
-      vim.schedule(update_popup)
-    end,
-  })
-
-  -- Handle window focus changes
-  vim.api.nvim_create_autocmd("WinEnter", {
-    callback = function()
-      local current_buf = vim.api.nvim_get_current_buf()
-      local current_win = vim.api.nvim_get_current_win()
-
-      -- Only show popup if we're in the exact original buffer AND window
-      if current_buf == state.original_bufnr and current_win == state.original_winid then
-        show_popup()
-      else
-        -- Don't hide popup if we're entering the popup window itself
-        if state.winid and current_win == state.winid then
-          return
-        end
-        -- Hide popup if we're in a different window (even with same buffer)
-        hide_popup()
-      end
-    end,
-  })
-
-  vim.api.nvim_create_autocmd("WinLeave", {
-    callback = function()
-      local current_win = vim.api.nvim_get_current_win()
-
-      -- Hide popup when leaving the original window
-      if current_win == state.original_winid then
-        -- Don't hide immediately - schedule it to check after window switch
-        vim.schedule(function()
-          local new_win = vim.api.nvim_get_current_win()
-          -- Only hide if we didn't switch to the popup window
-          if state.winid and new_win ~= state.winid then
-            hide_popup()
-          end
-        end)
-      end
-    end,
-  })
-
-  -- Handle window closure
-  vim.api.nvim_create_autocmd("WinClosed", {
-    callback = function(event)
-      local closed_winid = tonumber(event.match)
-      -- If the original window was closed, hide the popup
-      if closed_winid == state.original_winid then
-        hide_popup()
-        -- Reset original window tracking since it no longer exists
-        state.original_winid = nil
-      end
-    end,
-  })
-
-  update_popup()
-end
-
-local function disable()
-  state.enabled = false
-  cleanup()
-end
-
-function M.toggle()
-  if state.enabled then
-    disable()
+  if delay then
+    -- Small delay to ensure cursor position is stable
+    vim.defer_fn(function()
+      if split_state.should_show then update_popup(split_winid) end
+    end, 50)
   else
-    enable()
+    update_popup(split_winid)
   end
 end
 
--- Focus the popup window if it exists and is valid
-function M.focus()
-  if not state.enabled then return false end
-
-  -- If popup doesn't exist but should be shown, create it first
-  if not state.winid or not vim.api.nvim_win_is_valid(state.winid) then
-    if state.should_show then
-      update_popup()
-    else
-      show_popup()
+--- Clean up all splits and autocmds
+local function cleanup()
+  -- Close all split popups
+  for _, split_state in pairs(state.splits) do
+    if split_state.popup_winid and vim.api.nvim_win_is_valid(split_state.popup_winid) then
+      vim.api.nvim_win_close(split_state.popup_winid, true)
     end
   end
 
-  if state.winid and vim.api.nvim_win_is_valid(state.winid) then
-    vim.api.nvim_set_current_win(state.winid)
+  -- Clear splits table
+  state.splits = {}
+
+  -- Clean up global autocmds
+  for _, autocmd_id in ipairs(state.autocmd_ids) do
+    if autocmd_id then vim.api.nvim_del_autocmd(autocmd_id) end
+  end
+  state.autocmd_ids = {}
+end
+
+--- Enable inspector for current split
+local function enable_split()
+  local current_winid = vim.api.nvim_get_current_win()
+
+  -- Initialize split state if not exists
+  if not state.splits[current_winid] then
+    state.splits[current_winid] = {
+      winid = current_winid,
+      bufnr = nil,
+      popup_winid = nil,
+      should_show = true,
+      ns_id = nil,
+    }
+  else
+    -- Re-enable existing split
+    state.splits[current_winid].should_show = true
+  end
+
+  -- Set up global autocmds if this is the first split
+  if vim.tbl_count(state.splits) == 1 then
+    -- Cursor movement autocmds
+    local cursor_autocmd = vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+      callback = function()
+        local current_win = vim.api.nvim_get_current_win()
+
+        -- Check if current window is tracked and has an active popup
+        local split_state = state.splits[current_win]
+        if not split_state then return end
+
+        -- Don't update if popup is currently focused
+        if split_state.popup_winid and current_win == split_state.popup_winid then return end
+
+        vim.schedule(function() update_popup(current_win) end)
+      end,
+    })
+    table.insert(state.autocmd_ids, cursor_autocmd)
+
+    -- Window enter autocmds
+    local win_enter_autocmd = vim.api.nvim_create_autocmd("WinEnter", {
+      callback = function()
+        local current_win = vim.api.nvim_get_current_win()
+        local split_state = state.splits[current_win]
+
+        if split_state then
+          -- Show popup for tracked splits with delay to ensure stable cursor position
+          show_popup(current_win, true)
+        else
+          -- Hide popups from other splits when entering untracked windows
+          for tracked_winid, tracked_state in pairs(state.splits) do
+            if tracked_state.popup_winid and vim.api.nvim_win_is_valid(tracked_state.popup_winid) then
+              -- Check if we're entering the popup window itself
+              if current_win ~= tracked_state.popup_winid then hide_popup(tracked_winid) end
+            end
+          end
+        end
+      end,
+    })
+    table.insert(state.autocmd_ids, win_enter_autocmd)
+
+    -- Window leave autocmds
+    local win_leave_autocmd = vim.api.nvim_create_autocmd("WinLeave", {
+      callback = function()
+        local current_win = vim.api.nvim_get_current_win()
+        local split_state = state.splits[current_win]
+
+        if split_state then
+          -- Schedule hiding popup when leaving tracked splits
+          vim.schedule(function()
+            local new_win = vim.api.nvim_get_current_win()
+            -- Only hide if we didn't switch to the popup window
+            if split_state.popup_winid and new_win ~= split_state.popup_winid then hide_popup(current_win) end
+          end)
+        end
+      end,
+    })
+    table.insert(state.autocmd_ids, win_leave_autocmd)
+
+    -- Window closure autocmds
+    local win_closed_autocmd = vim.api.nvim_create_autocmd("WinClosed", {
+      callback = function(event)
+        local closed_winid = tonumber(event.match)
+        if not closed_winid then return end
+
+        -- Clean up state for closed splits
+        if state.splits[closed_winid] then
+          state.splits[closed_winid] = nil
+
+          -- If no splits remain, clean up everything
+          if vim.tbl_count(state.splits) == 0 then cleanup() end
+        end
+
+        -- Also check if a popup window was closed
+        for _, split_state in pairs(state.splits) do
+          if split_state.popup_winid == closed_winid then split_state.popup_winid = nil end
+        end
+      end,
+    })
+    table.insert(state.autocmd_ids, win_closed_autocmd)
+  end
+
+  -- Show popup for this split
+  show_popup(current_winid)
+end
+
+--- Disable inspector for current split
+local function disable_split()
+  local current_winid = vim.api.nvim_get_current_win()
+  local split_state = state.splits[current_winid]
+
+  if split_state then
+    -- Hide popup and remove from splits
+    hide_popup(current_winid)
+    state.splits[current_winid] = nil
+
+    -- If no splits remain, clean up everything
+    if vim.tbl_count(state.splits) == 0 then cleanup() end
+  end
+end
+
+--- Toggle color inspector for current split
+function M.toggle()
+  local current_winid = vim.api.nvim_get_current_win()
+  local split_state = state.splits[current_winid]
+
+  if split_state then
+    -- Split is already enabled, disable it
+    disable_split()
+  else
+    -- Split is not enabled, enable it
+    enable_split()
+  end
+end
+
+--- Focus the popup window if it exists and is valid for current split
+--- @return boolean Whether the popup window was successfully focused
+function M.focus()
+  local current_winid = vim.api.nvim_get_current_win()
+  local split_state = state.splits[current_winid]
+
+  if not split_state then return false end
+
+  -- If popup doesn't exist but should be shown, create it first
+  if not split_state.popup_winid or not vim.api.nvim_win_is_valid(split_state.popup_winid) then
+    if split_state.should_show then
+      update_popup(current_winid)
+    else
+      show_popup(current_winid)
+    end
+  end
+
+  if split_state.popup_winid and vim.api.nvim_win_is_valid(split_state.popup_winid) then
+    vim.api.nvim_set_current_win(split_state.popup_winid)
     return true
   end
   return false
 end
 
-function M.is_enabled() return state.enabled end
+--- Check if inspector is enabled for current split
+--- @return boolean Whether the inspector is enabled for current split
+function M.is_enabled()
+  local current_winid = vim.api.nvim_get_current_win()
+  return state.splits[current_winid] ~= nil
+end
+
+--- Get enabled splits count
+--- @return number Number of currently enabled splits
+function M.get_enabled_splits_count() return vim.tbl_count(state.splits) end
 
 return M
