@@ -19,12 +19,12 @@ local M = {
         },
         custom_highlights = function(colors)
           return {
-            NormalFloat = { bg = colors.base },
-            Pmenu = { bg = colors.base },
-            Float = { bg = colors.base },
-            FloatBorder = { bg = colors.base },
-            TelescopePromptBorder = { bg = colors.base },
-            TelescopeBorder = { bg = colors.base },
+            NormalFloat = { bg = "NONE" },
+            Pmenu = { bg = "NONE" },
+            Float = { bg = "NONE" },
+            FloatBorder = { bg = "NONE" },
+            TelescopePromptBorder = { bg = "NONE" },
+            TelescopeBorder = { bg = "NONE" },
             TelescopeTitle = { bg = "NONE" },
             -- Ensure other popup titles have no background
             FloatTitle = { bg = "NONE" },
