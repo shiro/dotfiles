@@ -34,7 +34,6 @@ function M.hot_reload_listen(name)
       vim.notify = function() end
 
       -- vim.cmd("mkview")
-      -- print("go", vim.inspect(_G.plugins_to_reload))
       require("lazy").reload({ plugins = vim.tbl_keys(_G.plugins_to_reload) })
       -- vim.cmd("loadview")
 

@@ -7,60 +7,94 @@ local state = {
   autocmd_id = nil,
 }
 
+-- Process extmarks and add to highlights
+local function process_extmarks(extmarks, highlights, seen)
+  if not extmarks then return end
+
+  for _, extmark in ipairs(extmarks) do
+    local hl_group = extmark.opts and extmark.opts.hl_group
+    if not hl_group or seen[hl_group] or hl_group == "IlluminatedWordRead" then
+      goto continue
+    end
+
+    seen[hl_group] = true
+    table.insert(highlights, {
+      name = hl_group,
+      target = extmark.opts.hl_group_link or hl_group,
+      priority = extmark.opts.priority,
+      index = #highlights + 1,
+    })
+
+    ::continue::
+  end
+end
+
+-- Process treesitter highlights and add to highlights
+local function process_treesitter(treesitter, highlights, seen)
+  if not treesitter then return end
+
+  for _, ts in ipairs(treesitter) do
+    local hl_group = ts.hl_group
+    if not hl_group or seen[hl_group] then
+      goto continue
+    end
+
+    seen[hl_group] = true
+    table.insert(highlights, {
+      name = hl_group,
+      target = ts.hl_group_link or hl_group,
+      priority = 100,
+      index = #highlights + 1,
+    })
+
+    ::continue::
+  end
+end
+
+-- Check if a highlight group has any colors defined
+local function has_colors(hl_group)
+  if not hl_group then return false end
+
+  local hl_def = vim.api.nvim_get_hl(0, { name = hl_group })
+  if not hl_def then return false end
+
+  -- Check for any color-related properties
+  return hl_def.fg ~= nil or
+         hl_def.bg ~= nil or
+         hl_def.sp ~= nil or
+         hl_def.ctermfg ~= nil or
+         hl_def.ctermbg ~= nil or
+         hl_def.bold or
+         hl_def.italic or
+         hl_def.underline or
+         hl_def.undercurl or
+         hl_def.underdouble or
+         hl_def.underdotted or
+         hl_def.underdashed or
+         hl_def.strikethrough or
+         hl_def.reverse or
+         hl_def.standout
+end
+
 -- Get highlight groups at cursor position
 local function get_highlights()
+  if not vim.inspect_pos then return {} end
+
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  row = row - 1
   local buf = vim.api.nvim_get_current_buf()
+  local inspect_data = vim.inspect_pos(buf, row - 1, col)
 
   local highlights = {}
   local seen = {}
 
-  if vim.inspect_pos then
-    local inspect_data = vim.inspect_pos(buf, row, col)
-
-    -- Process extmarks
-    if inspect_data.extmarks then
-      for _, extmark in ipairs(inspect_data.extmarks) do
-        local hl_group = extmark.opts and extmark.opts.hl_group
-        if hl_group and not seen[hl_group] and hl_group ~= "IlluminatedWordRead" then
-          seen[hl_group] = true
-          local target = extmark.opts.hl_group_link or hl_group
-
-          print(vim.inspect(extmark.opts))
-
-          table.insert(highlights, {
-            name = hl_group,
-            target = target,
-            priority = extmark.opts.priority,
-          })
-        end
-      end
-    end
-
-    -- Process treesitter
-    if inspect_data.treesitter then
-      for _, ts in ipairs(inspect_data.treesitter) do
-        local hl_group = ts.hl_group
-        if hl_group and not seen[hl_group] then
-          seen[hl_group] = true
-          local target = ts.hl_group_link or hl_group
-
-          table.insert(highlights, {
-            name = hl_group,
-            target = target,
-            priority = 100,
-          })
-        end
-      end
-    end
-  end
+  process_extmarks(inspect_data.extmarks, highlights, seen)
+  process_treesitter(inspect_data.treesitter, highlights, seen)
 
   table.sort(highlights, function(a, b)
     local a_priority = a.priority or 0
     local b_priority = b.priority or 0
     if a_priority ~= b_priority then return a_priority > b_priority end
-    return a.name < b.name
+    return a.index > b.index -- reverse order when priorities are equal
   end)
 
   return highlights
@@ -68,17 +102,31 @@ end
 
 -- Format highlight info for display
 local function format_highlights(highlights)
-  if #highlights == 0 then return { "No highlight groups found" } end
+  if #highlights == 0 then
+    return { "No highlight groups found" }
+  end
 
   local lines = {}
   for _, hl in ipairs(highlights) do
-    local line = hl.name == hl.target and hl.name or hl.name .. " links to " .. hl.target
-    if hl.priority then line = line .. " (priority: " .. hl.priority .. ")" end
+    local is_linked = hl.name ~= hl.target
+    local text
+    local unused_pos = nil
+
+    if is_linked then
+      text = hl.name .. " links to " .. hl.target
+      if not has_colors(hl.target) then
+        unused_pos = string.len(text)
+        text = text .. " (unused)"
+      end
+    else
+      text = hl.name
+    end
 
     table.insert(lines, {
-      text = line,
+      text = text,
       hl_group = hl.target,
-      links_pos = hl.name ~= hl.target and string.len(hl.name) or nil,
+      links_pos = is_linked and string.len(hl.name) or nil,
+      unused_pos = unused_pos,
     })
   end
   return lines
@@ -129,43 +177,74 @@ local function get_popup_config(content)
   }
 end
 
+-- Create or get buffer for popup
+local function get_or_create_buffer()
+  if not state.bufnr or not vim.api.nvim_buf_is_valid(state.bufnr) then
+    state.bufnr = vim.api.nvim_create_buf(false, true)
+    vim.bo[state.bufnr].bufhidden = "wipe"
+  end
+  return state.bufnr
+end
+
+-- Set buffer content
+local function set_buffer_content(bufnr, content)
+  local lines = {}
+  for _, item in ipairs(content) do
+    table.insert(lines, type(item) == "string" and item or item.text)
+  end
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+end
+
+-- Apply highlights to buffer
+local function apply_highlights(bufnr, content)
+  for i, item in ipairs(content) do
+    if type(item) == "string" or not item.hl_group then
+      goto continue
+    end
+
+    local line_idx = i - 1
+    if item.links_pos then
+      -- Highlight the source highlight group name
+      pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, 0, item.links_pos)
+      -- Highlight the " links to " part with Comment color
+      pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, "Comment", line_idx, item.links_pos, item.links_pos + 10)
+      -- Highlight the target highlight group name
+      if item.unused_pos then
+        -- Highlight target name up to the unused indicator
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, item.links_pos + 10, item.unused_pos)
+        -- Highlight the " (unused)" part with Comment color
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, "Comment", line_idx, item.unused_pos, -1)
+      else
+        -- Highlight the target name normally
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, item.links_pos + 10, -1)
+      end
+    else
+      pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, 0, -1)
+    end
+
+    ::continue::
+  end
+end
+
 local function update_popup()
   if not state.enabled then return end
 
   local highlights = get_highlights()
   local content = format_highlights(highlights)
 
+  -- Close existing window
   if state.winid and vim.api.nvim_win_is_valid(state.winid) then
     vim.api.nvim_win_close(state.winid, true)
   end
 
-  if not state.bufnr or not vim.api.nvim_buf_is_valid(state.bufnr) then
-    state.bufnr = vim.api.nvim_create_buf(false, true)
-    vim.bo[state.bufnr].bufhidden = "wipe"
-  end
+  -- Prepare buffer
+  local bufnr = get_or_create_buffer()
+  set_buffer_content(bufnr, content)
+  apply_highlights(bufnr, content)
 
-  local lines = {}
-  for _, item in ipairs(content) do
-    table.insert(lines, type(item) == "string" and item or item.text)
-  end
-  vim.api.nvim_buf_set_lines(state.bufnr, 0, -1, false, lines)
-
-  for i, item in ipairs(content) do
-    if type(item) ~= "string" and item.hl_group then
-      local line_idx = i - 1
-
-      if item.links_pos then
-        pcall(vim.api.nvim_buf_add_highlight, state.bufnr, -1, item.hl_group, line_idx, 0, item.links_pos)
-        pcall(vim.api.nvim_buf_add_highlight, state.bufnr, -1, "Comment", line_idx, item.links_pos, item.links_pos + 10)
-        pcall(vim.api.nvim_buf_add_highlight, state.bufnr, -1, item.hl_group, line_idx, item.links_pos + 10, -1)
-      else
-        pcall(vim.api.nvim_buf_add_highlight, state.bufnr, -1, item.hl_group, line_idx, 0, -1)
-      end
-    end
-  end
-
+  -- Create new window
   local config = get_popup_config(content)
-  state.winid = vim.api.nvim_open_win(state.bufnr, false, config)
+  state.winid = vim.api.nvim_open_win(bufnr, false, config)
   vim.wo[state.winid].winhl = "Normal:NormalFloat,Border:FloatBorder"
   vim.wo[state.winid].wrap = false
 end
