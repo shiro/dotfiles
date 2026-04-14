@@ -195,8 +195,23 @@ local function set_buffer_content(bufnr, content)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 end
 
+-- Create a highlight group for unused targets (same color as Comment with strikethrough)
+local function create_unused_highlight()
+  local unused_hl_name = "ColorInspectorUnused"
+  -- Get the Comment highlight group's color
+  local comment_hl = vim.api.nvim_get_hl(0, { name = "Comment" })
+  vim.api.nvim_set_hl(0, unused_hl_name, {
+    fg = comment_hl.fg,
+    ctermfg = comment_hl.ctermfg,
+    strikethrough = true
+  })
+  return unused_hl_name
+end
+
 -- Apply highlights to buffer
 local function apply_highlights(bufnr, content)
+  local unused_hl = create_unused_highlight()
+
   for i, item in ipairs(content) do
     if type(item) == "string" or not item.hl_group then
       goto continue
@@ -204,17 +219,20 @@ local function apply_highlights(bufnr, content)
 
     local line_idx = i - 1
     if item.links_pos then
-      -- Highlight the source highlight group name
-      pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, 0, item.links_pos)
-      -- Highlight the " links to " part with Comment color
-      pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, "Comment", line_idx, item.links_pos, item.links_pos + 10)
-      -- Highlight the target highlight group name
       if item.unused_pos then
-        -- Highlight target name up to the unused indicator
-        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, item.links_pos + 10, item.unused_pos)
+        -- If target is unused, highlight the source with grey and strikethrough too
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, unused_hl, line_idx, 0, item.links_pos)
+        -- Highlight the " links to " part with Comment color
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, "Comment", line_idx, item.links_pos, item.links_pos + 10)
+        -- Highlight target name with grey and strikethrough for unused targets
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, unused_hl, line_idx, item.links_pos + 10, item.unused_pos)
         -- Highlight the " (unused)" part with Comment color
         pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, "Comment", line_idx, item.unused_pos, -1)
       else
+        -- Highlight the source highlight group name normally
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, 0, item.links_pos)
+        -- Highlight the " links to " part with Comment color
+        pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, "Comment", line_idx, item.links_pos, item.links_pos + 10)
         -- Highlight the target name normally
         pcall(vim.api.nvim_buf_add_highlight, bufnr, -1, item.hl_group, line_idx, item.links_pos + 10, -1)
       end

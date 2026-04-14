@@ -8,6 +8,15 @@ local M = {
         flavour = "macchiato",
         transparent_background = true,
         auto_integrations = true,
+        lsp_styles = {
+          enabled = true,
+          underlines = {
+            errors = { "underline" },
+            hints = { "underline" },
+            warnings = { "underline" },
+            information = { "underline" },
+          },
+        },
         custom_highlights = function(colors)
           return {
             NormalFloat = { bg = colors.base },
@@ -20,7 +29,6 @@ local M = {
             -- Ensure other popup titles have no background
             FloatTitle = { bg = "NONE" },
 
-            String = { fg = colors.flamingo },
             -- ["@lsp.type.enumMember"] = { fg = colors.yellow },
             -- ["@function.macro"] = { fg = colors.yellow },
             -- ["@property"] = { fg = colors.pink },
@@ -43,7 +51,17 @@ local M = {
             ["@tag"] = { fg = colors.blue },
             ["@tag.attribute"] = { fg = colors.sky },
             ["@tag.builtin"] = { link = "@tag" },
-            ["@tag.delimiter"] = { link = "@tag" },
+            -- ["@tag.delimiter"] = { link = "@tag" },
+
+            String = { fg = colors.lavender },
+            Delimiter = { link = "Normal" },
+            Operator = { link = "Keyword" },
+            Special = { link = "Keyword" },
+            Constant = { fg = colors.rosewater },
+            ["@variable"] = { fg = colors.flamingo },
+            ["@variable.parameter"] = { fg = colors.pink },
+            ["@punctuation.bracket"] = { link = "Normal" },
+            ["@property"] = { fg = colors.pink },
 
             -- status bar
             WinSeparator = { fg = colors.overlay0 },
@@ -58,6 +76,7 @@ local M = {
 
             DiagnosticUnderlineWarn = { fg = colors.overlay2 },
             DiagnosticUnderlineError = { fg = colors.red },
+            DiagnosticUnnecessary = { italic = true },
           }
         end,
       })
