@@ -7,7 +7,7 @@ local M = {
         use_vim_lsp_config = true,
         preferred_servers = {
           typescriptreact = {
-            -- "ts_ls",
+            "ts_ls",
             "tailwindcss",
             "prettierd",
             "eslint",

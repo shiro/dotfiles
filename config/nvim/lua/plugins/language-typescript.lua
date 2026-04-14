@@ -7,10 +7,10 @@ local M = {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       require("typescript-tools").setup({
         capabilities = capabilities,
-        on_attach = function(client, bufnr)
-          local semantic_fix = require("utils.semantic-tokens-fix")
-          semantic_fix.setup_typescript_tools_semantic_tokens_fix(client, bufnr)
-        end,
+        -- on_attach = function(client, bufnr)
+        --   local semantic_fix = require("utils.semantic-tokens-fix")
+        --   semantic_fix.setup_typescript_tools_semantic_tokens_fix(client, bufnr)
+        -- end,
         settings = {
           -- publish_diagnostic_on = "change",
           tsserver_file_preferences = { importModuleSpecifierPreference = "non-relative" },

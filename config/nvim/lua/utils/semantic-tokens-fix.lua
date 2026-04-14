@@ -54,18 +54,6 @@ local function apply_semantic_tokens_manually(client, bufnr, result)
   end
 end
 
--- -- Check if semantic tokens are being applied by the built-in processor
--- local function check_semantic_tokens_applied(bufnr)
---   local namespaces = vim.api.nvim_get_namespaces()
---   for name, ns_id in pairs(namespaces) do
---     if name:match("vim_lsp_semantic_tokens") then
---       local extmarks = vim.api.nvim_buf_get_extmarks(bufnr, ns_id, 0, -1, {})
---       if #extmarks > 0 then return true end
---     end
---   end
---   return false
--- end
-
 -- Main workaround function for typescript-tools semantic tokens
 ---@param client table LSP client object
 ---@param bufnr number Buffer number
