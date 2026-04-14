@@ -122,6 +122,9 @@ local M = {
             ["New Obsidian note"] = { ft = { "markdown" }, command = function() vim.cmd("ObsidianNew") end },
             ["Close tab"] = { command = function() vim.cmd("tabclose") end },
             ["Go to next tab"] = { command = function() vim.cmd("tabnext") end },
+            ["Toggle color inspector"] = { command = function()
+              require("utils.color-inspector").toggle()
+            end },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
             ["Show PR"] = { command = function() vim.cmd("Octo pr") end },
             ["Github notifications"] = { command = function() vim.cmd("Octo notification list") end },
@@ -201,6 +204,14 @@ local M = {
             ["Organize imports"] = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").organize_imports() end,
+              -- command = function()
+              --   local params = {
+              --     command = "_typescript.organizeImports",
+              --     arguments = { vim.api.nvim_buf_get_name(0) },
+              --     title = "",
+              --   }
+              --   vim.lsp.buf.execute_command(params)
+              -- end,
             },
             ["Rename directory"] = {
               command = function() require("utils.typescript").rename_directory() end,

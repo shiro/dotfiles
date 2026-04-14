@@ -137,7 +137,12 @@ fn main() -> Result<()> {
                 .about("garbage collect")
                 .arg(clap::arg!(-l --list "list dead derivations instead of deleting them")),
         )
-        .subcommand(Command::new("update").about("update the flake to the latest version"));
+        .subcommand(Command::new("update").about("update the flake to the latest version"))
+        .subcommand(
+            Command::new("lookup")
+                .about("lookup a file in PATH, follow symlinks and find nix store folder if applicable")
+                .arg(clap::arg!(<file> "file to lookup")),
+        );
     let matches = &cmd.get_matches();
 
     match matches.subcommand() {
@@ -358,7 +363,10 @@ fn main() -> Result<()> {
             ))?;
         }
         Some(("dev", _)) => {
-            if std::env::var("TMP").unwrap_or_default().starts_with("/tmp/nix-shell-") {
+            if std::env::var("TMP")
+                .unwrap_or_default()
+                .starts_with("/tmp/nix-shell-")
+            {
                 Err(anyhow!("Already in a dev shell, nesting is forbidden"))?;
             }
 
@@ -390,6 +398,34 @@ fn main() -> Result<()> {
         }
         Some(("update", _)) => {
             run_cmd_interactive(&format!("nix flake update"))?;
+        }
+        Some(("lookup", matches)) => {
+            let file = matches.get_one::<String>("file").unwrap();
+
+            let location = Exec::cmd("which")
+                .arg(file)
+                .success_output()
+                .map_err(|_| anyhow!("'{}' not found in PATH", file))?
+                .stdout_str()
+                .trim()
+                .to_string();
+
+            // Follow symlinks to get the final location
+            let final_location = Path::new(&location)
+                .canonicalize()
+                .map_err(|e| anyhow!("Failed to resolve symlinks: {}", e))?
+                .to_string_lossy()
+                .to_string();
+
+            // Check if the final location is in /nix/store
+            if final_location.starts_with("/nix/store/") {
+                // Extract the full store path: /nix/store/<hash-name>/... -> /nix/store/<hash-name>
+                if let Some(store_path) = final_location.strip_prefix("/nix/store/") {
+                    if let Some(folder_name) = store_path.split('/').next() {
+                        println!("/nix/store/{}", folder_name);
+                    }
+                }
+            }
         }
         _ => unreachable!(),
     };

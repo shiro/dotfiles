@@ -7,17 +7,18 @@ local M = {
         use_vim_lsp_config = true,
         preferred_servers = {
           typescriptreact = {
+            -- "ts_ls",
             "tailwindcss",
             "prettierd",
             "eslint",
             "tailwindcss",
           },
           typescript = {
-            "typescript-language-server",
+            -- "typescript-language-server", -- Using typescript-tools instead
             "eslint",
           },
           javascript = {
-            "typescript-language-server",
+            -- "typescript-language-server", -- Using typescript-tools instead
             "eslint",
           },
           python = { "pyright" },
@@ -44,6 +45,15 @@ local M = {
           kotlin_language_server = {
             init_options = {
               storagePath = vim.env.XDG_DATA_HOME .. "/" .. "nvim-data",
+            },
+          },
+          ts_ls = {
+            init_options = {
+              preferences = {
+                importModuleSpecifierPreference = "non-relative",
+                includeCompletionsForModuleExports = true,
+                includeCompletionsForImportStatements = true,
+              },
             },
           },
         },

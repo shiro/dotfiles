@@ -16,7 +16,9 @@ local M = {
             FloatBorder = { bg = colors.base },
             TelescopePromptBorder = { bg = colors.base },
             TelescopeBorder = { bg = colors.base },
-            TelescopeTitle = { bg = colors.base },
+            TelescopeTitle = { bg = "NONE" },
+            -- Ensure other popup titles have no background
+            FloatTitle = { bg = "NONE" },
 
             String = { fg = colors.flamingo },
             -- ["@lsp.type.enumMember"] = { fg = colors.yellow },
@@ -30,6 +32,11 @@ local M = {
             -- Number = { fg = colors.yellow },
             -- Keyword = { fg = colors.rosewater },
             -- Number = { link = "String" },
+
+            -- ["@lsp.type.variable.readonly.local"] = { fg = colors.sapphire },
+            -- ["@lsp.type.variable.declaration.readonly.local"] = { fg = colors.sapphire },
+            -- ["@variable.parameter"] = { fg = colors.red },
+
             Function = { fg = colors.peach },
 
             -- typescriptVariableDeclaration = { fg = colors.red },
