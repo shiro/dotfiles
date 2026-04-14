@@ -122,9 +122,9 @@ local M = {
             ["New Obsidian note"] = { ft = { "markdown" }, command = function() vim.cmd("ObsidianNew") end },
             ["Close tab"] = { command = function() vim.cmd("tabclose") end },
             ["Go to next tab"] = { command = function() vim.cmd("tabnext") end },
-            ["Toggle color inspector"] = { command = function()
-              require("utils.color-inspector").toggle()
-            end },
+            ["Toggle color inspector"] = {
+              command = function() require("utils.color-inspector").toggle() end,
+            },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
             ["Show PR"] = { command = function() vim.cmd("Octo pr") end },
             ["Github notifications"] = { command = function() vim.cmd("Octo notification list") end },
