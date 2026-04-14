@@ -31,11 +31,12 @@ function M.hot_reload_listen(name)
       if not _G.plugins_to_reload then return end
 
       local original_notify = vim.notify
+      ---@diagnostic disable-next-line: duplicate-set-field
       vim.notify = function() end
 
-      -- vim.cmd("mkview")
+      local view_info = vim.fn.winsaveview()
       require("lazy").reload({ plugins = vim.tbl_keys(_G.plugins_to_reload) })
-      -- vim.cmd("loadview")
+      vim.fn.winrestview(view_info)
 
       vim.notify = original_notify
       _G.plugins_to_reload = {}
