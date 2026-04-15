@@ -38,9 +38,7 @@ local M = {
         -- auto-approve specific tools only
         auto_approve_tool_permissions = true,
       },
-      selection = {
-        enabled = false,
-      },
+      selection = { enabled = false },
       mappings = {
         sidebar = {
           close_from_input = { normal = "<esc>" },
