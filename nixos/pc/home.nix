@@ -1,0 +1,138 @@
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+
+{
+  imports = [
+    inputs.catppuccin.homeModules.catppuccin
+    inputs.whisp-away.nixosModules.home-manager
+  ];
+
+  catppuccin.alacritty.enable = true;
+  catppuccin.alacritty.flavor = "macchiato";
+
+  home.username = "shiro";
+  home.homeDirectory = "/home/shiro";
+
+  # i18n.inputMethod = {
+  #   enabled = "fcitx5";
+  #
+  #   # fcitx5.waylandFrontend = true;
+  #
+  #   fcitx5.addons = with pkgs; [
+  #       fcitx5-mozc
+  #       # fcitx5-lua
+  #       fcitx5-gtk
+  #
+  #       fcitx5-configtool
+  #       # fcitx5-with-addons
+  #   ];
+  # };
+
+  qt = {
+    enable = true;
+    style = {
+      name = "kvantum";
+    };
+    platformTheme.name = "kvantum";
+  };
+
+  catppuccin.kvantum.assertStyle = true;
+  catppuccin.kvantum.enable = true;
+  catppuccin.kvantum.apply = true;
+
+  home.packages = [ ];
+
+  # Home Manager is pretty good at managing dotfiles. The primary way to manage
+  # plain files is through 'home.file'.
+  home.file = {
+    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+    # # symlink to the Nix store copy.
+    # ".screenrc".source = dotfiles/screenrc;
+    # "wallpapers/.screenrc".source = dotfiles/screenrc;
+
+    # # You can also set the file content immediately.
+    # ".gradle/gradle.properties".text = ''
+    #   org.gradle.console=verbose
+    #   org.gradle.daemon.idletimeout=3600000
+    # '';
+  };
+
+  # Home Manager can also manage your environment variables through
+  # 'home.sessionVariables'. If you don't want to manage your shell through Home
+  # Manager then you have to manually source 'hm-session-vars.sh' located at
+  # either
+  #
+  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+  #
+  # or
+  #
+  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
+  #
+  # or
+  #
+  #  /etc/profiles/per-user/root/etc/profile.d/hm-session-vars.sh
+  #
+  home.sessionVariables = {
+    # EDITOR = "emacs";
+  };
+
+  # let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
+  home.stateVersion = "25.11";
+
+  services.udiskie.enable = true; # auto-mount disks
+
+  # services.kanshi = {
+  #   enable = true;
+  #   systemdTarget = "xdg-desktop-portal-hyprland.service";
+  #   profiles = {
+  #     laptop = {
+  #       outputs = [{
+  #         criteria = "eDP-1";
+  #         scale = 2.0;
+  #       }];
+  #       exec = "notify-send laptop";
+  #     };
+  #     work = {
+  #       outputs = [
+  #         {
+  #           criteria = "eDP-1";
+  #           position = "auto-down";
+  #           scale = 2.0;
+  #         }
+  #         {
+  #           criteria = "DP-4";
+  #           position = "auto-up";
+  #           scale = 1.6;
+  #         }
+  #       ];
+  #       exec = "notify-send work";
+  #       exec wlr-randr --output eDP-1 --right-of HDMI-A-1
+  #     };
+  #   };
+  # };
+
+  services.whisp-away = {
+    enable = true;
+    defaultModel = "small.en";
+    defaultBackend = "faster-whisper";
+  };
+
+  # firefox yazi
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals = [ pkgs.xdg-desktop-portal-termfilechooser ];
+  #   config = {
+  #     common = {
+  #       default = [ "gtk" ];
+  #       "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+  #     };
+  #   };
+  # };
+}
