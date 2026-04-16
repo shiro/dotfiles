@@ -6,6 +6,59 @@ local M = {
   --
 }
 
+-- Backwards compatible wrapper for vim.treesitter.get_parser
+local function getParser(buf)
+  local success, result = pcall(function()
+    -- Try the newer API first (Neovim 0.9+)
+    return vim.treesitter.get_parser(buf)
+  end)
+
+  if success and result then
+    return result
+  end
+
+  -- Fallback for older versions
+  success, result = pcall(function()
+    -- Try older API variations
+    if vim.treesitter.get_parser then
+      return vim.treesitter.get_parser(buf, nil)
+    end
+    return nil
+  end)
+
+  if success and result then
+    return result
+  end
+
+  -- Final fallback - try to get language and create parser
+  success, result = pcall(function()
+    local ft = vim.api.nvim_buf_get_option(buf, 'filetype')
+    local lang = ft
+
+    -- Map common filetypes to treesitter languages
+    local ft_to_lang = {
+      javascript = 'javascript',
+      typescript = 'typescript',
+      javascriptreact = 'javascript',
+      typescriptreact = 'typescript',
+      jsx = 'javascript',
+      tsx = 'typescript'
+    }
+
+    if ft_to_lang[ft] then
+      lang = ft_to_lang[ft]
+    end
+
+    if vim.treesitter.get_parser then
+      return vim.treesitter.get_parser(buf, lang)
+    end
+
+    return nil
+  end)
+
+  return success and result or nil
+end
+
 local import_query = [[
 ((import_statement) @node) 
 ]]
@@ -22,7 +75,7 @@ function GetClipboard() return vim.fn.getreg("+") end
 function GetIdentsInSelection(buf, sel)
   local idents = {}
 
-  local language_tree = vim.treesitter.get_parser(buf)
+  local language_tree = getParser(buf)
   if not language_tree then return {} end
 
   local root = language_tree:trees()[1]:root()
@@ -56,7 +109,7 @@ end
 local function GetImportNodes(buf)
   local imports = {}
 
-  local language_tree = vim.treesitter.get_parser(buf)
+  local language_tree = getParser(buf)
   if not language_tree then return {} end
 
   local root = language_tree:trees()[1]:root()
@@ -117,7 +170,7 @@ local function GetImportNodes(buf)
 end
 
 local function add_import(buf, import)
-  local language_tree = vim.treesitter.get_parser(buf)
+  local language_tree = getParser(buf)
   local row = 0
   local col = 0
   language_tree:for_each_tree(function(tree, lt)
