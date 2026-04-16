@@ -43,7 +43,6 @@ local M = {
 
             -- ["@lsp.type.variable.readonly.local"] = { fg = colors.sapphire },
             -- ["@lsp.type.variable.declaration.readonly.local"] = { fg = colors.sapphire },
-            -- ["@variable.parameter"] = { fg = colors.red },
 
             Function = { fg = colors.peach },
 
@@ -59,7 +58,7 @@ local M = {
             Special = { link = "Keyword" },
             Constant = { fg = colors.rosewater },
             ["@variable"] = { fg = colors.flamingo },
-            ["@variable.parameter"] = { fg = colors.pink },
+            ["@variable.parameter"] = { fg = colors.maroon },
             ["@punctuation.bracket"] = { link = "Normal" },
             ["@property"] = { fg = colors.pink },
 
