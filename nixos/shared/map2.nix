@@ -7,8 +7,9 @@
 }:
 
 let
+  cfg = config.services.map2;
   hyprland_pkg = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-  map2_wheel = pkgs.python313.pkgs.buildPythonPackage rec {
+  map2_wheel = pkgs.python313.pkgs.buildPythonPackage {
     version = "2.0.20";
     pname = "map2";
     format = "wheel";
@@ -28,39 +29,51 @@ let
 
 in
 {
-  systemd.user.services.map2 = {
-    enable = true;
-    wantedBy = [ "xsession.target" ];
-    partOf = [ "graphical-session.target" ];
-    path = with pkgs; [
-      python_map2_pkg
-      # pkgs.zsh
-      hyprland_pkg
-      evtest
-      procps
-      sudo
-      libnotify
-      grim
-      ydotool
-      wl-clipboard
+  options.services.map2 = {
+    enable = lib.mkEnableOption "map2 service";
 
-      xkbcomp
-      xkbutils
-      libxkbcommon
-    ];
-
-    serviceConfig = {
-      ExecStart = "${python_map2_pkg}/bin/python /home/shiro/project/mappings/main/macbook2018.py";
-      Restart = "always";
-      RestartSec = "5s";
+    mappingScript = lib.mkOption {
+      type = lib.types.str;
+      default = "/home/shiro/project/mappings/main/macbook2018.py";
+      description = "Path to the mapping script to execute";
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    python_map2_pkg
-  ];
+  config = lib.mkIf cfg.enable {
+    systemd.user.services.map2 = {
+      enable = true;
+      wantedBy = [ "xsession.target" ];
+      partOf = [ "graphical-session.target" ];
+      path = with pkgs; [
+        python_map2_pkg
+        # pkgs.zsh
+        hyprland_pkg
+        evtest
+        procps
+        sudo
+        libnotify
+        grim
+        ydotool
+        wl-clipboard
 
-  services.udev.extraRules = ''
-    KERNEL=="uinput", MODE="0660", GROUP="input"
-  '';
+        xkbcomp
+        xkbutils
+        libxkbcommon
+      ];
+
+      serviceConfig = {
+        ExecStart = "${python_map2_pkg}/bin/python ${cfg.mappingScript}";
+        Restart = "always";
+        RestartSec = "5s";
+      };
+    };
+
+    environment.systemPackages = with pkgs; [
+      python_map2_pkg
+    ];
+
+    services.udev.extraRules = ''
+      KERNEL=="uinput", MODE="0660", GROUP="input"
+    '';
+  };
 }

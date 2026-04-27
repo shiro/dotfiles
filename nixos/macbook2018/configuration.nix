@@ -39,6 +39,11 @@ in
     "${shared}/map2.nix"
   ];
 
+  services.map2 = {
+    enable = true;
+    mappingScript = "/home/shiro/project/mappings/main/macbook2018.py";
+  };
+
   hardware.firmware = [
     (pkgs.stdenvNoCC.mkDerivation (final: {
       name = "brcm-firmware";
