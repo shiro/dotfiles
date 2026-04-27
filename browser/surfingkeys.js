@@ -33,7 +33,14 @@ mapkey("p", "Open the clipboard's URL in the current tab", function () {
   });
 });
 
+// quit and save in embedded editor
 aceVimMap("<Esc>", ":wq", "normal");
+
+// open links from insert mode
+api.imapkey('<Ctrl-[>', 'Open a link', function() {
+    api.Hints.create("", api.Hints.dispatchMouseClick, {tabbed: true, active: true});
+})
+
 
 map("B", "b");
 mapkey("b", "Open a Bookmark in current tab", function () {
