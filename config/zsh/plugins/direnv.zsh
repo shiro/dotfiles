@@ -13,7 +13,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
     [[ "$AUTO_INIT_NIX_SHELL" == 1 ]] && return 0
     [[ "$TMP" == /tmp/nix-shell-* ]] && return 0
 
-    local ignored_commands=(cd echo s proj r rm dot ls la g ga gac gam gd gf gp gpf gcp gpl gr gre gl ggo)
+    local ignored_commands=(cd echo export s proj r rm dot ls la g ga gac gam gd gf gp gpf gcp gpl gr gre gl ggo)
     local command=("${1// */}")
 
     # don't do anyting if command should be ignored
