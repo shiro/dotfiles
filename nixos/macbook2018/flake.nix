@@ -3,7 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprland.url = "github:hyprwm/Hyprland";
+    whisp-away.url = "github:madjinn/whisp-away";
+    catppuccin.url = "github:catppuccin/nix";
     nixpkgs-rofi-blocks.url = "github:edenkras/nixpkgs";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -27,22 +29,35 @@
     ];
   };
 
-  outputs = { self, nixpkgs, nixpkgs-rofi-blocks, nixos-hardware, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-rofi-blocks,
+      nixos-hardware,
+      ...
+    }@inputs:
     let
       overlay-rofi-blocks = final: prev: {
-        rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.system};
+        rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.stdenv.hostPlatform.system};
       };
     in
     {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; };
-          modules = [ 
-            nixos-hardware.nixosModules.apple-t2
-            ({ ... }: { nixpkgs.overlays = [ overlay-rofi-blocks ]; })
-            ./configuration.nix
-            inputs.home-manager.nixosModules.default
-          ];
-        };
+        specialArgs = { inherit inputs; };
+        modules = [
+          nixos-hardware.nixosModules.apple-t2
+          (
+            { ... }:
+            {
+              nixpkgs.overlays = [ overlay-rofi-blocks ];
+            }
+          )
+          ./configuration.nix
+          inputs.catppuccin.nixosModules.catppuccin
+          inputs.home-manager.nixosModules.default
+        ];
+      };
 
     };
 }

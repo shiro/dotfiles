@@ -6,45 +6,8 @@
   ...
 }:
 let
-  hyprland_pkg = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  hyprland_cmd = "${hyprland_pkg}/bin/start-hyprland";
   username = "shiro";
-  # pkgs.rofi-blocks.rofi-blocks
-
-  rofi_plugin_blocks = (
-    pkgs.rofi-blocks.rofi-blocks.override {
-      rofi-unwrapped = pkgs.rofi-unwrapped;
-    }
-  );
-  rofi_package = pkgs.rofi.override { plugins = [ rofi_plugin_blocks ]; };
-
-  python_map2_package =
-    let
-      map2_wheel = pkgs.python312.pkgs.buildPythonPackage rec {
-        version = "2.0.20";
-        pname = "map2";
-        format = "wheel";
-        src = ./map2-2.1.1-cp312-cp312-manylinux_2_39_x86_64.whl;
-
-        # version = "2.0.19";
-        # pname = "
-        # format = "wheel";
-        # src = pkgs.fetchPypi {
-        #     inherit pname version format;
-        #     sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
-        #     dist = "cp312";
-        #     python = "cp312";
-        #     abi = "cp312";
-        #     platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-        # };
-      };
-    in
-    pkgs.python312.withPackages (
-      python-pkgs: with python-pkgs; [
-        pip
-        map2_wheel
-      ]
-    );
+  shared = "${builtins.getEnv "DOTFILES"}/nixos/shared";
 
   mpdConf = pkgs.writeText "mpd.conf" ''
     audio_output {
@@ -64,12 +27,16 @@ let
   '';
 in
 {
+  _module.args = {
+    username = username;
+  };
+
   imports = [
     /etc/nixos/hardware-configuration.nix
     inputs.home-manager.nixosModules.default
-    # "${
-    #   builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }
-    # }/apple/t2"
+    "${shared}/wayland-hyprland.nix"
+    "${shared}/ime.nix"
+    "${shared}/map2.nix"
   ];
 
   hardware.firmware = [
@@ -82,10 +49,30 @@ in
     }))
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = false;
-  boot.loader.efi.efiSysMountPoint = "/boot"; # make sure to change this to your EFI partition!
+  boot = {
+    plymouth.enable = true;
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    kernelParams = [
+      "quiet"
+      "udev.log_level=3"
+      "systemd.show_status=auto"
+    ];
+    loader.timeout = 0;
+  };
+  catppuccin.plymouth.enable = true;
+
+  boot.loader = {
+    grub = {
+      enable = true;
+      device = "nodev";
+      efiSupport = true;
+      gfxmodeEfi = "2880x1800";
+    };
+    efi.canTouchEfiVariables = true;
+  };
+  catppuccin.grub.enable = true;
+  catppuccin.tty.enable = true;
 
   # boot.loader = {
   #   grub = {
@@ -112,21 +99,6 @@ in
   # $ docker run --privileged --rm tonistiigi/binfmt --install all
   # virtualisation.docker.enable = true;
 
-  services.greetd = {
-    enable = true;
-    restart = true;
-    settings = {
-      initial_session = {
-        command = "${hyprland_cmd}";
-        user = "${username}";
-      };
-      default_session = {
-        command = "${hyprland_cmd}";
-        user = "${username}";
-      };
-    };
-  };
-
   systemd.user.services.ssh-agent = {
     enable = true;
     wantedBy = [ "default.target" ];
@@ -141,33 +113,6 @@ in
     };
   };
   # programs.ssh.startAgent = true;
-
-  systemd.user.services.map2 = {
-    enable = true;
-    wantedBy = [ "xsession.target" ];
-    partOf = [ "graphical-session.target" ];
-    path = [
-      pkgs.zsh
-      hyprland_pkg
-      pkgs.evtest
-      pkgs.procps
-      pkgs.killall
-    ];
-
-    serviceConfig = {
-      # Environment = [
-      #   ''LD_LIBRARY_PATH=${python_map2_package}/lib/python3.12/site-packages/map2.libs''
-      #   "FOO=bar"
-      # ];
-      # Environment = [
-      # ''VIRTUAL_ENV=/home/shiro/project/map2/venv'' ];
-      # ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-      # ExecStart = ''/run/wrappers/bin/sudo -E /home/shiro/project/map2/venv/bin/python /home/shiro/project/mappings/next/macbook2018.py'';
-      ExecStart = "${pkgs.zsh}/bin/zsh -c 'export LD_LIBRARY_PATH=${python_map2_package}/lib/python3.12/site-packages/map2.libs; ${python_map2_package}/bin/python /home/shiro/project/mappings/main/macbook2018.py'";
-      Restart = "always";
-      RestartSec = "5s";
-    };
-  };
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -237,51 +182,12 @@ in
   };
   programs.git.enable = true;
 
-  programs.hyprland = {
-    package = hyprland_pkg;
-    enable = true;
-    xwayland.enable = true;
-  };
-  programs.waybar = {
-    enable = true;
-  };
-
   environment.sessionVariables = {
     # make electron use wayland
     NIXOS_OZONE_WL = "1";
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";
     # XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
   };
-
-  services.xserver.enable = true;
-  # services.xserver.exportConfiguration = true;
-  # services.xserver.xkb = {
-  #   layout = "rabbit";
-  #   # xkbVariant = "workman,";
-  #   # xkbOptions = "grp:win_space_toggle";
-  # };
-  #
-  services.xserver.xkb.layout = "rabbit";
-  services.xserver.xkb.extraLayouts.rabbit = {
-    description = "US layout (rabbit)";
-    languages = [ "eng" ];
-    symbolsFile = /home/shiro/.xkb/symbols/rabbit;
-  };
-
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      # fcitx5-mozc
-      fcitx5-mozc-ut
-      fcitx5-gtk
-      qt6Packages.fcitx5-configtool
-    ];
-    fcitx5.waylandFrontend = true;
-  };
-
-  i18n.defaultLocale = "en_US.UTF-8";
-  # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
 
   programs.firefox = {
     enable = true;
@@ -320,8 +226,8 @@ in
       mpv
       nsxiv
       dragon-drop
-      nodejs_22
-      nodejs_22.pkgs.pnpm
+      nodejs_22 # node
+      pnpm # node package manager
       hub
       yarn
       go
@@ -329,45 +235,29 @@ in
       jq
       unzip
       dex
-      mpd
       xournalpp
       killall
-      ncmpcpp
-      mixxc
       aichat
       gh
       awscli2
       # libreoffice-qt6-fresh
-      xorg.xev
-      stylua
-      lua-language-server
 
-      # screenshot
-      grim
-      slurp
-      hyprpicker
       chromium
       cached-nix-shell
-
-      # branchctl
-      # suyu.packages.x86_64-linux.suyu
 
       # vim deps
       lua51Packages.rocks-nvim
       lua51Packages.lua
+      stylua
+      lua-language-server
+      tree-sitter
+      gnumake # needed for nvim plugin build
+      gcc # compiler
     ];
   };
 
-  fonts.packages = with pkgs; [
-    noto-fonts-cjk-sans
-    nerd-fonts.hack
-    nerd-fonts.noto
-    # (nerdfonts.override { fonts = [ "Hack" "Noto" ]; })
-  ];
-
   environment.systemPackages = with pkgs; [
     nil # nix language server (nvim can't install it)
-    alacritty
     cliphist
     fzf
     gcc
@@ -375,70 +265,31 @@ in
     bottom
     ranger
     silver-searcher
-    brightnessctl
-    ripdrag
     yazi
 
     xkeyboard_config
     libinput
     evtest
     # spice-vdagent
-    # (let map2 = python312.pkgs.buildPythonPackage rec {
-    #   version = "2.0.19";
-    #   pname = "map2";
-    #   format = "wheel";
-    #   src = fetchPypi {
-    #     inherit pname version format;
-    #     sha256 = "af1fb04fb753fcd8a213c96279cc32c4e378a1f74a6250fb814f3ca3c5caf69b";
-    #     dist = "cp312";
-    #     python = "cp312";
-    #     abi = "cp312";
-    #     platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
-    #   };
-    # };
-    # python312.withPackages (python-pkgs: [
-    #   python-pkgs.requests
-    # ])
-    # python_custom
-    python_map2_package
     ripgrep
     mako
     tmux
     wget
     zathura
-    hyprpaper
-    hyprlock
     rsync
-    ueberzugpp
-    wl-clipboard
-    xclip
     diff-so-fancy
     highlight
-    # carla
-    pavucontrol
-    rofi_package
     pmutils
-    wofi
     rclone
-    libnotify
-    wf-recorder
     nix-tree
-    pulseaudio # pulse CLI
-    bottles # wine emulation organization
+    # bottles # wine emulation organization
     cloudflared # cloudflare tunnels
 
-    # cursor
-    hyprcursor
-    inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
-    rose-pine-cursor
-    nwg-look
+    xkbcomp
+    xkbutils
 
-    xorg.xkbcomp
-    xorg.xkbutils
     libxkbcommon
     xorg.setxkbmap
-
-    sox # needed for gp.nvim (AI)
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -457,7 +308,6 @@ in
 
   security.rtkit.enable = true;
 
-  services.pipewire.jack.enable = true;
   # services.pipewire.systemWide = true;
 
   # services.udev.extraRules = ''
@@ -465,14 +315,10 @@ in
   #   # SUBSYSTEM=="misc", KERNEL=="uinput", MODE="0660", GROUP="input"
   #
   #   # Assign specific input devices to input group
-  #   # ATTRS{name}=="Gaming Keyboard", SUBSYSTEM=="input", MODE="0644", GROUP="map2"
   # '';
   # boot.initrd.services.udev.rules = ''
-  services.udev.enable = true;
   services.udev.extraRules = ''
     KERNEL=="uinput", MODE="0660", GROUP="input"
-
-    ACTION=="add", SUBSYSTEM=="backlight", MODE="0666", RUN+="${pkgs.brightnessctl}/bin/brightnessctl set 50000"
   '';
 
   # services.pipewire = {

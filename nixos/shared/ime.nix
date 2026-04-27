@@ -17,6 +17,8 @@
     ];
     fcitx5.waylandFrontend = true;
   };
+  # i18n.defaultLocale = "en_US.UTF-8";
+  # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
 
   # services.xserver.xkb.layout = "rabbit";
   # services.xserver.xkb.extraLayouts.rabbit = {
@@ -32,6 +34,22 @@
   #   # xkbVariant = "workman,";
   #   # xkbOptions = "grp:win_space_toggle";
   # };
-#
-}
+  #
 
+  #
+  #   services.xserver.enable = true;
+  # # services.xserver.exportConfiguration = true;
+  # # services.xserver.xkb = {
+  # #   layout = "rabbit";
+  # #   # xkbVariant = "workman,";
+  # #   # xkbOptions = "grp:win_space_toggle";
+  # # };
+  # #
+  #   services.xserver.xkb.layout = "rabbit";
+  #   services.xserver.xkb.extraLayouts.rabbit = {
+  #     description = "US layout (rabbit)";
+  #     languages = [ "eng" ];
+  #     symbolsFile = /home/shiro/.xkb/symbols/rabbit;
+  #   };
+
+}

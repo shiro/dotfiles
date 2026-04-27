@@ -15,9 +15,9 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ./wayland-hyprland.nix
+    ../shared/wayland-hyprland.nix
+    .../shared/ime.nix
     ./map2.nix
-    ./ime.nix
     ./music.nix
   ];
 
