@@ -53,7 +53,10 @@ require("lazy").setup({
 
     { import = "plugins.experimental.react-graph" },
   },
-  rocks = { hererocks = false }, -- recommended if you do not have global installation of Lua 5.1.
+  rocks = {
+    enabled = false,
+    hererocks = true,
+  }, -- recommended if you do not have global installation of Lua 5.1.
   change_detection = {
     enabled = true,
     notify = false,

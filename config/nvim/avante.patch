@@ -1,0 +1,66 @@
+diff --git a/lua/avante/providers/bedrock.lua b/lua/avante/providers/bedrock.lua
+index 3a4752e..560a77d 100644
+--- a/lua/avante/providers/bedrock.lua
++++ b/lua/avante/providers/bedrock.lua
+@@ -146,33 +146,7 @@ function M:parse_curl_args(prompt_opts)
+ 
+   ---@diagnostic disable-next-line: undefined-field
+   local profile = provider_conf.aws_profile
+-  if profile ~= nil and profile ~= "" then
+-    ---@diagnostic disable-next-line: undefined-field
+-    region = provider_conf.aws_region
+-    if not region or region == "" then
+-      Utils.error("Bedrock: no aws_region specified in bedrock config")
+-      return nil
+-    end
+-
+-    local awsCreds = M:get_aws_credentials(region, profile)
+-
+-    access_key_id = awsCreds.access_key_id
+-    secret_access_key = awsCreds.secret_access_key
+-    session_token = awsCreds.session_token
+-  else
+-    -- try to parse credentials from api key
+-    local api_key = self.parse_api_key()
+-    if api_key ~= nil then
+-      local parts = vim.split(api_key, ",")
+-      access_key_id = parts[1]
+-      secret_access_key = parts[2]
+-      region = parts[3]
+-      session_token = parts[4]
+-    else
+-      Utils.error("Bedrock: API key not set correctly")
+-      return nil
+-    end
+-  end
++  region = provider_conf.aws_region
+ 
+   local endpoint
+   if provider_conf.endpoint then
+@@ -188,12 +162,14 @@ function M:parse_curl_args(prompt_opts)
+     endpoint = string.format(
+       "https://bedrock-runtime.%s.amazonaws.com/model/%s/invoke-with-response-stream",
+       region,
+-      encoded_model
++      provider_conf.model
+     )
+   end
+ 
++  local api_key = os.getenv("AWS_BEARER_TOKEN_BEDROCK")
+   local headers = {
+     ["Content-Type"] = "application/json",
++    ["Authorization"] = "Bearer " .. api_key,
+   }
+ 
+   if session_token and session_token ~= "" then headers["x-amz-security-token"] = session_token end
+@@ -203,8 +179,8 @@ function M:parse_curl_args(prompt_opts)
+   local rawArgs = {
+     "--aws-sigv4",
+     string.format("aws:amz:%s:bedrock", region),
+-    "--user",
+-    string.format("%s:%s", access_key_id, secret_access_key),
++    -- "--user",
++    -- string.format("%s:%s", access_key_id, secret_access_key),
+   }
+ 
+   return {

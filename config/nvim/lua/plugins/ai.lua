@@ -74,6 +74,16 @@ local M = {
       },
     },
   },
+  {
+    "nhu/patchr.nvim",
+    opts = {
+      plugins = {
+        ["avante.nvim"] = {
+          "/home/shiro/.dotfiles/config/nvim/avante.patch",
+        },
+      },
+    },
+  },
 }
 
 -- TODO add recents integration
