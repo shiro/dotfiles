@@ -46,8 +46,8 @@ in
       partOf = [ "graphical-session.target" ];
       path = with pkgs; [
         python_map2_pkg
-        # pkgs.zsh
         hyprland_pkg
+        zsh
         evtest
         procps
         sudo
@@ -59,7 +59,12 @@ in
         xkbcomp
         xkbutils
         libxkbcommon
+        xkeyboard-config
       ];
+
+      environment = {
+        XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
+      };
 
       serviceConfig = {
         ExecStart = "${python_map2_pkg}/bin/python ${cfg.mappingScript}";

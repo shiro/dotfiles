@@ -191,7 +191,7 @@ in
     # make electron use wayland
     NIXOS_OZONE_WL = "1";
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";
-    # XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
+    XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
   };
 
   programs.firefox = {
