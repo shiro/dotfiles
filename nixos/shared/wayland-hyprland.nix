@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   inputs,
   username,
@@ -9,13 +7,6 @@
 let
   hyprland_pkg = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   hyprland_cmd = "${hyprland_pkg}/bin/start-hyprland > /dev/null";
-
-  rofi_plugin_blocks = (
-    pkgs.rofi-blocks.rofi-blocks.override {
-      rofi-unwrapped = pkgs.rofi-unwrapped;
-    }
-  );
-  rofi_package = pkgs.rofi.override { plugins = [ rofi_plugin_blocks ]; };
 in
 {
   programs.hyprland = {
@@ -28,25 +19,8 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    alacritty # terminal emulator
     hyprpaper # wallpapers for Hyprland
     hyprlock # lockscreen
-    hyprpicker
-    pavucontrol # pulse audio volume control
-    rofi_package # application search
-    wofi # application search (wayland)
-    dunst # notifications
-    brightnessctl # brightness control
-    wl-clipboard # clipboard access on wayland
-    grim # screenshot utility
-    slurp # region selection for scripting
-    wf-recorder # screen recording
-    ueberzugpp # draw images over TTY
-    pulseaudio # pulse CLI
-    libnotify # send notifications
-    dragon-drop # CLI drag-n-drop
-    ripdrag # CLI drag-n-drop
-    playerctl # browser media play/pause
 
     # cursor
     hyprcursor
@@ -86,10 +60,19 @@ in
     };
   };
 
-  services.udev.enable = true;
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="backlight", MODE="0666", RUN+="${pkgs.brightnessctl}/bin/brightnessctl set 50000"
-  '';
+  systemd.user.services.ssh-agent = {
+    enable = true;
+    wantedBy = [ "default.target" ];
+    path = [ pkgs.openssh ];
+    serviceConfig = {
+      Type = "simple";
+      Environment = [
+        "SSH_AUTH_SOCK=%t/ssh-agent.socket"
+        "DISPLAY=:0"
+      ];
+      ExecStart = "${pkgs.openssh}/bin/ssh-agent -D -a $SSH_AUTH_SOCK";
+    };
+  };
 
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
