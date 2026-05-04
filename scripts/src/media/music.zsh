@@ -44,7 +44,7 @@ case "$command" in
     mpc volume '-5'
     ;;
   library)
-    selected=`ls ~/Music | shuf | wofi -d -i`
+    selected=`ls ~/Music | shuf | rofi -dmenu -i`
     [ -n "$selected" ] && ~/bin/play ~/"Music/$selected"
     ;;
   ui)

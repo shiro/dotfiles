@@ -58,6 +58,44 @@ local M = {
         end
       end
 
+      local pick_git_branch = function(callback)
+        local pickers = require("telescope.pickers")
+        local finders = require("telescope.finders")
+        local conf = require("telescope.config").values
+        local actions = require("telescope.actions")
+        local action_state = require("telescope.actions.state")
+
+        -- get all branches
+        local handle = io.popen("git branch -a --format='%(refname:short)'")
+        local branches = {}
+        if handle then
+          for line in handle:lines() do
+            if line ~= "" then table.insert(branches, line) end
+          end
+          handle:close()
+        end
+
+        -- pick a branch
+        pickers
+          .new({}, {
+            prompt_title = "Select Branch",
+            finder = finders.new_table({
+              results = branches,
+            }),
+            sorter = conf.generic_sorter({}),
+            attach_mappings = function(prompt_bufnr, map)
+              actions.select_default:replace(function()
+                local selected_branch = action_state.get_selected_entry()
+                actions.close(prompt_bufnr)
+
+                if selected_branch then callback(selected_branch.value) end
+              end)
+              return true
+            end,
+          })
+          :find()
+      end
+
       telescope.setup({
         defaults = {
           mappings = {
@@ -127,60 +165,31 @@ local M = {
             },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
             ["Show PR"] = { command = function() vim.cmd("Octo pr") end },
+            ["Change git signs base branch"] = {
+              command = function()
+                pick_git_branch(function(branch_name) require("gitsigns").change_base(branch_name, true) end)
+              end,
+            },
             ["Github notifications"] = { command = function() vim.cmd("Octo notification list") end },
             ["Browse files on branch"] = {
               command = function()
-                local pickers = require("telescope.pickers")
-                local finders = require("telescope.finders")
-                local conf = require("telescope.config").values
-                local actions = require("telescope.actions")
-                local action_state = require("telescope.actions.state")
-
-                -- get all branches
-                local handle = io.popen("git branch -a --format='%(refname:short)'")
-                local branches = {}
-                if handle then
-                  for line in handle:lines() do
-                    if line ~= "" then table.insert(branches, line) end
-                  end
-                  handle:close()
-                end
-
-                -- pick a branch
-                pickers
-                  .new({}, {
-                    prompt_title = "Select Branch",
-                    finder = finders.new_table({
-                      results = branches,
-                    }),
-                    sorter = conf.generic_sorter({}),
+                pick_git_branch(function(branch_name)
+                  -- Open file browser for the selected branch
+                  require("telescope.builtin").find_files({
+                    prompt_title = "Files on " .. branch_name,
+                    cwd = vim.fn.getcwd(),
+                    find_command = { "git", "ls-tree", "-r", "--name-only", branch_name },
                     attach_mappings = function(prompt_bufnr, map)
-                      actions.select_default:replace(function()
-                        local selected_branch = action_state.get_selected_entry()
-                        actions.close(prompt_bufnr)
-
-                        if selected_branch then
-                          -- Open file browser for the selected branch
-                          require("telescope.builtin").find_files({
-                            prompt_title = "Files on " .. selected_branch.value,
-                            cwd = vim.fn.getcwd(),
-                            find_command = { "git", "ls-tree", "-r", "--name-only", selected_branch.value },
-                            attach_mappings = function(prompt_bufnr, map)
-                              require("telescope.actions").select_default:replace(function()
-                                local entry = require("telescope.actions.state").get_selected_entry()
-                                require("telescope.actions").close(prompt_bufnr)
-                                -- Open file using fugitive
-                                if entry then vim.cmd("Gedit " .. selected_branch.value .. ":" .. entry.value) end
-                              end)
-                              return true
-                            end,
-                          })
-                        end
+                      require("telescope.actions").select_default:replace(function()
+                        local entry = require("telescope.actions.state").get_selected_entry()
+                        require("telescope.actions").close(prompt_bufnr)
+                        -- Open file using fugitive
+                        if entry then vim.cmd("Gedit " .. branch_name .. ":" .. entry.value) end
                       end)
                       return true
                     end,
                   })
-                  :find()
+                end)
               end,
             },
             ["Copy GitHub URL"] = {

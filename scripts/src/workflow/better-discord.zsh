@@ -1,13 +1,15 @@
 #!/usr/bin/env zsh
 
-pkill -9 discord
+pkill -f '/discord'
 
 betterdiscordctl install
 betterdiscordctl reinstall
 
 discord &
-sleep 30
-pkill -9 discord
+sleep 10
+pkill -f '/discord'
+
+sleep 5
 
 betterdiscordctl reinstall
 
