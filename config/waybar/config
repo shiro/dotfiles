@@ -1,16 +1,29 @@
 {
-    "output": ["eDP-1", "HDMI-A-1", "Virtual-1"],
+    "output": [
+        "eDP-1",
+        "HDMI-A-1",
+        "Virtual-1"
+    ],
     "layer": "top",
     "position": "top",
     "spacing": 4,
-    "modules-left": ["mpd"],
+    "modules-left": [
+        "mpd"
+    ],
     "modules-center": [],
-    "modules-right": ["tray", "custom/audio-output", "cpu", "memory", "temperature", "backlight", "clock"],
+    "modules-right": [
+        "tray",
+        "custom/audio-output",
+        "battery",
+        "temperature",
+        "backlight",
+        "clock"
+    ],
     "custom/audio-output": {
-      "format": " {} ",
-      "exec": "$HOME/.config/waybar/audio-output",
-      "interval": 3,
-      "on-click": "$HOME/bin/audio-output toggle"
+        "format": " {} ",
+        "exec": "$HOME/.config/waybar/audio-output",
+        "interval": 3,
+        "on-click": "$HOME/bin/audio-output toggle"
     },
     "keyboard-state": {
         "numlock": true,
@@ -24,7 +37,10 @@
     "sway/scratchpad": {
         "format": "{icon} {count}",
         "show-empty": false,
-        "format-icons": ["", ""],
+        "format-icons": [
+            "",
+            ""
+        ],
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
     },
@@ -81,12 +97,26 @@
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC} {icon}",
-        "format-icons": ["", "", ""]
+        "format-icons": [
+            "",
+            "",
+            ""
+        ]
     },
     "backlight": {
         // "device": "acpi_video1",
         "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
     },
     "battery": {
         "states": {
@@ -100,7 +130,13 @@
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
     },
     "battery#bat2": {
         "bat": "BAT2"
@@ -129,7 +165,11 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", "", ""]
+            "default": [
+                "",
+                "",
+                ""
+            ]
         },
         "on-click": "pavucontrol"
     },
@@ -146,4 +186,3 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     }
 }
-
