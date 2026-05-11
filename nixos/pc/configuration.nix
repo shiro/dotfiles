@@ -16,6 +16,7 @@ in
     ./hardware-configuration.nix
 
     "${shared}/general.nix"
+    "${shared}/user.nix"
 
     "${shared}/discord.nix"
     "${shared}/gaming.nix"
@@ -42,14 +43,6 @@ in
     efi.canTouchEfiVariables = true;
   };
 
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    useUserPackages = true;
-    users = {
-      "shiro" = import ./home.nix;
-    };
-  };
-
   services.map2 = {
     enable = true;
     mappingScript = "/home/shiro/mappings/main/pc.py";
@@ -57,20 +50,13 @@ in
 
   networking.hostName = "shiro-main";
 
-  users.users.${username} = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "docker"
-      "input"
-      "ydotool"
-    ];
-    packages = with pkgs; [
+  userPackages =
+    with pkgs;
+    pkgs.lib.mkAfter [
       darktable # image editing
       go # golang
       awscli2
     ];
-  };
 
   environment.systemPackages = with pkgs; [
     davinci-resolve

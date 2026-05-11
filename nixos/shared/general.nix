@@ -54,14 +54,13 @@
   catppuccin.plymouth.enable = true;
   catppuccin.grub.enable = true;
   catppuccin.tty.enable = true;
+  catppuccin.accent = "blue";
+  catppuccin.flavor = "macchiato";
 
   security.sudo.wheelNeedsPassword = false;
   security.rtkit.enable = true;
 
   time.timeZone = "Asia/Tokyo";
-
-  catppuccin.accent = "blue";
-  catppuccin.flavor = "macchiato";
 
   # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
   i18n.defaultLocale = "en_US.UTF-8";

@@ -106,4 +106,50 @@ in
     # make electron use wayland
     NIXOS_OZONE_WL = "1";
   };
+
+  home-manager.users.${username} = {
+    imports = [
+      inputs.catppuccin.homeModules.catppuccin
+    ];
+
+    qt = {
+      enable = true;
+      style.name = "kvantum";
+      platformTheme.name = "kvantum";
+    };
+
+    catppuccin.kvantum.assertStyle = true;
+    catppuccin.kvantum.enable = true;
+    catppuccin.kvantum.apply = true;
+  };
+
+  # services.kanshi = {
+  #   enable = true;
+  #   systemdTarget = "xdg-desktop-portal-hyprland.service";
+  #   profiles = {
+  #     laptop = {
+  #       outputs = [{
+  #         criteria = "eDP-1";
+  #         scale = 2.0;
+  #       }];
+  #       exec = "notify-send laptop";
+  #     };
+  #     work = {
+  #       outputs = [
+  #         {
+  #           criteria = "eDP-1";
+  #           position = "auto-down";
+  #           scale = 2.0;
+  #         }
+  #         {
+  #           criteria = "DP-4";
+  #           position = "auto-up";
+  #           scale = 1.6;
+  #         }
+  #       ];
+  #       exec = "notify-send work";
+  #       exec wlr-randr --output eDP-1 --right-of HDMI-A-1
+  #     };
+  #   };
+  # };
 }

@@ -1,6 +1,7 @@
 {
   pkgs,
   username,
+  inputs,
   ...
 }:
 let
@@ -44,4 +45,16 @@ in
     pulseaudio # pulse CLI
     rofi_package # application search
   ];
+
+  home-manager.users.${username} = {
+    imports = [
+      inputs.whisp-away.nixosModules.home-manager
+    ];
+
+    services.whisp-away = {
+      enable = true;
+      defaultModel = "small.en";
+      defaultBackend = "faster-whisper";
+    };
+  };
 }
