@@ -50,6 +50,11 @@ in
     };
   };
 
+  services.map2 = {
+    enable = true;
+    mappingScript = "/home/shiro/mappings/main/pc.py";
+  };
+
   networking.hostName = "shiro-main";
 
   users.users.${username} = {
