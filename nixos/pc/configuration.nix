@@ -92,6 +92,8 @@ in
   networking.firewall.enable = false;
   networking.extraHosts = ''
     127.0.0.1 pc
+    192.168.1.200 homebox
+    192.168.1.201 proart
   '';
 
   system.stateVersion = "25.11";
