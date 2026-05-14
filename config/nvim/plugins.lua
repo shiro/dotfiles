@@ -36,6 +36,7 @@ require("lazy").setup({
     { import = "plugins.language-markdown" },
     { import = "plugins.language-go" },
     { import = "plugins.language-rust" },
+    { import = "plugins.language-json" },
 
     { import = "plugins.copy-imports" },
     { import = "plugins.formatting" },

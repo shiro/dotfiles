@@ -171,6 +171,14 @@ local M = {
               end,
             },
             ["Github notifications"] = { command = function() vim.cmd("Octo notification list") end },
+            ["Show full JSON key"] = {
+              ft = { "json", "jsonc" },
+              command = function() require("jsonpath").show_json_path() end,
+            },
+            ["Copy full JSON key"] = {
+              ft = { "json", "jsonc" },
+              command = function() require("jsonpath").yank_json_path() end,
+            },
             ["Browse files on branch"] = {
               command = function()
                 pick_git_branch(function(branch_name)

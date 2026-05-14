@@ -22,6 +22,7 @@
   "img-clip.nvim": { "branch": "main", "commit": "b6ddfb97b5600d99afe3452d707444afda658aca" },
   "incsearch-fuzzy.vim": { "branch": "master", "commit": "b08fa8fbfd633e2f756fde42bfb5251d655f5403" },
   "incsearch.vim": { "branch": "master", "commit": "c83de6d1ac31d173d7c3ffee0ad61dc643ee4f08" },
+  "jsonpath.nvim": { "branch": "main", "commit": "eb5d33ad1cc4c8f5926feae0909b888167c62c9d" },
   "lazy-lsp.nvim": { "branch": "master", "commit": "e2599ac3d2ee3b0c38d11edf1c01ce7e846f0079" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
   "lazydev.nvim": { "branch": "main", "commit": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d" },
