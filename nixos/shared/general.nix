@@ -47,6 +47,11 @@
   };
   nixpkgs.config.allowUnfree = true;
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
   console.useXkbConfig = true;
 
   catppuccin.plymouth.enable = true;

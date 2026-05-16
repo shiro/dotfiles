@@ -29,7 +29,6 @@ in
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
 
-  hardware.graphics.enable32Bit = true;
   hardware.bluetooth.enable = true;
   hardware.amdgpu.opencl.enable = true;
 
