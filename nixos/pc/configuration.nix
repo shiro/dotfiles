@@ -1,11 +1,11 @@
 {
+  self,
   pkgs,
-  inputs,
   ...
 }:
 let
   username = "shiro";
-  shared = "${builtins.getEnv "DOTFILES"}/nixos/shared";
+  shared = "${builtins.getEnv "PWD"}/../shared";
 in
 {
   _module.args = {
