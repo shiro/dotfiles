@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   username,
   ...
@@ -69,6 +67,7 @@
 
   environment.sessionVariables = {
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";
+    NIXPKGS_ALLOW_UNFREE = "1";
   };
 
   programs.zsh.enable = true;
