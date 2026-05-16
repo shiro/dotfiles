@@ -31,6 +31,7 @@ in
 
   hardware.graphics.enable32Bit = true;
   hardware.bluetooth.enable = true;
+  hardware.amdgpu.opencl.enable = true;
 
   boot.loader = {
     grub = {
