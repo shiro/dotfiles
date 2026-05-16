@@ -85,6 +85,8 @@
   programs.ssh.forwardX11 = true;
   programs.ssh.setXAuthLocation = true;
 
+  systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
+
   users.users.${username}.packages = with pkgs; [
     cached-nix-shell # quicker nix shells
     nix-tree # TUI for browsing nix derivations

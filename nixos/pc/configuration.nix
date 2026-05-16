@@ -1,5 +1,4 @@
 {
-  self,
   pkgs,
   ...
 }:
@@ -87,9 +86,7 @@ in
       };
     };
   };
-  systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
-  networking.firewall.enable = false;
   networking.extraHosts = ''
     127.0.0.1 pc
     192.168.1.200 homebox
