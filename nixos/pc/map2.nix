@@ -32,7 +32,7 @@ in
     partOf = [ "graphical-session.target" ];
     path = with pkgs; [
       python_map2_pkg
-      # pkgs.zsh
+      zsh
       hyprland_pkg
       evtest
       procps
