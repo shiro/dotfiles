@@ -123,6 +123,12 @@ in
     catppuccin.kvantum.apply = true;
   };
 
+  catppuccin.plymouth.enable = true;
+  catppuccin.grub.enable = true;
+  catppuccin.tty.enable = true;
+  catppuccin.accent = "blue";
+  catppuccin.flavor = "macchiato";
+
   # services.kanshi = {
   #   enable = true;
   #   systemdTarget = "xdg-desktop-portal-hyprland.service";

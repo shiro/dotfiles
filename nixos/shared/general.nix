@@ -54,12 +54,6 @@
 
   console.useXkbConfig = true;
 
-  catppuccin.plymouth.enable = true;
-  catppuccin.grub.enable = true;
-  catppuccin.tty.enable = true;
-  catppuccin.accent = "blue";
-  catppuccin.flavor = "macchiato";
-
   security.sudo.wheelNeedsPassword = false;
   security.rtkit.enable = true;
 
