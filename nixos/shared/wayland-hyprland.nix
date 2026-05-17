@@ -9,6 +9,11 @@ let
   hyprland_cmd = "${hyprland_pkg}/bin/start-hyprland > /dev/null";
 in
 {
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
   programs.hyprland = {
     package = hyprland_pkg;
     enable = true;
