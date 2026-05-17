@@ -71,7 +71,11 @@ in
     openDefaultPorts = true;
     dataDir = "/home/shiro";
     configDir = "/home/shiro/.config/syncthing";
-    # guiAddress = "0.0.0.0:8384";
+    guiAddress = "0.0.0.0:8384";
+    settings.gui = {
+      user = "shiro";
+      password = "verysecret";
+    };
     settings = {
       devices = {
         "homebox" = {
@@ -86,6 +90,7 @@ in
       };
     };
   };
+  networking.firewall.allowedTCPPorts = [ 8384 ];
 
   networking.extraHosts = ''
     127.0.0.1 pc
