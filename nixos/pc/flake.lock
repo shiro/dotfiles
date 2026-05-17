@@ -562,6 +562,22 @@
     },
     "nixpkgs_5": {
       "locked": {
+        "lastModified": 1777954456,
+        "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "549bd84d6279f9852cae6225e372cc67fb91a4c1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
         "lastModified": 1759036355,
         "narHash": "sha256-0m27AKv6ka+q270dw48KflE0LwQYrO7Fm4/2//KCVWg=",
         "owner": "nixos",
@@ -608,6 +624,7 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-rofi-blocks": "nixpkgs-rofi-blocks",
         "rose-pine-hyprcursor": "rose-pine-hyprcursor",
+        "surge": "surge",
         "whisp-away": "whisp-away"
       }
     },
@@ -628,6 +645,24 @@
       "original": {
         "owner": "ndom91",
         "repo": "rose-pine-hyprcursor",
+        "type": "github"
+      }
+    },
+    "surge": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1778823636,
+        "narHash": "sha256-EyZIDq2mSHRxaF7iJhFfkuokeWRkbGfYl0s0cryN/R0=",
+        "owner": "SurgeDM",
+        "repo": "Surge",
+        "rev": "eebbc055baccff30de013e28d7de3ec4927a5ce6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SurgeDM",
+        "repo": "Surge",
         "type": "github"
       }
     },
@@ -697,7 +732,7 @@
     "whisp-away": {
       "inputs": {
         "crane": "crane",
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_6"
       },
       "locked": {
         "lastModified": 1768913025,

@@ -45,6 +45,7 @@ in
     ueberzugpp # draw images over TTY
     pulseaudio # pulse CLI
     rofi_package # application search
+    inputs.surge.packages.${pkgs.system}.default # browser download manager
   ];
 
   home-manager.users.${username} = {
@@ -56,6 +57,21 @@ in
       enable = true;
       defaultModel = "small.en";
       defaultBackend = "faster-whisper";
+    };
+
+    systemd.user.services.surge = {
+      Unit = {
+        Description = "Surge download manager server";
+        After = [ "graphical-session.target" ];
+        Wants = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        ExecStart = "${inputs.surge.packages.${pkgs.system}.default}/bin/surge server --token 12345";
+        Restart = "on-failure";
+        RestartSec = 5;
+      };
+      Install.WantedBy = [ "default.target" ];
     };
   };
 }
