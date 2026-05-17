@@ -24,6 +24,19 @@ local M = {
       })
     end,
   },
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      image = {
+        doc = {
+          inline = false,
+          max_width = 20,
+          max_height = 20,
+        },
+      },
+    },
+  },
 }
 
 return M

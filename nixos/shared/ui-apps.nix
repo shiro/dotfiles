@@ -24,6 +24,7 @@ in
 
   users.users.${username}.packages = with pkgs; [
     alacritty # terminal emulator
+    kitty # terminal emulator
     keepassxc # password manager
     mpv # video player
     xournalpp # notes app
