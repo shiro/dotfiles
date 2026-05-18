@@ -88,6 +88,13 @@ in
             "poco1"
           ];
         };
+        "cache" = {
+          path = "/home/shiro/sync/cache";
+          devices = [
+            "shiro-main"
+            "poco1"
+          ];
+        };
       };
     };
   };
