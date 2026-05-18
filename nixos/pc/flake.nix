@@ -42,6 +42,12 @@
       overlay-rofi-blocks = final: prev: {
         rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.stdenv.hostPlatform.system};
       };
+      # upstream fails some tests, remove when working again
+      overlay-openldap = final: prev: {
+        openldap = prev.openldap.overrideAttrs {
+          doCheck = false;
+        };
+      };
     in
     {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
@@ -50,7 +56,10 @@
           (
             { ... }:
             {
-              nixpkgs.overlays = [ overlay-rofi-blocks ];
+              nixpkgs.overlays = [
+                overlay-rofi-blocks
+                overlay-openldap
+              ];
             }
           )
           ./configuration.nix

@@ -7,7 +7,7 @@ local M = {
       if vim.fn.executable("tree-sitter") == 1 then
         require("nvim-treesitter").install({
           "typescript",
-          "tsx",
+         "tsx",
           "javascript",
           "css",
           "scss",
