@@ -48,6 +48,7 @@ in
   };
 
   networking.hostName = "shiro-main";
+  networking.hostId = "37738740";
 
   userPackages =
     with pkgs;
