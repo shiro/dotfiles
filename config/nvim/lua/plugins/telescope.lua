@@ -214,6 +214,25 @@ local M = {
             ["Format buffer"] = { command = function() vim.g.format() end },
             ["Buffers"] = { command = function() require("telescope.builtin").buffers() end },
             ["Toggle block split"] = { command = function() require("treesj").toggle() end },
+            ["Toggle split zoom"] = {
+              command = function()
+                -- Check if current window is zoomed by comparing with total available space
+                local current_win = vim.api.nvim_get_current_win()
+                local win_height = vim.api.nvim_win_get_height(current_win)
+                local win_width = vim.api.nvim_win_get_width(current_win)
+                local total_height = vim.o.lines - vim.o.cmdheight - 1 -- account for statusline
+                local total_width = vim.o.columns
+
+                -- If window is close to full size, restore equal layout
+                if win_height >= total_height - 3 and win_width >= total_width - 3 then
+                  vim.cmd("wincmd =") -- equalize all windows
+                else
+                  vim.cmd("wincmd _") -- maximize height
+                  vim.cmd("wincmd |") -- maximize width
+                end
+              end,
+            },
+            ["Open file in new tab"] = { command = function() vim.cmd("tabe %") end },
             ["Remove unused imports"] = {
               ft = { "typescriptreact", "typescript" },
               command = function() require("typescript-tools.api").remove_unused_imports() end,

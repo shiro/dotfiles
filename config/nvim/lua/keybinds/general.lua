@@ -20,4 +20,8 @@ vim.keymap.set("i", "<C-h>", "<C-w>", { noremap = true, silent = true })
 -- ctrl+delete forward delete
 vim.keymap.set("i", "<C-Del>", "<C-o>dw", { noremap = true, silent = true })
 
+vim.keymap.set("n", "<C-t>h", ":tabprev<cr>", { silent = true })
+vim.keymap.set("n", "<C-t>l", ":tabnext<cr>", { silent = true })
+vim.keymap.set("n", "<C-t>x", ":tabclose<cr>", { silent = true })
+
 return M
