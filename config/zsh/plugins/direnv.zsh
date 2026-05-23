@@ -10,10 +10,10 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
 
   autoload -U add-zsh-hook
   __auto_nix_shell() {
-    [[ "$AUTO_INIT_NIX_SHELL" == 1 ]] && return 0
+    [[ "$AUTO_INIT_NIX_SHELL_DONE" == 1 ]] && return 0
     [[ "$TMP" == /tmp/nix-shell-* ]] && return 0
 
-    local ignored_commands=(cd echo export s proj r rm dot ls la g ga gac gam gd gf gp gpf gcp gpl gr gre gl ggo)
+    local ignored_commands=(disable-auto-shell cd echo export s proj r rm dot ls la g ga gac gam gd gf gp gpf gcp gpl gr gre gl ggo)
     local command=("${1// */}")
 
     # don't do anyting if command should be ignored
@@ -31,9 +31,11 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
       fi
 
       # cached nix shells sometimes don't create TMP...
-      AUTO_INIT_NIX_SHELL=1 $shell_cmd --command "zsh -is eval 'mkdir -p \$TMP; nclr && $1'"
+      AUTO_INIT_NIX_SHELL_DONE=1 $shell_cmd --command "zsh -is eval 'mkdir -p \$TMP; nclr && $1'"
     fi
     return 0
   }
   add-zsh-hook preexec __auto_nix_shell
 fi
+
+alias disable-auto-shell='export AUTO_INIT_NIX_SHELL_DONE=1'
