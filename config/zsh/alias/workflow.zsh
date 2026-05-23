@@ -8,6 +8,8 @@ alias dt='cd ~/Desktop'
 alias dot="cd $DOTFILES"
 alias v='OPEN_LAST=1 nvim'
 
+alias dl='surge connect'
+
 codi() {
   local syntax="${1:-python}"
   shift
