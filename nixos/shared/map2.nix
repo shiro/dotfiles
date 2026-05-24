@@ -79,6 +79,7 @@ in
 
     services.udev.extraRules = ''
       KERNEL=="uinput", MODE="0660", GROUP="input"
+      SUBSYSTEM=="hidraw", KERNEL=="hidraw*", MODE="0660", GROUP="input"
     '';
   };
 }
