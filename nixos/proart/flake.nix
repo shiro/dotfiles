@@ -2,7 +2,8 @@
   description = "Nixos config flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/master";
     hyprland.url = "github:hyprwm/Hyprland";
     whisp-away.url = "github:madjinn/whisp-away";
     catppuccin.url = "github:catppuccin/nix";

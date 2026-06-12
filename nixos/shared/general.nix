@@ -6,7 +6,6 @@
 {
   # Backup the entire config directory
   environment.etc."nixos-config".source = ./..;
-
   nix.settings = {
     substituters = [
       "https://cache.soopy.moe"

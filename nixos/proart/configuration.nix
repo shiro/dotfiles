@@ -1,6 +1,5 @@
 {
   pkgs,
-  inputs,
   config,
   ...
 }:
@@ -14,9 +13,9 @@ in
   };
 
   imports = [
-    /etc/nixos/hardware-configuration.nix
-    inputs.home-manager.nixosModules.default
+    ./hardware-configuration.nix
     "${shared}/general.nix"
+    "${shared}/user.nix"
 
     "${shared}/ime.nix"
     "${shared}/laptop.nix"
@@ -32,6 +31,32 @@ in
   };
 
   boot.kernelPackages = pkgs.linuxPackages_7_0;
+  boot.supportedFilesystems = [ "zfs" ];
+  networking.hostId = "4199706c";
+  boot.zfs.package = pkgs.zfs_2_4;
+
+  services.sanoid = {
+    enable = true;
+    templates = {
+      "default" = {
+        hourly = 24;
+        daily = 7;
+        weekly = 7;
+        monthly = 4;
+        autosnap = true;
+        autoprune = true;
+      };
+    };
+    datasets = {
+      "storage/home" = {
+        useTemplate = [ "default" ];
+      };
+    };
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /etc/asusd 0755 root root -"
+  ];
 
   hardware.graphics = {
     enable = true;
@@ -71,14 +96,6 @@ in
       gfxmodeEfi = "2880x1800";
     };
     efi.canTouchEfiVariables = true;
-  };
-
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    useUserPackages = true;
-    users = {
-      "shiro" = import ./home.nix;
-    };
   };
 
   networking.hostName = "shiro-proart";
