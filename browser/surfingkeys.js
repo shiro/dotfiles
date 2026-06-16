@@ -20,9 +20,6 @@ const {
   RUNTIME,
 } = api;
 
-// mapkey('<Ctrl-y>', 'Show me the money', function() {
-//     Front.showPopup('a well-known phrase uttered by characters in the 1996 film Jerry Maguire (Escape to close).');
-// });
 
 settings.scrollStepSize = 140;
 settings.newTabPosition = "last";
@@ -37,7 +34,7 @@ mapkey("p", "Open the clipboard's URL in the current tab", function () {
 aceVimMap("<Esc>", ":wq", "normal");
 
 // open links from insert mode
-api.imapkey('<Ctrl-[>', 'Open a link', function() {
+api.imapkey('<Ctrl-y>', 'Open a link', function() {
     api.Hints.create("", api.Hints.dispatchMouseClick, {tabbed: true, active: true});
 })
 
@@ -123,6 +120,17 @@ unmap("sfrshow");
 unmap("j", /youtube.com/);
 unmap("k", /youtube.com/);
 unmap("l", /youtube.com/);
+
+mapkey(
+    'h',
+    'Fullscreen current video',
+    function() {
+        document.querySelector('.ytp-fullscreen-button')?.click();
+    },
+    { domain: /:\/\/www\.youtube\.com/ }
+);
+
+
 
 settings.theme = `
 /*.sk_theme {
