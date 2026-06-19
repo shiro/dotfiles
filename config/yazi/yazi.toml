@@ -11,10 +11,10 @@ folder = [
   { run = 'alacritty -e yazi "$@"', block = false, desc = "Open in Yazi", for = "linux" }
 ]
 
-[open]
-rules = [
-  { name = "*/", use = "folder" }
-]
+#[open]
+#rules = [
+#  { name = "*/", use = "folder" }
+#]
 
 [plugin]
 prepend_previewers = [
