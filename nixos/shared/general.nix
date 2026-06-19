@@ -36,7 +36,9 @@
   security.sudo.wheelNeedsPassword = false;
   security.rtkit.enable = true;
 
-  time.timeZone = "Asia/Tokyo";
+  # time.timeZone = "Asia/Tokyo";
+  services.timesyncd.enable = true;
+  services.automatic-timezoned.enable = true;
 
   # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
   i18n.defaultLocale = "en_US.UTF-8";
@@ -82,8 +84,7 @@
     imagemagick # image processing
     moreutils # useful command line utils like 'vipe'
     bottom # process viewer
-    silver-searcher # full text search
-    ripgrep # faster grep
+    ripgrep # full text search
     yazi # file browser
     fzf # TUI for selecting options
     cliphist # store and manipulate clipboard history
