@@ -68,20 +68,6 @@ in
   };
   services.pipewire.jack.enable = true;
 
-  # reduce blue-light
-  location.provider = "geoclue2";
-  services.redshift = {
-    enable = true;
-    brightness = {
-      day = "1";
-      night = "1";
-    };
-    temperature = {
-      day = 5500;
-      night = 3700;
-    };
-  };
-
   systemd.user.services.ssh-agent = {
     enable = true;
     wantedBy = [ "default.target" ];
@@ -143,13 +129,28 @@ in
     catppuccin.kvantum.assertStyle = true;
     catppuccin.kvantum.enable = true;
     catppuccin.kvantum.apply = true;
+
+    # reduce blue-light
+    services.gammastep = {
+      enable = true;
+      provider = "geoclue2";
+      temperature = {
+        day = 6500;
+        night = 4000;
+      };
+    };
   };
 
+  catppuccin.enable = true;
+  catppuccin.autoEnable = false;
   catppuccin.plymouth.enable = true;
   catppuccin.grub.enable = true;
   catppuccin.tty.enable = true;
   catppuccin.accent = "blue";
   catppuccin.flavor = "macchiato";
+
+  services.geoclue2.enable = true;
+  location.provider = "geoclue2";
 
   # services.kanshi = {
   #   enable = true;
