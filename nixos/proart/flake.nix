@@ -10,6 +10,7 @@
     nixpkgs-rofi-blocks.url = "github:edenkras/nixpkgs";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    surge.url = "github:SurgeDM/Surge";
 
     home-manager = {
       url = "github:nix-community/home-manager";

@@ -23,7 +23,19 @@ in
     "${shared}/music.nix"
     "${shared}/ui-apps.nix"
     "${shared}/wayland-hyprland.nix"
+
+    "${shared}/gaming.nix"
+    "${shared}/discord.nix"
   ];
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
   services.map2 = {
     enable = true;
@@ -34,6 +46,7 @@ in
   boot.supportedFilesystems = [ "zfs" ];
   networking.hostId = "4199706c";
   boot.zfs.package = pkgs.zfs_2_4;
+  boot.zfs.forceImportRoot = false;
 
   services.sanoid = {
     enable = true;
@@ -52,15 +65,6 @@ in
         useTemplate = [ "default" ];
       };
     };
-  };
-
-  systemd.tmpfiles.rules = [
-    "d /etc/asusd 0755 root root -"
-  ];
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
   };
 
   # nvidia stuff
@@ -87,6 +91,14 @@ in
 
   # asusctl
   services.asusd.enable = true;
+  systemd.tmpfiles.rules = [ "d /etc/asusd 0755 root root -" ];
+  environment.etc."asusd/asusd.ron".text = ''
+    (
+     profile: "Quiet",
+     bat_profile: "Quiet",
+     ac_profile: "Quiet",
+    )
+  '';
 
   boot.loader = {
     grub = {
