@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 # author: shiro <shiro@usagi.io>
 #
 # this script renames raw photos and their associated xmp files
