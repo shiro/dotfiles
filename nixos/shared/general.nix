@@ -101,6 +101,7 @@
     dragon-drop # drag and drop
     p7zip # work with archives
     zip # work with archives
+    exiftool # image processing
 
     xrandr # set X11 display settings
     xkbcomp

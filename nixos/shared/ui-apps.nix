@@ -53,6 +53,11 @@ in
       inputs.whisp-away.nixosModules.home-manager
     ];
 
+    services.udiskie = {
+      enable = true;
+      tray = "auto";
+    };
+
     services.whisp-away = {
       enable = true;
       defaultModel = "small.en";
