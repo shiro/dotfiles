@@ -9,7 +9,7 @@ local M = {
     ---@module 'avante'
     ---@type avante.Config
     opts = {
-      provider = "openai",
+      -- provider = "openai",
       -- provider = "bedrock",
       -- cursor_applying_provider = "openai",
       providers = {

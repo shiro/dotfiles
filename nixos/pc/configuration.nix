@@ -65,6 +65,9 @@ in
     bluez # bluetooth
   ];
 
+  # Disable sanoid since we're not using ZFS
+  # services.sanoid.enable = false;
+
   services.syncthing = {
     enable = true;
     user = "shiro";

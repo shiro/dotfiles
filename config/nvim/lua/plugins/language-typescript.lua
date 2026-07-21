@@ -17,6 +17,7 @@ local M = {
           -- tsserver_plugins = {
           --   "@styled/typescript-styled-plugin",
           -- },
+          -- tsserver_path = "/home/shiro/.local/share/pnpm/bin/tsc",
         },
       })
     end,

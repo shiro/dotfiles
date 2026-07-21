@@ -3,13 +3,15 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-xanmod.url = "github:nixos/nixpkgs/2976dad409c9b240b720c8ef7b546b262a9a7cf6";
     hyprland.url = "github:hyprwm/Hyprland";
     whisp-away.url = "github:madjinn/whisp-away";
     catppuccin.url = "github:catppuccin/nix";
     nixpkgs-rofi-blocks.url = "github:edenkras/nixpkgs";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    surge.url = "github:SurgeDM/Surge";
+    # surge.url = "github:SurgeDM/Surge";
+    surge.url = "github:shiro/Surge";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -36,6 +38,7 @@
       nixpkgs,
       nixpkgs-rofi-blocks,
       nixos-hardware,
+      nixpkgs-xanmod,
       ...
     }@inputs:
     let
@@ -48,6 +51,20 @@
           doCheck = false;
         };
       };
+      overlay-xanmod = final: prev: {
+        linuxKernel = prev.linuxKernel // {
+          packages = prev.linuxKernel.packages // {
+            linux_xanmod_stable =
+              nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxKernel.packages.linux_xanmod_stable;
+          };
+        };
+        # Also provide the latest version if needed
+        linuxPackages_xanmod_latest =
+          nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxPackages_xanmod_latest
+            or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxKernel.packages.linux_xanmod_latest
+              or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxPackages_xanmod
+                or prev.linuxPackages_latest;
+      };
     in
     {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
@@ -59,6 +76,7 @@
               nixpkgs.overlays = [
                 overlay-rofi-blocks
                 overlay-openldap
+                overlay-xanmod
               ];
             }
           )
