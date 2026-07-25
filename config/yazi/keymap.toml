@@ -40,6 +40,7 @@ prepend_keymap = [
   { on = "l", run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
   { on = ["e", "l"], run = "open --interactive", desc = "Open selected files" },
   { on = ["e", "e"], run = "shell --block 'vim $*'", desc = "Edit" },
+  { on = ["e", "x"], run = "shell --block 'zsh -i -c \"extract $*\"'", desc = "Extract archive" },
   { on = ["e", "d"], run = "shell 'ripdrag -n $*'", desc = "Drag and drop" },
 
   { on = ["o", "m"], run = ["sort mtime --reverse=no", "linemode mtime"], desc = "Sort by modified time" },
