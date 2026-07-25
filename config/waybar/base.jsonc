@@ -1,0 +1,13 @@
+{
+    "modules-left": [
+        "mpd"
+    ],
+    "modules-right": [
+        "tray",
+        "custom/audio-output",
+        "battery",
+        "temperature",
+        "backlight",
+        "clock"
+    ]
+}

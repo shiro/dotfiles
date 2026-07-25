@@ -1,4 +1,8 @@
 {
+    "include": [
+        "$HOME/.config/waybar/base.jsonc",
+        "$HOME/.local/config/waybar/config.jsonc"
+    ],
     "output": [
         "eDP-1",
         "HDMI-A-1",
@@ -7,18 +11,7 @@
     "layer": "top",
     "position": "top",
     "spacing": 4,
-    "modules-left": [
-        "mpd"
-    ],
     "modules-center": [],
-    "modules-right": [
-        "tray",
-        "custom/audio-output",
-        "battery",
-        "temperature",
-        "backlight",
-        "clock"
-    ],
     "custom/audio-output": {
         "format": " {} ",
         "exec": "$HOME/.config/waybar/audio-output",
