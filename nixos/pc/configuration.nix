@@ -59,7 +59,7 @@ in
     ];
 
   environment.systemPackages = with pkgs; [
-    davinci-resolve
+    # davinci-resolve
     xkeyboard_config # TODO move or remove
     cloudflared # cloudflare tunnels
     bluez # bluetooth

@@ -99,8 +99,9 @@
     pnpm # node package manager
     yarn # node package manager
     dragon-drop # drag and drop
-    p7zip # work with archives
-    zip # work with archives
+    p7zip # various archives (iso, etc.)
+    rar # rar archives
+    zip # zip archives
     exiftool # image processing
 
     xrandr # set X11 display settings
