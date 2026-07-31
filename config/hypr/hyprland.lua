@@ -145,6 +145,7 @@ hl.window_rule({
   float = true,
   size = "monitor_w*0.8 monitor_h*0.9",
   center = true,
+  workspace = "2 silent",
 })
 
 -- Guild Wars 2
