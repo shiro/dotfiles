@@ -171,6 +171,9 @@ bind -n M-/ command-prompt -I "" "rename-window '%%'" # rename window
 
 bind -n M-b copy-mode
 
+# select next link in visual mode
+bind -T copy-mode-vi u send-keys -X search-backward "https?://" \; send-keys -X search-forward " " \; send-keys -X cursor-left \; send-keys -X begin-selection \; send-keys -X search-backward "https?://" \; send-keys -X stop-selection
+
 bind-key C-q confirm-before kill-server
 
 # }}}
