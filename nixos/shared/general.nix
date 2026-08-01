@@ -24,6 +24,7 @@
       "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
       "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
     ];
+    trusted-users = [ "root" username ];
     experimental-features = [
       "nix-command"
       "flakes"

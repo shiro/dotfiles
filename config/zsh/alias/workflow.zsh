@@ -9,6 +9,7 @@ alias dot="cd $DOTFILES"
 alias v='OPEN_LAST=1 nvim'
 
 alias dl='surge connect'
+alias c='opencode'
 
 codi() {
   local syntax="${1:-python}"
