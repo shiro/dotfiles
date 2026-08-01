@@ -2,7 +2,15 @@ local M = {
   -- pretty UI {{{
   {
     "stevearc/dressing.nvim",
-    opts = {},
+    opts = {
+      input = {
+        relative = "editor",
+        prefer_width = 40,
+        win_options = {
+          winblend = 0,
+        },
+      },
+    },
     event = "VeryLazy",
   },
   -- show color hex codes

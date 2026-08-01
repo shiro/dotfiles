@@ -130,6 +130,7 @@ local M = {
             },
             ["Diff with HEAD"] = { command = function() require("plugins.commands.diff-head")() end },
             ["Diff with branch"] = { command = function() require("plugins.commands.diff-branch")() end },
+            ["Diff with ..."] = { command = function() require("plugins.commands.diff-with")() end },
             ["Get highlight group under cursor"] = { command = function() vim.cmd("Inspect") end },
             ["Switch AI model"] = { command = function() require("avante.api").select_model() end },
             ["Close all other buffers"] = { command = function() vim.cmd("%bd!|e#|bd#") end },
