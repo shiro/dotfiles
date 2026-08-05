@@ -119,8 +119,9 @@ local M = {
             { buffer = bufnr, desc = "Select current git hunk" }
           )
 
-          vim.keymap.set("n", "<leader>hr", function() gitsigns.reset_hunk() end, { buffer = bufnr })
-          vim.keymap.set("n", "<leader>hs", function() gitsigns.stage_hunk() end, { buffer = bufnr })
+           vim.keymap.set("n", "<leader>hr", function() gitsigns.reset_hunk() end, { buffer = bufnr })
+           vim.keymap.set("v", "<leader>hr", function() gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") }) end, { buffer = bufnr })
+           vim.keymap.set("n", "<leader>hs", function() gitsigns.stage_hunk() end, { buffer = bufnr })
         end,
       })
     end,
