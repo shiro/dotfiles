@@ -20,18 +20,17 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
     (($ignored_commands[(Ie)$command])) && return 0
 
     if [ -n "$locations["`pwd`"]" ]; then
-      echo initializing nix shell...
-      echo
+      # echo initializing nix shell...
+      # echo
 
-      local shell_cmd=""
+      local shell_cmd=(nix-shell)
+
       if command -v cached-nix-shell > /dev/null; then
-	shell_cmd="cached-nix-shell"
-      else
-	shell_cmd="nix-shell"
+	shell_cmd=(cached-nix-shell -d)
       fi
 
       # cached nix shells sometimes don't create TMP...
-      AUTO_INIT_NIX_SHELL_DONE=1 $shell_cmd --command "zsh -is eval 'mkdir -p \$TMP; nclr && $1'"
+      AUTO_INIT_NIX_SHELL_DONE=1 "${shell_cmd[@]}" --command "zsh -is eval '$1'"
     fi
     return 0
   }

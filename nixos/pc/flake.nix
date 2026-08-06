@@ -12,6 +12,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     # surge.url = "github:SurgeDM/Surge";
     surge.url = "github:shiro/Surge";
+    cached-nix-shell.url = "github:shiro/cached-nix-shell";
 
     home-manager = {
       url = "github:nix-community/home-manager";

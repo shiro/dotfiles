@@ -1,6 +1,7 @@
 {
   pkgs,
   username,
+  inputs,
   ...
 }:
 {
@@ -69,7 +70,7 @@
   systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
   users.users.${username}.packages = with pkgs; [
-    cached-nix-shell # quicker nix shells
+    inputs.cached-nix-shell.packages.${pkgs.system}.default # quicker nix shells
     nix-tree # TUI for browsing nix derivations
     borgbackup # backups
     hub # github CLI

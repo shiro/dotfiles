@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    cached-nix-shell.url = "github:shiro/cached-nix-shell";
 
     home-manager = {
       url = "github:nix-community/home-manager";
