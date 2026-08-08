@@ -1,0 +1,34 @@
+{
+  // JSON Schema for editor autocompletion
+  "$schema": "https://raw.githubusercontent.com/JosXa/opencode-snippets/v3.0.0/schema/config.schema.json",
+
+  // Logging settings
+  "logging": {
+    // Enable debug logging to file
+    // Logs are written to ~/.config/opencode/logs/snippets/daily/
+    // Values: true, false, "enabled", "disabled"
+    // Default: false
+    "debug": false
+  },
+
+  // Experimental features (may change or be removed)
+  "experimental": {
+    // Enable skill rendering with <skill>name</skill> or <skill name="name" /> syntax
+    // When enabled, skill tags are replaced with the skill's content body
+    // Skills are loaded from OpenCode's standard skill directories
+    // Values: true, false, "enabled", "disabled"
+    // Default: false
+    "skillRendering": false,
+
+    // Enable #skill(name) syntax that shows a placeholder inline while injecting
+    // the OpenCode-style <skill_content> payload to the model after the message
+    // Values: true, false, "enabled", "disabled"
+    // Default: false
+    "skillLoading": false
+  },
+
+  // How many messages from the bottom of the conversation to place injected context
+  // Higher = injection feels "older" to the model, lower = closer to recent context
+  // Default: 5
+  "injectRecencyMessages": 5
+}

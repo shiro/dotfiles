@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "theme": "system",
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "ap-northeast-1"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "ap-northeast-1"
+      }
+    }
+  },
+  "plugin": [
+    "opencode-snippets",
+    "opencode-antigravity-auth"
+  ]
+}
