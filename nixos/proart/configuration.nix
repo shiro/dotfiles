@@ -33,14 +33,11 @@ in
 
   services.map2 = {
     enable = true;
-    mappingScript = "/home/shiro/project/mappings/main/proart.py";
+    mappingScript = "/home/${username}/project/mappings/main/proart.py";
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_7_0;
-  boot.supportedFilesystems = [ "zfs" ];
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   networking.hostId = "4199706c";
-  boot.zfs.package = pkgs.zfs_2_4;
-  boot.zfs.forceImportRoot = false;
 
   services.sanoid = {
     enable = true;
@@ -133,29 +130,17 @@ in
     XKB_CONFIG_ROOT = "${pkgs.xkeyboard_config}/share/X11/xkb";
   };
 
-  users.users.shiro = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "docker"
-      "input"
-    ];
-    packages = with pkgs; [
-      awscli2
-    ];
-  };
-
   environment.systemPackages = with pkgs; [
     cloudflared # cloudflare tunnels
   ];
 
   services.syncthing = {
     enable = true;
-    user = "shiro";
+    user = username;
     group = "users";
     openDefaultPorts = true;
-    dataDir = "/home/shiro";
-    configDir = "/home/shiro/.config/syncthing";
+    dataDir = "/home/${username}";
+    configDir = "/home/${username}/.config/syncthing";
     # guiAddress = "0.0.0.0:8384";
     settings = {
       devices = {
@@ -165,7 +150,7 @@ in
       };
       folders = {
         "wiki" = {
-          path = "/home/shiro/wiki";
+          path = "/home/${username}/wiki";
           devices = [ "homebox" ];
         };
       };

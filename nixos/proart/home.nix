@@ -19,16 +19,26 @@
   #   ];
   # };
 
+  # qt = {
+  #   enable = true;
+  #   platformTheme = "gtk";
+  #   style = {
+  #     name = "gtk2";
+  #     package = pkgs.kdePackages.breeze.qt5;
+  #   };
+  # };
+
+  # Qt/gtk Theme Configuration via Kvantum
+  gtk.enable = true;
+  catppuccin.gtk.enable = true;
   qt = {
     enable = true;
-    platformTheme = "gtk";
-    style = {
-      name = "gtk2";
-      package = pkgs.kdePackages.breeze.qt5;
-    };
+    platformTheme.name = "qtct"; # or "gtk"
+    style.name = "kvantum";
   };
+  catppuccin.kvantum.enable = true;
 
-  home.packages = [];
+  home.packages = [ ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -100,4 +110,3 @@
   # };
 
 }
-

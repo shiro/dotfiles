@@ -122,13 +122,16 @@ in
 
     qt = {
       enable = true;
+      platformTheme.name = "qtct";
       style.name = "kvantum";
-      platformTheme.name = "kvantum";
+      # platformTheme.name = "kvantum";
     };
 
-    catppuccin.kvantum.assertStyle = true;
-    catppuccin.kvantum.enable = true;
-    catppuccin.kvantum.apply = true;
+    catppuccin.qt5ct.enable = true;
+    catppuccin.qt5ct.assertPlatformTheme = true;
+    # catppuccin.kvantum.assertStyle = true;
+    # catppuccin.kvantum.enable = true;
+    # catppuccin.kvantum.apply = true;
 
     # reduce blue-light
     services.gammastep = {
