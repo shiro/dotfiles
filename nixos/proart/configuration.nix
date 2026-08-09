@@ -31,12 +31,6 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-
   services.map2 = {
     enable = true;
     mappingScript = "/home/shiro/project/mappings/main/proart.py";

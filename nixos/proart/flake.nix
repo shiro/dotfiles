@@ -4,13 +4,14 @@
   inputs = {
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/master";
+    nixpkgs-xanmod.url = "github:nixos/nixpkgs/2976dad409c9b240b720c8ef7b546b262a9a7cf6";
     hyprland.url = "github:hyprwm/Hyprland";
     whisp-away.url = "github:madjinn/whisp-away";
     catppuccin.url = "github:catppuccin/nix";
     nixpkgs-rofi-blocks.url = "github:edenkras/nixpkgs";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    surge.url = "github:SurgeDM/Surge";
+    surge.url = "github:shiro/Surge";
     cached-nix-shell.url = "github:shiro/cached-nix-shell";
 
     home-manager = {
@@ -38,11 +39,32 @@
       nixpkgs,
       nixpkgs-rofi-blocks,
       nixos-hardware,
+      nixpkgs-xanmod,
       ...
     }@inputs:
     let
       overlay-rofi-blocks = final: prev: {
         rofi-blocks = nixpkgs-rofi-blocks.legacyPackages.${prev.stdenv.hostPlatform.system};
+      };
+      # upstream fails some tests, remove when working again
+      overlay-openldap = final: prev: {
+        openldap = prev.openldap.overrideAttrs {
+          doCheck = false;
+        };
+      };
+      overlay-xanmod = final: prev: {
+        linuxKernel = prev.linuxKernel // {
+          packages = prev.linuxKernel.packages // {
+            linux_xanmod_stable =
+              nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxKernel.packages.linux_xanmod_stable;
+          };
+        };
+        # Also provide the latest version if needed
+        linuxPackages_xanmod_latest =
+          nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxPackages_xanmod_latest
+            or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxKernel.packages.linux_xanmod_latest
+              or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxPackages_xanmod
+                or prev.linuxPackages_latest;
       };
     in
     {
@@ -52,7 +74,11 @@
           (
             { ... }:
             {
-              nixpkgs.overlays = [ overlay-rofi-blocks ];
+              nixpkgs.overlays = [
+                overlay-rofi-blocks
+                overlay-openldap
+                overlay-xanmod
+              ];
             }
           )
           ./configuration.nix
