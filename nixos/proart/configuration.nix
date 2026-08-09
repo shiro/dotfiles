@@ -83,13 +83,6 @@ in
   # asusctl
   services.asusd.enable = true;
   systemd.tmpfiles.rules = [ "d /etc/asusd 0755 root root -" ];
-  environment.etc."asusd/asusd.ron".text = ''
-    (
-     profile: "Quiet",
-     bat_profile: "Quiet",
-     ac_profile: "Quiet",
-    )
-  '';
 
   boot.loader = {
     grub = {
