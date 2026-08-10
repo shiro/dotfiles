@@ -76,6 +76,9 @@ local M = {
             DiagnosticUnderlineWarn = { fg = colors.overlay2 },
             DiagnosticUnderlineError = { fg = colors.red },
             DiagnosticUnnecessary = { italic = true },
+
+            -- aerial.nvim
+            AerialResolved = { fg = colors.overlay0 },
           }
         end,
       })
