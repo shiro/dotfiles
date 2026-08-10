@@ -166,7 +166,32 @@ local M = {
               command = function() require("utils.color-inspector").toggle() end,
             },
             ["Review PR"] = { command = function() vim.cmd("Octo review") end },
-            ["Show PR"] = { command = function() vim.cmd("Octo pr") end },
+            ["Show PR"] = {
+              command = function()
+                local buffers = vim.api.nvim_list_bufs()
+                local found_buf = nil
+                
+                -- Look for a buffer matching octo://*/pull/* pattern
+                for _, buf in ipairs(buffers) do
+                  if vim.api.nvim_buf_is_loaded(buf) then
+                    local name = vim.api.nvim_buf_get_name(buf)
+                    if name:match("^octo://[^/]+/[^/]+/pull/%d+$") then
+                      found_buf = buf
+                      break
+                    end
+                  end
+                end
+                
+                if found_buf then
+                  -- Open existing buffer
+                  vim.api.nvim_set_current_buf(found_buf)
+                else
+                  -- Run octo command
+                  vim.cmd("Octo pr")
+                end
+              end,
+              keymaps = { { "n", "<leader>h" } },
+            },
             ["Change git signs base branch"] = {
               command = function()
                 pick_git_branch(function(branch_name) require("gitsigns").change_base(branch_name, true) end)
