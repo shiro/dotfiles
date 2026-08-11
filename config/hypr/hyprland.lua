@@ -292,7 +292,8 @@ pcall(require, "hyprland")
 
 -- Autostart
 hl.on("hyprland.start", function()
-  hl.exec_cmd("hyprctl dispatch workspace 2")
+  hl.exec_cmd("hyprctl eval 'hl.dispatch(hl.dsp.focus({ workspace = \"2\" }))'")
+
   hl.exec_cmd("hyprpaper -c " .. home .. "/.local/config/hypr/hyprpaper.conf")
   hl.exec_cmd("systemctl --user restart map2")
   -- hl.exec_cmd("sleep 5 && waybar > ~/output.txt 2>&1")

@@ -6,8 +6,6 @@ local M = {
     config = function()
       local actions = require("diffview.actions")
 
-
-
       require("diffview").setup({
         file_panel = {
           listing_style = "tree",
@@ -37,7 +35,6 @@ local M = {
                 actions.select_entry()
               end,
             })
-
           end,
           diff_buf_read = function(bufnr)
             -- Fix filetype detection for diff buffers
@@ -45,9 +42,7 @@ local M = {
             local bufname = vim.api.nvim_buf_get_name(bufnr)
             if bufname and bufname ~= "" then
               local ft = vim.filetype.match({ filename = bufname, buf = bufnr })
-              if ft then
-                vim.bo[bufnr].filetype = ft
-              end
+              if ft then vim.bo[bufnr].filetype = ft end
             end
           end,
         },
@@ -71,6 +66,7 @@ local M = {
       })
     end,
   },
+  { "kokusenz/deltaview.nvim" },
 }
 
 return M
