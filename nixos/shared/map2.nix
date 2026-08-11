@@ -10,7 +10,7 @@ let
   cfg = config.services.map2;
   hyprland_pkg = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   map2_wheel = pkgs.python313.pkgs.buildPythonPackage {
-    version = "2.0.20";
+    version = "2.1.1";
     pname = "map2";
     format = "wheel";
     src = ./map2-2.1.1-cp313-cp313-manylinux_2_39_x86_64.whl;
