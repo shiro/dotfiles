@@ -145,7 +145,7 @@ in
   };
 
   catppuccin.enable = true;
-  catppuccin.autoEnable = false;
+  catppuccin.autoEnable = true;
   catppuccin.plymouth.enable = true;
   catppuccin.grub.enable = true;
   catppuccin.tty.enable = true;
