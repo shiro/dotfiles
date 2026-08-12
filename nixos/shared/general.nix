@@ -106,6 +106,7 @@
     rar # rar archives
     zip # zip archives
     exiftool # image processing
+    awscli # needed for avante.nvim
 
     xrandr # set X11 display settings
     xkbcomp
