@@ -1,3 +1,4 @@
-.nix-shell-inputs
-avante.md
-AGENTS.md
+/.nix-shell-inputs
+/avante.md
+/AGENTS.md
+/agents
