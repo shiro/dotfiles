@@ -5,6 +5,7 @@ local M = {
     ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local dmm_tsserver_filepath = "./node_modules/@typescript/old/lib/tsserver.js"
       require("typescript-tools").setup({
         capabilities = capabilities,
         on_attach = function(client, bufnr)
@@ -18,6 +19,7 @@ local M = {
           --   "@styled/typescript-styled-plugin",
           -- },
           -- tsserver_path = "/home/shiro/.local/share/pnpm/bin/tsc",
+          tsserver_path = (vim.fn.filereadable(dmm_tsserver_filepath) == 1) and dmm_tsserver_filepath or nil,
         },
       })
     end,
