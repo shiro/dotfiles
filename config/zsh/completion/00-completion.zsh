@@ -27,6 +27,8 @@ setopt always_to_end
 setopt interactivecomments # allow comments in CLI
 setopt menu_complete # show suggestions on first tab if ambigous
 
+# sort completion suggestions by last modified
+zstyle ':completion:*' file-sort modification
 
 # case, hypthen insensitive completion
 # zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
