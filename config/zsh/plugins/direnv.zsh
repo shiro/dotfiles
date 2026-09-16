@@ -30,7 +30,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
       fi
 
       # cached nix shells sometimes don't create TMP...
-      AUTO_INIT_NIX_SHELL_DONE=1 "${shell_cmd[@]}" --command "zsh -is eval '$1'"
+      AUTO_INIT_NIX_SHELL_DONE=1 "${shell_cmd[@]}" --command "zsh -is eval 'mkdir -p \$TMP; nclr && $1'"
     fi
     return 0
   }
