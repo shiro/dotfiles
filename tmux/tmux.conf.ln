@@ -49,21 +49,13 @@ bind -T copy-mode-vi Escape send-keys -X clear-selection
 bind -T copy-mode-vi v send-keys -X begin-selection
 bind -T copy-mode-vi r send-keys -X rectangle-toggle
 
-# enable 256 color display
-set -g default-terminal "xterm-256color"
-#set -g default-terminal "alacritty"
-#set-option -sa terminal-overrides ",xterm*:Tc" # true color support
-set -as terminal-features "xterm-256color*:RGB:extkeys"
-set -s extended-keys on
-#set -as terminal-features ",xterm-256color*:Tc"
-
 # disable visual notifications
 set -g visual-activity off
 
 # disable bell notifications
 set -g bell-action none
 
-# disable window activity notifications
+# disable window activity notificationsR
 set -g monitor-activity off
 
 # refresh status bar info every N seconds
@@ -116,8 +108,9 @@ bind-key -n š break-pane
 bind-key -n Š join-pane -t:!
 
 # split panes
-bind -n M-\\ split-window -h -c "#{pane_current_path}"
-bind -n M-] split-window -v -c "#{pane_current_path}"
+# kitty maps 'M-*' to cutstom unicode char to avoid breaking TUIs
+bind-key -n 0xe001 split-window -h -c "#{pane_current_path}"
+bind-key -n 0xe002 split-window -v -c "#{pane_current_path}"
 
 # resize panes
 bind -n M-H resize-pane -L 3
@@ -234,7 +227,9 @@ bind-key -n C-S-F next-window #send "\e[70;5u"
 bind-key -n C-S-P send "\e[80;5u"
 bind-key -n C-S-R send "\e[82;5u"
 
-# support kitty images and yazi
+# support kitty
 set -g allow-passthrough on
 set -ga update-environment TERM
 set -ga update-environment TERM_PROGRAM
+set -g default-terminal "tmux-256color"
+set -as terminal-overrides ",xterm-kitty:Tc"
