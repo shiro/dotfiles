@@ -19,6 +19,8 @@
       "docker"
       "input"
       "ydotool"
+      "render"
+      "video"
     ];
     packages = config.userPackages;
   };

@@ -14,6 +14,11 @@
     surge.url = "github:shiro/Surge";
     cached-nix-shell.url = "github:shiro/cached-nix-shell";
 
+    figma-linux-next = {
+      url = "github:arximus88/figma-linux-next";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,6 +70,9 @@
             or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxKernel.packages.linux_xanmod_latest
               or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxPackages_xanmod
                 or prev.linuxPackages_latest;
+        # Pin ZFS to the same kernel commit to ensure compatibility
+        zfs = nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.zfs;
+        zfs_unstable = nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.zfs_unstable;
       };
     in
     {
@@ -82,6 +90,7 @@
             }
           )
           ./configuration.nix
+          inputs.figma-linux-next.nixosModules.default
           inputs.catppuccin.nixosModules.catppuccin
           inputs.home-manager.nixosModules.default
         ];

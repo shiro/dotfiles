@@ -42,6 +42,25 @@ in
     efi.canTouchEfiVariables = true;
   };
 
+  # hardware.graphics = {
+  #   extraPackages = with pkgs; [
+  #     rocmPackages.rocminfo
+  #     rocmPackages.rocm-smi
+  #   ];
+  # };
+  #
+  # services.ollama = {
+  #   enable = true;
+  #   package = pkgs.ollama-rocm;
+  #
+  #   environmentVariables = {
+  #     LLAMA_ARG_CPU_MOE = "1";
+  #     LLAMA_ARG_N_CPU_MOE = "40";
+  #     LLAMA_ARG_FLASH_ATTN = "1";
+  #     LLAMA_ARG_NO_MMAP = "1";
+  #   };
+  # };
+
   services.map2 = {
     enable = true;
     mappingScript = "/home/shiro/mappings/main/pc.py";
@@ -49,6 +68,7 @@ in
 
   networking.hostName = "shiro-main";
   networking.hostId = "37738740";
+  programs.figma-linux-next.enable = true;
 
   userPackages =
     with pkgs;
@@ -63,6 +83,7 @@ in
     xkeyboard_config # TODO move or remove
     cloudflared # cloudflare tunnels
     bluez # bluetooth
+    # figma-linux
   ];
 
   # Disable sanoid since we're not using ZFS
