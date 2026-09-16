@@ -6,10 +6,44 @@
       "options": {
         "region": "ap-northeast-1"
       }
+    },
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5-coder:7b": {
+          "name": "Qwen 2.5 Coder 7B"
+        }
+      }
     }
   },
   "plugin": [
     "opencode-snippets",
     "opencode-antigravity-auth"
-  ]
+  ],
+  "mcp": {
+    "chrome-devtools": {
+      "type": "local",
+      "enabled": false,
+      "command": [
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--browser-url=http://127.0.0.1:9222"
+      ]
+    },
+    "composio": {
+      "type": "remote",
+      "url": "https://connect.composio.dev/mcp",
+      "enabled": false
+    },
+    "figma-local-disabled": {
+      "type": "remote",
+      "url": "http://127.0.0.1:3845/mcp",
+      "enabled": false
+    }
+  }
 }
