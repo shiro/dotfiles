@@ -121,6 +121,12 @@ local M = {
         },
         extensions = {
           omnibar = {
+            ["Reload treesitter injections"] = {
+              command = function()
+                vim.treesitter.stop()
+                vim.treesitter.start()
+              end,
+            },
             ["Inspect treesitter nodes"] = { command = function() vim.cmd("InspectTree") end },
             ["Run treesitter query"] = {
               command = function()
