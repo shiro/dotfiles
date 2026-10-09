@@ -92,7 +92,7 @@ in
     ipafont
     kochi-substitute
     source-code-pro
-    ttf_bitstream_vera
+    ttf-bitstream-vera
   ];
 
   fonts.fontconfig.defaultFonts = {
