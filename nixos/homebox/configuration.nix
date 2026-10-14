@@ -63,6 +63,9 @@ in
         "macbook2018" = {
           id = "K3RTVLW-IPHUON4-GIYAMVL-D54NRUQ-K657RDD-U5VFX4C-ZNOWJIW-5VNPJQI";
         };
+        "proart" = {
+          id = "HUUZ4QW-JZB5TI5-UKGU6AH-5OD7VYT-FBNTTAZ-TQZINCL-2F26LHA-XY2OWQF";
+        };
         "grandma" = {
           id = "KXL6KTI-NZXY6KF-Q7STMNQ-PWXZ4HG-4K4U7SV-MTDU5AS-HDQRLCA-P3CTUQI";
         };
@@ -77,6 +80,7 @@ in
             "shiro-main"
             "poco1"
             "macbook2018"
+            "proart"
           ];
         };
         "pictures" = {
@@ -86,6 +90,7 @@ in
             "grandma"
             "maiko"
             "poco1"
+            "proart"
           ];
         };
         "cache" = {
@@ -93,6 +98,7 @@ in
           devices = [
             "shiro-main"
             "poco1"
+            "proart"
           ];
         };
       };
