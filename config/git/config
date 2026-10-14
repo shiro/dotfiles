@@ -10,6 +10,7 @@
 	excludesFile = ~/.config/git/gitignore
 [rebase]
 	autosquash = true
+	updateRefs = true
 [pull]
 	rebase = true
 [hub]
