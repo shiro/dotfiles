@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 let
   tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
   hyprland_pkg = inputs.hyprland.packages.${pkgs.system}.hyprland;
@@ -6,28 +12,35 @@ let
   username = "shiro";
   # pkgs.rofi-blocks.rofi-blocks
 
-  rofi-blocks = (pkgs.rofi-blocks.rofi-blocks.override {
-    rofi-unwrapped = pkgs.rofi-wayland-unwrapped;
-  });
+  rofi-blocks = (
+    pkgs.rofi-blocks.rofi-blocks.override {
+      rofi-unwrapped = pkgs.rofi-wayland-unwrapped;
+    }
+  );
   rofi_custom = pkgs.rofi-wayland.override { plugins = [ rofi-blocks ]; };
 
-  python_custom = let map2 = pkgs.python312.pkgs.buildPythonPackage rec {
-    version = "2.1.1";
-    pname = "map2";
-    format = "wheel";
-    src = pkgs.fetchPypi {
-      inherit pname version format;
-      sha256 = "sha256-mIIkaltbZtJ3fEIukVAqAGi7Tc/Wb6bkCq0HetW3xNQ=";
-      dist = "cp312";
-      python = "cp312";
-      abi = "cp312";
-      platform = "manylinux_2_17_aarch64.manylinux2014_aarch64";
-    };
-  };
-  in pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-    pip
-    map2
-  ]);
+  python_custom =
+    let
+      map2 = pkgs.python312.pkgs.buildPythonPackage rec {
+        version = "2.1.1";
+        pname = "map2";
+        format = "wheel";
+        src = pkgs.fetchPypi {
+          inherit pname version format;
+          sha256 = "sha256-mIIkaltbZtJ3fEIukVAqAGi7Tc/Wb6bkCq0HetW3xNQ=";
+          dist = "cp312";
+          python = "cp312";
+          abi = "cp312";
+          platform = "manylinux_2_17_aarch64.manylinux2014_aarch64";
+        };
+      };
+    in
+    pkgs.python312.withPackages (
+      python-pkgs: with python-pkgs; [
+        pip
+        map2
+      ]
+    );
 
   mpdConf = pkgs.writeText "mpd.conf" ''
     audio_output {
@@ -48,16 +61,15 @@ let
 in
 {
   # imports =
-  #   [ 
+  #   [
   #     ./hardware-configuration.nix
   #     inputs.home-manager.nixosModules.default
   #   ];
-  imports =
-    [
-      ./hardware-configuration.nix
-      inputs.apple-silicon.nixosModules.default
-      # inputs.home-manager.nixosModules.default
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    inputs.apple-silicon.nixosModules.default
+    # inputs.home-manager.nixosModules.default
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -90,7 +102,6 @@ in
     };
   };
 
-
   systemd.user.services.ssh-agent = {
     enable = true;
     wantedBy = [ "default.target" ];
@@ -98,10 +109,10 @@ in
     serviceConfig = {
       Type = "simple";
       Environment = [
-        ''SSH_AUTH_SOCK=%t/ssh-agent.socket''
-        ''DISPLAY=:0''
+        "SSH_AUTH_SOCK=%t/ssh-agent.socket"
+        "DISPLAY=:0"
       ];
-      ExecStart = ''${pkgs.openssh}/bin/ssh-agent -D -a $SSH_AUTH_SOCK'';
+      ExecStart = "${pkgs.openssh}/bin/ssh-agent -D -a $SSH_AUTH_SOCK";
     };
   };
 
@@ -109,19 +120,27 @@ in
     enable = true;
     wantedBy = [ "xsession.target" ];
     partOf = [ "graphical-session.target" ];
-    path = [ pkgs.zsh hyprland_pkg pkgs.evtest pkgs.procps pkgs.killall ];
+    path = [
+      pkgs.zsh
+      hyprland_pkg
+      pkgs.evtest
+      pkgs.procps
+      pkgs.killall
+    ];
     serviceConfig = {
-      ExecStart = ''/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/mappings/main/macbook.py'';
+      ExecStart = "/run/wrappers/bin/sudo -E ${python_custom}/bin/python /home/shiro/mappings/main/macbook.py";
       Restart = "always";
       RestartSec = "5s";
-     };
+    };
   };
 
   security.sudo.wheelNeedsPassword = false;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nixpkgs.config.allowUnfree = true;
-
 
   sound.enable = true;
   hardware = {
@@ -137,7 +156,6 @@ in
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-
   # Set your time zone.
   time.timeZone = "Asia/Tokyo";
 
@@ -148,19 +166,18 @@ in
     useXkbConfig = true; # use xkb.options in tty.
   };
 
-
   # services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 
   nix.settings = {
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    substituters = [ "https://hyprland.cachix.org" ];
+    trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
   };
 
   programs.zsh = {
     enable = true;
     # initExtra = ''
-      # export NIX_LD=$(nix eval --impure --raw --expr 'let pkgs = import <nixpkgs> {}; NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"; in NIX_LD')
+    # export NIX_LD=$(nix eval --impure --raw --expr 'let pkgs = import <nixpkgs> {}; NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker"; in NIX_LD')
     # '';
   };
   programs.neovim = {
@@ -176,7 +193,7 @@ in
     xwayland.enable = true;
   };
   programs.waybar = {
-   enable = true;
+    enable = true;
   };
 
   environment.sessionVariables = {
@@ -185,7 +202,6 @@ in
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";
   };
 
-
   services.xserver.enable = true;
   services.xserver.exportConfiguration = true;
   # services.xserver.xkb = {
@@ -193,7 +209,7 @@ in
   #   # xkbVariant = "workman,";
   #   # xkbOptions = "grp:win_space_toggle";
   # };
-  # 
+  #
   # services.xserver.xkb.extraLayouts.rabbit = {
   #   description = "US layout (rabbit)";
   #   languages   = [ "eng" ];
@@ -206,21 +222,24 @@ in
     fcitx5.waylandFrontend = true;
 
     fcitx5.addons = with pkgs; [
-        fcitx5-mozc
-        fcitx5-gtk
-        fcitx5-configtool
-        fcitx5-with-addons
+      fcitx5-mozc
+      fcitx5-gtk
+      fcitx5-configtool
+      fcitx5-with-addons
     ];
   };
   i18n.defaultLocale = "en_US.UTF-8";
   # i18n.supportedLocales = [ "ja_JP.UTF-8/UTF-8" ];
 
-
   users.defaultUserShell = pkgs.zsh;
 
   users.users.shiro = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "input" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+      "input"
+    ];
     packages = with pkgs; [
       ashuffle
       # bandwitch
@@ -259,7 +278,6 @@ in
       killall
       ncmpcpp
       mixxc
-      gh
       awscli2
       libreoffice-qt6-fresh
       xorg.xev
@@ -272,13 +290,6 @@ in
       qemu
     ];
   };
-
-  # home-manager = {
-  #   extraSpecialArgs = { inherit inputs; };
-  #   users = {
-  #     "shiro" = import ./home.nix;
-  #   };
-  # };
 
   environment.systemPackages = with pkgs; [
     alacritty
@@ -347,7 +358,6 @@ in
 
     pkg-config
   ];
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -421,20 +431,26 @@ in
 
   systemd.user.services.waypipe = {
     enable = true;
-    after = [ "network.target" "sound.target" ];
+    after = [
+      "network.target"
+      "sound.target"
+    ];
     wantedBy = [ "default.target" ];
     serviceConfig = {
       Environment = "PATH=/home/shiro/bin";
       ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
       Type = "notify";
-# ExecStartPre = ''
-# ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
+      # ExecStartPre = ''
+      # ${pkgs.bash}/bin/bash -c "${pkgs.coreutils}/bin/mkdir -p '${cfg.dataDir}' '${cfg.playlistDirectory}'"'';
     };
   };
 
   systemd.user.services.mpd = {
     enable = true;
-    after = [ "network.target" "sound.target" ];
+    after = [
+      "network.target"
+      "sound.target"
+    ];
     wantedBy = [ "default.target" ];
     serviceConfig = {
       Environment = "PATH=/home/shiro/bin";
@@ -468,7 +484,7 @@ in
   #     KeepAlive = true;
   #   };
 
-    # Install = { WantedBy = [ "sockets.target" ]; };
+  # Install = { WantedBy = [ "sockets.target" ]; };
   # };
 
   networking.wireless.iwd = {
@@ -476,12 +492,14 @@ in
     settings.General.EnableNetworkConfiguration = true;
   };
 
-  networking.nameservers = [ "1.1.1.1" "9.9.9.9" ];
+  networking.nameservers = [
+    "1.1.1.1"
+    "9.9.9.9"
+  ];
 
-  networking.extraHosts =
-    ''
+  networking.extraHosts = ''
     127.0.0.1 mac
-    '';
+  '';
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }

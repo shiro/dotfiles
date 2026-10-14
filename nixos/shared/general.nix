@@ -4,6 +4,25 @@
   inputs,
   ...
 }:
+let
+  gh-news = pkgs.rustPlatform.buildRustPackage rec {
+    pname = "gh-news";
+    version = "0.18.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "chmouel";
+      repo = "gh-news";
+      rev = "v${version}";
+      hash = "sha256-FzOcusIiwo2FNxfeXjj1rY13jXZq9j3snI2NYmUQxaI=";
+    };
+
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-rCIpKXfwin0p1zT+N3ZfPdNhzPIa2112rEJs7pZc4XE=";
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.openssl ];
+  };
+in
 {
   # Backup the entire config directory
   environment.etc."nixos-config".source = ./..;
@@ -25,7 +44,10 @@
       "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
       "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
     ];
-    trusted-users = [ "root" username ];
+    trusted-users = [
+      "root"
+      username
+    ];
     experimental-features = [
       "nix-command"
       "flakes"
@@ -74,7 +96,6 @@
     nix-tree # TUI for browsing nix derivations
     borgbackup # backups
     hub # github CLI
-    gh # github CLI
     git-absorb # amend commits through history
     opencode # AI coding
     jq # work with JSON
@@ -125,4 +146,11 @@
 
     black # python formatter
   ];
+
+  home-manager.users.${username} = {
+    programs.gh = {
+      enable = true;
+      extensions = [ gh-news ];
+    };
+  };
 }
