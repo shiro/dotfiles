@@ -4,25 +4,6 @@
   inputs,
   ...
 }:
-let
-  gh-news = pkgs.rustPlatform.buildRustPackage rec {
-    pname = "gh-news";
-    version = "0.18.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "chmouel";
-      repo = "gh-news";
-      rev = "v${version}";
-      hash = "sha256-FzOcusIiwo2FNxfeXjj1rY13jXZq9j3snI2NYmUQxaI=";
-    };
-
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-rCIpKXfwin0p1zT+N3ZfPdNhzPIa2112rEJs7pZc4XE=";
-
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.openssl ];
-  };
-in
 {
   # Backup the entire config directory
   environment.etc."nixos-config".source = ./..;
@@ -150,7 +131,7 @@ in
   home-manager.users.${username} = {
     programs.gh = {
       enable = true;
-      extensions = [ gh-news ];
+      extensions = [ ];
     };
   };
 }
