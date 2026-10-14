@@ -70,7 +70,8 @@ end
 
 local M = {
   {
-    "pwntester/octo.nvim",
+    "shiro/octo.nvim",
+    -- dir = vim.fn.expand("~/project/octo.nvim"),
     requires = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
