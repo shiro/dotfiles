@@ -72,61 +72,67 @@
 
   systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true"; # Don't create default ~/Sync folder
 
-  users.users.${username}.packages = with pkgs; [
-    inputs.cached-nix-shell.packages.${pkgs.system}.default # quicker nix shells
-    nix-tree # TUI for browsing nix derivations
-    borgbackup # backups
-    hub # github CLI
-    git-absorb # amend commits through history
-    opencode # AI coding
-    jq # work with JSON
-    aichat # ai chat
-    killall # useful command utility
-    phrase-cli # translation platform
-    unzip # unpack a bunch of formats
-    dex # desktop entries
-    nsxiv # image viewer
-    imagemagick # image processing
-    moreutils # useful command line utils like 'vipe'
-    bottom # process viewer
-    ripgrep # full text search
-    yazi # file browser
-    fzf # TUI for selecting options
-    cliphist # store and manipulate clipboard history
-    rclone # copy files
-    rsync # copy files
-    pmutils # power management
-    zathura # PDF browser
-    tmux # multiplexer
-    wget # download files from terminal
-    diff-so-fancy # nicer git diffs
-    nodejs_22 # node
-    pnpm # node package manager
-    yarn # node package manager
-    dragon-drop # drag and drop
-    p7zip # various archives (iso, etc.)
-    rar # rar archives
-    zip # zip archives
-    exiftool # image processing
-    awscli # needed for avante.nvim
+  users.users.${username}.packages =
+    with pkgs;
+    [
+      inputs.cached-nix-shell.packages.${pkgs.system}.default # quicker nix shells
+      nix-tree # TUI for browsing nix derivations
+      borgbackup # backups
+      hub # github CLI
+      git-absorb # amend commits through history
+      opencode # AI coding
+      jq # work with JSON
+      aichat # ai chat
+      killall # useful command utility
+      phrase-cli # translation platform
+      unzip # unpack a bunch of formats
+      dex # desktop entries
+      nsxiv # image viewer
+      imagemagick # image processing
+      moreutils # useful command line utils like 'vipe'
+      bottom # process viewer
+      ripgrep # full text search
+      yazi # file browser
+      fzf # TUI for selecting options
+      cliphist # store and manipulate clipboard history
+      rclone # copy files
+      rsync # copy files
+      pmutils # power management
+      zathura # PDF browser
+      tmux # multiplexer
+      wget # download files from terminal
+      diff-so-fancy # nicer git diffs
+      nodejs_22 # node
+      pnpm # node package manager
+      yarn # node package manager
+      dragon-drop # drag and drop
+      p7zip # various archives (iso, etc.)
+    ]
+    ++ (lib.optionals (!pkgs.stdenv.isAarch64 && !pkgs.stdenv.isAarch32) [
+      rar # rar archives (not available on ARM platforms)
+    ])
+    ++ [
+      zip # zip archives
+      exiftool # image processing
+      awscli # needed for avante.nvim
 
-    xrandr # set X11 display settings
-    xkbcomp
-    xkbutils
+      xrandr # set X11 display settings
+      xkbcomp
+      xkbutils
 
-    # vim deps
-    lua51Packages.rocks-nvim
-    lua51Packages.lua
-    stylua
-    lua-language-server
-    tree-sitter
-    nil # nix language server
-    highlight
-    gnumake
-    gcc
+      # vim deps
+      lua51Packages.rocks-nvim
+      lua51Packages.lua
+      stylua
+      lua-language-server
+      tree-sitter
+      nil # nix language server
+      highlight
+      gnumake
+      gcc
 
-    black # python formatter
-  ];
+      black # python formatter
+    ];
 
   home-manager.users.${username} = {
     programs.gh = {
