@@ -65,6 +65,9 @@
             or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxKernel.packages.linux_xanmod_latest
               or nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.linuxPackages_xanmod
                 or prev.linuxPackages_latest;
+        # Pin ZFS to the same kernel commit to ensure compatibility
+        zfs = nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.zfs;
+        zfs_unstable = nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.zfs_unstable;
       };
     in
     {

@@ -28,15 +28,17 @@
   #   };
   # };
 
-  # Qt/gtk Theme Configuration via Kvantum
-  gtk.enable = true;
-  catppuccin.gtk.enable = true;
   qt = {
     enable = true;
-    platformTheme.name = "qtct"; # or "gtk"
+    platformTheme.name = "qtct";
     style.name = "kvantum";
   };
-  catppuccin.kvantum.enable = true;
+
+  catppuccin.qt5ct.enable = true;
+  catppuccin.qt5ct.assertPlatformTheme = true;
+  # catppuccin.kvantum.assertStyle = true;
+  # catppuccin.kvantum.enable = true;
+  # catppuccin.kvantum.apply = true;
 
   home.packages = [ ];
 

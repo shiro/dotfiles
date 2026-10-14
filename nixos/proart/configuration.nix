@@ -39,6 +39,15 @@ in
   boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   networking.hostId = "4199706c";
 
+  # services.ollama = {
+  #   enable = true;
+  #   environmentVariables = {
+  #     OLLAMA_NUM_PARALLEL = "4";
+  #     OLLAMA_MAX_LOADED_MODELS = "1";
+  #   };
+  #   package = pkgs.ollama-cuda;
+  # };
+
   services.sanoid = {
     enable = true;
     templates = {
@@ -156,6 +165,13 @@ in
   networking.extraHosts = ''
     127.0.0.1 mac
   '';
+
+  networking.nameservers = [
+    "9.9.9.9"
+    "149.112.112.112"
+    "2620:fe::fe"
+    "2620:fe::9"
+  ];
 
   system.stateVersion = "24.05";
 }
