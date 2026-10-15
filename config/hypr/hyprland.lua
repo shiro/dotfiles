@@ -191,6 +191,8 @@ hl.bind("SUPER + SHIFT + C", hl.dsp.window.move({ workspace = 10 }))
 -- move/resize windows with SUPER + LMB/RMB and dragging
 hl.bind("SUPER + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind("SUPER + mouse:273", hl.dsp.window.resize(), { mouse = true })
+-- resize with SUPER + SHIFT + LMB dragging
+hl.bind("SUPER + SHIFT + mouse:272", hl.dsp.window.resize(), { mouse = true })
 hl.bind("SUPER + Q", hl.dsp.window.close())
 hl.bind("SUPER + S", hl.dsp.group.toggle())
 hl.bind("SUPER + Space", hl.dsp.window.cycle_next())
