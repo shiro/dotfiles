@@ -21,8 +21,7 @@
     }
   },
   "plugin": [
-    "opencode-snippets",
-    "opencode-antigravity-auth"
+    "opencode-snippets"
   ],
   "mcp": {
     "chrome-devtools": {
@@ -35,15 +34,14 @@
         "--browser-url=http://127.0.0.1:9222"
       ]
     },
-    "composio": {
+    "figma": {
+      "enabled": false,
       "type": "remote",
-      "url": "https://connect.composio.dev/mcp",
-      "enabled": false
+      "url": "https://mcp.figma.com/mcp",
+      "oauth": {
+        "clientId": "oJyz7pHtWMkUTfX3ajgMaR",
+        "clientSecret": "pijSqSvHC0hMpvwFLzcGCeWpc4QanknBgeMysvyS"
+      }
     },
-    "figma-local-disabled": {
-      "type": "remote",
-      "url": "http://127.0.0.1:3845/mcp",
-      "enabled": false
-    }
   }
 }
