@@ -20,7 +20,8 @@
       }
     }
   },
-  "plugin": [
+  "plugins": [
+    "@openchamber/opencode-claude",
     "opencode-snippets"
   ],
   "mcp": {
@@ -42,6 +43,6 @@
         "clientId": "oJyz7pHtWMkUTfX3ajgMaR",
         "clientSecret": "pijSqSvHC0hMpvwFLzcGCeWpc4QanknBgeMysvyS"
       }
-    },
+    }
   }
 }

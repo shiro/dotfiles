@@ -79,6 +79,7 @@
       nix-tree # TUI for browsing nix derivations
       borgbackup # backups
       hub # github CLI
+      gh # github CLI
       git-absorb # amend commits through history
       opencode # AI coding
       jq # work with JSON
@@ -114,7 +115,7 @@
     ++ [
       zip # zip archives
       exiftool # image processing
-      awscli # needed for avante.nvim
+      awscli2 # AWS CLI v2
 
       xrandr # set X11 display settings
       xkbcomp

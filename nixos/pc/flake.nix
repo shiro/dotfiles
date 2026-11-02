@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-xanmod.url = "github:nixos/nixpkgs/2976dad409c9b240b720c8ef7b546b262a9a7cf6";
+    nixpkgs-xanmod.url = "github:nixos/nixpkgs/nixos-unstable";
     hyprland.url = "github:hyprwm/Hyprland";
     whisp-away.url = "github:madjinn/whisp-away";
     catppuccin.url = "github:catppuccin/nix";
