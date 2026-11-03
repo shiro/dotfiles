@@ -82,6 +82,7 @@
       gh # github CLI
       git-absorb # amend commits through history
       opencode # AI coding
+      claude-code # AI coding
       jq # work with JSON
       aichat # ai chat
       killall # useful command utility

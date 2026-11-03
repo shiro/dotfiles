@@ -4,7 +4,8 @@
     "name": "system"
   },
   "plugins": [
-    "opencode-snippets"
+    "opencode-snippets",
+    "opencode-claude-quota"
   ],
   "diffs": {
     "wrap": "word"
@@ -14,5 +15,12 @@
     "scrollbar": false,
     "thinking": "show"
   },
-  "animations": true
+  "animations": true,
+  "keybinds": {
+    "agent.cycle": "tab",
+    "agent.cycle.reverse": "shift+tab"
+  },
+  "tabs": {
+    "mode": "off"
+  }
 }

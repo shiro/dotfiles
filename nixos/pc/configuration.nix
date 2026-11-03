@@ -76,6 +76,7 @@ in
       darktable # image editing
       go # golang
       awscli2
+      opencode # OpenCode coding agent
     ];
 
   environment.systemPackages = with pkgs; [
