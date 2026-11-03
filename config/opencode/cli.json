@@ -19,7 +19,11 @@
   "keybinds": {
     "agent.cycle": "tab",
     "agent.cycle.reverse": "shift+tab",
-    "variant.cycle": "ctrl+a"
+    "variant.cycle": "ctrl+w",
+    "model.list": "ctrl+f",
+    "model.cycle_favorite": "ctrl+e",
+    "session.list": "ctrl+s",
+    "mcp.list": "ctrl+r"
   },
   "tabs": {
     "mode": "off"

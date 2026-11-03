@@ -1,7 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "claude-agent/claude-haiku-5-5",
+  "model": "claude-agent/haiku",
   "autoupdate": false,
+  "agents": {
+    "plan": {
+      "model": "claude-agent/sonnet"
+    },
+    "reasoner": {
+      "description": "Deep reasoning, debugging, architecture, and tradeoff analysis",
+      "mode": "subagent",
+      "model": "claude-agent/sonnet"
+    }
+  },
   "provider": {
     "amazon-bedrock": {
       "options": {
@@ -37,8 +47,8 @@
       "type": "remote",
       "url": "https://mcp.figma.com/mcp",
       "oauth": {
-        "clientId": "oJyz7pHtWMkUTfX3ajgMaR",
-        "clientSecret": "pijSqSvHC0hMpvwFLzcGCeWpc4QanknBgeMysvyS"
+        "client_id": "{env:FIGMA_CLIENT_ID}",
+        "client_secret": "{env:FIGMA_CLIENT_SECRET}"
       }
     }
   }
