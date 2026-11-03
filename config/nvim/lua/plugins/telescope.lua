@@ -203,6 +203,14 @@ local M = {
                 pick_git_branch(function(branch_name) require("gitsigns").change_base(branch_name, true) end)
               end,
             },
+            ["Set diff target"] = {
+              command = function()
+                pick_git_branch(function(branch_name) require("gitsigns").change_base(branch_name, true) end)
+              end,
+            },
+            ["Reset diff target"] = {
+              command = function() require("gitsigns").reset_base(true) end,
+            },
             ["Github notifications"] = { command = function() vim.cmd("Octo notification list") end },
             ["Show full JSON key"] = {
               ft = { "json", "jsonc" },
@@ -231,6 +239,21 @@ local M = {
                     end,
                   })
                 end)
+              end,
+            },
+            ["Find diff files against branch"] = {
+              command = function()
+                pick_git_branch(function(branch_name)
+                  require("telescopePickers").prettyChangedFilesPicker({
+                    branch = branch_name,
+                    layout_strategy = layout(),
+                  })
+                end)
+              end,
+            },
+            ["Find diff files"] = {
+              command = function()
+                require("telescopePickers").prettyChangedFilesPicker({ layout_strategy = layout() })
               end,
             },
             ["Copy GitHub URL"] = {

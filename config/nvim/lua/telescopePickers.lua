@@ -204,6 +204,118 @@ function M.prettyGitPicker(opts)
   require("telescope.builtin").git_files(options)
 end
 
+-- opts.branch: list files changed against this branch (git diff)
+-- no branch: list working tree changes against HEAD (git status)
+function M.prettyChangedFilesPicker(opts)
+  if type(opts) ~= "table" then
+    M.printErrInvalidArgument()
+    return
+  end
+
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local ref = opts.branch or "HEAD"
+  local results = {}
+
+  local output = vim.fn.systemlist({ "git", "diff", "--name-status", ref })
+  if vim.v.shell_error ~= 0 then
+    vim.notify("git diff failed:\n" .. table.concat(output, "\n"), vim.log.levels.ERROR)
+    return
+  end
+
+  for _, line in ipairs(output) do
+    if line ~= "" then
+      local fields = vim.split(line, "\t", { plain = true })
+      -- renames and copies list the old path first and the new path last
+      table.insert(results, { status = fields[1]:sub(1, 1), path = fields[#fields] })
+    end
+  end
+
+  -- untracked files aren't in git diff, so add them as added when listing working tree changes
+  if not opts.branch then
+    for _, path in ipairs(vim.fn.systemlist({ "git", "ls-files", "--others", "--exclude-standard" })) do
+      if path ~= "" then table.insert(results, { status = "A", path = path }) end
+    end
+  end
+
+  local displayer = telescopeEntryDisplayModule.create({
+    separator = " ",
+    items = {
+      { width = fileTypeIconWidth },
+      { width = nil },
+      { width = nil },
+      { width = nil },
+      { width = 2 },
+    },
+  })
+
+  local entry_maker = function(item)
+    local highlight = "diffChanged"
+    if item.status == "A" then
+      highlight = "diffAdded"
+    elseif item.status == "D" then
+      highlight = "diffRemoved"
+    end
+
+    return {
+      value = item.path,
+      ordinal = item.path,
+      path = item.path,
+      status = item.status,
+      display = function()
+        local tail, pathToDisplay = M.getPathAndTail(item.path)
+        local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
+
+        local tailForDisplay = tail .. " "
+        local padding = string.rep(
+          " ",
+          vim.fn.winwidth(0) - fileTypeIconWidth - string.len(tailForDisplay) - string.len(pathToDisplay) - 9
+        )
+
+        return displayer({
+          { icon, iconHighlight },
+          tailForDisplay,
+          { pathToDisplay, "TelescopeResultsComment" },
+          padding,
+          { item.status .. "⠀", highlight },
+        })
+      end,
+    }
+  end
+
+  pickers
+    .new({}, {
+      prompt_title = opts.branch and ("Diff files against " .. opts.branch) or "Diff files",
+      finder = finders.new_table({
+        results = results,
+        entry_maker = entry_maker,
+      }),
+      sorter = conf.file_sorter({}),
+      previewer = false,
+      layout_strategy = opts.layout_strategy,
+      attach_mappings = function(prompt_bufnr)
+        actions.select_default:replace(function()
+          local entry = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          if not entry then return end
+
+          -- deleted files don't exist in the working tree, so read them from the ref
+          if entry.status == "D" then
+            vim.cmd("Gedit " .. ref .. ":" .. entry.path)
+          else
+            vim.cmd("edit " .. vim.fn.fnameescape(entry.path))
+          end
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
 function M.prettyGrepPicker(opts)
   if type(opts) ~= "table" or opts.picker == nil then
     M.printErrInvalidArgument()
