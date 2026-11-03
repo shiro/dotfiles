@@ -13,12 +13,13 @@
   "session": {
     "sidebar": "auto",
     "scrollbar": false,
-    "thinking": "show"
+    "thinking": "hide"
   },
   "animations": true,
   "keybinds": {
     "agent.cycle": "tab",
-    "agent.cycle.reverse": "shift+tab"
+    "agent.cycle.reverse": "shift+tab",
+    "variant.cycle": "ctrl+a"
   },
   "tabs": {
     "mode": "off"
