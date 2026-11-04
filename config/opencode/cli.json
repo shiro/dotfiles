@@ -13,7 +13,8 @@
   "session": {
     "sidebar": "auto",
     "scrollbar": false,
-    "thinking": "hide"
+    "thinking": "hide",
+    "permissions": "autoaccept"
   },
   "animations": true,
   "keybinds": {
@@ -23,7 +24,8 @@
     "model.list": "ctrl+f",
     "model.cycle_favorite": "ctrl+e",
     "session.list": "ctrl+s",
-    "mcp.list": "ctrl+r"
+    "mcp.list": "ctrl+r",
+    "session.rename": "none"
   },
   "tabs": {
     "mode": "off"
