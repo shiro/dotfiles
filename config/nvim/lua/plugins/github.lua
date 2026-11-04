@@ -94,8 +94,10 @@ local M = {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "octo",
         callback = function()
-          -- don't wrap text
+          -- don't wrap text (textwidth=0 alone still lets the global wrapmargin auto-break)
           vim.opt_local.textwidth = 0
+          vim.opt_local.wrapmargin = 0
+          vim.opt_local.formatoptions:remove("t")
 
           local utils = require("octo.utils")
           local buffer = utils.get_current_buffer()
