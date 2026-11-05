@@ -39,9 +39,9 @@ prepend_keymap = [
   { on = ["S"], run = "shell --block 'zsh'", desc = "Open zsh" },
   { on = "l", run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
   { on = ["e", "l"], run = "open --interactive", desc = "Open selected files" },
-  { on = ["e", "e"], run = "shell --block 'vim $*'", desc = "Edit" },
-  { on = ["e", "x"], run = "shell --block 'zsh -i -c \"extract $*\"'", desc = "Extract archive" },
-  { on = ["e", "d"], run = "shell 'ripdrag -n $*'", desc = "Drag and drop" },
+  { on = ["e", "e"], run = "shell --block -- vim %s", desc = "Edit" },
+  { on = ["e", "x"], run = "shell --block -- zsh -i -c 'extract \"%h\"'", desc = "Extract archive" },
+  { on = ["e", "d"], run = "shell -- ripdrag -n %s", desc = "Drag and drop" },
 
   { on = ["o", "m"], run = ["sort mtime --reverse=no", "linemode mtime"], desc = "Sort by modified time" },
   { on = ["o", "M"], run = ["sort mtime --reverse=yes", "linemode mtime"], desc = "Sort by modified time (reverse)" },

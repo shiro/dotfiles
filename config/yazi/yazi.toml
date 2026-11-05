@@ -1,6 +1,7 @@
 [mgr]
 sort_dir_first = false
-sort_by = "extension"
+sort_by = "mtime"
+sort_reverse = true
 
 [preview]
 ueberzug_scale = 1.6
