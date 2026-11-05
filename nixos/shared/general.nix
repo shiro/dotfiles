@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   username,
   inputs,
@@ -49,6 +50,13 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   networking.networkmanager.enable = true;
+  # Per-machine /etc/hosts entries from ~/.local/config/hosts (hosts file
+  # syntax), read at build time (needs --impure); skipped when missing.
+  networking.extraHosts =
+    let
+      localHosts = "/home/${username}/.local/config/hosts";
+    in
+    lib.optionalString (builtins.pathExists localHosts) (builtins.readFile localHosts);
 
   environment.sessionVariables = {
     LOCAL_CONFIG_DIR = "/home/${username}/.local/config";

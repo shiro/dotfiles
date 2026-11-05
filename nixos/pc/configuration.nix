@@ -18,6 +18,7 @@ in
     "${shared}/user.nix"
 
     "${shared}/discord.nix"
+    "${shared}/docker.nix"
     "${shared}/gaming.nix"
     "${shared}/ime.nix"
     "${shared}/laptop.nix"
