@@ -114,6 +114,14 @@ in
           path = "/home/shiro/wiki";
           devices = [ "homebox" ];
         };
+        "cache" = {
+          path = "/home/shiro/cache";
+          devices = [ "homebox" ];
+        };
+        "pictures" = {
+          path = "/home/shiro/pictures";
+          devices = [ "homebox" ];
+        };
       };
     };
   };
