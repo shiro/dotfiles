@@ -6,7 +6,8 @@ local M = {
       require("lazy-lsp").setup({
         use_vim_lsp_config = true,
         -- eslint's server fails on repos without a flat eslint.config.js; skip it entirely
-        excluded_servers = { "eslint" },
+        -- ltex: ltex-ls removed from nixpkgs (archived upstream), fails to start via nix
+        excluded_servers = { "eslint", "ltex" },
         preferred_servers = {
           typescriptreact = {
             -- "ts_ls",
