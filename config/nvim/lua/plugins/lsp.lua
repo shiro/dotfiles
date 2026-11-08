@@ -5,6 +5,8 @@ local M = {
     config = function()
       require("lazy-lsp").setup({
         use_vim_lsp_config = true,
+        -- eslint's server fails on repos without a flat eslint.config.js; skip it entirely
+        excluded_servers = { "eslint" },
         preferred_servers = {
           typescriptreact = {
             -- "ts_ls",
