@@ -29,6 +29,8 @@
     home-manager = {
       extraSpecialArgs = { inherit inputs; };
       useUserPackages = true;
+      # move pre-existing files out of the way instead of failing activation
+      backupFileExtension = "hm-bak";
 
       users.${username} = {
         home.username = "shiro";
