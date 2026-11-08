@@ -11,6 +11,8 @@ struct Generation {
     current: bool,
     #[serde(rename = "nixosVersion")]
     nixos_version: String,
+    #[serde(default)]
+    date: String,
 }
 
 fn list_generations() -> Result<Vec<Generation>> {
@@ -18,7 +20,20 @@ fn list_generations() -> Result<Vec<Generation>> {
         .args(&["list-generations", "--json"])
         .success_output()?
         .stdout_str();
-    Ok(serde_json::from_str(&raw)?)
+    let mut generations: Vec<Generation> = serde_json::from_str(&raw)?;
+
+    // nixos-rebuild no longer reports the NIXOS_LABEL in nixosVersion, read it from the generation
+    for generation in generations.iter_mut() {
+        let path = format!(
+            "/nix/var/nix/profiles/system-{}-link/nixos-version",
+            generation.generation
+        );
+        if let Ok(label) = fs::read_to_string(path) {
+            generation.nixos_version = label.trim().to_string();
+        }
+    }
+
+    Ok(generations)
 }
 
 fn format_column(header_columns: &[&str], data_rows: Vec<Vec<String>>) -> (String, Vec<String>) {
@@ -155,14 +170,14 @@ fn main() -> Result<()> {
                     .iter()
                     .map(|v| {
                         let current = if v.current { "yes" } else { " " };
-                        let (date, name) = v
-                            .nixos_version
-                            .split_once("_")
-                            .unwrap_or(("unknown", &v.nixos_version));
+                        let (date, name) = match v.nixos_version.split_once("_") {
+                            Some((date, name)) => (date.replacen("-", " ", 1), name),
+                            None => (v.date.clone(), v.nixos_version.as_str()),
+                        };
                         vec![
                             v.generation.to_string(),
                             current.to_string(),
-                            date.to_string(),
+                            date,
                             name.to_string(),
                         ]
                     })
