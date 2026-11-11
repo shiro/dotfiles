@@ -252,8 +252,12 @@ hl.bind("SUPER+ALT+SHIFT+9", hl.dsp.exec_cmd("sleep 2 && ~/bin/screencap"))
 -- speech-to-text (hyprwhspr, push-to-talk)
 -- note: must not start with "[", Hyprland parses a leading [...] as exec window rules
 local hyprwhspr_ctl = 'test -p "$XDG_RUNTIME_DIR/hyprwhspr/recording_control" && echo %s > "$XDG_RUNTIME_DIR/hyprwhspr/recording_control"'
-hl.bind("ALT+g", hl.dsp.exec_cmd(string.format(hyprwhspr_ctl, "start")))
+hl.bind("ALT+g", hl.dsp.exec_cmd("~/bin/omniprompt --disarm; " .. string.format(hyprwhspr_ctl, "start")))
 hl.bind("ALT+g", hl.dsp.exec_cmd(string.format(hyprwhspr_ctl, "release")), { release = true })
+-- omniprompt: same as above, but the transcription is routed to ~/bin/omniprompt
+-- instead of being typed (see post_transcription_hook in hyprwhspr/config.json)
+hl.bind("ALT+f", hl.dsp.exec_cmd("~/bin/omniprompt --arm; " .. string.format(hyprwhspr_ctl, "start")))
+hl.bind("ALT+f", hl.dsp.exec_cmd(string.format(hyprwhspr_ctl, "release")), { release = true })
 hl.bind("SUPER+ALT+SHIFT+k", hl.dsp.exec_cmd("zsh -ic ~/bin/wiki"))
 hl.bind("SUPER+ALT+SHIFT+Y", hl.dsp.exec_cmd("keepassxc"))
 -- system

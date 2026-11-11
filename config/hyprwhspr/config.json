@@ -3,8 +3,10 @@
   "transcription_backend": "cpu",
   "model": "small.en",
   "language": "en",
+  "whisper_prompt_en": "Transcribe with proper capitalization. Technical talk about Linux, programming, gaming and system administration. Terms: NixOS, Hyprland, hyprwhspr, map2, opencode, Syncthing, kubectl, symlink, kernel, systemd, sudo, chmod, grep, tmux, Neovim, Git, GitHub, repo, commit, rebase, dotfiles, config, JSON, YAML, API, CLI, GPU, CPU, RAM, SSD, Wayland, Docker, Rust, Python, TypeScript, Lua, async, regex, localhost, DPS, FPS, MMO, RPG, PvP, NPC, cooldown, nerf, buff, aggro.",
   "audio_feedback": false,
   "mic_osd_enabled": false,
   "external_bindings": true,
+  "post_transcription_hook": "/home/shiro/bin/omniprompt --hook",
   "grab_keys": false
 }

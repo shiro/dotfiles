@@ -17,6 +17,9 @@
     "permissions": "autoaccept"
   },
   "animations": true,
+  "prompt": {
+    "paste": "full"
+  },
   "keybinds": {
     "agent.cycle": "tab",
     "agent.cycle.reverse": "shift+tab",
