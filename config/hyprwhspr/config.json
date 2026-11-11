@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/goodroot/hyprwhspr/main/share/config.schema.json",
+  "transcription_backend": "cpu",
+  "model": "small.en",
+  "language": "en",
+  "audio_feedback": false,
+  "mic_osd_enabled": false,
+  "external_bindings": true,
+  "grab_keys": false
+}

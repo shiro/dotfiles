@@ -249,8 +249,11 @@ hl.bind(
 hl.bind("SUPER+ALT+SHIFT+9", hl.dsp.exec_cmd("sleep 2 && ~/bin/screencap"))
 -- bind = ,f13, exec, firefox
 -- bind = SUPER ALT SHIFT, j, exec, (cd ~/project/voice; nix-shell --run "python main.py")
-hl.bind("ALT+g", hl.dsp.exec_cmd("whisp-away start"))
-hl.bind("ALT+g", hl.dsp.exec_cmd("whisp-away stop"), { repeating = true })
+-- speech-to-text (hyprwhspr, push-to-talk)
+-- note: must not start with "[", Hyprland parses a leading [...] as exec window rules
+local hyprwhspr_ctl = 'test -p "$XDG_RUNTIME_DIR/hyprwhspr/recording_control" && echo %s > "$XDG_RUNTIME_DIR/hyprwhspr/recording_control"'
+hl.bind("ALT+g", hl.dsp.exec_cmd(string.format(hyprwhspr_ctl, "start")))
+hl.bind("ALT+g", hl.dsp.exec_cmd(string.format(hyprwhspr_ctl, "release")), { release = true })
 hl.bind("SUPER+ALT+SHIFT+k", hl.dsp.exec_cmd("zsh -ic ~/bin/wiki"))
 hl.bind("SUPER+ALT+SHIFT+Y", hl.dsp.exec_cmd("keepassxc"))
 -- system

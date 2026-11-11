@@ -49,19 +49,9 @@ in
   ];
 
   home-manager.users.${username} = {
-    imports = [
-      inputs.whisp-away.nixosModules.home-manager
-    ];
-
     services.udiskie = {
       enable = true;
       tray = "auto";
-    };
-
-    services.whisp-away = {
-      enable = true;
-      defaultModel = "small.en";
-      defaultBackend = "faster-whisper";
     };
 
     systemd.user.services.surge = {

@@ -6,6 +6,39 @@
   ...
 }:
 {
+  # hyprwhspr speech-to-text, only on hosts whose flake has the `hyprwhspr` input
+  imports = lib.optionals (inputs ? hyprwhspr) [
+    inputs.hyprwhspr.nixosModules.default
+    (
+      { pkgs, ... }:
+      {
+        services.hyprwhspr = {
+          enable = true;
+          users = [ username ];
+          # upstream builds whisper.cpp with no SIMD (GGML_NATIVE=OFF only), making
+          # transcription ~10x slower; enable x86-64-v3 instructions (AVX2/FMA/F16C)
+          package = inputs.hyprwhspr.packages.${pkgs.stdenv.hostPlatform.system}.default.override (old: {
+            callPackage =
+              fn: args:
+              let
+                drv = old.callPackage fn args;
+              in
+              if (drv.pname or "") == "pywhispercpp" then
+                drv.overridePythonAttrs (prev: {
+                  env = prev.env // {
+                    CMAKE_ARGS =
+                      prev.env.CMAKE_ARGS
+                      + " -DGGML_AVX=ON -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON -DGGML_BMI2=ON";
+                  };
+                })
+              else
+                drv;
+          });
+        };
+      }
+    )
+  ];
+
   # Backup the entire config directory
   environment.etc."nixos-config".source = ./..;
   nix.settings = {
