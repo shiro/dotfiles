@@ -82,6 +82,7 @@ button:hover {
 #pulseaudio,
 #wireplumber,
 #custom-media,
+#custom-claude-usage,
 #tray,
 #mode,
 #idle_inhibitor,
@@ -276,3 +277,4 @@ label:focus {
 #scratchpad.empty {
 	background-color: transparent;
 }
+

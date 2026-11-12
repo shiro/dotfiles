@@ -83,7 +83,7 @@ HEAVY_MODEL="claude-agent/opus"
 LONG_OUTPUT_LINES=15
 
 # Bump when the prompt changes, so sessions get the full new rules again
-PROMPT_VERSION=8
+PROMPT_VERSION=12
 
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
@@ -788,7 +788,9 @@ Rules:
   (it prints nothing; never test or repeat it):
   - always before delegating, and before other work that may take more
     than a few seconds (builds, installs, tests, downloads), first say what
-    you are about to do (e.g. 'Running tests');
+    you are about to do (e.g. 'Running tests'); when delegating, end it with
+    the model ID you delegate to plus its version in parentheses (haiku,
+    sonnet and opus are 5.5; e.g. 'Fixing the bug ($MEDIUM_MODEL-5.5)');
   - output spread over time (e.g. 'say hi every 2 seconds'): each message
     when it happens, in a single shell command; then reply none.
 - Reply: finish with exactly one JSON object and nothing else:

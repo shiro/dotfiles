@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Weekly Claude usage (0-100) via Anthropic OAuth usage endpoint, using Claude Code credentials.
+
+creds="${CLAUDE_CREDENTIALS:-$HOME/.claude/.credentials.json}"
+cache="${XDG_RUNTIME_DIR:-/tmp}/waybar-claude-usage.json"
+
+token="$(jq -r '.claudeAiOauth.accessToken // empty' "$creds" 2>/dev/null)"
+[ -z "$token" ] && { echo '{"text":"?","tooltip":"No Claude credentials"}'; exit 0; }
+
+resp="$(curl -fsS --max-time 8 \
+  -H "Authorization: Bearer $token" \
+  -H "anthropic-beta: oauth-2025-04-20" \
+  https://api.anthropic.com/api/oauth/usage 2>/dev/null)"
+
+if [ -n "$resp" ] && jq -e '.seven_day.utilization != null' <<<"$resp" >/dev/null 2>&1; then
+  printf '%s' "$resp" > "$cache"
+elif [ -f "$cache" ]; then
+  resp="$(cat "$cache")"
+else
+  echo '{"text":"?","tooltip":"Claude usage unavailable"}'; exit 0
+fi
+
+plural() { [ "$1" -eq 1 ] && echo "$2" || echo "$2s"; }
+
+reset="$(jq -r '.seven_day.resets_at // empty' <<<"$resp")"
+reset_text=""
+if [ -n "$reset" ] && rs="$(date -d "$reset" +%s 2>/dev/null)"; then
+  s=$(( rs - $(date +%s) ))
+  [ "$s" -lt 0 ] && s=0
+  d=$(( s / 86400 )); h=$(( (s % 86400) / 3600 )); m=$(( (s % 3600) / 60 ))
+  [ "$m" -lt 1 ] && m=1
+  if [ "$d" -gt 0 ]; then
+    t="$d $(plural "$d" day)"
+    [ "$h" -gt 0 ] && t="$t, $h $(plural "$h" hour)"
+  elif [ "$h" -gt 0 ]; then
+    t="$h $(plural "$h" hour)"
+  else
+    t="$m $(plural "$m" minute)"
+  fi
+  reset_text=$'\nResets in '"$t"
+fi
+
+jq -c --arg reset "$reset_text" '
+  (.seven_day.utilization | round | if . > 100 then 100 elif . < 0 then 0 else . end) as $p
+  | {text: "\($p)", percentage: $p,
+     class: (if $p >= 90 then "critical" elif $p >= 75 then "warning" else "" end),
+     tooltip: ($reset | ltrimstr("\n"))}' <<<"$resp"
