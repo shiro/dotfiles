@@ -34,6 +34,11 @@ _omniprompt-run() {
   fi
 }
 zle -N _omniprompt-run
+
+# Requests run here as " omniprompt --job FILE": never save them to history
+_omniprompt-history() { [[ $1 != *' --job '*omniprompt/job-* ]]; }
+autoload -Uz add-zsh-hook
+add-zsh-hook zshaddhistory _omniprompt-history
 bindkey -M viins '^X^]' _omniprompt-run
 bindkey -M vicmd '^X^]' _omniprompt-run
 bindkey -M emacs '^X^]' _omniprompt-run

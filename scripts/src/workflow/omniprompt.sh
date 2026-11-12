@@ -56,6 +56,10 @@
 # back at the next prompt) and enters the command. Shells without the widget
 # (started before it existed, zsh -f, ...) just get printed output as before.
 #
+# In such a pane, the request itself also runs in that shell: as a foreground
+# job (omniprompt --job, not saved to history) that blocks the prompt until
+# the reply is shown, prints its output there and is aborted with Ctrl+C.
+#
 # Activity is logged to ~/.local/state/omniprompt.log.
 #
 # To add an action, add an entry to the action list matching its context.
@@ -111,9 +115,23 @@ SELF="$(readlink -f "$0")"
 # ---------------------------------------------------------------------------
 
 NOTIFY=""
+JOB_TTY="" # terminal of a --job run in the user's zsh (see hand_to_shell)
 
 set_output_commands() {
-  NOTIFY="$SELF --notify${PRINT_PANE:+ --pane $PRINT_PANE} short"
+  if [ -n "$JOB_TTY" ]; then
+    NOTIFY="$SELF --notify --tty $JOB_TTY short"
+  else
+    NOTIFY="$SELF --notify${PRINT_PANE:+ --pane $PRINT_PANE} short"
+  fi
+}
+
+# Arguments for notify: where this request's output goes
+output_args() {
+  if [ -n "$JOB_TTY" ]; then
+    printf '%s\n' --tty "$JOB_TTY"
+  elif [ -n "$PRINT_PANE" ]; then
+    printf '%s\n' --pane "$PRINT_PANE"
+  fi
 }
 
 # ---------------------------------------------------------------------------
@@ -229,6 +247,10 @@ usage: $SCRIPT_NAME [PROMPT...]
                                 print into a tmux pane at a zsh prompt, else
                                 show a popup (used by opencode for the
                                 start popup)
+       $SCRIPT_NAME --job FILE  run a request handed to a zsh prompt in
+                                the foreground (used via the zsh widget)
+       $SCRIPT_NAME --run-in-pane PANE run|type COMMAND
+                                enter COMMAND once PANE is at its prompt
        $SCRIPT_NAME --end-session PID TOKEN
                                 end the session of a zsh that exits (used
                                 by the zsh widget)
@@ -878,6 +900,23 @@ print_to_pane() {
   printf '%s' "$out" >"$tty"
 }
 
+# print_to_tty TTY KIND TITLE [BODY]
+#
+# Print a message as plain output of a --job running in the foreground there.
+print_to_tty() {
+  local color
+  [ -w "$1" ] || return 1
+  case "$2" in
+    fail) color='1;31' ;;
+    answer) color='1;36' ;;
+    *) color='1;34' ;;
+  esac
+  {
+    printf '\e[%sm%s\e[0m\n' "$color" "omniprompt: $3"
+    [ -n "${4:-}" ] && printf '%s\n' "$4"
+  } >"$1"
+}
+
 # run_in_pane PANE MODE COMMAND
 #   MODE: run (type it and press Enter) or type (only type it)
 #
@@ -921,13 +960,14 @@ run_in_pane() {
 #   KIND: short (brief confirmation), answer (stays shown), fail (critical)
 # Prints into PANE when it is still at a zsh prompt, else shows a popup.
 notify() {
-  local pane=""
-  if [ "${1:-}" = --pane ]; then
-    pane="$2"
-    shift 2
-  fi
+  local pane="" tty=""
+  case "${1:-}" in
+    --pane) pane="$2" && shift 2 ;;
+    --tty) tty="$2" && shift 2 ;;
+  esac
   local kind="${1:-short}" title="${2:-}" body="${3:-}"
 
+  [ -n "$tty" ] && print_to_tty "$tty" "$kind" "$title" "$body" && return 0
   [ -n "$pane" ] && print_to_pane "$pane" "$kind" "$title" "$body" && return 0
 
   case "$kind" in
@@ -989,8 +1029,8 @@ render_body() {
 # reply object, and to a failure when opencode failed without replying.
 show_reply() {
   local text="$1" status="$2" json kind title body format
-  local -a pane=()
-  [ -n "$PRINT_PANE" ] && pane=(--pane "$PRINT_PANE")
+  local -a pane
+  mapfile -t pane < <(output_args)
 
   if ! json="$(parse_reply "$text")"; then
     if [ -n "$(one_line "$text")" ]; then
@@ -1026,6 +1066,12 @@ show_reply() {
       local command mode
       command="$(jq -r '.command // empty | tostring' <<<"$json")"
       mode="$(jq -r 'if .run == false then "type" else "run" end' <<<"$json")"
+      # A --job blocks the prompt: enter the command once it has exited
+      if [ -n "$command" ] && [ -n "$JOB_TTY" ] && [ -n "$PRINT_PANE" ]; then
+        setsid -f "$SELF" --run-in-pane "$PRINT_PANE" "$mode" "$command" \
+          >/dev/null 2>&1
+        return
+      fi
       if [ -n "$command" ] && [ -n "$PRINT_PANE" ] &&
         run_in_pane "$PRINT_PANE" "$mode" "$command"; then
         log "shell ($mode, pane $PRINT_PANE): $command"
@@ -1100,7 +1146,7 @@ load_zsh_environment() {
 
 # handle_prompt TEXT
 handle_prompt() {
-  local request answer status
+  local request
 
   request="$(one_line "$1")"
   [ -n "$request" ] || return 0
@@ -1108,18 +1154,68 @@ handle_prompt() {
   load_login_environment
   detect_context
   CONTEXT_TEXT="$(print_context)"
+  # At a zsh prompt with the widget: run there in the foreground instead
+  [ -n "$RUN_SHELL_PID" ] && hand_to_shell "$request" && return 0
+  run_request "$request"
+}
+
+# hand_to_shell REQUEST
+#
+# Run the request as a foreground job in the user's zsh, so it blocks the
+# prompt like any program and Ctrl+C aborts it. The detected context is
+# passed in a job file; the command starts with a space, so it is not saved
+# to history (HIST_IGNORE_SPACE, and the widget's zshaddhistory hook). It is
+# a separate process, so it can neither exit that shell nor change its
+# directory.
+hand_to_shell() {
+  local request="$1" job
+  job="$(mktemp "$SHELL_RUN_DIR/job-XXXXXX")" || return 1
+  declare -p request ACTIVE_CLASS ACTIVE_TITLE WORKING_DIR PANE_PID PANE_CMD \
+    PRINT_PANE TMUX_PANE_ID SHELL_PID RUN_SHELL_PID NVIM_BUFFER NVIM_LINE \
+    NVIM_COLUMN NVIM_SOCKET GIT_ROOT WORKSPACE AVAILABLE_ACTIONS CONTEXT_TEXT |
+    sed 's/^declare /declare -g /' >"$job"
+  run_in_pane "$PRINT_PANE" run " $(printf '%q' "$SELF") --job $(printf '%q' "$job")" &&
+    return 0
+  rm -f "$job"
+  return 1
+}
+
+# run_job FILE: the foreground job started by hand_to_shell
+run_job() {
+  [ -f "$1" ] || return 1
+  # shellcheck disable=SC1090
+  . "$1"
+  rm -f "$1"
+  JOB_TTY="$(tty 2>/dev/null)" || JOB_TTY=""
+  [ -n "$JOB_TTY" ] && printf '\e[2momniprompt: %s\e[0m\n' "$request"
+  trap 'abort_job' INT
+  run_request "$request"
+}
+
+abort_job() {
+  trap - INT
+  notify --tty "$JOB_TTY" fail Aborted
+  finish_session 1
+  exit 130
+}
+
+# run_request REQUEST: send it to opencode and show the reply
+run_request() {
+  local request="$1" answer status
+
   detect_session
   lock_session
   [ -n "$SESSION_ID" ] || use_one_off_session
   load_session_state
-  load_zsh_environment
+  # A job runs in the user's zsh and already has its environment
+  [ -n "$JOB_TTY" ] || load_zsh_environment
   set_output_commands
   log "prompt: $request" \
     "(class=$ACTIVE_CLASS cwd=$WORKING_DIR workspace=$WORKSPACE app=$PANE_CMD" \
     "buffer=$NVIM_BUFFER cursor=$NVIM_LINE:$NVIM_COLUMN" \
     "print_pane=$PRINT_PANE tmux_pane=$TMUX_PANE_ID run_shell=$RUN_SHELL_PID" \
     "git=$GIT_ROOT session=$SESSION_ID new=$SESSION_NEW one_off=$SESSION_ONE_OFF" \
-    "send=actions:$SEND_ACTIONS,context:$SEND_CONTEXT)"
+    "send=actions:$SEND_ACTIONS,context:$SEND_CONTEXT job=${JOB_TTY:-no})"
 
   # opencode runs the action itself, in the workspace when one is known
   [ -n "$WORKSPACE" ] && cd "$WORKSPACE" 2>/dev/null
@@ -1188,6 +1284,16 @@ case "${1:-}" in
   --disarm) rm -f "$FLAG_FILE" ;;
   --hook) run_hook ;;
   --notify) shift && notify "$@" ;;
+  --job) run_job "${2:-}" ;;
+  --run-in-pane)
+    # After a job exits: wait for its pane to be back at the prompt
+    for _ in $(seq 100); do
+      run_in_pane "$2" "$3" "$4" && exit 0
+      sleep 0.05
+    done
+    log "could not run in shell (pane=$2): $4"
+    notify --pane "$2" fail "Could not run in shell" "$4"
+    ;;
   --end-session)
     [[ "${2:-}" =~ ^[0-9]+$ ]] && [[ "${3:-}" =~ ^[0-9]+$ ]] &&
       end_session "$(session_id "$2" "$3")"
