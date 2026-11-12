@@ -59,6 +59,8 @@
 # In such a pane, the request itself also runs in that shell: as a foreground
 # job (omniprompt --job, not saved to history) that blocks the prompt until
 # the reply is shown, prints its output there and is aborted with Ctrl+C.
+# While it works, it prints each tool call opencode makes (one dimmed line
+# each), so slow requests show what they are doing.
 #
 # Activity is logged to ~/.local/state/omniprompt.log.
 #
@@ -81,7 +83,7 @@ HEAVY_MODEL="claude-agent/opus"
 LONG_OUTPUT_LINES=15
 
 # Bump when the prompt changes, so sessions get the full new rules again
-PROMPT_VERSION=7
+PROMPT_VERSION=8
 
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
@@ -225,6 +227,8 @@ SENT_ACTIONS=""      # action lists last sent
 SENT_CONTEXT=""      # hash of the context last sent
 SENT_NVIM_SOCKET=""  # nvim socket the nvim rule was last sent for
 SENT_CHAT=""         # 1 when the chat rule was sent
+SENT_ABORTED=""      # 1 when the previous request was aborted (Ctrl+C)
+ABORTED=0            # 1 when this request is aborted
 SEND_ACTIONS=1       # send the actions with this request
 SEND_CONTEXT=1       # send the context with this request
 SEND_NVIM_RULE=1     # send the nvim rule with this request
@@ -603,6 +607,7 @@ load_session_state() {
   SENT_CONTEXT="$(state_get "$SESSION_STATE" context)"
   SENT_NVIM_SOCKET="$(state_get "$SESSION_STATE" nvim)"
   SENT_CHAT="$(state_get "$SESSION_STATE" chat)"
+  SENT_ABORTED="$(state_get "$SESSION_STATE" aborted)"
 
   [ "${AVAILABLE_ACTIONS[*]}" != "$SENT_ACTIONS" ] || SEND_ACTIONS=0
   [ "$(context_hash)" != "$SENT_CONTEXT" ] || SEND_CONTEXT=0
@@ -635,7 +640,7 @@ save_session_state() {
 
   mkdir -p "$SESSION_STATE_DIR"
   printf '%s
-' "version=$PROMPT_VERSION" "pid=$SHELL_PID" "start=$SHELL_START"     "token=$SHELL_TOKEN" "dir=${WORKSPACE:-$SENT_DIR}" "actions=$actions"     "context=$context" "nvim=$nvim" "chat=$chat" >"$SESSION_STATE"
+' "version=$PROMPT_VERSION" "pid=$SHELL_PID" "start=$SHELL_START"     "token=$SHELL_TOKEN" "dir=${WORKSPACE:-$SENT_DIR}" "actions=$actions"     "context=$context" "nvim=$nvim" "chat=$chat" "aborted=$ABORTED" >"$SESSION_STATE"
 }
 
 # delete_session ID: delete the opencode session and its state
@@ -702,6 +707,8 @@ build_prompt() {
     print_rules
   else
     printf 'New request; same rules and reply format.\n'
+    [ "$SENT_ABORTED" = 1 ] &&
+      printf '%s\n' 'The previous request was aborted by the user (Ctrl+C) before it finished, likely because it was misheard: if this request names or fixes something in it, redo it with that correction.'
     if [ "$SEND_ACTIONS" = 1 ]; then print_actions; else printf 'Actions: unchanged.\n'; fi
     if [ "$SEND_CONTEXT" = 1 ]; then printf '%s\n' "$CONTEXT_TEXT"; else printf 'Context: unchanged.\n'; fi
     local send_nvim=0 send_chat=0
@@ -725,7 +732,9 @@ EOF
   [ "$SESSION_ONE_OFF" = 0 ] && cat <<EOF
 Later requests from the same terminal shell continue this conversation: use
 it to resolve references ('again', 'undo that', 'that file'), but never redo
-earlier requests unasked. Each request comes with its own context.
+earlier requests unasked. A short follow-up that only makes sense as a
+fix of the previous request (e.g. a misheard word) is a correction: redo
+that request with it. Each request comes with its own context.
 EOF
   printf '\n'
 }
@@ -765,7 +774,7 @@ Rules:
   user did not ask for. Only edit files the request is about. Nothing
   destructive or hard to undo (deleting files, git push/reset, force, sudo,
   killing unrelated processes) unless asked for exactly that. If the request
-  is unclear, do nothing and reply fail 'Not recognized' with a very short
+  is unclear (and no correction of the previous one), do nothing and reply fail 'Not recognized' with a very short
   reason as body.
 - Models: do simple work yourself. Delegate the rest with your subagent tool
   (agent general), giving it everything it needs (the request, paths,
@@ -1192,10 +1201,36 @@ run_job() {
   run_request "$request"
 }
 
+# job_progress: filter for opencode's stderr in a --job
+#
+# Logs everything and prints each tool call (command, read, edit, search,
+# finished subagent; one line, dimmed, cut to the terminal width) to the job's
+# terminal, so the user sees what is going on. Tool calls are the lines that
+# start with a reset, a marker and another reset; their output and the
+# model's text are left out. Writes nothing to stdout.
+job_progress() {
+  local line plain width
+  width="$(stty size <"$JOB_TTY" 2>/dev/null | cut -d' ' -f2)"
+  [[ "$width" =~ ^[0-9]+$ ]] && [ "$width" -gt 10 ] || width=80
+
+  while IFS= read -r line; do
+    printf '%s\n' "$line" >>"$LOG_FILE"
+    [[ "$line" == $'\e[0m'*' '$'\e[0m'* ]] || continue
+    plain="$(sed -E 's/\x1b\[[0-9;]*m//g' <<<"$line")"
+    case "$plain" in
+      # Start popups print themselves; nvim buffer checks are noise
+      *" --notify "* | *"nvim --server "*) continue ;;
+    esac
+    printf '\e[2m  %s\e[0m\n' "${plain:0:width-2}" >>"$JOB_TTY"
+  done
+}
+
 abort_job() {
   trap - INT
   notify --tty "$JOB_TTY" fail Aborted
-  finish_session 1
+  ABORTED=1
+  # The request reached the session: keep its state for the follow-up
+  finish_session 0
   exit 130
 }
 
@@ -1224,8 +1259,14 @@ run_request() {
   # No popup here: opencode announces long-running work itself ($NOTIFY),
   # so instant requests only show the result
 
-  answer="$(opencode run --auto --title omniprompt --model "$MODEL" \
-    --session "$SESSION_ID" "$(build_prompt "$request")" 2>>"$LOG_FILE")"
+  if [ -n "$JOB_TTY" ]; then
+    # The filter keeps the substitution open until it has printed everything
+    answer="$(opencode run --auto --title omniprompt --model "$MODEL" \
+      --session "$SESSION_ID" "$(build_prompt "$request")" 2> >(job_progress))"
+  else
+    answer="$(opencode run --auto --title omniprompt --model "$MODEL" \
+      --session "$SESSION_ID" "$(build_prompt "$request")" 2>>"$LOG_FILE")"
+  fi
   status=$?
   log "opencode (status $status): $(one_line "$answer")"
 
