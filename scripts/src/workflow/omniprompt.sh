@@ -77,7 +77,7 @@ HEAVY_MODEL="claude-agent/opus"
 LONG_OUTPUT_LINES=15
 
 # Bump when the prompt changes, so sessions get the full new rules again
-PROMPT_VERSION=6
+PROMPT_VERSION=7
 
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
@@ -738,6 +738,7 @@ print_rules() {
   cat <<EOF
 
 Rules:
+- Stay minimal to conserve tokens.
 - Do the minimum: the fewest commands that finish the request, nothing the
   user did not ask for. Only edit files the request is about. Nothing
   destructive or hard to undo (deleting files, git push/reset, force, sudo,
@@ -765,7 +766,8 @@ Rules:
   short: confirms what was done (title one or two words, no body); fail:
   something failed (title what failed, body the reason; no workarounds);
   none: show nothing. format (optional): plain (default), code, list (one
-  item per line) or table (columns separated by tabs).
+  item per line) or table (columns separated by tabs). Word it plainly,
+  outcome first; never claim success you did not verify.
 EOF
   print_chat_rule
   print_nvim_rule
@@ -1123,8 +1125,8 @@ handle_prompt() {
   [ -n "$WORKSPACE" ] && cd "$WORKSPACE" 2>/dev/null
   move_session
 
-  # Show that the request was received, before the work
-  notify ${PRINT_PANE:+--pane "$PRINT_PANE"} short "$request"
+  # No popup here: opencode announces long-running work itself ($NOTIFY),
+  # so instant requests only show the result
 
   answer="$(opencode run --auto --title omniprompt --model "$MODEL" \
     --session "$SESSION_ID" "$(build_prompt "$request")" 2>>"$LOG_FILE")"
