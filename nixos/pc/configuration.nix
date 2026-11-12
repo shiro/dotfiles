@@ -17,6 +17,7 @@ in
     "${shared}/general.nix"
     "${shared}/user.nix"
 
+    "${shared}/ai.nix"
     "${shared}/discord.nix"
     "${shared}/docker.nix"
     "${shared}/gaming.nix"
