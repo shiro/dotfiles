@@ -22,7 +22,8 @@
 # actions available in it. Actions are recipes for common tasks; anything else
 # falls through to run-command, where opencode works out the commands itself.
 # The request is routed by a light model ($MODEL), which does simple work
-# itself and delegates medium and heavy work to subagents on stronger models.
+# itself and escalates medium and heavy work: this script then continues the
+# same session on a stronger model.
 # opencode runs everything and ends with a structured (JSON) reply saying
 # what to show: an answer, a confirmation, a failure or nothing. This script
 # shows it (printed into the zsh pane or as a popup), which saves the model a
@@ -74,7 +75,7 @@ SCRIPT_NAME="$(basename "$0")"
 
 # Routes every request and does simple work itself
 MODEL="claude-agent/haiku"
-# Medium work (code changes, debugging) is delegated to this model
+# Medium work (code changes, debugging) is escalated to this model
 MEDIUM_MODEL="claude-agent/sonnet"
 # Heavy work (large or multi-file changes, architecture) only, or when asked
 HEAVY_MODEL="claude-agent/opus"
@@ -83,7 +84,7 @@ HEAVY_MODEL="claude-agent/opus"
 LONG_OUTPUT_LINES=15
 
 # Bump when the prompt changes, so sessions get the full new rules again
-PROMPT_VERSION=12
+PROMPT_VERSION=13
 
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
@@ -776,21 +777,17 @@ Rules:
   killing unrelated processes) unless asked for exactly that. If the request
   is unclear (and no correction of the previous one), do nothing and reply fail 'Not recognized' with a very short
   reason as body.
-- Models: do simple work yourself. Delegate the rest with your subagent tool
-  (agent general), giving it everything it needs (the request, paths,
-  working directory) and telling it to show no popups. Model
-  $MEDIUM_MODEL for medium work (writing, fixing or reviewing code,
-  debugging, multi-step changes); $HEAVY_MODEL only for heavy work (large or
-  multi-file changes, architecture, hard problems). A model the user names
-  (e.g. 'use opus') wins.
+- Models: do simple work yourself. Otherwise do no work and reply
+  {"kind": "escalate", "model": "medium", "title": "<what will be done>"}:
+  medium for writing, fixing or reviewing code, debugging, multi-step
+  changes; heavy only for large or multi-file changes, architecture, hard
+  problems. A model the user names wins (sonnet medium, opus heavy).
 - Popups: your final reply is shown as the result; show no other popups
   (no notify-send), except with $NOTIFY '<text>'
   (it prints nothing; never test or repeat it):
-  - always before delegating, and before other work that may take more
-    than a few seconds (builds, installs, tests, downloads), first say what
-    you are about to do (e.g. 'Running tests'); when delegating, end it with
-    the model ID you delegate to plus its version in parentheses (haiku,
-    sonnet and opus are 5.5; e.g. 'Fixing the bug ($MEDIUM_MODEL-5.5)');
+  - before work that may take more than a few seconds (builds, installs,
+    tests, downloads), first say what you are about to do (e.g. 'Running
+    tests');
   - output spread over time (e.g. 'say hi every 2 seconds'): each message
     when it happens, in a single shell command; then reply none.
 - Reply: finish with exactly one JSON object and nothing else:
@@ -820,8 +817,8 @@ print_chat_rule() {
   is something to read that would be too long for a popup (over about
   $LONG_OUTPUT_LINES lines, e.g. research or listings; judge this before doing the
   work). Never for a task that just does something (edits, git, builds,
-  multi-step or long-running work, however complex): do it, delegating as
-  needed, and reply short or fail. For a chat, do not do the work: title a
+  multi-step or long-running work, however complex): do it and reply short
+  or fail. For a chat, do not do the work: title a
   short label; body the
   request as a self-contained task in the user's words, with everything
   from the context and this conversation resolved (absolute paths, line
@@ -836,8 +833,7 @@ print_nvim_rule() {
   [ -n "$NVIM_SOCKET" ] || return 0
   cat <<EOF
 - nvim is open. Before anything that may change files on disk (edits,
-  formatters, fixers, generators, git checkout/stash/pull; also around
-  delegated work), list buffers with unsaved changes:
+  formatters, fixers, generators, git checkout/stash/pull), list buffers with unsaved changes:
   nvim --server '$NVIM_SOCKET' --remote-expr 'join(map(getbufinfo({"bufmodified": 1}), "v:val.name"), "\\n")'
   If a file that may change is listed, reply fail 'Unsaved changes' with
   the files as body and stop. Afterwards, reload the buffers:
@@ -1205,8 +1201,8 @@ run_job() {
 
 # job_progress: filter for opencode's stderr in a --job
 #
-# Logs everything and prints each tool call (command, read, edit, search,
-# finished subagent; one line, dimmed, cut to the terminal width) to the job's
+# Logs everything and prints each tool call (command, read, edit, search;
+# one line, dimmed, cut to the terminal width) to the job's
 # terminal, so the user sees what is going on. Tool calls are the lines that
 # start with a reset, a marker and another reset; their output and the
 # model's text are left out. Writes nothing to stdout.
@@ -1238,7 +1234,7 @@ abort_job() {
 
 # run_request REQUEST: send it to opencode and show the reply
 run_request() {
-  local request="$1" answer status
+  local request="$1" answer status json
 
   detect_session
   lock_session
@@ -1261,20 +1257,40 @@ run_request() {
   # No popup here: opencode announces long-running work itself ($NOTIFY),
   # so instant requests only show the result
 
-  if [ -n "$JOB_TTY" ]; then
-    # The filter keeps the substitution open until it has printed everything
-    answer="$(opencode run --auto --title omniprompt --model "$MODEL" \
-      --session "$SESSION_ID" "$(build_prompt "$request")" 2> >(job_progress))"
-  else
-    answer="$(opencode run --auto --title omniprompt --model "$MODEL" \
-      --session "$SESSION_ID" "$(build_prompt "$request")" 2>>"$LOG_FILE")"
-  fi
+  answer="$(run_opencode "$MODEL" "$(build_prompt "$request")")"
   status=$?
   log "opencode (status $status): $(one_line "$answer")"
+  json="$(parse_reply "$answer")" &&
+    [ "$(jq -r .kind <<<"$json")" = escalate ] && escalate "$json"
 
   show_reply "$answer" "$status"
   finish_session "$status"
   sweep_sessions
+}
+
+# run_opencode MODEL PROMPT
+run_opencode() {
+  if [ -n "$JOB_TTY" ]; then
+    # The filter keeps the substitution open until it has printed everything
+    opencode run --auto --title omniprompt --model "$1" \
+      --session "$SESSION_ID" "$2" 2> >(job_progress)
+  else
+    opencode run --auto --title omniprompt --model "$1" \
+      --session "$SESSION_ID" "$2" 2>>"$LOG_FILE"
+  fi
+}
+
+# escalate REPLY: continue the session on the model the reply asks for; sets
+# answer and status of run_request
+escalate() {
+  local model="$MEDIUM_MODEL"
+  local -a out
+  [ "$(jq -r .model <<<"$1")" = heavy ] && model="$HEAVY_MODEL"
+  mapfile -t out < <(output_args)
+  notify "${out[@]}" short "$(jq -r '.title // "Working"' <<<"$1") ($model-5.5)"
+  answer="$(run_opencode "$model" 'Escalated to you: do the request yourself. Same rules and reply format; do not escalate.')"
+  status=$?
+  log "opencode $model (status $status): $(one_line "$answer")"
 }
 
 # One request at a time per session. When the session is busy (e.g. a long

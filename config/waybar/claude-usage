@@ -20,28 +20,31 @@ else
   echo '{"text":"?","tooltip":"Claude usage unavailable"}'; exit 0
 fi
 
-plural() { [ "$1" -eq 1 ] && echo "$2" || echo "$2s"; }
-
-reset="$(jq -r '.seven_day.resets_at // empty' <<<"$resp")"
-reset_text=""
-if [ -n "$reset" ] && rs="$(date -d "$reset" +%s 2>/dev/null)"; then
+reset_in() {
+  local reset="$1" rs s d h m t
+  [ -n "$reset" ] && rs="$(date -d "$reset" +%s 2>/dev/null)" || return 0
   s=$(( rs - $(date +%s) ))
   [ "$s" -lt 0 ] && s=0
   d=$(( s / 86400 )); h=$(( (s % 86400) / 3600 )); m=$(( (s % 3600) / 60 ))
   [ "$m" -lt 1 ] && m=1
   if [ "$d" -gt 0 ]; then
-    t="$d $(plural "$d" day)"
-    [ "$h" -gt 0 ] && t="$t, $h $(plural "$h" hour)"
+    t="${d}d"; [ "$h" -gt 0 ] && t="$t ${h}h"; [ "$m" -gt 0 ] && t="$t ${m}m"
   elif [ "$h" -gt 0 ]; then
-    t="$h $(plural "$h" hour)"
+    t="${h}h"; [ "$m" -gt 0 ] && t="$t ${m}m"
   else
-    t="$m $(plural "$m" minute)"
+    t="${m}m"
   fi
-  reset_text=$'\nResets in '"$t"
-fi
+  echo "$t"
+}
 
-jq -c --arg reset "$reset_text" '
+week_reset="$(jq -r '.seven_day.resets_at // empty' <<<"$resp")"
+hour_reset="$(jq -r '.five_hour.resets_at // empty' <<<"$resp")"
+tooltip=""
+if t="$(reset_in "$hour_reset")" && [ -n "$t" ]; then tooltip="Hourly reset in $t"; fi
+if t="$(reset_in "$week_reset")" && [ -n "$t" ]; then tooltip="${tooltip:+$tooltip$'\n'}Weekly reset in $t"; fi
+
+jq -c --arg tooltip "$tooltip" '
   (.seven_day.utilization | round | if . > 100 then 100 elif . < 0 then 0 else . end) as $p
   | {text: "\($p)", percentage: $p,
      class: (if $p >= 90 then "critical" elif $p >= 75 then "warning" else "" end),
-     tooltip: ($reset | ltrimstr("\n"))}' <<<"$resp"
+     tooltip: $tooltip}' <<<"$resp"
