@@ -4,7 +4,9 @@
 #
 # Hold Alt+F in Hyprland to dictate; on release hyprwhspr transcribes the
 # speech and hands the text to omniprompt (via --hook) instead of typing it.
-# A very short Alt+F tap (under ABORT_MAX_MS) aborts running requests instead.
+# A very short Alt+F tap (under ABORT_MAX_MS) aborts the requests running for
+# the focused tmux pane, terminal window or application instead (see
+# request_scope).
 #
 # omniprompt detects the focused window and, depending on it, more context:
 #   kitty    -> working directory, foreground app of the focused tmux pane
@@ -90,6 +92,9 @@ PROMPT_VERSION=13
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
 FLAG_MAX_AGE_MIN=2
+# Exists while an Alt+F recording is being transcribed (from its release
+# until the hook takes the text), so an abort tap can drop it
+PENDING_FILE="$FLAG_DIR/omniprompt-pending"
 # An Alt+F recording shorter than this aborts the running requests instead
 ABORT_MAX_MS=1000
 
@@ -200,6 +205,8 @@ NVIM_ACTIONS=(
 
 ACTIVE_CLASS=""
 ACTIVE_TITLE=""
+ACTIVE_ADDRESS="" # Hyprland address of the focused window
+ACTIVE_PID=""     # pid of the focused window's process
 WORKING_DIR=""
 PANE_PID=""
 PANE_CMD=""
@@ -385,22 +392,41 @@ find_hyprland_instance() {
 }
 
 detect_window_context() {
+  detect_active_window || return 0
+  case "$ACTIVE_CLASS" in
+    kitty) detect_kitty_context "$ACTIVE_PID" ;;
+    firefox) detect_firefox_context ;;
+  esac
+}
+
+# Sets ACTIVE_CLASS, ACTIVE_TITLE, ACTIVE_ADDRESS and ACTIVE_PID.
+detect_active_window() {
   local win
 
-  command -v hyprctl >/dev/null 2>&1 || return 0
+  command -v hyprctl >/dev/null 2>&1 || return 1
   find_hyprland_instance
   win="$(hyprctl activewindow -j 2>/dev/null)" || {
     log "hyprctl activewindow failed"
-    return 0
+    return 1
   }
+  # \x1f, not a tab: runs of whitespace separators would merge empty fields
+  IFS=$'\x1f' read -r ACTIVE_CLASS ACTIVE_ADDRESS ACTIVE_PID ACTIVE_TITLE < <(
+    jq -r '[.class, .address, .pid, .title] | map(. // "" | tostring) | join("\u001f")' \
+      <<<"$win"
+  )
+}
 
-  ACTIVE_CLASS="$(jq -r '.class // empty' <<<"$win")"
-  ACTIVE_TITLE="$(jq -r '.title // empty' <<<"$win")"
-
-  case "$ACTIVE_CLASS" in
-    kitty) detect_kitty_context "$(jq -r '.pid // empty' <<<"$win")" ;;
-    firefox) detect_firefox_context ;;
-  esac
+# request_scope: what a request belongs to, for aborting (see release): the
+# focused tmux pane, else the terminal window, else the application (all of
+# its windows, e.g. every Firefox window).
+request_scope() {
+  if [ -n "$TMUX_PANE_ID" ]; then
+    printf 'pane:%s\n' "$TMUX_PANE_ID"
+  elif [ "$ACTIVE_CLASS" = kitty ] && [ -n "$ACTIVE_ADDRESS" ]; then
+    printf 'window:%s\n' "$ACTIVE_ADDRESS"
+  else
+    printf 'class:%s\n' "$ACTIVE_CLASS"
+  fi
 }
 
 # Sets GIT_ROOT to the closest git root (searched from the nvim buffer's
@@ -1181,7 +1207,7 @@ handle_prompt() {
 hand_to_shell() {
   local request="$1" job
   job="$(mktemp "$SHELL_RUN_DIR/job-XXXXXX")" || return 1
-  declare -p request ACTIVE_CLASS ACTIVE_TITLE WORKING_DIR PANE_PID PANE_CMD \
+  declare -p request ACTIVE_CLASS ACTIVE_TITLE ACTIVE_ADDRESS ACTIVE_PID WORKING_DIR PANE_PID PANE_CMD \
     PRINT_PANE TMUX_PANE_ID SHELL_PID RUN_SHELL_PID NVIM_BUFFER NVIM_LINE \
     NVIM_COLUMN NVIM_SOCKET GIT_ROOT WORKSPACE AVAILABLE_ACTIONS CONTEXT_TEXT |
     sed 's/^declare /declare -g /' >"$job"
@@ -1202,12 +1228,14 @@ run_job() {
   run_request "$request"
 }
 
-# --release (Alt+F released): a recording under ABORT_MAX_MS aborts every
-# running request (SIGINT to its process group, like Ctrl+C) and marks the
-# flag so the hook drops the transcription. Always shows a popup, so a tap
-# with nothing running does not look like a silent abort.
+# --release (Alt+F released): a recording under ABORT_MAX_MS aborts the
+# running requests of the focused window's scope (see request_scope; SIGINT
+# to their process group, like Ctrl+C) and marks the flag so the hook drops
+# the transcription, also of a recording still being transcribed (that one
+# is dropped whatever the scope). Always shows a popup, so a tap with nothing
+# running does not look like a silent abort.
 release() {
-  local start file pid pgid ms aborted=""
+  local start file pid pgid ms scope aborted=""
   start="$(head -c 32 "$FLAG_FILE" 2>/dev/null)"
   if ! [[ "$start" =~ ^[0-9]+$ ]]; then
     log "release: flag not armed (${start:-missing})"
@@ -1215,13 +1243,29 @@ release() {
   fi
   ms=$((($(date +%s%N) - start) / 1000000))
   log "release: recording ${ms}ms"
-  [ "$ms" -lt "$ABORT_MAX_MS" ] || return 0
+  if [ "$ms" -ge "$ABORT_MAX_MS" ]; then
+    # Being transcribed until the hook takes it
+    : >"$PENDING_FILE"
+    return 0
+  fi
   printf abort >"$FLAG_FILE"
+  # A recording still being transcribed: the hook drops it (the flag now says
+  # abort), so it never becomes a request
+  if [ -n "$(find "$PENDING_FILE" -mmin "-$FLAG_MAX_AGE_MIN" 2>/dev/null)" ]; then
+    aborted=1
+    log "release: dropped the pending transcription"
+  fi
+  rm -f "$PENDING_FILE"
+  # Only the parts of the context the scope needs (no nvim queries)
+  detect_active_window && [ "$ACTIVE_CLASS" = kitty ] && detect_terminal "$ACTIVE_PID"
+  scope="$(request_scope)"
   for file in "$SHELL_RUN_DIR"/running-*; do
     [ -e "$file" ] || continue
     pid="${file##*-}"
     pgid=""
     if [[ "$pid" =~ ^[0-9]+$ ]] && grep -qa omniprompt "/proc/$pid/cmdline" 2>/dev/null; then
+      # Another pane, window or application: leave it running
+      [ "$(head -n1 "$file")" = "$scope" ] || continue
       pgid="$(stat_field "$pid" 3)"
       if [ -n "$pgid" ] && kill -INT -- "-$pgid" 2>>"$LOG_FILE"; then
         aborted=1
@@ -1237,7 +1281,7 @@ release() {
   if [ -n "$aborted" ]; then
     notify fail Aborted 2>>"$LOG_FILE" || log "release: notify failed ($?)"
   else
-    log "release: nothing running"
+    log "release: nothing running for $scope"
     notify short "Nothing to abort"
   fi
 }
@@ -1282,7 +1326,7 @@ run_request() {
 
   # Ctrl+C in a --job, or a short Alt+F recording (see release)
   trap 'abort_job' INT
-  mkdir -p "$SHELL_RUN_DIR" && : >"$SHELL_RUN_DIR/running-$$"
+  mkdir -p "$SHELL_RUN_DIR" && request_scope >"$SHELL_RUN_DIR/running-$$"
   trap 'rm -f "$SHELL_RUN_DIR/running-$$"' EXIT
   detect_session
   lock_session
@@ -1364,6 +1408,7 @@ lock_session() {
 run_hook() {
   local text
   text="$(cat)"
+  rm -f "$PENDING_FILE"
 
   if [ -n "$(find "$FLAG_FILE" -mmin "-$FLAG_MAX_AGE_MIN" 2>/dev/null)" ]; then
     # An abort recording (see release) is dropped
