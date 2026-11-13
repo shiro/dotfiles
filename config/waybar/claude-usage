@@ -39,9 +39,15 @@ reset_in() {
 
 week_reset="$(jq -r '.seven_day.resets_at // empty' <<<"$resp")"
 hour_reset="$(jq -r '.five_hour.resets_at // empty' <<<"$resp")"
-tooltip=""
-if t="$(reset_in "$hour_reset")" && [ -n "$t" ]; then tooltip="Hourly reset in $t"; fi
-if t="$(reset_in "$week_reset")" && [ -n "$t" ]; then tooltip="${tooltip:+$tooltip$'\n'}Weekly reset in $t"; fi
+hour_pct="$(jq -r '.five_hour.utilization // empty | round' <<<"$resp")"
+week_pct="$(jq -r '.seven_day.utilization // empty | round' <<<"$resp")"
+
+line() { # label pct reset
+  local out="$1: ${2:-?}%" t
+  if t="$(reset_in "$3")" && [ -n "$t" ]; then out="$out | resets in $t"; fi
+  echo "$out"
+}
+tooltip="$(line Hourly "$hour_pct" "$hour_reset")"$'\n'"$(line Weekly "$week_pct" "$week_reset")"
 
 jq -c --arg tooltip "$tooltip" '
   (.seven_day.utilization | round | if . > 100 then 100 elif . < 0 then 0 else . end) as $p
