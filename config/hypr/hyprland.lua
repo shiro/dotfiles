@@ -306,8 +306,6 @@ hl.on("hyprland.start", function()
 
   hl.exec_cmd("hyprpaper -c " .. home .. "/.local/config/hypr/hyprpaper.conf")
   hl.exec_cmd("systemctl --user restart map2")
-  -- hl.exec_cmd("sleep 5 && waybar > ~/output.txt 2>&1")
-  hl.exec_cmd("waybar")
   hl.exec_cmd("sleep 5 && keepassxc")
   hl.exec_cmd("sleep 5 && ~/bin/better-discord")
   hl.exec_cmd("sleep 10 && ashuffle --tweak play-on-startup=no")

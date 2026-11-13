@@ -38,6 +38,11 @@ in
   programs.waybar = {
     enable = true;
   };
+  # Run waybar as a user service, started with the graphical session
+  systemd.user.services.waybar = {
+    wantedBy = [ "graphical-session.target" ];
+    serviceConfig.Restart = "on-failure";
+  };
 
   environment.systemPackages = with pkgs; [
     hyprpaper # wallpapers for Hyprland
