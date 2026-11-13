@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Prints brightness; exits non-zero (hiding the module) when no backlight exists.
+line="$(brightnessctl -m -c backlight 2>/dev/null | head -n1)" || exit 1
+[ -n "$line" ] || exit 1
+
+pct="$(echo "$line" | cut -d, -f4 | tr -d '%')"
+icons=(     )
+idx=$(( pct * ${#icons[@]} / 101 ))
+echo "${pct}% ${icons[$idx]}"

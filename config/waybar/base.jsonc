@@ -8,7 +8,7 @@
         "custom/audio-output",
         "battery",
         "temperature",
-        "backlight",
+        "custom/backlight",
         "clock"
     ]
 }

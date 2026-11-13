@@ -103,6 +103,12 @@
             ""
         ]
     },
+    "custom/backlight": {
+        "format": "{}",
+        "exec": "$HOME/.config/waybar/backlight",
+        "exec-if": "ls /sys/class/backlight/* >/dev/null 2>&1",
+        "interval": 2
+    },
     "backlight": {
         // "device": "acpi_video1",
         "format": "{percent}% {icon}",
