@@ -1204,20 +1204,42 @@ run_job() {
 
 # --release (Alt+F released): a recording under ABORT_MAX_MS aborts every
 # running request (SIGINT to its process group, like Ctrl+C) and marks the
-# flag so the hook drops the transcription.
+# flag so the hook drops the transcription. Always shows a popup, so a tap
+# with nothing running does not look like a silent abort.
 release() {
-  local start file pid aborted=""
+  local start file pid pgid ms aborted=""
   start="$(head -c 32 "$FLAG_FILE" 2>/dev/null)"
-  [[ "$start" =~ ^[0-9]+$ ]] || return 0
-  [ $((($(date +%s%N) - start) / 1000000)) -lt "$ABORT_MAX_MS" ] || return 0
+  if ! [[ "$start" =~ ^[0-9]+$ ]]; then
+    log "release: flag not armed (${start:-missing})"
+    return 0
+  fi
+  ms=$((($(date +%s%N) - start) / 1000000))
+  log "release: recording ${ms}ms"
+  [ "$ms" -lt "$ABORT_MAX_MS" ] || return 0
   printf abort >"$FLAG_FILE"
   for file in "$SHELL_RUN_DIR"/running-*; do
+    [ -e "$file" ] || continue
     pid="${file##*-}"
-    [[ "$pid" =~ ^[0-9]+$ ]] && grep -qa omniprompt "/proc/$pid/cmdline" 2>/dev/null &&
-      kill -INT -- "-$(stat_field "$pid" 3)" 2>/dev/null && aborted=1
+    pgid=""
+    if [[ "$pid" =~ ^[0-9]+$ ]] && grep -qa omniprompt "/proc/$pid/cmdline" 2>/dev/null; then
+      pgid="$(stat_field "$pid" 3)"
+      if [ -n "$pgid" ] && kill -INT -- "-$pgid" 2>>"$LOG_FILE"; then
+        aborted=1
+        log "release: aborted pid $pid (pgid $pgid)"
+      else
+        log "release: could not abort pid $pid (pgid ${pgid:-?})"
+      fi
+    else
+      log "release: stale $file"
+    fi
     rm -f "$file"
   done
-  [ -z "$aborted" ] || notify fail Aborted
+  if [ -n "$aborted" ]; then
+    notify fail Aborted 2>>"$LOG_FILE" || log "release: notify failed ($?)"
+  else
+    log "release: nothing running"
+    notify short "Nothing to abort"
+  fi
 }
 
 # job_progress: filter for opencode's stderr in a --job
