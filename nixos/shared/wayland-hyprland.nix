@@ -42,6 +42,8 @@ in
   systemd.user.services.waybar = {
     wantedBy = [ "graphical-session.target" ];
     serviceConfig.Restart = "on-failure";
+    # module scripts need bash/jq/curl, which the minimal service PATH lacks
+    path = with pkgs; [ bash jq curl ];
   };
 
   environment.systemPackages = with pkgs; [
