@@ -201,7 +201,18 @@ fn main() -> Result<()> {
             };
 
             let now = Utc::now().format("%Y.%m.%d-%H:%M");
-            std::env::set_var("NIXOS_LABEL", format!("{now} {msg}").replace(" ", "_"));
+            // system.nixos.label only allows [a-zA-Z0-9:_.-]; map everything else to '_'.
+            let label: String = format!("{now} {msg}")
+                .chars()
+                .map(|c| {
+                    if c.is_ascii_alphanumeric() || matches!(c, ':' | '_' | '.' | '-') {
+                        c
+                    } else {
+                        '_'
+                    }
+                })
+                .collect();
+            std::env::set_var("NIXOS_LABEL", label);
 
             run_cmd_interactive("sudo -EH nixos-rebuild switch --flake path:.#default --impure")?;
 

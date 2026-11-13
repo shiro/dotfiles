@@ -9,10 +9,28 @@ has-track() {
   [[ `mpc current` != "" ]]
 }
 
+# Library mode: normal queue behaviour with ashuffle refilling it.
+# Stop ashuffle while rebuilding the queue (it refills on clear), then start it again.
+library-mode() {
+  systemctl --user stop ashuffle.service 2>/dev/null || true
+  mpc -q consume off
+  mpc -q single off
+  mpc -q repeat off
+  mpc -q clear
+  for item in "$@"; do
+    # Fall back to a file:// URI for files not yet in the MPD database.
+    mpc -q add "$item" 2>/dev/null || mpc -q add "file://$HOME/Music/$item"
+  done
+}
+
+start-shuffle() {
+  systemctl --user start ashuffle.service
+}
+
 reload-library() {
-  mpc clear
-  mpc add /
-  mpc shuffle
+  library-mode /
+  mpc -q shuffle
+  start-shuffle
 }
 
 case "$command" in
@@ -45,7 +63,12 @@ case "$command" in
     ;;
   library)
     selected=`ls ~/Music | shuf | rofi -dmenu -i`
-    [ -n "$selected" ] && ~/bin/play ~/"Music/$selected"
+    if [ -n "$selected" ]; then
+      # Paths are relative to the MPD music directory (~/Music); ashuffle continues after it.
+      library-mode "$selected"
+      mpc -q play
+      start-shuffle
+    fi
     ;;
   ui)
     ncmpcpp

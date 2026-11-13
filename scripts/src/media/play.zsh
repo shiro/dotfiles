@@ -9,16 +9,21 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-# first insert first file and remove all others from the list
-mpc insert "$(realpath $1)"
-mpc next
-mpc crop
-shift
+# Local-socket MPD clients can play files outside the music directory via file:// URIs.
+uri() { print -r -- "file://$(realpath "$1")" }
 
-# then insert all the rest after
-while [ "$#" -gt 0 ]; do
-  mpc add "$(realpath "$1")"
-  shift
+# Stop the library shuffler first, otherwise it refills the queue as soon as it's cleared.
+systemctl --user stop ashuffle.service 2>/dev/null || true
+
+# Replace the queue with the given file(s) and play them through once.
+# consume: each track is removed from the queue once it has played, so the queue ends up empty.
+mpc -q repeat off
+mpc -q random off
+mpc -q single off
+mpc -q consume on
+mpc -q clear
+for f in "$@"; do
+  mpc -q add "$(uri "$f")"
 done
 
-mpc play
+mpc -q play
