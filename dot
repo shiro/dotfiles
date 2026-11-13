@@ -1,7 +1,66 @@
 #!/usr/bin/env zsh
 
+# omnibar-rs: built in the background while the rest runs, only when
+# ~/bin/omnibar-rs is missing or no longer runs (e.g. its glibc was GC'd)
+omnibar_repo=https://github.com/shiro/omnibar-rs.git
+omnibar_dir=/tmp/omnibar-rs
+omnibar_log=/tmp/omnibar-rs-build.log
+omnibar_bin=~/bin/omnibar-rs
+omnibar_gcroots=~/.local/state/omnibar-rs/gcroots
+omnibar_pid=
+
+build_omnibar() {
+    setopt err_exit pipe_fail
+    export GIT_TERMINAL_PROMPT=0
+
+    if [[ -d $omnibar_dir/.git ]]; then
+        git -C $omnibar_dir fetch origin
+        git -C $omnibar_dir reset --hard origin/HEAD
+    else
+        rm -rf $omnibar_dir
+        git clone $omnibar_repo $omnibar_dir
+    fi
+
+    cd $omnibar_dir
+    if type nix-shell > /dev/null; then
+        nix-shell --run 'cargo build --release'
+
+        # keep the nix store libs the binary links against from being GC'd
+        rm -rf $omnibar_gcroots
+        mkdir -p $omnibar_gcroots
+        for p in ${(u)${(f)"$(ldd target/release/omnibar-rs | grep -o '/nix/store/[^/]*')"}}; do
+            nix-store --add-root $omnibar_gcroots/${p:t} --realise $p
+        done
+    else
+        cargo build --release
+    fi
+
+    mkdir -p ${omnibar_bin:h}
+    install -m755 target/release/omnibar-rs $omnibar_bin
+}
+
+if ! { [[ -x $omnibar_bin ]] && $omnibar_bin --version > /dev/null 2>&1 }; then
+    ( build_omnibar ) < /dev/null > $omnibar_log 2>&1 &
+    omnibar_pid=$!
+fi
+
 if type "nix-shell" > /dev/null; then
     nix-shell --command 'cargo run --release'
 else
     cargo run --release
 fi
+status_main=$?
+
+status_omnibar=0
+if [[ -n $omnibar_pid ]]; then
+    wait $omnibar_pid
+    status_omnibar=$?
+    if (( status_omnibar == 0 )); then
+        echo "omnibar-rs: built and installed to $omnibar_bin"
+    else
+        echo "omnibar-rs: build failed (exit $status_omnibar), see $omnibar_log" >&2
+    fi
+fi
+
+(( status_main != 0 )) && exit $status_main
+exit $status_omnibar
