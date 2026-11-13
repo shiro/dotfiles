@@ -833,10 +833,9 @@ print_nvim_rule() {
   [ -n "$NVIM_SOCKET" ] || return 0
   cat <<EOF
 - nvim is open. Before anything that may change files on disk (edits,
-  formatters, fixers, generators, git checkout/stash/pull), list buffers with unsaved changes:
-  nvim --server '$NVIM_SOCKET' --remote-expr 'join(map(getbufinfo({"bufmodified": 1}), "v:val.name"), "\\n")'
-  If a file that may change is listed, reply fail 'Unsaved changes' with
-  the files as body and stop. Afterwards, reload the buffers:
+  formatters, fixers, generators, git checkout/stash/pull), save its buffers:
+  nvim --server '$NVIM_SOCKET' --remote-expr 'execute("silent! wall")'
+  Afterwards, reload the buffers:
   nvim --server '$NVIM_SOCKET' --remote-expr 'execute("checktime")'
 EOF
 }
