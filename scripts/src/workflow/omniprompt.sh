@@ -4,6 +4,7 @@
 #
 # Hold Alt+F in Hyprland to dictate; on release hyprwhspr transcribes the
 # speech and hands the text to omniprompt (via --hook) instead of typing it.
+# A very short Alt+F tap (under ABORT_MAX_MS) aborts running requests instead.
 #
 # omniprompt detects the focused window and, depending on it, more context:
 #   kitty    -> working directory, foreground app of the focused tmux pane
@@ -89,6 +90,8 @@ PROMPT_VERSION=13
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
 FLAG_MAX_AGE_MIN=2
+# An Alt+F recording shorter than this aborts the running requests instead
+ABORT_MAX_MS=1000
 
 LOG_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/omniprompt.log"
 
@@ -247,6 +250,8 @@ usage: $SCRIPT_NAME [PROMPT...]
        $SCRIPT_NAME --hook      hyprwhspr post_transcription_hook mode
        $SCRIPT_NAME --arm       mark the next transcription as an omniprompt
        $SCRIPT_NAME --disarm    clear that mark
+       $SCRIPT_NAME --release   after a recording under ${ABORT_MAX_MS}ms: abort
+                                the running requests
        $SCRIPT_NAME --list      list all actions
        $SCRIPT_NAME --notify [--pane PANE] short|answer|fail TITLE [BODY]
                                 print into a tmux pane at a zsh prompt, else
@@ -709,7 +714,7 @@ build_prompt() {
   else
     printf 'New request; same rules and reply format.\n'
     [ "$SENT_ABORTED" = 1 ] &&
-      printf '%s\n' 'The previous request was aborted by the user (Ctrl+C) before it finished, likely because it was misheard: if this request names or fixes something in it, redo it with that correction.'
+      printf '%s\n' 'The previous request was aborted by the user before it finished, likely because it was misheard: if this request names or fixes something in it, redo it with that correction.'
     if [ "$SEND_ACTIONS" = 1 ]; then print_actions; else printf 'Actions: unchanged.\n'; fi
     if [ "$SEND_CONTEXT" = 1 ]; then printf '%s\n' "$CONTEXT_TEXT"; else printf 'Context: unchanged.\n'; fi
     local send_nvim=0 send_chat=0
@@ -1194,8 +1199,25 @@ run_job() {
   rm -f "$1"
   JOB_TTY="$(tty 2>/dev/null)" || JOB_TTY=""
   [ -n "$JOB_TTY" ] && printf '\e[2momniprompt: %s\e[0m\n' "$request"
-  trap 'abort_job' INT
   run_request "$request"
+}
+
+# --release (Alt+F released): a recording under ABORT_MAX_MS aborts every
+# running request (SIGINT to its process group, like Ctrl+C) and marks the
+# flag so the hook drops the transcription.
+release() {
+  local start file pid aborted=""
+  start="$(head -c 32 "$FLAG_FILE" 2>/dev/null)"
+  [[ "$start" =~ ^[0-9]+$ ]] || return 0
+  [ $((($(date +%s%N) - start) / 1000000)) -lt "$ABORT_MAX_MS" ] || return 0
+  printf abort >"$FLAG_FILE"
+  for file in "$SHELL_RUN_DIR"/running-*; do
+    pid="${file##*-}"
+    [[ "$pid" =~ ^[0-9]+$ ]] && grep -qa omniprompt "/proc/$pid/cmdline" 2>/dev/null &&
+      kill -INT -- "-$(stat_field "$pid" 3)" 2>/dev/null && aborted=1
+    rm -f "$file"
+  done
+  [ -z "$aborted" ] || notify fail Aborted
 }
 
 # job_progress: filter for opencode's stderr in a --job
@@ -1224,7 +1246,8 @@ job_progress() {
 
 abort_job() {
   trap - INT
-  notify --tty "$JOB_TTY" fail Aborted
+  # Outside a shell, the popup comes from release
+  [ -n "$JOB_TTY" ] && print_to_tty "$JOB_TTY" fail Aborted
   ABORTED=1
   # The request reached the session: keep its state for the follow-up
   finish_session 0
@@ -1235,6 +1258,10 @@ abort_job() {
 run_request() {
   local request="$1" answer status json
 
+  # Ctrl+C in a --job, or a short Alt+F recording (see release)
+  trap 'abort_job' INT
+  mkdir -p "$SHELL_RUN_DIR" && : >"$SHELL_RUN_DIR/running-$$"
+  trap 'rm -f "$SHELL_RUN_DIR/running-$$"' EXIT
   detect_session
   lock_session
   [ -n "$SESSION_ID" ] || use_one_off_session
@@ -1317,8 +1344,10 @@ run_hook() {
   text="$(cat)"
 
   if [ -n "$(find "$FLAG_FILE" -mmin "-$FLAG_MAX_AGE_MIN" 2>/dev/null)" ]; then
+    # An abort recording (see release) is dropped
+    [ "$(cat "$FLAG_FILE")" = abort ] ||
+      printf '%s' "$text" | setsid -f "$0" >/dev/null 2>&1
     rm -f "$FLAG_FILE"
-    printf '%s' "$text" | setsid -f "$0" >/dev/null 2>&1
     exit 77
   fi
 
@@ -1338,7 +1367,8 @@ list_actions() {
 case "${1:-}" in
   --help | -h) usage ;;
   --list) list_actions ;;
-  --arm) mkdir -p "$FLAG_DIR" && touch "$FLAG_FILE" ;;
+  --arm) mkdir -p "$FLAG_DIR" && date +%s%N >"$FLAG_FILE" ;;
+  --release) release ;;
   --disarm) rm -f "$FLAG_FILE" ;;
   --hook) run_hook ;;
   --notify) shift && notify "$@" ;;
