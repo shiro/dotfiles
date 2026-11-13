@@ -12,6 +12,7 @@
       git
       bash
       coreutils
+      claude-code
     ];
     serviceConfig = {
       ExecStart = "${pkgs.opencode}/bin/opencode serve --service";

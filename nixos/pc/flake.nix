@@ -3,7 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-xanmod.url = "github:nixos/nixpkgs/nixos-unstable";
+    # pinned: last nixos-unstable channel rev with xanmod main <= 7.2 (zfs 2.4.4 max kernel 7.2)
+    nixpkgs-xanmod.url = "github:nixos/nixpkgs/f9a75f41be3a74eab55d3a7679d34ad6cc0da977";
     hyprland.url = "github:hyprwm/Hyprland";
     hyprwhspr.url = "github:goodroot/hyprwhspr";
     catppuccin.url = "github:catppuccin/nix";
@@ -13,7 +14,6 @@
     # surge.url = "github:SurgeDM/Surge";
     surge.url = "github:shiro/Surge";
     cached-nix-shell.url = "github:shiro/cached-nix-shell";
-    opencode-nix.url = "github:anomalyco/opencode/v2.2.4";
 
     figma-linux-next = {
       url = "github:arximus88/figma-linux-next";
@@ -46,7 +46,6 @@
       nixpkgs-rofi-blocks,
       nixos-hardware,
       nixpkgs-xanmod,
-      opencode-nix,
       ...
     }@inputs:
     let
@@ -76,9 +75,6 @@
         zfs = nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.zfs;
         zfs_unstable = nixpkgs-xanmod.legacyPackages.${prev.stdenv.hostPlatform.system}.zfs_unstable;
       };
-      overlay-opencode = final: prev: {
-        opencode = opencode-nix.packages.${prev.stdenv.hostPlatform.system}.default;
-      };
     in
     {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
@@ -91,7 +87,6 @@
                 overlay-rofi-blocks
                 overlay-openldap
                 overlay-xanmod
-                overlay-opencode
               ];
             }
           )
