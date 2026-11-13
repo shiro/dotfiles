@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   username,
   ...
@@ -38,12 +39,22 @@ in
   programs.waybar = {
     enable = true;
   };
-  # Run waybar as a user service, started with the graphical session
+  # Run waybar as a user service. It is started by Hyprland (hyprland.lua) after
+  # WAYLAND_DISPLAY is imported into the systemd environment; starting it from
+  # graphical-session.target races that and fails with "cannot open display".
   systemd.user.services.waybar = {
-    wantedBy = [ "graphical-session.target" ];
+    wantedBy = lib.mkForce [ ];
     serviceConfig.Restart = "on-failure";
-    # module scripts need bash/jq/curl, which the minimal service PATH lacks
-    path = with pkgs; [ bash jq curl ];
+    # module scripts need these tools, which the minimal service PATH lacks
+    path = with pkgs; [
+      bash
+      jq
+      curl
+      gawk # audio-output
+      pulseaudio # pactl, for audio-output
+      bluez # bluetoothctl, for controllers
+      brightnessctl # backlight
+    ];
   };
 
   environment.systemPackages = with pkgs; [
