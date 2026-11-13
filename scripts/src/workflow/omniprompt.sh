@@ -1403,7 +1403,8 @@ lock_session() {
 }
 
 # hyprwhspr post_transcription_hook; stdin is the transcription.
-#   Not armed: exit 0 with empty stdout so the text is typed as usual.
+#   Not armed: exit 0 with empty stdout so the text is typed as usual, then
+#              clipboard-rotate restores the clipboard the paste overwrote.
 #   Armed:     route it to omniprompt and exit 77 so hyprwhspr skips typing.
 run_hook() {
   local text
@@ -1419,6 +1420,10 @@ run_hook() {
   fi
 
   rm -f "$FLAG_FILE"
+  # hyprwhspr pastes via the clipboard once this hook returns: after it has
+  # pasted, drop the transcription from cliphist and restore the previous entry
+  [ -n "$text" ] &&
+    setsid -f sh -c 'sleep 2; exec "$HOME/bin/clipboard-rotate"' >/dev/null 2>&1
   exit 0
 }
 
