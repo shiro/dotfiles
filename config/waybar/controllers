@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Waybar: one icon per connected Bluetooth gamepad. "disconnect" disconnects them all.
+
+list() {
+  bluetoothctl devices Connected 2>/dev/null | while read -r _ mac name; do
+    if bluetoothctl info "$mac" 2>/dev/null | grep -q 'Icon: input-gaming'; then
+      echo "$mac $name"
+    fi
+  done
+}
+
+if [ "$1" == "disconnect" ]; then
+  list | while read -r mac _; do bluetoothctl disconnect "$mac" >/dev/null; done
+  exit 0
+fi
+
+devs="$(list)"
+if [ -z "$devs" ]; then
+  echo '{"text":"","class":"empty"}'
+  exit 0
+fi
+
+count=$(echo "$devs" | wc -l)
+icons=""
+for ((i = 0; i < count; i++)); do icons+="󰊴 "; done
+tooltip="$(echo "$devs" | cut -d' ' -f2- | paste -sd'\r' | sed 's/\r/\\n/g')"
+printf '{"text":"%s","tooltip":"%s\\n\\nRight-click to disconnect","class":"connected"}\n' "${icons% }" "$tooltip"

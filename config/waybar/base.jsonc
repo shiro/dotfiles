@@ -5,6 +5,7 @@
     "modules-right": [
         "tray",
         "custom/claude-usage",
+        "custom/controllers",
         "custom/audio-output",
         "battery",
         "temperature",
