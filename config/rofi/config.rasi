@@ -1,29 +1,28 @@
 * {
-    active-background: #aa8455;
-    active-foreground: @foreground;
-    normal-background: @background;
-    normal-foreground: #9ab4c2;
-    urgent-background: #aa8455;
+    active-background: transparent;
+    active-foreground: @background;
+    normal-background: transparent;
+    normal-foreground: @foreground;
+    urgent-background: transparent;
     urgent-foreground: @foreground;
 
-    alternate-active-background: @normal-background;
+    alternate-active-background: transparent;
     alternate-active-foreground: @normal-foreground;
-    alternate-normal-background: @normal-background;
+    alternate-normal-background: transparent;
     alternate-normal-foreground: @normal-foreground;
-    alternate-urgent-background: @normal-background;
+    alternate-urgent-background: transparent;
     alternate-urgent-foreground: @normal-foreground;
 
-    selected-active-background: #424f9e;
-    selected-active-foreground: #e5be4e;
-    selected-normal-background: #4674a2;
-    selected-normal-foreground: #e7e7f1;
-    selected-urgent-background: #424f9e;
-    selected-urgent-foreground: #e5be4e;
+    selected-active-background: @background;
+    selected-active-foreground: #24273a;
+    selected-normal-background: @foreground;
+    selected-normal-foreground: #24273a;
+    selected-urgent-background: @background;
+    selected-urgent-foreground: #24273a;
 
-    background-color: @background;
-    background: #11242f;
-    foreground: #e7e7f1;
-    border-color: @background;
+    background: rgba(36, 39, 58, 0.9);
+    foreground: #8aadf4;
+    border-color: rgb(54, 58, 79);
     spacing: 2;
 }
 
@@ -153,6 +152,7 @@
 #entry {
     spacing: 0;
     text-color: @normal-foreground;
+    placeholder: "";
 }
 
 #prompt {
