@@ -115,6 +115,7 @@ fn main() -> Result<()> {
     use clap::Command;
     let cmd = clap::command!()
         .subcommand_required(true)
+        .after_help("shell wrapper only (not handled by this binary):\n  skip    skip the auto nix shell for this shell session")
         .subcommand(Command::new("list").about("lists all generations"))
         .subcommand(
             Command::new("new").about("builds a new generation").arg(

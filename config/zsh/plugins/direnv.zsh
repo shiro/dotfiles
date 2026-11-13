@@ -38,3 +38,12 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
 fi
 
 alias disable-auto-shell='export AUTO_INIT_NIX_SHELL_DONE=1'
+
+# 's skip' disables the auto nix shell for this session; everything else goes to the s script
+s() {
+  if [[ "$1" == skip ]]; then
+    export AUTO_INIT_NIX_SHELL_DONE=1
+  else
+    command s "$@"
+  fi
+}
