@@ -4,6 +4,12 @@
 creds="${CLAUDE_CREDENTIALS:-$HOME/.claude/.credentials.json}"
 cache="${XDG_RUNTIME_DIR:-/tmp}/waybar-claude-usage.json"
 
+# Token expired (or about to): let the CLI refresh it (no usage spent).
+exp="$(jq -r '.claudeAiOauth.expiresAt // 0' "$creds" 2>/dev/null)"
+if [ "${exp:-0}" -lt $(( ($(date +%s) + 120) * 1000 )) ] && command -v claude >/dev/null; then
+  timeout 20 claude auth status >/dev/null 2>&1
+fi
+
 token="$(jq -r '.claudeAiOauth.accessToken // empty' "$creds" 2>/dev/null)"
 [ -z "$token" ] && { echo '{"text":"?","tooltip":"No Claude credentials"}'; exit 0; }
 
