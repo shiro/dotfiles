@@ -87,7 +87,7 @@ HEAVY_MODEL="claude-agent/opus"
 LONG_OUTPUT_LINES=15
 
 # Bump when the prompt changes, so sessions get the full new rules again
-PROMPT_VERSION=13
+PROMPT_VERSION=14
 
 FLAG_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprwhspr"
 FLAG_FILE="$FLAG_DIR/omniprompt"
@@ -469,7 +469,8 @@ detect_kitty_context() {
   fi
 
   case "$PANE_CMD" in
-    nvim) detect_nvim_context ;;
+    # yazi: nvim opened from it is its child, tmux still reports yazi
+    nvim | yazi) detect_nvim_context ;;
   esac
 }
 
@@ -866,9 +867,14 @@ print_nvim_rule() {
 - nvim is open. Before anything that may change files on disk (edits,
   formatters, fixers, generators, git checkout/stash/pull), save its buffers:
   nvim --server '$NVIM_SOCKET' --remote-expr 'execute("silent! wall")'
-  Afterwards, reload the buffers:
-  nvim --server '$NVIM_SOCKET' --remote-expr 'execute("checktime")'
 EOF
+}
+
+# Reload nvim buffers changed on disk by the request (not left to the model)
+reload_nvim() {
+  [ -n "$NVIM_SOCKET" ] || return 0
+  timeout 2 nvim --server "$NVIM_SOCKET" \
+    --remote-expr 'execute("checktime")' >/dev/null 2>&1
 }
 
 # ---------------------------------------------------------------------------
@@ -1312,6 +1318,7 @@ job_progress() {
 
 abort_job() {
   trap - INT
+  reload_nvim
   # Outside a shell, the popup comes from release
   [ -n "$JOB_TTY" ] && print_to_tty "$JOB_TTY" fail Aborted
   ABORTED=1
@@ -1355,6 +1362,7 @@ run_request() {
   json="$(parse_reply "$answer")" &&
     [ "$(jq -r .kind <<<"$json")" = escalate ] && escalate "$json"
 
+  reload_nvim
   show_reply "$answer" "$status"
   finish_session "$status"
   sweep_sessions

@@ -65,6 +65,10 @@ in
     hyprcursor
     inputs.rose-pine-hyprcursor.packages.${pkgs.system}.default
     rose-pine-cursor
+
+    # android phone access over adb
+    android-tools # adb, fastboot
+    (callPackage ./adbfs.nix { }) # mount phone filesystem via adb (FUSE3 port of adbfs-rootless)
   ];
 
   programs.ydotool.enable = true; # automate wayland tasks
