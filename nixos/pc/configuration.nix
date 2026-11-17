@@ -20,6 +20,7 @@ in
     "${shared}/ai.nix"
     "${shared}/discord.nix"
     "${shared}/docker.nix"
+    "${shared}/fujipod-ci.nix"
     "${shared}/gaming.nix"
     "${shared}/ime.nix"
     "${shared}/laptop.nix"
