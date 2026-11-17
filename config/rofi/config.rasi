@@ -72,6 +72,18 @@
     padding: 1px;
 }
 
+/* Matched text: Catppuccin Macchiato peach */
+#element-text {
+    background-color: inherit;
+    text-color: inherit;
+    highlight: bold #f5a97f;
+}
+
+/* Hovered row has a blue background, so use dark base for contrast */
+#element-text.selected {
+    highlight: bold underline #24273a;
+}
+
 #element.normal.normal {
     background-color: @normal-background;
     text-color: @normal-foreground;
