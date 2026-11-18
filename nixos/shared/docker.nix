@@ -3,6 +3,12 @@
 {
   virtualisation.docker.enable = true;
 
+  # cap the BuildKit build cache (least recently used goes first), it otherwise grows with every build
+  virtualisation.docker.daemon.settings.builder.gc = {
+    enabled = true;
+    defaultKeepStorage = "20GB";
+  };
+
   environment.systemPackages = with pkgs; [
     docker-compose
   ];
