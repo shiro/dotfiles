@@ -57,6 +57,4 @@ tooltip="$(line Hourly "$hour_pct" "$hour_reset")"$'\n'"$(line Weekly "$week_pct
 
 jq -c --arg tooltip "$tooltip" '
   (.seven_day.utilization | round | if . > 100 then 100 elif . < 0 then 0 else . end) as $p
-  | {text: "\($p)", percentage: $p,
-     class: (if $p >= 90 then "critical" elif $p >= 75 then "warning" else "" end),
-     tooltip: $tooltip}' <<<"$resp"
+  | {text: "\($p)", percentage: $p, tooltip: $tooltip}' <<<"$resp"
