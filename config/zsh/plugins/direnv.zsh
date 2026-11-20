@@ -19,6 +19,12 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
     # don't do anyting if command should be ignored
     (($ignored_commands[(Ie)$command])) && return 0
 
+    # don't do anything for auto-cd (a lone directory path like `..` or `../foo`)
+    if [[ "$1" != *' '* ]] && ! whence -- "$command" > /dev/null; then
+      local target=${~command}
+      [[ -d "$target" ]] && return 0
+    fi
+
     # search upwards from the current directory for a registered location with a shell.nix
     local dir="$PWD" shell_file=
     while :; do
