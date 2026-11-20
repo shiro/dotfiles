@@ -147,6 +147,15 @@ hl.window_rule({
   center = true,
 })
 
+-- android emulator screen of `pnpm android:dev` (scrcpy, SDL_APP_ID set by the dev script)
+hl.window_rule({
+  name = "android-dev-emulator",
+  match = {
+    class = "tauri-android-dev",
+  },
+  float = true,
+})
+
 -- Guild Wars 2
 -- windowrule = workspace special silent, match:class steam_proton, match:title negative:Guild Wars 2, match:float 1
 
