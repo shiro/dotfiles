@@ -19,7 +19,23 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
     # don't do anyting if command should be ignored
     (($ignored_commands[(Ie)$command])) && return 0
 
-    if [ -n "$locations["`pwd`"]" ]; then
+    # search upwards from the current directory for a registered location with a shell.nix
+    local dir="$PWD" shell_file=
+    while :; do
+      if [ -n "$locations["$dir"]" ]; then
+        if [ -f "$dir/shell.nix" ]; then
+          shell_file="$dir/shell.nix"
+          break
+        elif [ -f "$dir/default.nix" ]; then
+          shell_file="$dir/default.nix"
+          break
+        fi
+      fi
+      [[ "$dir" == / ]] && break
+      dir="${dir:h}"
+    done
+
+    if [ -n "$shell_file" ]; then
       # echo initializing nix shell...
       # echo
 
@@ -30,7 +46,7 @@ if [ -f "$HOME/.local/config/nix/nix-shell-locations" ]; then
       fi
 
       # cached nix shells sometimes don't create TMP...
-      AUTO_INIT_NIX_SHELL_DONE=1 "${shell_cmd[@]}" --command "zsh -is eval 'mkdir -p \$TMP; nclr && $1'"
+      AUTO_INIT_NIX_SHELL_DONE=1 "${shell_cmd[@]}" "$shell_file" --command "zsh -is eval 'mkdir -p \$TMP; nclr && $1'"
     fi
     return 0
   }

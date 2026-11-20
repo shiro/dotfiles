@@ -397,7 +397,20 @@ fn main() -> Result<()> {
                 Err(anyhow!("Already in a dev shell, nesting is forbidden"))?;
             }
 
-            let _ = run_cmd_interactive("nix-shell --command zsh");
+            // search upwards from the current directory for a shell.nix (or default.nix)
+            let cwd = std::env::current_dir()?;
+            let shell_file = cwd
+                .ancestors()
+                .flat_map(|dir| [dir.join("shell.nix"), dir.join("default.nix")])
+                .find(|path| path.is_file())
+                .ok_or_else(|| {
+                    anyhow!("couldn't find 'shell.nix' or 'default.nix' in current or parent directories")
+                })?;
+
+            let _ = Exec::cmd("nix-shell")
+                .arg(&shell_file)
+                .args(&["--command", "zsh"])
+                .join();
         }
         Some(("gc", args)) => {
             let list = args.get_one("list").cloned().unwrap_or(false);

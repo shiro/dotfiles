@@ -10,6 +10,16 @@
 # yarn
 # export PATH="$PATH:${HOME}/.yarn/bin"
 
+# android SDK, skipped inside nix shells so a project's shell.nix SDK/NDK isn't overridden
+# if [[ -z "$IN_NIX_SHELL" ]]; then
+#   export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+#   export ANDROID_HOME="$HOME/Android/Sdk"
+#   export NDK_HOME="$ANDROID_SDK_ROOT/ndk/<version>"
+#   export PATH="$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
+#   export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+#   export PATH="$PATH:$ANDROID_SDK_ROOT/emulator"
+# fi
+
 # vimwiki
 # read -r -d '' VIMWIKI_LIST <<EOF
 # [ \
